@@ -1,0 +1,55 @@
+<h1 mat-dialog-title>Login</h1>
+<div fxLayout="column" class="example-loading-shade" fxLayoutAlign="center center" *ngIf="emProcessamento">
+  <div fxFlex="70" fxFlexAlign="center">
+    <mat-spinner></mat-spinner>
+  </div>
+  <div fxFlex="10" fxFlexAlign="center">
+    &nbsp;
+  </div>
+  <div fxFlex="20" fxFlexAlign="center">
+    <label>Aguarde...</label>
+  </div>
+
+
+</div>
+<div mat-dialog-content *ngIf="!emProcessamento">
+  <div fxLayout="row" style="width:100%;" fxFill>
+    <div fxLayout="column" fxFill>
+      <div fxLayout="row">
+        <div fxFlex="20" fxLayoutAlign="center center">
+          <img src="assets/imagens/chave.png" style="width: 100px; height: 100px;">
+        </div>
+        <div fxFlex="80" fxLayoutAlign="start center">
+          <div fxLayout="column" style="width: 100%;">
+            <div fxFlex="100">
+              <mat-form-field style="width:100%">
+                <input matInput tabindex="1" [(ngModel)]="data.email" [formControl]="valEmail" placeholder="E-Mail" required (click)="setErroLogin('')">
+                <mat-error *ngIf="valEmail.invalid">{{getEmailErrorMessage()}}</mat-error>
+              </mat-form-field>
+            </div>
+            <div fxFlex="100">
+              <mat-form-field style="width:100%">
+                <input matInput tabindex="2" [(ngModel)]="data.password" [formControl]="valPassword" placeholder="Senha" required [type]="hide ? 'password' : 'text'">
+                <mat-icon matSuffix (click)="hide = !hide">{{hide? 'visibility' : 'visibility_off'}}</mat-icon>
+                <mat-error *ngIf="valPassword.invalid">{{getPasswordErrorMessage()}}</mat-error>
+              </mat-form-field>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div mat-dialog-actions *ngIf="!emProcessamento">
+  <div fxLayout="row" fxLayoutAlign="end center" fxFill>
+    <button mat-raised-button color="primary" (click)="onEntrarClick(data)" tabindex="2" style="width: 50%" [disabled]="(!(valEmail.valid && valPassword.valid))||(emProcessamento)">Entrar</button>
+    <button mat-raised-button color="primary" (click)="onNoClick()" tabindex="-1" style="width: 50%">Cancelar</button>
+  </div>
+  <div fxLayout="row" fxLayoutAlign="center center" fxFill>
+    <mat-error *ngIf="erroLogin">{{msgErroLogin}}</mat-error>
+    &nbsp;
+  </div>
+  <div fxLayout="row" fxLayoutAlign="center center" fxFill>
+    <a href="#">Esquecia a senha</a>
+  </div>
+</div>

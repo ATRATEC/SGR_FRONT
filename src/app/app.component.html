@@ -1,0 +1,301 @@
+<mat-toolbar color="primary">
+  <a class="navbar-brand" href="#">
+    <span>ATRATEC LOTE SERIE </span>
+  </a>
+  <!-- Cadastros -->
+  <button mat-button [matMenuTriggerFor]="cadastros" *ngIf="Logado">
+    <span style="color: white">Cadastros</span>
+  </button>
+  <mat-menu #cadastros="matMenu" [overlapTrigger]="false">
+    <button mat-menu-item [routerLink]="['/clientes']">
+      <mat-icon fontSet="fontawesome" fontIcon="fa-group"></mat-icon>
+      <span>Clientes</span>
+    </button>
+    <button mat-menu-item [routerLink]="['/produtos']">
+      <mat-icon fontSet="fontawesome" fontIcon="fa-cubes"></mat-icon>
+      <span>Produtos</span>
+    </button>
+    <button mat-menu-item [routerLink]="['/movimentos']">
+      <mat-icon fontSet="fontawesome" fontIcon="fa-exchange"></mat-icon>
+      <span>Movimentações</span>
+    </button>
+  </mat-menu>
+  <!-- Processos -->
+  <button mat-button [matMenuTriggerFor]="processos" *ngIf="Logado">
+    <span style="color: white">Processos</span>
+  </button>
+  <mat-menu #processos="matMenu" [overlapTrigger]="false">
+    <button mat-menu-item>
+      <mat-icon fontSet="fontawesome" fontIcon="fa-group"></mat-icon>
+      <span>Clientes</span>
+    </button>
+    <button mat-menu-item>
+      <mat-icon fontSet="fontawesome" fontIcon="fa-cubes"></mat-icon>
+      <span>Produtos</span>
+    </button>
+    <button mat-menu-item>
+      <mat-icon fontSet="fontawesome" fontIcon="fa-exchange"></mat-icon>
+      <span>Movimentações</span>
+    </button>
+  </mat-menu>
+  <!-- Relatórios -->
+
+  <button mat-button [matMenuTriggerFor]="relatorios" *ngIf="Logado">
+    <span style="color: white">Relatórios</span>
+  </button>
+  <mat-menu #relatorios="matMenu" [overlapTrigger]="false">
+    <button mat-menu-item>
+      <mat-icon fontSet="fontawesome" fontIcon="fa-group"></mat-icon>
+      <span>Clientes</span>
+    </button>
+    <button mat-menu-item>
+      <mat-icon fontSet="fontawesome" fontIcon="fa-cubes"></mat-icon>
+      <span>Produtos</span>
+    </button>
+    <button mat-menu-item>
+      <mat-icon fontSet="fontawesome" fontIcon="fa-exchange"></mat-icon>
+      <span>Movimentações</span>
+    </button>
+  </mat-menu>
+  <!-- Utilitários -->
+  <button mat-button [matMenuTriggerFor]="utilitarios" *ngIf="Logado">
+    <span style="color: white">Utilitários</span>
+  </button>
+  <mat-menu #utilitarios="matMenu" [overlapTrigger]="false">
+    <button mat-menu-item>
+      <mat-icon fontSet="fontawesome" fontIcon="fa-group"></mat-icon>
+      <span>Clientes</span>
+    </button>
+    <button mat-menu-item>
+      <mat-icon fontSet="fontawesome" fontIcon="fa-cubes"></mat-icon>
+      <span>Produtos</span>
+    </button>
+    <button mat-menu-item>
+      <mat-icon fontSet="fontawesome" fontIcon="fa-exchange"></mat-icon>
+      <span>Movimentações</span>
+    </button>
+  </mat-menu>
+  <span class="espaco"></span>
+  <button mat-button [matMenuTriggerFor]="loginsistema" *ngIf="Logado">
+    <i class="fa fa-user-o" aria-hidden="true"></i>
+    <span style="color: white"> {{Usuario.name}}</span>
+  </button>
+  <mat-menu #loginsistema="matMenu" [overlapTrigger]="false">
+    <button mat-menu-item>
+      <mat-icon fontSet="fontawesome" fontIcon="fa-key"></mat-icon>
+      <span>Trocar Senha</span>
+    </button>
+    <button mat-menu-item (click)="logOut()">
+      <mat-icon fontSet="fontawesome" fontIcon="fa-user-times"></mat-icon>
+      <span>Sair</span>
+    </button>
+  </mat-menu>
+  <button mat-button *ngIf="!Logado" (click)="openLoginDialog()">
+    <i class="fa fa-hand-o-right" aria-hidden="true"></i>
+    <span style="color: white">Login</span>
+  </button>
+</mat-toolbar>
+<router-outlet *ngIf="Logado"></router-outlet>
+
+
+
+
+<!-- <mat-card class="card-demo">
+  <mat-card-title>Layout Children with 'layout-align'</mat-card-title>
+  <mat-card-subtitle></mat-card-subtitle>
+  <mat-card-content>
+    <div class="containerX">
+      <div class="colorNested box" [class.taller]="options.direction != 'row'">
+        <div [fxLayout]="options.direction" [fxLayoutAlign]="layoutAlign()" style="height: 100%;">
+          <div class="blocks one um">1</div>
+          <div class="blocks dois" [class.two_h]="options.direction == 'row'" [class.two_w]="options.direction != 'row'">2
+          </div>
+          <div class="blocks three tres">3</div>
+          <div class="blocks quatro" [class.four_h]="options.direction == 'row'" [class.four_w]="options.direction != 'row'">4
+          </div>
+          <div class="blocks fives cinco">5</div>
+        </div>
+      </div>
+    </div>
+  </mat-card-content>
+  <mat-card-actions fxLayout="row" fxLayoutAlign="center" fxHide fxHide.gt-sm="false">
+    <form fxLayout="row" fxLayout.xs="column" fxLayoutAlign="space-around stretch" class="demo_controls">
+      <div>
+        <div>Layout Direction</div>
+        <mat-radio-group [(ngModel)]="options.direction" name="direction" fxLayout="column">
+          <mat-radio-button value="row">row</mat-radio-button>
+          <mat-radio-button value="column">column</mat-radio-button>
+        </mat-radio-group>
+      </div>
+      <div>
+        <div>Alignment in Layout Direction ({{options.direction == 'row' ? 'horizontal' : 'vertical'}})
+        </div>
+        <mat-radio-group [(ngModel)]="options.mainAxis" name="mainAxis" fxLayout="column">
+          <mat-radio-button value="">none</mat-radio-button>
+          <mat-radio-button value="start">start (default)</mat-radio-button>
+          <mat-radio-button value="center">center</mat-radio-button>
+          <mat-radio-button value="end">end</mat-radio-button>
+          <mat-radio-button value="space-around">space-around</mat-radio-button>
+          <mat-radio-button value="space-between">space-between</mat-radio-button>
+          <mat-radio-button value="space-evenly">space-evenly</mat-radio-button>
+        </mat-radio-group>
+      </div>
+      <div>
+        <div>Alignment in Perpendicular Direction ({{options.direction == 'column' ? 'horizontal' : 'vertical'}})
+        </div>
+        <mat-radio-group [(ngModel)]="options.crossAxis" name="crossAxis" fxLayout="column">
+          <mat-radio-button value="none">
+            <em>none</em>
+          </mat-radio-button>
+          <mat-radio-button value="start">start</mat-radio-button>
+          <mat-radio-button value="center">center</mat-radio-button>
+          <mat-radio-button value="end">end</mat-radio-button>
+          <mat-radio-button value="stretch">stretch (default)</mat-radio-button>
+        </mat-radio-group>
+      </div>
+    </form>
+  </mat-card-actions>
+  <mat-card-footer style="width:95%;">
+    <div class="hint forceAbove" style="padding-left:50px;">
+      &lt;div fxLayout="{{ options.direction }}"
+      <span style="padding-left: 30px">fxLayoutAlign="{{ layoutAlign() }}"</span>
+      &gt;
+    </div>
+  </mat-card-footer>
+</mat-card>
+
+<mat-card class="card-demo">
+  <mat-card-title>
+    <a href="" target="_blank">Layout Fill</a>
+  </mat-card-title>
+  <mat-card-subtitle>Using 'fxFill' to fill available width and height of parent container.
+  </mat-card-subtitle>
+  <mat-card-content class="large">
+    <div fxLayout="column" fxFill>
+      <div fxLayout fxFlex>
+        <div class="one" fxFlex="20" fxLayoutAlign="center center"> A</div>
+        <div class="two" fxFlex="80" fxLayoutAlign="center center"> B</div>
+      </div>
+    </div>
+  </mat-card-content>
+  <mat-card-footer class="bottomPad">
+    <div class="hint"></div>
+  </mat-card-footer>
+</mat-card>
+
+<mat-card class="card-demo" (click)="toggleDirection()">
+  <mat-card-title>'Flex' to Fill Row</mat-card-title>
+  <mat-card-subtitle>Simple row using "flex" on 3rd element to fill available main axis.
+  </mat-card-subtitle>
+  <mat-card-content>
+    <div class="containerX">
+      <div [fxLayout]="direction" (click)="toggleDirection()" class="colored box" style="cursor: pointer;">
+        <div [fxFlex]="someValue"> fxFlex="20"</div>
+        <div fxFlex="60"> fxFlex="60"</div>
+        <div fxFlex> fxFlex</div>
+      </div>
+    </div>
+  </mat-card-content>
+  <mat-card-footer>
+    <div class="hint">&lt;div fxLayout="{{ direction }}" &gt;</div>
+  </mat-card-footer>
+</mat-card>
+
+<mat-card class="card-demo" (click)="toggleDirection()">
+  <mat-card-title>'Flex' with Layout-Wrap</mat-card-title>
+  <mat-card-subtitle>Using "layout-wrap" to wrap positioned items within a layout container
+  </mat-card-subtitle>
+  <mat-card-content>
+    <div class="containerX">
+      <div [fxLayout]="direction" fxLayoutWrap class="colored wrapped box" (click)="toggleDirection()" style="cursor: pointer;">
+        <div fxFlex="30"> fxFlex="30"</div>
+        <div fxFlex="45"> fxFlex="45"</div>
+        <div fxFlex="19"> fxFlex="19"</div>
+        <div fxFlex="33"> fxFlex="33"</div>
+        <div fxFlex="67"> fxFlex="67"</div>
+        <div fxFlex="50"> fxFlex="50"</div>
+        <div fxFlex> fxFlex</div>
+      </div>
+    </div>
+  </mat-card-content>
+  <mat-card-footer>
+    <div class="hint">&lt;div fxLayout="{{ direction }}" &gt;</div>
+  </mat-card-footer>
+</mat-card> -->
+<!-- <div class="bounds">
+
+  <div class="content" fxLayout="row" fxLayout.xs="column" fxFlexFill>
+
+    <div fxFlex="15" class="sec1" fxFlex.xs="55">
+      first-section
+    </div>
+    <div fxFlex="30" class="sec2">
+      second-section
+    </div>
+    <div fxFlex="55" class="sec3" fxFlex.xs="15">
+      third-section
+    </div>
+
+  </div>
+
+</div> -->
+
+<!-- <ol>
+  <li>
+    <mat-form-field>
+      <input matInput [(ngModel)]="name" placeholder="What's your name?">
+    </mat-form-field>
+  </li>
+  <li>
+    <button mat-raised-button (click)="openDialog()">Pick one</button>
+  </li>
+  <li *ngIf="animal">
+    You chose:
+    <i>{{animal}}</i>
+  </li>
+</ol> -->
+
+<!-- <ol>
+  <li>
+    <mat-form-field>
+      <input matInput [(ngModel)]="name" placeholder="Titulo do Formulario">
+    </mat-form-field>
+  </li>
+  <li>
+    <button mat-raised-button (click)="openLoginDialog()">Login</button>
+  </li>
+  <li *ngIf="login">
+    You chose:
+    <i>{{login}}</i>
+  </li>
+</ol> -->
+
+<!-- <button mat-raised-button (click)="chamalogin()">Login</button> -->
+<!-- <button mat-raised-button (click)="lerToken()">Ler Token</button> -->
+
+<!-- <form class="example-form">
+  <mat-form-field class="example-full-width">
+    <input matInput placeholder="Email" [formControl]="emailFormControl">
+    <mat-error *ngIf="emailFormControl.hasError('pattern')">
+      Please enter a valid email address
+    </mat-error>
+    <mat-error *ngIf="emailFormControl.hasError('required')">
+      Email is <strong>required</strong>
+    </mat-error>
+  </mat-form-field>
+</form> -->
+
+<!-- <form class="example-form">
+
+    <mat-form-field class="example-full-width">
+      <input matInput #message maxlength="256" placeholder="Message">
+      <mat-hint align="start"><strong>Don't disclose personal info</strong> </mat-hint>
+      <mat-hint align="end">{{message.value.length}} / 256</mat-hint>
+    </mat-form-field>
+
+  </form> -->
+
+
+<!-- Copyright 2017 Google Inc. All Rights Reserved.
+      Use of this source code is governed by an MIT-style license that
+      can be found in the LICENSE file at http://angular.io/license -->
