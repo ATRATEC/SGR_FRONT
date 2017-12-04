@@ -61,7 +61,8 @@
 
 .mat-table {
   overflow: auto;
-  max-height: 490px;
+  min-height: 300px;
+  max-height: 440px;
 }
 
 .mat-header-cell .mat-sort-header-sorted {
@@ -136,11 +137,11 @@ mat-row:nth-child(odd) {
 }
 
 .mat-column-id {
-  max-width: 50px;
+  max-width: 40px;
 }
 
 .mat-column-codigo_produto {
-  max-width: 150px;
+  max-width: 100px;
 }
 
 .mat-column-descricao {
@@ -148,7 +149,7 @@ mat-row:nth-child(odd) {
 }
 
 .mat-column-unidade {
-  max-width: 100px;
+  max-width: 80px;
 }
 
 .mat-column-quantidade_estoque {

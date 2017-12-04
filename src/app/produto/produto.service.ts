@@ -10,7 +10,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 
 @Injectable()
 export class ProdutoService {
-  private produtoUrl = 'http://siatra.localhost/api/produtos';
+  private produtoUrl = 'http://sgr.localhost/api/produtos';
 
   constructor(private _http: Http) {}
 

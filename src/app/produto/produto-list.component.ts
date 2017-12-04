@@ -15,6 +15,7 @@ import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/distinctUntilChanged';
 import 'rxjs/add/operator/debounceTime';
 import { Produto } from './produto';
+import {ChangeDetectorRef} from '@angular/core';
 
 @Component({
   selector: 'app-produto',
@@ -32,6 +33,7 @@ export class ProdutoListComponent implements OnInit {
   dataSource: DsProduto | null;
   selectedRowIndex: number = -1;
   produtos: Produto[];
+
 
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild(MatPaginator) paginator: MatPaginator;

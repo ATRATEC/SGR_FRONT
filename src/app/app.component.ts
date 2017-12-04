@@ -28,8 +28,8 @@ export class AppComponent implements OnInit {
   Logado: boolean;
   Usuario: User;
   users: User[];
-  private loginUrl = 'http://siatra.localhost/api/login';
-  private usersUrl = 'http://siatra.localhost/api/users';
+  private loginUrl = 'http://sgr.localhost/api/login';
+  private usersUrl = 'http://sgr.localhost/api/users';
 
   options = {
     direction: 'row',

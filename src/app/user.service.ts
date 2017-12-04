@@ -6,7 +6,7 @@ import { User } from './user';
 
 @Injectable()
 export class UserService {
-  private usersUrl = 'http://siatra.localhost/api/users';
+  private usersUrl = 'http://sgr.localhost/api/users';
 
   constructor(private _http: Http) { }
 

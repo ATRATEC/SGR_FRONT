@@ -1,25 +1,71 @@
 <mat-toolbar color="primary">
   <a class="navbar-brand" href="#">
-    <span>ATRATEC LOTE SERIE </span>
+    <span>SGR </span>
   </a>
   <!-- Cadastros -->
   <button mat-button [matMenuTriggerFor]="cadastros" *ngIf="Logado">
     <span style="color: white">Cadastros</span>
   </button>
   <mat-menu #cadastros="matMenu" [overlapTrigger]="false">
+    <button mat-menu-item [routerLink]="['/produtos']">
+      <mat-icon fontSet="fontawesome" fontIcon="fa-handshake-o"></mat-icon>
+      <span>Serviços</span>
+    </button>
     <button mat-menu-item [routerLink]="['/clientes']">
       <mat-icon fontSet="fontawesome" fontIcon="fa-group"></mat-icon>
-      <span>Clientes</span>
+      <span>Cliente</span>
+    </button>
+    <button mat-menu-item [routerLink]="['/clientes']" [matMenuTriggerFor]="contrato">
+      <mat-icon fontSet="fontawesome" fontIcon="fa-book"></mat-icon>
+      <span>Contrato</span>
     </button>
     <button mat-menu-item [routerLink]="['/produtos']">
-      <mat-icon fontSet="fontawesome" fontIcon="fa-cubes"></mat-icon>
-      <span>Produtos</span>
+      <mat-icon fontSet="fontawesome" fontIcon="fa-truck"></mat-icon>
+      <span>Fornecedor</span>
     </button>
-    <button mat-menu-item [routerLink]="['/movimentos']">
-      <mat-icon fontSet="fontawesome" fontIcon="fa-exchange"></mat-icon>
-      <span>Movimentações</span>
+    <button mat-menu-item [routerLink]="['/produtos']" [matMenuTriggerFor]="residuo">
+      <mat-icon fontSet="fontawesome" fontIcon="fa-recycle"></mat-icon>
+      <span>Resíduo</span>
+    </button>
+    <button mat-menu-item [routerLink]="['/produtos']">
+      <mat-icon fontSet="fontawesome" fontIcon="fa-usd"></mat-icon>
+      <span>Preço</span>
     </button>
   </mat-menu>
+  <!-- Contrato -->
+  <mat-menu #contrato="matMenu">
+    <button mat-menu-item [routerLink]="['/produtos']">
+      <!-- <mat-icon fontSet="fontawesome" fontIcon="fa-truck"></mat-icon> -->
+      <span>Cliente</span>
+    </button>
+    <button mat-menu-item [routerLink]="['/produtos']">
+      <!-- <mat-icon fontSet="fontawesome" fontIcon="fa-truck"></mat-icon> -->
+      <span>Fornecedor</span>
+    </button>
+  </mat-menu>
+  <!-- Residuo -->
+  <mat-menu #residuo="matMenu">
+      <button mat-menu-item [routerLink]="['/produtos']">
+        <!-- <mat-icon fontSet="fontawesome" fontIcon="fa-truck"></mat-icon> -->
+        <span>Acondicionamento</span>
+      </button>
+      <button mat-menu-item [routerLink]="['/produtos']">
+        <!-- <mat-icon fontSet="fontawesome" fontIcon="fa-truck"></mat-icon> -->
+        <span>Resíduos</span>
+      </button>
+      <button mat-menu-item [routerLink]="['/produtos']">
+        <!-- <mat-icon fontSet="fontawesome" fontIcon="fa-truck"></mat-icon> -->
+        <span>Pesagem</span>
+      </button>
+      <button mat-menu-item [routerLink]="['/produtos']">
+        <!-- <mat-icon fontSet="fontawesome" fontIcon="fa-truck"></mat-icon> -->
+        <span>Tipo de Resíduo</span>
+      </button>
+      <button mat-menu-item [routerLink]="['/produtos']">
+        <!-- <mat-icon fontSet="fontawesome" fontIcon="fa-truck"></mat-icon> -->
+        <span>Tipo de Tratamento</span>
+      </button>
+    </mat-menu>
   <!-- Processos -->
   <button mat-button [matMenuTriggerFor]="processos" *ngIf="Logado">
     <span style="color: white">Processos</span>
@@ -75,6 +121,20 @@
       <span>Movimentações</span>
     </button>
   </mat-menu>
+  <!-- Financeiro -->
+  <button mat-button [matMenuTriggerFor]="financeiro" *ngIf="Logado">
+      <span style="color: white">Financeiro</span>
+    </button>
+    <mat-menu #financeiro="matMenu" [overlapTrigger]="false">
+      <button mat-menu-item>
+        <mat-icon fontSet="fontawesome" fontIcon="fa-group"></mat-icon>
+        <span>Receita</span>
+      </button>
+      <button mat-menu-item>
+        <mat-icon fontSet="fontawesome" fontIcon="fa-cubes"></mat-icon>
+        <span>Despesa</span>
+      </button>
+    </mat-menu>
   <span class="espaco"></span>
   <button mat-button [matMenuTriggerFor]="loginsistema" *ngIf="Logado">
     <i class="fa fa-user-o" aria-hidden="true"></i>
