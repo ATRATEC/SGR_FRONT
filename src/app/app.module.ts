@@ -17,13 +17,15 @@ import { AppRoutingModule } from './/app-routing.module';
 import { ClienteComponent } from './cliente/cliente.component';
 import { MovimentoComponent } from './movimento/movimento.component';
 import { ProdutoModule } from './produto/produto.module';
+import { OnlyNumberDirective } from './only-number.directive';
 
 @NgModule({
   declarations: [
     AppComponent,
     LoginComponent,
     ClienteComponent,
-    MovimentoComponent
+    MovimentoComponent,
+    OnlyNumberDirective
   ],
   imports: [
     FlexLayoutModule,

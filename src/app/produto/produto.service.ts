@@ -1,6 +1,6 @@
 import { isEmpty } from 'rxjs/operators';
 import { isNullOrUndefined } from 'util';
-import { Produto } from './produto';
+import { Produto, ProdutoFilter } from './produto';
 import { Injectable } from '@angular/core';
 import 'rxjs/add/observable/of';
 import 'rxjs/add/operator/map';
@@ -17,7 +17,7 @@ export class ProdutoService {
   /** Metodo que retorna um observable com dados da listagem de produtos
    *  parametro: acessToken: string
   */
-  getProdutos(accessToken: string, sort: string, order: string, page: number, pagesize: number) {
+  getProdutos(accessToken: string, sort: string, order: string, page: number, pagesize: number, filter: ProdutoFilter) {
     const headers = new Headers({
       Accept: 'application/json',
       Authorization: 'Bearer ' + accessToken
@@ -25,7 +25,7 @@ export class ProdutoService {
 
     const search: URLSearchParams =  new URLSearchParams();
     search.set('nrcount', pagesize.toString());
-    page++;
+    // page++;
     search.set('page', page.toString());
 
     if ((!isNullOrUndefined(order)) && (order.length > 0)) {
@@ -40,6 +40,18 @@ export class ProdutoService {
     } else {
       sort = 'id';
       search.set('orderkey', sort);
+    }
+
+    if ((!isNullOrUndefined(filter.id)) && (filter.id.toString().length > 0)) {
+      search.set('id', filter.id.toString());
+    }
+
+    if ((!isNullOrUndefined(filter.codigo)) && (filter.codigo.length > 0)) {
+      search.set('codigo', filter.codigo);
+    }
+
+    if ((!isNullOrUndefined(filter.descricao)) && (filter.descricao.length > 0)) {
+      search.set('descricao', filter.descricao);
     }
 
     return this._http

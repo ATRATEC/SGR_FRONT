@@ -1,3 +1,8 @@
+export interface ProdutoFilter {
+  id: string;
+  codigo: string;
+  descricao: string;
+}
 export class Produto {
   constructor(
     public id: number,

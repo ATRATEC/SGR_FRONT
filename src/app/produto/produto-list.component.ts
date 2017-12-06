@@ -1,3 +1,6 @@
+import { by } from 'protractor';
+// import { Observable } from 'rxjs/Rx';
+import { FormControl } from '@angular/forms';
 import { DsProduto } from './dsproduto';
 import { TokenManagerService } from './../token-manager.service';
 import { ProdutoService } from './produto.service';
@@ -16,6 +19,7 @@ import 'rxjs/add/operator/distinctUntilChanged';
 import 'rxjs/add/operator/debounceTime';
 import { Produto } from './produto';
 import {ChangeDetectorRef} from '@angular/core';
+import { OnlyNumberDirective } from './../only-number.directive';
 
 @Component({
   selector: 'app-produto',
@@ -34,9 +38,22 @@ export class ProdutoListComponent implements OnInit {
   selectedRowIndex: number = -1;
   produtos: Produto[];
 
+  idFilter = new FormControl();
+  codigoFilter = new FormControl();
+  descricaoFilter = new FormControl();
 
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild(MatPaginator) paginator: MatPaginator;
+
+  keyPress(event: any) {
+    const pattern = /[0-9\+\-\ ]/;
+    const inputChar = String.fromCharCode(event.charCode);
+    // console.log(inputChar, e.charCode);
+       if (!pattern.test(inputChar)) {
+       // invalid character, prevent input
+           event.preventDefault();
+      }
+ }
   // @ViewChild('filter') filter: ElementRef;
 
   // isAllSelected(): boolean {
@@ -123,6 +140,17 @@ export class ProdutoListComponent implements OnInit {
     this.paginator._intl.previousPageLabel = 'Voltar Página';
 
     this.dataSource = new DsProduto(this._tokenManager, this._produtoService, this.paginator, this.sort);
+
+    const idFilter$ = this.idFilter.valueChanges.debounceTime(500).distinctUntilChanged().startWith('');
+    const codigoFilter$ = this.codigoFilter.valueChanges.debounceTime(500).distinctUntilChanged().startWith('');
+    const descricaoFilter$ = this.descricaoFilter.valueChanges.debounceTime(500).distinctUntilChanged().startWith('');
+
+    Observable.combineLatest(idFilter$, codigoFilter$, descricaoFilter$).debounceTime(500).distinctUntilChanged().
+    map(
+      ([id, codigo, descricao ]) => ({id, codigo, descricao})).subscribe(filter => {
+        if (!this.dataSource) { return; }
+        this.dataSource.filter = filter;
+      });
     // this.dataSource = new ExampleDataSource(this.exampleDatabase, this.paginator, this.sort);
     // Observable.fromEvent(this.filter.nativeElement, 'keyup')
     //     .debounceTime(150)

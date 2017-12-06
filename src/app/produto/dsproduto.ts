@@ -1,4 +1,4 @@
-import { TokenManagerService } from './../token-manager.service';
+  import { TokenManagerService } from './../token-manager.service';
 import { ProdutoService } from './produto.service';
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { DataSource} from '@angular/cdk/collections';
@@ -13,9 +13,18 @@ import 'rxjs/add/observable/fromEvent';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/distinctUntilChanged';
 import 'rxjs/add/operator/debounceTime';
-import { Produto } from './produto';
+import { Produto, ProdutoFilter } from './produto';
 
 export class DsProduto extends DataSource<Produto> {
+  _filterChange = new BehaviorSubject( {id: '', codigo: '', descricao: ''} );
+
+  get filter(): ProdutoFilter {
+    return this._filterChange.value;
+  }
+
+  set filter(filter: ProdutoFilter) {
+    this._filterChange.next(filter);
+  }
 
   resultsLength = 0;
   isLoadingResults = false;
@@ -37,16 +46,17 @@ export class DsProduto extends DataSource<Produto> {
   connect(): Observable<Produto[]> {
     const displayDataChanges = [
       this._sort.sortChange,
-      this._paginator.page
+      this._paginator.page,
+      this._filterChange,
     ];
-    this._sort.sortChange.subscribe(() => this._paginator.pageIndex = 0);
+    this._sort.sortChange.subscribe(() => this._paginator.pageIndex = 1);
 
     return Observable.merge(...displayDataChanges)
     .startWith(null)
     .switchMap(() => {
       this.isLoadingResults = true;
       return this._produtoService.getProdutos(this._tokenManager.retrieve(),
-        this._sort.active, this._sort.direction, this._paginator.pageIndex, this._paginator.pageSize);
+        this._sort.active, this._sort.direction, this._paginator.pageIndex, this._paginator.pageSize, this.filter);
     })
     .map(data => {
       // Flip flag to show that loading has finished.
@@ -58,7 +68,7 @@ export class DsProduto extends DataSource<Produto> {
       this.registroDe = data.from;
       this.registroAte = data.to;
       this.nrRegistros = data.total;
-
+      // console.log(data.data);
       return data.data;
     })
     .catch(() => {

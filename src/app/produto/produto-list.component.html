@@ -58,18 +58,18 @@
               <tr>
                 <td>
                     <mat-form-field class="mat-column-id" style="margin-left: 10px">
-                        <input matInput #filter placeholder="ID">
+                        <input matInput type="number" #filter placeholder="ID" [formControl]="idFilter" (keypress)="keyPress($event)">
                       </mat-form-field>
                 </td>
                 <td>
                     <mat-form-field class="mat-column-codigo_produto">
-                        <input matInput #filter placeholder="Código">
+                        <input matInput #filter placeholder="Código" [formControl]="codigoFilter">
                       </mat-form-field>
                 </td>
                 <td class="mat-column-descricao" >
                     <!-- style="width: 500px" -->
                     <mat-form-field class="mat-column-descricao" >
-                        <input matInput #filter placeholder="Descrição">
+                        <input matInput #filter placeholder="Descrição" [formControl]="descricaoFilter">
                       </mat-form-field>
                 </td>
                 <td>
