@@ -1,3 +1,4 @@
+import { AlertsService } from './alerts.service';
 import { AuthGuard } from './auth-guard';
 import { TokenManagerService } from './token-manager.service';
 import { UserService } from './user.service';
@@ -18,6 +19,9 @@ import { ClienteComponent } from './cliente/cliente.component';
 import { MovimentoComponent } from './movimento/movimento.component';
 import { ProdutoModule } from './produto/produto.module';
 import { OnlyNumberDirective } from './only-number.directive';
+import { AlertComponent } from './alert/alert.component';
+import { AlertsComponent } from './alerts/alerts.component';
+import { DialogComponent } from './dialog/dialog.component';
 
 @NgModule({
   declarations: [
@@ -25,7 +29,10 @@ import { OnlyNumberDirective } from './only-number.directive';
     LoginComponent,
     ClienteComponent,
     MovimentoComponent,
-    OnlyNumberDirective
+    OnlyNumberDirective,
+    AlertComponent,
+    AlertsComponent,
+    DialogComponent
   ],
   imports: [
     FlexLayoutModule,
@@ -40,8 +47,8 @@ import { OnlyNumberDirective } from './only-number.directive';
     ProdutoModule,
     AppRoutingModule
   ],
-  providers: [LoginService, UserService, TokenManagerService, AuthGuard],
-  entryComponents: [LoginComponent],
+  providers: [LoginService, UserService, TokenManagerService, AuthGuard, AlertsService],
+  entryComponents: [LoginComponent, DialogComponent],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

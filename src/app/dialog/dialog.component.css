@@ -1,0 +1,39 @@
+hr {
+  display: block;
+  background-color:rgb(248, 248, 248);
+  margin-top: 0;
+  margin-bottom: 0;
+  margin-left: auto;
+  margin-right: auto;
+  border-style: inset;
+  border-width: 1.5px;
+  padding:0px;
+}
+
+.example-loading-shade {
+  /* position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 56px;
+  right: 0; */
+  background: rgba(255, 255, 255, 0.15);
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.wrapper_close {
+  position: absolute;
+  top: -21px;
+  right: -21px;
+  width: 30px;
+  box-shadow: 0 5px 40px rgba(0, 0, 0, 0.2);
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.wrapper_symbol svg {
+  width: 80px;
+  padding: 3rem 0rem;
+}

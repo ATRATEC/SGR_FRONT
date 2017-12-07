@@ -155,6 +155,7 @@
     <span style="color: white">Login</span>
   </button>
 </mat-toolbar>
+<app-alerts [defaultSettings]="options"></app-alerts>
 <router-outlet *ngIf="Logado"></router-outlet>
 
 
@@ -332,6 +333,12 @@
 
 <!-- <button mat-raised-button (click)="chamalogin()">Login</button> -->
 <!-- <button mat-raised-button (click)="lerToken()">Ler Token</button> -->
+
+<!-- <button mat-raised-button (click)="open('info')"> info </button>
+<button mat-raised-button (click)="open('warning')"> warning </button>
+<button mat-raised-button (click)="open('error')"> error </button>
+<button mat-raised-button (click)="open('success')"> success </button>
+<button mat-raised-button (click)="openDialog()"> Dialog </button> -->
 
 <!-- <form class="example-form">
   <mat-form-field class="example-full-width">

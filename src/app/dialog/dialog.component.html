@@ -1,0 +1,77 @@
+<h1 mat-dialog-title>{{data.title}}</h1>
+<!-- <div fxLayout="column" class="example-loading-shade" fxLayoutAlign="center center" *ngIf="emProcessamento">
+  <div fxFlex="70" fxFlexAlign="center">
+    <mat-spinner></mat-spinner>
+  </div>
+  <div fxFlex="10" fxFlexAlign="center">
+    &nbsp;
+  </div>
+  <div fxFlex="20" fxFlexAlign="center">
+    <label>Aguarde...</label>
+  </div>
+</div> -->
+<div mat-dialog-content>
+  <div fxLayout="row" style="width:100%;" fxFill>
+    <div fxLayout="column" fxFill>
+      <div fxLayout="row">
+        <div fxFlex="20%" fxLayoutAlign="center center" >
+          <div class="wrapper_symbol" [ngSwitch]="data.type" style="height: 100px; width: 100px;">
+              <ng-template ngSwitchCase="success" style="height: 100px; width: 100px;">
+                  <i class="fa fa-check-circle fa-5x" style="color: rgb(22, 165, 22)"></i>
+              </ng-template>
+
+              <ng-template ngSwitchCase="error">
+                  <i class="fa fa-times-circle fa-5x" style="color: red"></i>
+              </ng-template>
+
+              <ng-template ngSwitchCase="warning">
+                  <i class="fa fa-exclamation-circle fa-5x" style="color: rgb(255, 145, 0)"></i>
+              </ng-template>
+
+              <ng-template ngSwitchCase="info">
+                  <i class="fa fa-exclamation-circle fa-5x" style="color: rgb(111, 110, 219)"></i>
+              </ng-template>
+              <ng-template ngSwitchCase="question">
+                  <i class="fa fa-question-circle fa-5x" style="color: rgb(248, 252, 9)"></i>
+              </ng-template>
+          </div>
+        </div>
+        <div fxFlex="80%" fxLayoutAlign="start center" >
+          <div fxLayout="column" fxLayoutAlign="start center" style="width: 100%;" fxLayoutGap="10px">
+            <div fxFlex="100%">
+              <p>{{data.message}}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div mat-dialog-actions>
+  <div fxLayout="row" fxLayoutAlign="end center" fxFill>
+    <button mat-raised-button color="primary" (click)="onEntrarClick()" tabindex="2" *ngIf="data.showOkButton">
+        <i class="fa fa-check" aria-hidden="true"></i>
+        <span>OK</span>
+    </button>
+    <button mat-raised-button color="primary" (click)="onEntrarClick()" tabindex="2" *ngIf="data.showYesNoButton">
+        <i class="fa fa-check" aria-hidden="true"></i>
+        <span>Sim</span>
+    </button>
+    <button mat-raised-button color="primary" (click)="onNoClick()" tabindex="-1" *ngIf="data.showYesNoButton">
+        <i class="fa fa-times" aria-hidden="true"></i>
+        <span>Não</span>
+    </button>
+    <button mat-raised-button color="primary" (click)="onNoClick()" tabindex="-1" *ngIf="data.showCancelButton">
+        <i class="fa fa-ban" aria-hidden="true"></i>
+        <span>Cancelar</span>
+    </button>
+  </div>
+  <!-- style="width: 50%" -->
+  <!-- <div fxLayout="row" fxLayoutAlign="center center" fxFill>
+    <mat-error *ngIf="erroLogin">{{msgErroLogin}}</mat-error>
+    &nbsp;
+  </div> -->
+  <!-- <div fxLayout="row" fxLayoutAlign="center center" fxFill>
+    <a href="#">Esquecia a senha</a>
+  </div> -->
+</div>

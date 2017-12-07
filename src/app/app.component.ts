@@ -1,3 +1,7 @@
+import { DialogComponent } from './dialog/dialog.component';
+import { AlertSettings } from './alert-settings';
+import { AlertType } from './alert-type';
+import { AlertsService } from './alerts.service';
 import { TokenManagerService } from './token-manager.service';
 import { UserService } from './user.service';
 import { LoginService } from './login.service';
@@ -45,7 +49,8 @@ export class AppComponent implements OnInit {
   constructor(private tokenManager: TokenManagerService,
               private loginService: LoginService,
               private userService: UserService,
-              public dialog: MatDialog) {
+              public dialog: MatDialog,
+              private _alert: AlertsService ) {
     if (!this.verificaLogin()) {
       // this.openLoginDialog();
       this.Logado = false;
@@ -55,6 +60,21 @@ export class AppComponent implements OnInit {
   ngOnInit(): void {
     // this.logOut();
   }
+
+  open(type: AlertType) {
+
+    // const conf: AlertSettings = new AlertSettings();
+
+    const settings: AlertSettings = {
+      overlay: true,
+      overlayClickToClose: false,
+      showCloseButton: true,
+      duration: 0
+    };
+
+
+    this._alert.create(type, 'This is a message', 'SGR', settings);
+}
 
   verificaLogin() {
     if (localStorage.getItem('Logado')) {
@@ -170,6 +190,34 @@ export class AppComponent implements OnInit {
         localStorage.setItem('currentUser', JSON.stringify(this.Usuario));
         localStorage.setItem('Logado', JSON.stringify({Logado: this.Logado}));
       }
+    });
+  }
+
+  openDialog(): void {
+    const dialogLoginRef = this.dialog.open(DialogComponent, {
+      width: '450px',
+      height: '250px',
+      disableClose: true,
+      data: { title: 'SGR',
+              message: 'teste de mensagem do dialogo',
+              showOkButton: false,
+              showYesNoButton: true,
+              showCancelButton: false,
+              type: 'question'
+            }
+    });
+
+    dialogLoginRef.afterClosed().subscribe(result => {
+      console.log('The dialog was closed');
+      alert('sua mensagem de retorno foi' + result.retorno );
+      console.log(result.retorno);
+      // if ((result.Usuario != null) || (result.Usuario !== undefined)) {
+      //   this.Usuario = result.Usuario;
+      //   this.Logado = result.logado;
+      //   this.tokenManager.store(result.token);
+      //   localStorage.setItem('currentUser', JSON.stringify(this.Usuario));
+      //   localStorage.setItem('Logado', JSON.stringify({Logado: this.Logado}));
+      // }
     });
   }
 
