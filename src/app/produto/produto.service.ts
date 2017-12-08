@@ -14,6 +14,38 @@ export class ProdutoService {
 
   constructor(private _http: Http) {}
 
+  addProduto() {
+
+  }
+
+  deleteProduto(accessToken: string, _id: number) {
+    const headers = new Headers({
+      Accept: 'application/json',
+      Authorization: 'Bearer ' + accessToken
+    });
+
+    return this._http
+      .delete(this.produtoUrl + '/' + _id.toString(), { headers: headers })
+      .map((res: Response) => res.json())
+      .catch((error: any) =>
+        Observable.throw(error.json().error || 'Server error')
+      );
+  }
+
+  getProduto(accessToken: string, _id: number)  {
+    const headers = new Headers({
+      Accept: 'application/json',
+      Authorization: 'Bearer ' + accessToken
+    });
+
+    return this._http
+      .get(this.produtoUrl + '/' + _id.toString(), { headers: headers })
+      .map((res: Response) => res)
+      .catch((error: any) =>
+        Observable.throw(error.json().error || 'Server error')
+      );
+  }
+
   /** Metodo que retorna um observable com dados da listagem de produtos
    *  parametro: acessToken: string
   */

@@ -1,3 +1,4 @@
+import { DialogService } from './dialog/dialog.service';
 import { AlertsService } from './alerts.service';
 import { AuthGuard } from './auth-guard';
 import { TokenManagerService } from './token-manager.service';
@@ -47,7 +48,7 @@ import { DialogComponent } from './dialog/dialog.component';
     ProdutoModule,
     AppRoutingModule
   ],
-  providers: [LoginService, UserService, TokenManagerService, AuthGuard, AlertsService],
+  providers: [LoginService, UserService, TokenManagerService, AuthGuard, AlertsService, DialogService],
   entryComponents: [LoginComponent, DialogComponent],
   bootstrap: [AppComponent]
 })

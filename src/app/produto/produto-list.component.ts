@@ -1,3 +1,4 @@
+import { DialogService } from './../dialog/dialog.service';
 import { by } from 'protractor';
 // import { Observable } from 'rxjs/Rx';
 import { FormControl } from '@angular/forms';
@@ -18,8 +19,10 @@ import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/distinctUntilChanged';
 import 'rxjs/add/operator/debounceTime';
 import { Produto } from './produto';
-import {ChangeDetectorRef} from '@angular/core';
+import { ChangeDetectorRef } from '@angular/core';
 import { OnlyNumberDirective } from './../only-number.directive';
+// import { DialogComponent } from '../dialog/dialog.component';
+// import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 
 @Component({
   selector: 'app-produto',
@@ -27,16 +30,13 @@ import { OnlyNumberDirective } from './../only-number.directive';
   styleUrls: ['./produto-list.component.css']
 })
 export class ProdutoListComponent implements OnInit {
-  pagina = 1;
-  totalPagina = 10;
-  // displayedColumns = ['select', 'userId', 'userName', 'progress', 'color'];
   displayedColumns = ['id', 'codigo_produto', 'descricao', 'unidade', 'quantidade_estoque'];
-  // exampleDatabase = new ExampleDatabase();
-  selection = new SelectionModel<string>(true, []);
-  // dataSource: ExampleDataSource | null;
+  // selection = new SelectionModel<string>(true, []);
   dataSource: DsProduto | null;
-  selectedRowIndex: number = -1;
+  selectedRowIndex = -1;
+  selectedRow: any | null;
   produtos: Produto[];
+
 
   idFilter = new FormControl();
   codigoFilter = new FormControl();
@@ -79,7 +79,9 @@ export class ProdutoListComponent implements OnInit {
   //   }
   // }
 
-  constructor(private _produtoService: ProdutoService, private _tokenManager: TokenManagerService) {}
+  constructor(private _produtoService: ProdutoService,
+              private _tokenManager: TokenManagerService,
+              private dialog: DialogService) {}
 
   obterProdutos() {
     // const token = this._tokenManager.retrieve();
@@ -94,44 +96,82 @@ export class ProdutoListComponent implements OnInit {
   highlight(row) {
     if (this.selectedRowIndex === row.id) {
       this.selectedRowIndex = -1;
+      this.selectedRow = null;
     } else {
       this.selectedRowIndex = row.id;
+      this.selectedRow = row;
     }
-    // alert('clicou na linha ' + row.id);
   }
 
 
   //#region botões de ação
   btnEditar_click() {
-    alert('Editar');
+    this.editarRegistro();
   }
 
   btnIncluir_click() {
-    alert('Incluir');
+    this.incluirRegistro();
   }
 
   btnExcluir_click() {
-    alert('Excluir');
+    // alert('Excluir');
+    // this.ngOnInit();
+    this.excluirRegistro();
   }
   //#endregion
 
-  //#region botoes navegação
-  btnPrimeiro_click() {
-    alert('primeiro');
+ /**
+  * Metodo que verifica se existe registro selecionado na grid.
+ */
+  validaSelecao(): boolean {
+    if (this.selectedRowIndex === -1) {
+      this.dialog.warning('SGR', 'Nenhum registro selecionado na grade.');
+      return false;
+    } else {
+      return true;
+      // alert('Produto para selecionado para exclusão ' + this.selectedRow.codigo_produto);
+      // this.ngOnInit();
+      // this.selectedRowIndex = -1;
+      // this.selectedRow = null;
+    }
   }
 
-  btnAnterior_click() {
-    alert('anterior');
+  incluirRegistro() {
+
   }
 
-  btnProximo_click() {
-    alert('proximo');
+
+  editarRegistro() {
+    if (this.validaSelecao()) {
+      // alert('Produto para selecionado para edição ' + this.selectedRow.codigo_produto);
+      this.ngOnInit();
+      this.selectedRowIndex = -1;
+      this.selectedRow = null;
+    }
   }
 
-  btnUltimo_click() {
-    alert('ultimo');
+  excluirRegistro() {
+    if (this.validaSelecao()) {
+      this.dialog.question('SGR', 'Deseja realmente excluir o produto:' + this.selectedRow.id).subscribe(
+        result => {
+          if (result.retorno) {
+            this._produtoService.deleteProduto(this._tokenManager.retrieve(), this.selectedRow.id).subscribe(
+              data => {
+                this.dialog.success('SGR', 'Produto excluído com sucesso.');
+                this.ngOnInit();
+              },
+              error => {
+                this.dialog.error('SGR', 'Erro ao excluir o registro. msg: ' + error.error);
+              },
+            );
+            this.selectedRowIndex = -1;
+            this.selectedRow = null;
+          }
+        }
+      );
+      // alert('Produto para selecionado para exclusão ' + this.selectedRow.codigo_produto);
+    }
   }
-  //#endregion
 
   ngOnInit() {
     // this.dataSource = new ExampleDataSource(this.exampleDatabase, this.sort);
