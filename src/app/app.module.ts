@@ -23,7 +23,6 @@ import { OnlyNumberDirective } from './only-number.directive';
 import { AlertComponent } from './alert/alert.component';
 import { AlertsComponent } from './alerts/alerts.component';
 import { DialogComponent } from './dialog/dialog.component';
-
 @NgModule({
   declarations: [
     AppComponent,

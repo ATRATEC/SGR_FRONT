@@ -21,7 +21,7 @@ export class ProdutoService {
   deleteProduto(accessToken: string, _id: number) {
     const headers = new Headers({
       Accept: 'application/json',
-      Authorization: 'Bearer ' + accessToken
+      Authorization: 'Bearer ' + accessToken.toString().replace(/"/g, '')
     });
 
     return this._http
@@ -35,7 +35,7 @@ export class ProdutoService {
   getProduto(accessToken: string, _id: number)  {
     const headers = new Headers({
       Accept: 'application/json',
-      Authorization: 'Bearer ' + accessToken
+      Authorization: 'Bearer ' + accessToken.toString().replace(/"/g, '')
     });
 
     return this._http
@@ -52,12 +52,12 @@ export class ProdutoService {
   getProdutos(accessToken: string, sort: string, order: string, page: number, pagesize: number, filter: ProdutoFilter) {
     const headers = new Headers({
       Accept: 'application/json',
-      Authorization: 'Bearer ' + accessToken
+      Authorization: 'Bearer ' + accessToken.toString().replace(/"/g, '')
     });
 
     const search: URLSearchParams =  new URLSearchParams();
     search.set('nrcount', pagesize.toString());
-    // page++;
+    page++;
     search.set('page', page.toString());
 
     if ((!isNullOrUndefined(order)) && (order.length > 0)) {

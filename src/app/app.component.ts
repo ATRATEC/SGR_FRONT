@@ -77,7 +77,12 @@ export class AppComponent implements OnInit {
 }
 
   verificaLogin() {
-    if (localStorage.getItem('Logado')) {
+    // if (localStorage.getItem('Logado')) {
+    //   this.Usuario = JSON.parse(localStorage.getItem('currentUser'));
+    //   this.Logado = true;
+    //   return true;
+    // }
+    if (sessionStorage.getItem('Logado')) {
       this.Usuario = JSON.parse(localStorage.getItem('currentUser'));
       this.Logado = true;
       return true;
@@ -189,6 +194,7 @@ export class AppComponent implements OnInit {
         this.tokenManager.store(result.token);
         localStorage.setItem('currentUser', JSON.stringify(this.Usuario));
         localStorage.setItem('Logado', JSON.stringify({Logado: this.Logado}));
+        sessionStorage.setItem('Logado', JSON.stringify({Logado: this.Logado}));
       }
     });
   }
@@ -224,6 +230,7 @@ export class AppComponent implements OnInit {
   logOut(): void {
     this.Logado = false;
     this.tokenManager.delete();
+    sessionStorage.removeItem('Logado');
     localStorage.removeItem('Logado');
     localStorage.removeItem('currentUser');
   }

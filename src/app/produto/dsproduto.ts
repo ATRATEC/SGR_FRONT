@@ -1,4 +1,4 @@
-  import { TokenManagerService } from './../token-manager.service';
+import { TokenManagerService } from './../token-manager.service';
 import { ProdutoService } from './produto.service';
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { DataSource} from '@angular/cdk/collections';
@@ -27,7 +27,7 @@ export class DsProduto extends DataSource<Produto> {
   }
 
   resultsLength = 0;
-  isLoadingResults = false;
+  isLoadingResults: boolean;
 
   paginaInicial: number;
   paginaAtual: number;
@@ -42,6 +42,7 @@ export class DsProduto extends DataSource<Produto> {
               private _paginator: MatPaginator,
               private _sort: MatSort) {
     super();
+    this.isLoadingResults = false;
   }
   connect(): Observable<Produto[]> {
     const displayDataChanges = [
@@ -49,7 +50,7 @@ export class DsProduto extends DataSource<Produto> {
       this._paginator.page,
       this._filterChange,
     ];
-    this._sort.sortChange.subscribe(() => this._paginator.pageIndex = 1);
+    this._sort.sortChange.subscribe(() => this._paginator.pageIndex = 0);
 
     return Observable.merge(...displayDataChanges)
     .startWith(null)

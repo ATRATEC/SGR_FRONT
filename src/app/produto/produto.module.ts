@@ -5,6 +5,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { BrowserModule } from '@angular/platform-browser';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { ProdutoListComponent } from './produto-list.component';
+import { ProdutoFormComponent } from './produto-form.component';
 import { ProdutoService } from './produto.service';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
@@ -25,7 +26,8 @@ import { ProdutoRoutingModule } from './produto-routing.module';
     ProdutoRoutingModule
   ],
   declarations: [
-    ProdutoListComponent
+    ProdutoListComponent,
+    ProdutoFormComponent
   ],
   providers: [ProdutoService]
 })

@@ -1,9 +1,9 @@
 <!-- <mat-card style="background-color: rgb(255, 255, 255); margin: 2px; padding: 2px; max-height: 550px" ng-keydown=""> -->
   <!-- <mat-card-content style="background-color: rgb(255, 255, 255); padding: 0"> -->
-    <div fxLayout="row" fxLayoutAlign="start start" fxLayoutGap="1px" style="background-color: rgb(255, 255, 255)">
-      <div fxFlex="140px" style="background-color: rgb(255, 255, 255);padding: 10px;" fxLayoutGap="10px" >
+    <div fxLayout="row" fxLayoutAlign="start start" fxLayoutGap="1px">
+      <div fxFlex="140px" style="padding: 10px;" fxLayoutGap="10px" >
         <div fxLayout="column" fxLayoutAlign="space-between center" fxLayoutGap="5px" style="height: 100%">
-          <div fxFlex="80%" fxFlexFill style="background-color: rgb(255, 255, 255)" fxFlexAlign="center">
+          <div fxFlex="80%" fxFlexFill fxFlexAlign="center">
             <button id="lblTitulo" mat-raised-button style="width: 100%" disabled>
               <i class="fa fa-cubes" aria-hidden="true"></i>
               <span>PRODUTOS</span>
@@ -21,7 +21,7 @@
               <span>Excluir</span>
             </button>
           </div>
-          <div fxFlex="40px" fxFlexFill style="background-color: rgb(255, 255, 255)" fxFlexAlign="end">
+          <div fxFlex="40px" fxFlexFill fxFlexAlign="end">
 
 
               <!-- <div fxFlex="20%" fxFlexFill> -->
@@ -39,7 +39,7 @@
           </div>
         </div>
       </div>
-      <div fxFlex="90%" style="background-color: rgb(255, 255, 255)">
+      <div fxFlex="90%">
         <div fxLayout="column" fxLayoutAlign="center center" fxLayoutGap="5px">
           <!-- <div fxFlex="35px" fxFlexAlign="start" style="background-color: rgb(29, 238, 221); width: 100%" [style.display]="selection.isEmpty() ? '' : 'none'">
             <div class="example-header" [style.display]="selection.isEmpty() ? '' : 'none'">
@@ -53,7 +53,7 @@
             {{selection.selected.length}} {{selection.selected.length == 1 ? 'user' : 'users'}} selected
           </div>
           <div fxFlex="1px" class="customHrFull"></div> -->
-          <div fxFlex="47px" fxFlexAlign="start" style="background-color: rgb(255, 255, 255); width: 100%">
+          <div fxFlex="47px" fxFlexAlign="start" style="width: 100%">
             <table>
               <tr>
                 <td>
@@ -87,10 +87,10 @@
             </table>
           </div>
           <div fxFlex="1px" class="customHrFull"></div>
-          <div fxFlex="400px" class="example-loading-shade" fxFlexAlign="start" *ngIf="dataSource.isLoadingResults">
+          <div fxFlex="400px" class="example-loading-shade" fxFlexAlign="start" *ngIf="dataSource.isLoadingResults" style="height: 100%">
             <mat-spinner *ngIf="dataSource.isLoadingResults"></mat-spinner>
           </div>
-          <div fxFlex="400px" fxFlexAlign="start" style="background-color: rgb(255, 255, 255); width: 100%">
+          <div fxFlex="400px" fxFlexAlign="start" style="width: 100%">
 
             <mat-table #table [dataSource]="dataSource" matSort>
 
@@ -143,7 +143,7 @@
               <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
               <mat-row *matRowDef="let row; columns: displayedColumns;" [ngClass]="{'highlight': selectedRowIndex == row.id}" (click)="highlight(row)"></mat-row>
             </mat-table>
-            <mat-paginator #paginator [length]="dataSource.nrRegistros" [pageIndex]="1" [pageSize]="25" [pageSizeOptions]="[5, 10, 15, 25, 100]">
+            <mat-paginator #paginator [length]="dataSource.nrRegistros" [pageIndex]="0" [pageSize]="25" [pageSizeOptions]="[5, 10, 15, 25, 100]">
             </mat-paginator>
           </div>
         </div>
