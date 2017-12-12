@@ -31,7 +31,8 @@ import { OnlyNumberDirective } from './../only-number.directive';
   styleUrls: ['./acondicionamento-list.component.css']
 })
 export class AcondicionamentoListComponent implements OnInit {
-  displayedColumns = ['id', 'codigo', 'descricao'];
+  displayedColumns = ['codigo', 'descricao'];
+  // displayedColumns = ['id', 'codigo', 'descricao'];
   // selection = new SelectionModel<string>(true, []);
   dataSource: DsAcondicionamento | null;
   selectedRowIndex = -1;

@@ -1,3 +1,4 @@
+import { isNullOrUndefined } from 'util';
 import { DialogService } from './../dialog/dialog.service';
 import { TokenManagerService } from './../token-manager.service';
 import { AcondicionamentoService } from './acondicionamento.service';
@@ -26,6 +27,7 @@ export class AcondicionamentoFormComponent implements OnInit, AfterViewInit, Aft
 
   acondicionamento: Acondicionamento;
   emProcessamento = false;
+  exibeIncluir = false;
 
   valCodigo = new FormControl('', [Validators.required]);
   valDescricao = new FormControl('', [Validators.required]);
@@ -39,7 +41,7 @@ export class AcondicionamentoFormComponent implements OnInit, AfterViewInit, Aft
 
   ngOnInit() {
     this.emProcessamento = true;
-    this.acondicionamento = new Acondicionamento(0, null, '', '', '');
+    this.acondicionamento = new Acondicionamento(null, null, '', '', '');
     this._route.params.forEach((params: Params) => {
       const id: number = +params['id'];
       if (id) {
@@ -62,6 +64,8 @@ export class AcondicionamentoFormComponent implements OnInit, AfterViewInit, Aft
         //    console.log(cliente);
         //    this.cliente = cliente;
         // });
+      } else {
+        this.emProcessamento = false;
       }
     });
   }
@@ -85,21 +89,55 @@ export class AcondicionamentoFormComponent implements OnInit, AfterViewInit, Aft
   }
 
   btnSalvar_click() {
-    this._acondicionamentoService.addAcondicionamento(this._tokenManager.retrieve(),
-                                                      '1',
-                                                      'teste de inclusão').subscribe(
+    this.emProcessamento = true;
+    if (isNullOrUndefined(this.acondicionamento.id)) {
+      this._acondicionamentoService.addAcondicionamento(this._tokenManager.retrieve(),
+                                                      this.acondicionamento.codigo.toString(),
+                                                      this.acondicionamento.descricao).subscribe(
                                                         data => {
-                                                          this.dialog.success('SGR', 'Acondicionamento incluído com sucesso.');
-                                                          this.ngOnInit();
+                                                          this.emProcessamento = false;
+                                                          this.exibeIncluir = true;
+                                                          this.dialog.success('SGR', 'Acondicionamento salvo com sucesso.');
+                                                          //this.ngOnInit();
                                                         },
                                                         error => {
-                                                          this.dialog.error('SGR', 'Erro ao incluir o registro. msg: ' + error.error);
+                                                          this.emProcessamento = false;
+                                                          this.dialog.error('SGR', 'Erro ao salvar o registro. msg: ' + error.error);
                                                         },
                                                       );
+    } else {
+      this._acondicionamentoService.editAcondicionamento(this._tokenManager.retrieve(),
+                                                         this.acondicionamento.id,
+                                                         this.acondicionamento.codigo.toString(),
+                                                         this.acondicionamento.descricao).subscribe(
+                                                         data => {
+                                                          this.emProcessamento = false;
+                                                          this.exibeIncluir = true;
+                                                          this.dialog.success('SGR', 'Acondicionamento salvo com sucesso.');
+                                                          //this.ngOnInit();
+                                                        },
+                                                        error => {
+                                                          this.emProcessamento = false;
+                                                          this.dialog.error('SGR', 'Erro ao salvar o registro. msg: ' + error.error);
+                                                        },
+                                                      );
+    }
+
+    // this._acondicionamentoService.addAcondicionamento(this._tokenManager.retrieve(),
+    //                                                   '1',
+    //                                                   'teste de inclusão').subscribe(
+    //                                                     data => {
+    //                                                       this.dialog.success('SGR', 'Acondicionamento incluído com sucesso.');
+    //                                                       this.ngOnInit();
+    //                                                     },
+    //                                                     error => {
+    //                                                       this.dialog.error('SGR', 'Erro ao incluir o registro. msg: ' + error.error);
+    //                                                     },
+    //                                                   );
   }
 
   btnIncluir_click() {
-
+    this.acondicionamento = new Acondicionamento(null, null, '', '', '');
   }
 
   getCodigoErrorMessage() {

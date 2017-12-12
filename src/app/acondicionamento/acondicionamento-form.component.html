@@ -6,7 +6,7 @@
           <mat-icon>save</mat-icon>
           <span>Salvar</span>
         </button>
-        <button id="btnIncluir" mat-raised-button color="primary" style="width: 100%" (click)="btnIncluir_click()">
+        <button id="btnIncluir" mat-raised-button color="primary" style="width: 100%" (click)="btnIncluir_click()" *ngIf="exibeIncluir">
           <mat-icon>insert_drive_file</mat-icon>
           <span>Incluir</span>
         </button>
@@ -42,6 +42,7 @@
             </div>
         <mat-card *ngIf="!emProcessamento">
           <div fxLayout="column" fxLayoutAlign="start center" fxLayoutGap="5px">
+            <input type="hidden" value={{acondicionamento.id}} tabindex="3">
             <div fxFlex="50%" fxFlexAlign="start">
               <mat-form-field class="frm_acondicionamento_codigo">
                 <input matInput autofocus #codigo maxlength="9" [formControl]="valCodigo" type="number" tabindex="1" placeholder="Código" required (keypress)="keyPress($event)" [(ngModel)]="acondicionamento.codigo">
