@@ -4,10 +4,6 @@
       <div fxFlex="140px" style="padding: 10px;" fxLayoutGap="10px" >
         <div fxLayout="column" fxLayoutAlign="space-between center" fxLayoutGap="5px" style="height: 100%">
           <div fxFlex="80%" fxFlexFill fxFlexAlign="center">
-            <button id="lblTitulo" mat-raised-button style="width: 100%" disabled>
-              <i class="fa fa-cubes" aria-hidden="true"></i>
-              <span>PRODUTOS</span>
-            </button>
             <button id="btnEditar" mat-raised-button color="primary" style="width: 100%" (click)="btnEditar_click()">
               <mat-icon>edit</mat-icon>
               <span>Editar</span>
@@ -40,7 +36,13 @@
         </div>
       </div>
       <div fxFlex="90%">
-        <div fxLayout="column" fxLayoutAlign="center center" fxLayoutGap="5px">
+        <div fxLayout="column" fxLayoutAlign="center center" fxLayoutGap="10px">
+            <div fxFlex="35px" fxFlexAlign="start" style="padding: 10px;">
+                <button id="lblTitulo" mat-raised-button style="width: 100%" disabled>
+                    <i class="fa fa-cubes" aria-hidden="true"></i>
+                    <span>PRODUTOS</span>
+                  </button>
+            </div>
           <!-- <div fxFlex="35px" fxFlexAlign="start" style="background-color: rgb(29, 238, 221); width: 100%" [style.display]="selection.isEmpty() ? '' : 'none'">
             <div class="example-header" [style.display]="selection.isEmpty() ? '' : 'none'">
               <mat-form-field floatPlaceholder="never">
@@ -57,7 +59,7 @@
             <table>
               <tr>
                 <td>
-                    <mat-form-field class="mat-column-id" style="margin-left: 10px">
+                    <mat-form-field class="mat-column-id" style="margin-left: 5px">
                         <input matInput type="number" #filter placeholder="ID" [formControl]="idFilter" (keypress)="keyPress($event)">
                       </mat-form-field>
                 </td>

@@ -12,4 +12,12 @@ export class ProdutoFormComponent implements OnInit {
   ngOnInit() {
   }
 
+  btnSalvar_click() {
+
+  }
+
+  btnIncluir_click() {
+
+  }
+
 }

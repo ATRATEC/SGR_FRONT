@@ -1,3 +1,4 @@
+import { AcondicionamentoModule } from './acondicionamento/acondicionamento.module';
 import { DialogService } from './dialog/dialog.service';
 import { AlertsService } from './alerts.service';
 import { AuthGuard } from './auth-guard';
@@ -45,6 +46,7 @@ import { DialogComponent } from './dialog/dialog.component';
     ReactiveFormsModule,
     CommonModule,
     ProdutoModule,
+    AcondicionamentoModule,
     AppRoutingModule
   ],
   providers: [LoginService, UserService, TokenManagerService, AuthGuard, AlertsService, DialogService],
