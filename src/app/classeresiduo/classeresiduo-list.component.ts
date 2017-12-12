@@ -2,9 +2,9 @@ import { Router } from '@angular/router';
 import { DialogService } from './../dialog/dialog.service';
 import { by } from 'protractor';
 import { FormControl } from '@angular/forms';
-import { DsAcondicionamento } from './dsacondicionamento';
+import { DsClasseResiduo } from './dsclasseresiduo';
 import { TokenManagerService } from './../token-manager.service';
-import { AcondicionamentoService } from './acondicionamento.service';
+import { ClasseResiduoService } from './classeresiduo.service';
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { DataSource} from '@angular/cdk/collections';
 import { MatSort } from '@angular/material';
@@ -18,22 +18,22 @@ import 'rxjs/add/observable/fromEvent';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/distinctUntilChanged';
 import 'rxjs/add/operator/debounceTime';
-import { Acondicionamento } from './acondicionamento';
+import { ClasseResiduo } from './classeresiduo';
 import { ChangeDetectorRef } from '@angular/core';
 import { OnlyNumberDirective } from './../only-number.directive';
 
 @Component({
-  selector: 'app-acondicionamento',
-  templateUrl: './acondicionamento-list.component.html',
-  styleUrls: ['./acondicionamento-list.component.css']
+  selector: 'app-classeresiduo',
+  templateUrl: './classeresiduo-list.component.html',
+  styleUrls: ['./classeresiduo-list.component.css']
 })
-export class AcondicionamentoListComponent implements OnInit {
+export class ClasseResiduoListComponent implements OnInit {
   displayedColumns = ['codigo', 'descricao'];
   // displayedColumns = ['id', 'codigo', 'descricao'];
-  dataSource: DsAcondicionamento | null;
+  dataSource: DsClasseResiduo | null;
   selectedRowIndex = -1;
   selectedRow: any | null;
-  acondicionamentos: Acondicionamento[];
+  classeresiduos: ClasseResiduo[];
 
 
   idFilter = new FormControl();
@@ -51,17 +51,17 @@ export class AcondicionamentoListComponent implements OnInit {
     }
   }
 
-  constructor(private _acondicionamentoService: AcondicionamentoService,
+  constructor(private _classeresiduoService: ClasseResiduoService,
               private _tokenManager: TokenManagerService,
               private dialog: DialogService,
               private _router: Router) {}
 
-  obterAcondicionamentos() {
+  obterClasseResiduos() {
     // const token = this._tokenManager.retrieve();
-    // this._acondicionamentoService.getAcondicionamentos(token).subscribe(data => {
-    //   this.acondicionamentos = data.data;
+    // this._classeresiduoService.getClasseResiduos(token).subscribe(data => {
+    //   this.classeresiduos = data.data;
     //   console.log(data);
-    //   console.log(this.acondicionamentos.length);
+    //   console.log(this.classeresiduos.length);
     //   console.log(token);
     // });
   }
@@ -87,6 +87,8 @@ export class AcondicionamentoListComponent implements OnInit {
   }
 
   btnExcluir_click() {
+    // alert('Excluir');
+    // this.ngOnInit();
     this.excluirRegistro();
   }
   //#endregion
@@ -104,14 +106,14 @@ export class AcondicionamentoListComponent implements OnInit {
   }
 
   incluirRegistro() {
-    this._router.navigate(['/acondicionamentos/acondicionamento']);
+    this._router.navigate(['/classeresiduos/classeresiduo']);
   }
 
 
   editarRegistro() {
     if (this.validaSelecao()) {
-      this._router.navigate(['/acondicionamentos/acondicionamento', {id: this.selectedRow.id}]);
-      this.ngOnInit();
+      this._router.navigate(['/classeresiduos/classeresiduo', {id: this.selectedRow.id}]);
+      // this.ngOnInit();
       this.selectedRowIndex = -1;
       this.selectedRow = null;
     }
@@ -119,12 +121,12 @@ export class AcondicionamentoListComponent implements OnInit {
 
   excluirRegistro() {
     if (this.validaSelecao()) {
-      this.dialog.question('SGR', 'Deseja realmente excluir o acondicionamento: ' + this.selectedRow.id + '?').subscribe(
+      this.dialog.question('SGR', 'Deseja realmente excluir o classeresiduo: ' + this.selectedRow.id + '?').subscribe(
         result => {
           if (result.retorno) {
-            this._acondicionamentoService.deleteAcondicionamento(this._tokenManager.retrieve(), this.selectedRow.id).subscribe(
+            this._classeresiduoService.deleteClasseResiduo(this._tokenManager.retrieve(), this.selectedRow.id).subscribe(
               data => {
-                this.dialog.success('SGR', 'Acondicionamento excluído com sucesso.');
+                this.dialog.success('SGR', 'ClasseResiduo excluído com sucesso.');
                 this.ngOnInit();
               },
               error => {
@@ -144,7 +146,7 @@ export class AcondicionamentoListComponent implements OnInit {
     this.paginator._intl.nextPageLabel = 'Próxima Página';
     this.paginator._intl.previousPageLabel = 'Voltar Página';
 
-    this.dataSource = new DsAcondicionamento(this._tokenManager, this._acondicionamentoService, this.paginator, this.sort);
+    this.dataSource = new DsClasseResiduo(this._tokenManager, this._classeresiduoService, this.paginator, this.sort);
 
     const idFilter$ = this.idFilter.valueChanges.debounceTime(500).distinctUntilChanged().startWith('');
     const codigoFilter$ = this.codigoFilter.valueChanges.debounceTime(500).distinctUntilChanged().startWith('');
@@ -158,4 +160,3 @@ export class AcondicionamentoListComponent implements OnInit {
       });
   }
 }
-

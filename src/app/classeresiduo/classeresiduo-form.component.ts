@@ -1,7 +1,7 @@
 import { isNullOrUndefined } from 'util';
 import { DialogService } from './../dialog/dialog.service';
 import { TokenManagerService } from './../token-manager.service';
-import { AcondicionamentoService } from './acondicionamento.service';
+import { ClasseResiduoService } from './classeresiduo.service';
 import { Component, OnInit, AfterViewInit, AfterViewChecked } from '@angular/core';
 import { Router } from '@angular/router';
 import { by } from 'protractor';
@@ -14,18 +14,18 @@ import 'rxjs/add/operator/distinctUntilChanged';
 import 'rxjs/add/operator/debounceTime';
 import { ChangeDetectorRef, ViewChildren } from '@angular/core';
 import { OnlyNumberDirective } from './../only-number.directive';
-import { Acondicionamento } from './acondicionamento';
+import { ClasseResiduo } from './classeresiduo';
 import { ActivatedRoute, Params} from '@angular/router';
 import {FormControl, Validators} from '@angular/forms';
 
 @Component({
-  selector: 'app-acondicionamento-form',
-  templateUrl: './acondicionamento-form.component.html',
-  styleUrls: ['./acondicionamento-form.component.css']
+  selector: 'app-classeresiduo-form',
+  templateUrl: './classeresiduo-form.component.html',
+  styleUrls: ['./classeresiduo-form.component.css']
 })
-export class AcondicionamentoFormComponent implements OnInit, AfterViewInit, AfterViewChecked {
+export class ClasseResiduoFormComponent implements OnInit, AfterViewInit, AfterViewChecked {
 
-  acondicionamento: Acondicionamento;
+  classeresiduo: ClasseResiduo;
   emProcessamento = false;
   exibeIncluir = false;
 
@@ -34,20 +34,20 @@ export class AcondicionamentoFormComponent implements OnInit, AfterViewInit, Aft
 
   @ViewChildren('input') vc;
 
-  constructor(private _acondicionamentoService: AcondicionamentoService,
+  constructor(private _classeresiduoService: ClasseResiduoService,
     private _tokenManager: TokenManagerService,
     private _route: ActivatedRoute,
     private dialog: DialogService) {}
 
   ngOnInit() {
     this.emProcessamento = true;
-    this.acondicionamento = new Acondicionamento(null, null, '', '', '');
+    this.classeresiduo = new ClasseResiduo(null, null, '', '', '');
     this._route.params.forEach((params: Params) => {
       const id: number = +params['id'];
       if (id) {
-        this._acondicionamentoService.getAcondicionamento(this._tokenManager.retrieve(), id)
+        this._classeresiduoService.getClasseResiduo(this._tokenManager.retrieve(), id)
         .subscribe( data => {
-          this.acondicionamento = JSON.parse(data._body);
+          this.classeresiduo = JSON.parse(data._body);
           this.emProcessamento = false;
         });
       } else {
@@ -74,42 +74,42 @@ export class AcondicionamentoFormComponent implements OnInit, AfterViewInit, Aft
 
   btnSalvar_click() {
     this.emProcessamento = true;
-    if (isNullOrUndefined(this.acondicionamento.id)) {
-      this._acondicionamentoService.addAcondicionamento(
-        this._tokenManager.retrieve(),
-        this.acondicionamento.codigo.toString(),
-        this.acondicionamento.descricao).subscribe(
-          data => {
-            this.emProcessamento = false;
-            this.exibeIncluir = true;
-            this.dialog.success('SGR', 'Acondicionamento salvo com sucesso.');
-          },
-          error => {
-            this.emProcessamento = false;
-            this.dialog.error('SGR', 'Erro ao salvar o registro. msg: ' + error.error);
-          },
-        );
-    } else {
-      this._acondicionamentoService.editAcondicionamento(
-        this._tokenManager.retrieve(),
-        this.acondicionamento.id,
-        this.acondicionamento.codigo.toString(),
-        this.acondicionamento.descricao).subscribe(
+    if (isNullOrUndefined(this.classeresiduo.id)) {
+      this._classeresiduoService.addClasseResiduo(
+      this._tokenManager.retrieve(),
+      this.classeresiduo.codigo.toString(),
+      this.classeresiduo.descricao).subscribe(
         data => {
-        this.emProcessamento = false;
-        this.exibeIncluir = true;
-        this.dialog.success('SGR', 'Acondicionamento salvo com sucesso.');
-      },
-      error => {
-        this.emProcessamento = false;
-        this.dialog.error('SGR', 'Erro ao salvar o registro. msg: ' + error.error);
-      },
-    );
+          this.emProcessamento = false;
+          this.exibeIncluir = true;
+          this.dialog.success('SGR', 'Classe de Residuo salvo com sucesso.');
+        },
+        error => {
+          this.emProcessamento = false;
+          this.dialog.error('SGR', 'Erro ao salvar o registro. msg: ' + error.error);
+        },
+      );
+    } else {
+      this._classeresiduoService.editClasseResiduo(
+        this._tokenManager.retrieve(),
+        this.classeresiduo.id,
+        this.classeresiduo.codigo.toString(),
+        this.classeresiduo.descricao).subscribe(
+        data => {
+          this.emProcessamento = false;
+          this.exibeIncluir = true;
+          this.dialog.success('SGR', 'Classe de Residuo salvo com sucesso.');
+        },
+        error => {
+          this.emProcessamento = false;
+          this.dialog.error('SGR', 'Erro ao salvar o registro. msg: ' + error.error);
+        },
+      );
     }
   }
 
   btnIncluir_click() {
-    this.acondicionamento = new Acondicionamento(null, null, '', '', '');
+    this.classeresiduo = new ClasseResiduo(null, null, '', '', '');
   }
 
   getCodigoErrorMessage() {

@@ -1,3 +1,4 @@
+import { ClasseResiduoModule } from './classeresiduo/classeresiduo.module';
 import { AcondicionamentoModule } from './acondicionamento/acondicionamento.module';
 import { DialogService } from './dialog/dialog.service';
 import { AlertsService } from './alerts.service';
@@ -47,6 +48,7 @@ import { DialogComponent } from './dialog/dialog.component';
     CommonModule,
     ProdutoModule,
     AcondicionamentoModule,
+    ClasseResiduoModule,
     AppRoutingModule
   ],
   providers: [LoginService, UserService, TokenManagerService, AuthGuard, AlertsService, DialogService],
