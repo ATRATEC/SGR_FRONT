@@ -1,6 +1,6 @@
 import { TokenManagerService } from './../token-manager.service';
-import { ClasseResiduoService } from './classeresiduo.service';
-import { Component, OnInit, ViewChild, ElementRef, EventEmitter } from '@angular/core';
+import { ResiduoService } from './residuo.service';
+import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { DataSource} from '@angular/cdk/collections';
 import { MatSort } from '@angular/material';
 import { MatPaginator } from '@angular/material';
@@ -13,22 +13,21 @@ import 'rxjs/add/observable/fromEvent';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/distinctUntilChanged';
 import 'rxjs/add/operator/debounceTime';
-import { ClasseResiduo, ClasseResiduoFilter } from './classeresiduo';
+import { Residuo, ResiduoFilter } from './residuo';
 
-export class DsClasseResiduo extends DataSource<ClasseResiduo> {
+export class DsResiduo extends DataSource<Residuo> {
   _filterChange = new BehaviorSubject( {id: '', codigo: '', descricao: ''} );
 
-  public onChange: EventEmitter<boolean> = new EventEmitter<boolean>();
-
-  get filter(): ClasseResiduoFilter {
+  get filter(): ResiduoFilter {
     return this._filterChange.value;
   }
 
-  set filter(filter: ClasseResiduoFilter) {
+  set filter(filter: ResiduoFilter) {
     this._filterChange.next(filter);
   }
 
   resultsLength = 0;
+  isLoadingResults: boolean;
 
   paginaInicial: number;
   paginaAtual: number;
@@ -36,16 +35,15 @@ export class DsClasseResiduo extends DataSource<ClasseResiduo> {
   registroDe: number;
   registroAte: number;
   nrRegistros: number;
-  // isRateLimitReached = false;
 
   constructor(private _tokenManager: TokenManagerService,
-              private _classeresiduoService: ClasseResiduoService,
+              private _residuoService: ResiduoService,
               private _paginator: MatPaginator,
               private _sort: MatSort) {
     super();
-    this.onChange.emit(false);
+    this.isLoadingResults = false;
   }
-  connect(): Observable<ClasseResiduo[]> {
+  connect(): Observable<Residuo[]> {
     const displayDataChanges = [
       this._sort.sortChange,
       this._paginator.page,
@@ -56,29 +54,26 @@ export class DsClasseResiduo extends DataSource<ClasseResiduo> {
     return Observable.merge(...displayDataChanges)
     .startWith(null)
     .switchMap(() => {
-      this.onChange.emit(true);
-      return this._classeresiduoService.getClasseResiduos(this._tokenManager.retrieve(),
+      this.isLoadingResults = true;
+      return this._residuoService.getResiduos(this._tokenManager.retrieve(),
         this._sort.active, this._sort.direction, this._paginator.pageIndex, this._paginator.pageSize, this.filter);
     })
     .map(data => {
       // Flip flag to show that loading has finished.
-      this.onChange.emit(false);
-      // this.isRateLimitReached = false;
-      // this.resultsLength = data.total_count;
+      this.isLoadingResults = false;
       this.paginaInicial = 1;
       this.paginaFinal = data.meta.last_page;
       this.registroDe = data.meta.from;
       this.registroAte = data.meta.to;
       this.nrRegistros = data.meta.total;
-      // console.log(data.data);
       return data.data;
     })
     .catch(() => {
+      this.isLoadingResults = false;
       return Observable.of([]);
     });
-    // throw new Error('Method not implemented.');
   }
   disconnect(): void {
-    // throw new Error('Method not implemented.');
+
   }
 }

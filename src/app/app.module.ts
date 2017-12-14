@@ -1,3 +1,5 @@
+import { ResiduoModule } from './residuo/residuo.module';
+import { TipoAtividadeModule } from './tipoatividade/tipoatividade.module';
 import { ClasseResiduoModule } from './classeresiduo/classeresiduo.module';
 import { AcondicionamentoModule } from './acondicionamento/acondicionamento.module';
 import { DialogService } from './dialog/dialog.service';
@@ -49,6 +51,8 @@ import { DialogComponent } from './dialog/dialog.component';
     ProdutoModule,
     AcondicionamentoModule,
     ClasseResiduoModule,
+    TipoAtividadeModule,
+    ResiduoModule,
     AppRoutingModule
   ],
   providers: [LoginService, UserService, TokenManagerService, AuthGuard, AlertsService, DialogService],

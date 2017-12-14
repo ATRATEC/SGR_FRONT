@@ -28,7 +28,7 @@
       <div fxFlex="25px" fxFlexAlign="start" style="padding: 10px;">
         <button id="lblTitulo" mat-raised-button style="width: 100%" disabled>
           <i class="fa fa-recycle" aria-hidden="true"></i>
-          <span>CLASSES DE RESÍDUOS</span>
+          <span>RESÍDUOS</span>
         </button>
       </div>
       <div fxFlex="47px" fxFlexAlign="start" style="width: 100%">
@@ -49,8 +49,8 @@
         </table>
       </div>
       <div fxFlex="1px" class="customHrFull"></div>
-      <div fxFlex="400px" class="example-loading-shade" fxFlexAlign="start" *ngIf="isLoadingResults" style="height: 100%">
-        <mat-spinner *ngIf="isLoadingResults"></mat-spinner>
+      <div fxFlex="400px" class="example-loading-shade" fxFlexAlign="start" *ngIf="dataSource.isLoadingResults" style="height: 100%">
+        <mat-spinner *ngIf="dataSource.isLoadingResults"></mat-spinner>
       </div>
       <div fxFlex="400px" fxFlexAlign="start" style="width: 100%">
         <mat-table #table [dataSource]="dataSource" matSort>
@@ -70,6 +70,12 @@
           <ng-container matColumnDef="descricao">
             <mat-header-cell *matHeaderCellDef mat-sort-header> Descrição </mat-header-cell>
             <mat-cell *matCellDef="let row"> {{row.descricao}} </mat-cell>
+          </ng-container>
+
+          <!-- Name Column -->
+          <ng-container matColumnDef="descricao_classe">
+            <mat-header-cell *matHeaderCellDef mat-sort-header> Classe </mat-header-cell>
+            <mat-cell *matCellDef="let row"> {{row.descricao_classe}} </mat-cell>
           </ng-container>
 
           <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>

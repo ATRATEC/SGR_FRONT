@@ -1,6 +1,6 @@
 import { TokenManagerService } from './../token-manager.service';
 import { AcondicionamentoService } from './acondicionamento.service';
-import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, EventEmitter } from '@angular/core';
 import { DataSource} from '@angular/cdk/collections';
 import { MatSort } from '@angular/material';
 import { MatPaginator } from '@angular/material';
@@ -18,6 +18,8 @@ import { Acondicionamento, AcondicionamentoFilter } from './acondicionamento';
 export class DsAcondicionamento extends DataSource<Acondicionamento> {
   _filterChange = new BehaviorSubject( {id: '', codigo: '', descricao: ''} );
 
+  public onChange: EventEmitter<boolean> = new EventEmitter<boolean>();
+
   get filter(): AcondicionamentoFilter {
     return this._filterChange.value;
   }
@@ -27,7 +29,7 @@ export class DsAcondicionamento extends DataSource<Acondicionamento> {
   }
 
   resultsLength = 0;
-  isLoadingResults: boolean;
+  // isLoadingResults: boolean;
 
   paginaInicial: number;
   paginaAtual: number;
@@ -41,7 +43,7 @@ export class DsAcondicionamento extends DataSource<Acondicionamento> {
               private _paginator: MatPaginator,
               private _sort: MatSort) {
     super();
-    this.isLoadingResults = false;
+    this.onChange.emit(false);
   }
   connect(): Observable<Acondicionamento[]> {
     const displayDataChanges = [
@@ -54,22 +56,23 @@ export class DsAcondicionamento extends DataSource<Acondicionamento> {
     return Observable.merge(...displayDataChanges)
     .startWith(null)
     .switchMap(() => {
-      this.isLoadingResults = true;
+      // this.isLoadingResults = true;
+      this.onChange.emit(true);
       return this._acondicionamentoService.getAcondicionamentos(this._tokenManager.retrieve(),
         this._sort.active, this._sort.direction, this._paginator.pageIndex, this._paginator.pageSize, this.filter);
     })
     .map(data => {
       // Flip flag to show that loading has finished.
-      this.isLoadingResults = false;
+      // this.isLoadingResults = false;
+      this.onChange.emit(false);
       this.paginaInicial = 1;
-      this.paginaFinal = data.last_page;
-      this.registroDe = data.from;
-      this.registroAte = data.to;
-      this.nrRegistros = data.total;
+      this.paginaFinal = data.meta.last_page;
+      this.registroDe = data.meta.from;
+      this.registroAte = data.meta.to;
+      this.nrRegistros = data.meta.total;
       return data.data;
     })
     .catch(() => {
-      this.isLoadingResults = false;
       return Observable.of([]);
     });
   }

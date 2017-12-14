@@ -1,10 +1,11 @@
+import { ClasseResiduoService } from './../classeresiduo/classeresiduo.service';
 import { Router } from '@angular/router';
 import { DialogService } from './../dialog/dialog.service';
 import { by } from 'protractor';
 import { FormControl } from '@angular/forms';
-import { DsClasseResiduo } from './dsclasseresiduo';
+import { DsResiduo } from './dsresiduo';
 import { TokenManagerService } from './../token-manager.service';
-import { ClasseResiduoService } from './classeresiduo.service';
+import { ResiduoService } from './residuo.service';
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { DataSource} from '@angular/cdk/collections';
 import { MatSort } from '@angular/material';
@@ -18,23 +19,23 @@ import 'rxjs/add/observable/fromEvent';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/distinctUntilChanged';
 import 'rxjs/add/operator/debounceTime';
-import { ClasseResiduo } from './classeresiduo';
-import { ChangeDetectorRef, AfterViewInit } from '@angular/core';
+import { Residuo } from './residuo';
+import { ChangeDetectorRef } from '@angular/core';
 import { OnlyNumberDirective } from './../only-number.directive';
 
 @Component({
-  selector: 'app-classeresiduo',
-  templateUrl: './classeresiduo-list.component.html',
-  styleUrls: ['./classeresiduo-list.component.css']
+  selector: 'app-residuo',
+  templateUrl: './residuo-list.component.html',
+  styleUrls: ['./residuo-list.component.css']
 })
-export class ClasseResiduoListComponent implements OnInit, AfterViewInit {
-  displayedColumns = ['codigo', 'descricao'];
-  // displayedColumns = ['id', 'codigo', 'descricao'];
-  dataSource: DsClasseResiduo | null;
+export class ResiduoListComponent implements OnInit {
+  displayedColumns = ['codigo', 'descricao', 'descricao_classe'];
+  // displayedColumns = ['id', 'codigo', 'descricao', ];
+  dataSource: DsResiduo | null;
   selectedRowIndex = -1;
   selectedRow: any | null;
-  classeresiduos: ClasseResiduo[];
-  isLoadingResults: boolean;
+  residuos: Residuo[];
+
 
   idFilter = new FormControl();
   codigoFilter = new FormControl();
@@ -51,17 +52,19 @@ export class ClasseResiduoListComponent implements OnInit, AfterViewInit {
     }
   }
 
-  constructor(private _classeresiduoService: ClasseResiduoService,
+  constructor(private _residuoService: ResiduoService,
+              private _classeResiduoService: ClasseResiduoService,
               private _tokenManager: TokenManagerService,
               private dialog: DialogService,
               private _router: Router) {}
 
-  obterClasseResiduos() {
+  obterClasseResiduos(_id: number) {
+
     // const token = this._tokenManager.retrieve();
-    // this._classeresiduoService.getClasseResiduos(token).subscribe(data => {
-    //   this.classeresiduos = data.data;
+    // this._residuoService.getResiduos(token).subscribe(data => {
+    //   this.residuos = data.data;
     //   console.log(data);
-    //   console.log(this.classeresiduos.length);
+    //   console.log(this.residuos.length);
     //   console.log(token);
     // });
   }
@@ -77,9 +80,8 @@ export class ClasseResiduoListComponent implements OnInit, AfterViewInit {
   }
 
   dblck(row) {
-    this._router.navigate(['/acondicionamentos/acondicionamento', {id: row.id}]);
+    this._router.navigate(['/residuos/residuo', {id: row.id}]);
   }
-
 
   //#region botões de ação
   btnEditar_click() {
@@ -91,8 +93,6 @@ export class ClasseResiduoListComponent implements OnInit, AfterViewInit {
   }
 
   btnExcluir_click() {
-    // alert('Excluir');
-    // this.ngOnInit();
     this.excluirRegistro();
   }
   //#endregion
@@ -110,14 +110,14 @@ export class ClasseResiduoListComponent implements OnInit, AfterViewInit {
   }
 
   incluirRegistro() {
-    this._router.navigate(['/classeresiduos/classeresiduo']);
+    this._router.navigate(['/residuos/residuo']);
   }
 
 
   editarRegistro() {
     if (this.validaSelecao()) {
-      this._router.navigate(['/classeresiduos/classeresiduo', {id: this.selectedRow.id}]);
-      // this.ngOnInit();
+      this._router.navigate(['/residuos/residuo', {id: this.selectedRow.id}]);
+      this.ngOnInit();
       this.selectedRowIndex = -1;
       this.selectedRow = null;
     }
@@ -125,12 +125,12 @@ export class ClasseResiduoListComponent implements OnInit, AfterViewInit {
 
   excluirRegistro() {
     if (this.validaSelecao()) {
-      this.dialog.question('SGR', 'Deseja realmente excluir o classeresiduo: ' + this.selectedRow.id + '?').subscribe(
+      this.dialog.question('SGR', 'Deseja realmente excluir o residuo: ' + this.selectedRow.id + '?').subscribe(
         result => {
           if (result.retorno) {
-            this._classeresiduoService.deleteClasseResiduo(this._tokenManager.retrieve(), this.selectedRow.id).subscribe(
+            this._residuoService.deleteResiduo(this._tokenManager.retrieve(), this.selectedRow.id).subscribe(
               data => {
-                this.dialog.success('SGR', 'ClasseResiduo excluído com sucesso.');
+                this.dialog.success('SGR', 'Residuo excluído com sucesso.');
                 this.ngOnInit();
               },
               error => {
@@ -145,21 +145,12 @@ export class ClasseResiduoListComponent implements OnInit, AfterViewInit {
     }
   }
 
-  ngAfterViewInit(): void {
-    this.dataSource.onChange.subscribe({next: (event: boolean) => {
-      this.isLoadingResults = event;
-      // console.log('estatus do datasource: ' + event);
-    }});
-  }
-
   ngOnInit() {
     this.paginator._intl.itemsPerPageLabel = 'Itens por pagina';
     this.paginator._intl.nextPageLabel = 'Próxima Página';
     this.paginator._intl.previousPageLabel = 'Voltar Página';
 
-    this.isLoadingResults = false;
-
-    this.dataSource = new DsClasseResiduo(this._tokenManager, this._classeresiduoService, this.paginator, this.sort);
+    this.dataSource = new DsResiduo(this._tokenManager, this._residuoService, this.paginator, this.sort);
 
     const idFilter$ = this.idFilter.valueChanges.debounceTime(500).distinctUntilChanged().startWith('');
     const codigoFilter$ = this.codigoFilter.valueChanges.debounceTime(500).distinctUntilChanged().startWith('');
@@ -173,3 +164,4 @@ export class ClasseResiduoListComponent implements OnInit, AfterViewInit {
       });
   }
 }
+

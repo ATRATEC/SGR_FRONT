@@ -19,7 +19,7 @@ import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/distinctUntilChanged';
 import 'rxjs/add/operator/debounceTime';
 import { Acondicionamento } from './acondicionamento';
-import { ChangeDetectorRef } from '@angular/core';
+import { ChangeDetectorRef, AfterViewInit } from '@angular/core';
 import { OnlyNumberDirective } from './../only-number.directive';
 
 @Component({
@@ -27,13 +27,14 @@ import { OnlyNumberDirective } from './../only-number.directive';
   templateUrl: './acondicionamento-list.component.html',
   styleUrls: ['./acondicionamento-list.component.css']
 })
-export class AcondicionamentoListComponent implements OnInit {
+export class AcondicionamentoListComponent implements OnInit, AfterViewInit {
   displayedColumns = ['codigo', 'descricao'];
   // displayedColumns = ['id', 'codigo', 'descricao'];
   dataSource: DsAcondicionamento | null;
   selectedRowIndex = -1;
   selectedRow: any | null;
   acondicionamentos: Acondicionamento[];
+  isLoadingResults: boolean;
 
 
   idFilter = new FormControl();
@@ -74,6 +75,10 @@ export class AcondicionamentoListComponent implements OnInit {
       this.selectedRowIndex = row.id;
       this.selectedRow = row;
     }
+  }
+
+  dblck(row) {
+    this._router.navigate(['/acondicionamentos/acondicionamento', {id: row.id}]);
   }
 
 
@@ -139,10 +144,19 @@ export class AcondicionamentoListComponent implements OnInit {
     }
   }
 
+  ngAfterViewInit(): void {
+    this.dataSource.onChange.subscribe({next: (event: boolean) => {
+      this.isLoadingResults = event;
+      // console.log('estatus do datasource: ' + event);
+    }});
+  }
+
   ngOnInit() {
     this.paginator._intl.itemsPerPageLabel = 'Itens por pagina';
     this.paginator._intl.nextPageLabel = 'Próxima Página';
     this.paginator._intl.previousPageLabel = 'Voltar Página';
+
+    this.isLoadingResults = false;
 
     this.dataSource = new DsAcondicionamento(this._tokenManager, this._acondicionamentoService, this.paginator, this.sort);
 

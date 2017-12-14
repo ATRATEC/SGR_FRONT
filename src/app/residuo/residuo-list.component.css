@@ -62,7 +62,7 @@
 .mat-table {
   overflow: auto;
   min-height: 300px;
-  max-height: 410px;
+  max-height: 440px;
 }
 
 .mat-header-cell .mat-sort-header-sorted {
@@ -140,7 +140,7 @@ mat-row:nth-child(odd) {
   max-width: 40px;
 }
 
-.mat-column-codigo_produto {
+.mat-column-codigo {
   max-width: 100px;
 }
 

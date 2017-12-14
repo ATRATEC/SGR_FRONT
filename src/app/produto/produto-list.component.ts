@@ -19,7 +19,7 @@ import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/distinctUntilChanged';
 import 'rxjs/add/operator/debounceTime';
 import { Produto } from './produto';
-import { ChangeDetectorRef } from '@angular/core';
+import { ChangeDetectorRef, AfterViewInit } from '@angular/core';
 import { OnlyNumberDirective } from './../only-number.directive';
 // import { DialogComponent } from '../dialog/dialog.component';
 // import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
@@ -29,13 +29,14 @@ import { OnlyNumberDirective } from './../only-number.directive';
   templateUrl: './produto-list.component.html',
   styleUrls: ['./produto-list.component.css']
 })
-export class ProdutoListComponent implements OnInit {
+export class ProdutoListComponent implements OnInit, AfterViewInit {
   displayedColumns = ['id', 'codigo_produto', 'descricao', 'unidade', 'quantidade_estoque'];
   // selection = new SelectionModel<string>(true, []);
   dataSource: DsProduto | null;
   selectedRowIndex = -1;
   selectedRow: any | null;
   produtos: Produto[];
+  isLoadingResults: boolean;
 
 
   idFilter = new FormControl();
@@ -173,11 +174,20 @@ export class ProdutoListComponent implements OnInit {
     }
   }
 
+  ngAfterViewInit(): void {
+    this.dataSource.onChange.subscribe({next: (event: boolean) => {
+      this.isLoadingResults = event;
+      // console.log('estatus do datasource: ' + event);
+    }});
+  }
+
   ngOnInit() {
     // this.dataSource = new ExampleDataSource(this.exampleDatabase, this.sort);
     this.paginator._intl.itemsPerPageLabel = 'Itens por pagina';
     this.paginator._intl.nextPageLabel = 'Próxima Página';
     this.paginator._intl.previousPageLabel = 'Voltar Página';
+
+    this.isLoadingResults = false;
 
     this.dataSource = new DsProduto(this._tokenManager, this._produtoService, this.paginator, this.sort);
 

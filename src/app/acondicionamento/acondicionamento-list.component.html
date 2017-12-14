@@ -49,8 +49,8 @@
         </table>
       </div>
       <div fxFlex="1px" class="customHrFull"></div>
-      <div fxFlex="400px" class="example-loading-shade" fxFlexAlign="start" *ngIf="dataSource.isLoadingResults" style="height: 100%">
-        <mat-spinner *ngIf="dataSource.isLoadingResults"></mat-spinner>
+      <div fxFlex="400px" class="example-loading-shade" fxFlexAlign="start" *ngIf="isLoadingResults" style="height: 100%">
+        <mat-spinner *ngIf="isLoadingResults"></mat-spinner>
       </div>
       <div fxFlex="400px" fxFlexAlign="start" style="width: 100%">
         <mat-table #table [dataSource]="dataSource" matSort>
@@ -73,7 +73,7 @@
           </ng-container>
 
           <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-          <mat-row *matRowDef="let row; columns: displayedColumns;" [ngClass]="{'highlight': selectedRowIndex == row.id}" (click)="highlight(row)"></mat-row>
+          <mat-row *matRowDef="let row; columns: displayedColumns;" [ngClass]="{'highlight': selectedRowIndex == row.id}" (click)="highlight(row)" (dblclick)="dblck(row)"></mat-row>
         </mat-table>
         <mat-paginator #paginator [length]="dataSource.nrRegistros" [pageIndex]="0" [pageSize]="25" [pageSizeOptions]="[5, 10, 15, 25, 100]">
         </mat-paginator>
