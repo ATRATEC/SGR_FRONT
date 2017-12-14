@@ -1,3 +1,4 @@
+import { TipoTratamentoModule } from './tipotratamento/tipotratamento.module';
 import { ResiduoModule } from './residuo/residuo.module';
 import { TipoAtividadeModule } from './tipoatividade/tipoatividade.module';
 import { ClasseResiduoModule } from './classeresiduo/classeresiduo.module';
@@ -52,6 +53,7 @@ import { DialogComponent } from './dialog/dialog.component';
     AcondicionamentoModule,
     ClasseResiduoModule,
     TipoAtividadeModule,
+    TipoTratamentoModule,
     ResiduoModule,
     AppRoutingModule
   ],
