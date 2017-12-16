@@ -158,11 +158,11 @@
                         </div>
                         <div fxFlex="300px" fxFlexFill>
                           <mat-form-field class="frm_cliente_cidade">
-                            <input matInput #cidade maxlength="40" placeholder="Cidade" [matAutocomplete]="auto" tabindex="11" [(ngModel)]="cliente.cidade" >
+                            <input matInput #cidade maxlength="40" placeholder="Cidade" [matAutocomplete]="auto" tabindex="11" [(ngModel)]="cliente.cidade" [formControl]="cidadeFilter">
                             <mat-hint align="end">{{cidade.value?.length || 0}}/40</mat-hint>
                             <mat-autocomplete #auto="matAutocomplete">
-                                <mat-option *ngFor="let cidade of cidades" [value]="cidade.cCod">
-                                  <span>{{ cidade.cCod }}</span> |
+                                <mat-option *ngFor="let cidade of filteredOptions | async" [value]="cidade.cCod">
+                                  <span>{{ cidade.cCod }}</span>
                                 </mat-option>
                               </mat-autocomplete>
                           </mat-form-field>

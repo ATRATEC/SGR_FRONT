@@ -19,6 +19,8 @@ import { Cliente } from './cliente';
 import { ActivatedRoute, Params} from '@angular/router';
 import {FormControl, Validators} from '@angular/forms';
 import { Estado, Cidade } from './../endereco';
+import {startWith} from 'rxjs/operators/startWith';
+import {map} from 'rxjs/operators/map';
 
 @Component({
   selector: 'app-cliente-form',
@@ -39,6 +41,9 @@ export class ClienteFormComponent implements OnInit, AfterViewInit, AfterViewChe
   valCnpjCpf = new FormControl('', [Validators.required, Validators.pattern(  this.ptn)]);
   valDDD = new FormControl('', [Validators.pattern('[0-9]{2}')]);
   valTelefone = new FormControl('', [Validators.pattern('[0-9]{4}\-[0-9]{4}|[0-9]{5}\-[0-9]{4}')]);
+  cidadeFilter = new FormControl();
+
+  filteredOptions: Observable<Cidade[]>;
 
   @ViewChildren('input') vc;
 
@@ -71,7 +76,31 @@ export class ClienteFormComponent implements OnInit, AfterViewInit, AfterViewChe
         this.emProcessamento = false;
       }
     });
+
+    this.filteredOptions = this.cidadeFilter.valueChanges
+    .pipe(
+      startWith({} as Cidade),
+      map((cidade: any) => cidade && typeof cidade === 'object' ? cidade.cCod : cidade),
+      map((cCod: any) => cCod ? this.filter(cCod) : this.cidades)
+    );
+
+    // const cidadeFilter$ = this.cidadeFilter.valueChanges.debounceTime(500).distinctUntilChanged().startWith('');
+    // Observable.combineLatest(cidadeFilter$
+    //     ).debounceTime(500).distinctUntilChanged().map(
+    // ([cidade ]) =>
+    // ({cidade})).subscribe(filter => {
+    //   console.log(filter.cidade);
+    // });
   }
+
+  filter(name: string): Cidade[] {
+    return this.cidades.filter(option =>
+      option.cCod.toLowerCase().indexOf(name.toLowerCase()) === 0);
+  }
+
+  // displayFn(cidade: Cidade): string {
+  //   return cidade ? cidade.cCod : '';
+  // }
 
   formataCnpjCpf(event: any) {
     // const namere = new RegExp('[0-9]{3}\.[0-9]{3}\.[0-9]{3}\-[0-9]{2}|[0-9]{2}\.[0-9]{3}\.[0-9]{3}\/[0-9]{4}\-[0-9]{2}');
@@ -124,6 +153,7 @@ export class ClienteFormComponent implements OnInit, AfterViewInit, AfterViewChe
 
   estadoChange(event: any) {
     this.loadCidades(event.value);
+    this.cliente.cidade = '';
     // console.log('mudou estado ' + event.value);
   }
 
