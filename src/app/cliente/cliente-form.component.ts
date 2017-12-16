@@ -40,7 +40,11 @@ export class ClienteFormComponent implements OnInit, AfterViewInit, AfterViewChe
   valRazaoSocial = new FormControl('', [Validators.required]);
   valCnpjCpf = new FormControl('', [Validators.required, Validators.pattern(  this.ptn)]);
   valDDD = new FormControl('', [Validators.pattern('[0-9]{2}')]);
+  valDDD2 = new FormControl('', [Validators.pattern('[0-9]{2}')]);
+  valDDDFax = new FormControl('', [Validators.pattern('[0-9]{2}')]);
   valTelefone = new FormControl('', [Validators.pattern('[0-9]{4}\-[0-9]{4}|[0-9]{5}\-[0-9]{4}')]);
+  valTelefone2 = new FormControl('', [Validators.pattern('[0-9]{4}\-[0-9]{4}|[0-9]{5}\-[0-9]{4}')]);
+  valTelefoneFax = new FormControl('', [Validators.pattern('[0-9]{4}\-[0-9]{4}|[0-9]{5}\-[0-9]{4}')]);
   cidadeFilter = new FormControl();
 
   filteredOptions: Observable<Cidade[]>;
@@ -148,6 +152,44 @@ export class ClienteFormComponent implements OnInit, AfterViewInit, AfterViewChe
     if (telefone_umask.length === 9) {
       tel = telefone_umask.substr(0, 5) + '-' + telefone_umask.substr(5, 4);
       this.cliente.telefone1_numero = tel;
+    }
+  }
+
+  formataTelefone2(event: any) {
+    // const namere = new RegExp('[0-9]{3}\.[0-9]{3}\.[0-9]{3}\-[0-9]{2}|[0-9]{2}\.[0-9]{3}\.[0-9]{3}\/[0-9]{4}\-[0-9]{2}');
+
+    const telefone = event.target.value;
+    let telefone_umask: string = telefone;
+    telefone_umask = telefone_umask.replace('-', '').trim();
+    let tel: string;
+    if (telefone_umask.length === 8) {
+       tel = telefone_umask.substr(0, 4) + '-' + telefone_umask.substr(4, 4);
+       this.cliente.telefone2_numero = tel;
+    }
+
+
+    if (telefone_umask.length === 9) {
+      tel = telefone_umask.substr(0, 5) + '-' + telefone_umask.substr(5, 4);
+      this.cliente.telefone2_numero = tel;
+    }
+  }
+
+  formataTelefoneFax(event: any) {
+    // const namere = new RegExp('[0-9]{3}\.[0-9]{3}\.[0-9]{3}\-[0-9]{2}|[0-9]{2}\.[0-9]{3}\.[0-9]{3}\/[0-9]{4}\-[0-9]{2}');
+
+    const telefone = event.target.value;
+    let telefone_umask: string = telefone;
+    telefone_umask = telefone_umask.replace('-', '').trim();
+    let tel: string;
+    if (telefone_umask.length === 8) {
+       tel = telefone_umask.substr(0, 4) + '-' + telefone_umask.substr(4, 4);
+       this.cliente.fax_numero = tel;
+    }
+
+
+    if (telefone_umask.length === 9) {
+      tel = telefone_umask.substr(0, 5) + '-' + telefone_umask.substr(5, 4);
+      this.cliente.fax_numero = tel;
     }
   }
 
@@ -267,6 +309,61 @@ export class ClienteFormComponent implements OnInit, AfterViewInit, AfterViewChe
       mensagem = mensagem + 'Formato inválido para o campo';
     }
     return mensagem;
+  }
+
+  getDDD2ErrorMessage() {
+    let mensagem = '';
+
+    if (this.valDDD2.hasError('pattern')) {
+      mensagem = mensagem + 'Formato inválido para o campo';
+    }
+    return mensagem;
+  }
+
+  getTelefone2ErrorMessage() {
+    let mensagem = '';
+
+    if (this.valTelefone2.hasError('pattern')) {
+      mensagem = mensagem + 'Formato inválido para o campo';
+    }
+    return mensagem;
+  }
+
+  getDDDFaxErrorMessage() {
+    let mensagem = '';
+
+    if (this.valDDDFax.hasError('pattern')) {
+      mensagem = mensagem + 'Formato inválido para o campo';
+    }
+    return mensagem;
+  }
+
+  getTelefoneFaxErrorMessage() {
+    let mensagem = '';
+
+    if (this.valTelefoneFax.hasError('pattern')) {
+      mensagem = mensagem + 'Formato inválido para o campo';
+    }
+    return mensagem;
+  }
+
+  parseDate(dateString: string): Date {
+    if (dateString) {
+        return new Date(dateString);
+    } else {
+        return null;
+    }
+  }
+
+  validadeanoChange(event: any) {
+    const dtemiss = new Date(this.cliente.dtemissaolicenca);
+    let ano = dtemiss.getFullYear();
+    const mes = dtemiss.getMonth();
+    const dia = dtemiss.getDate();
+    ano = ano + parseInt(event.target.value, 10);
+    const dt = new Date(ano, mes, dia);
+    this.cliente.dtvalidadelicenca = dt;
+    console.log('data ' + dt.toLocaleDateString());
   }
 
 }

@@ -56,7 +56,11 @@ export class ClienteService {
       importado_api: _cliente.importado_api,
       cnae: _cliente.cnae,
       obsEndereco: _cliente.obsEndereco,
-      obsTelefonesEmail: _cliente.obsTelefonesEmail
+      obsTelefonesEmail: _cliente.obsTelefonesEmail,
+      nrolicenca: _cliente.nrolicenca,
+      dtemissaolicenca: _cliente.dtemissaolicenca,
+      nroanoslicenca: _cliente.nroanoslicenca,
+      dtvalidadelicenca: _cliente.dtvalidadelicenca
     };
     // _params.set('codigo', '1');
 
@@ -111,7 +115,11 @@ export class ClienteService {
       importado_api: _cliente.importado_api,
       cnae: _cliente.cnae,
       obsEndereco: _cliente.obsEndereco,
-      obsTelefonesEmail: _cliente.obsTelefonesEmail
+      obsTelefonesEmail: _cliente.obsTelefonesEmail,
+      nrolicenca: _cliente.nrolicenca,
+      dtemissaolicenca: _cliente.dtemissaolicenca,
+      nroanoslicenca: _cliente.nroanoslicenca,
+      dtvalidadelicenca: _cliente.dtvalidadelicenca
     };
     // _params.set('id', _id.toString());
 

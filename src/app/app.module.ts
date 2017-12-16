@@ -65,7 +65,7 @@ import { DialogComponent } from './dialog/dialog.component';
     AuthGuard,
     AlertsService,
     DialogService,
-    EnderecoService
+    EnderecoService,
   ],
   entryComponents: [LoginComponent, DialogComponent],
   bootstrap: [AppComponent]

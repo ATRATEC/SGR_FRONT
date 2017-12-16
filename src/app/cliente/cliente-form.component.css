@@ -25,6 +25,23 @@
   width: 90px;
 }
 
+.frm_cliente_telefone2_ddd {
+  width: 70px;
+}
+
+.frm_cliente_telefone2_numero {
+  width: 90px;
+}
+
+.frm_cliente_fax_ddd {
+  width: 70px;
+}
+
+.frm_cliente_fax_numero {
+  width: 90px;
+}
+
+
 .frm_cliente_contato {
   width: 220px;
 }
@@ -55,6 +72,46 @@
 
 .frm_cliente_cep {
   width: 150px;
+}
+
+.frm_cliente_email {
+  width: 430px;
+}
+
+.frm_cliente_homepage {
+  width: 430px;
+}
+
+.frm_cliente_inscrestadual {
+  width: 180px;
+}
+
+.frm_cliente_inscrmunicipal {
+  width: 180px;
+}
+
+.frm_cliente_inscrsuframa {
+  width: 180px;
+}
+
+.frm_cliente_nrolicenca {
+  width: 150px;
+}
+
+.frm_cliente_dtemissaolicenca {
+  width: 170px;
+}
+
+.frm_cliente_validadeano {
+  width: 90px;
+}
+
+.frm_cliente_dtvencimentolicenca {
+  width: 170px;
+}
+
+.frm_cliente_observacao {
+  width: 550px;
 }
 
 .frm_cliente-loading-shade {

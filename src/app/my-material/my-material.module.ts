@@ -36,6 +36,7 @@ import {
   MatToolbarModule,
   MatTooltipModule,
   MatStepperModule,
+  MAT_DATE_LOCALE,
 } from '@angular/material';
 import {HttpModule} from '@angular/http';
 import {CdkTableModule} from '@angular/cdk/table';
@@ -77,7 +78,8 @@ import {CdkTableModule} from '@angular/cdk/table';
     MatTooltipModule,
   ],
 providers: [
-  MatIconRegistry
+  MatIconRegistry,
+  {provide: MAT_DATE_LOCALE, useValue: 'pt-BR'},
 ]
 })
 export class MyMaterialModule {

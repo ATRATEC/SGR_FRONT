@@ -1,3 +1,4 @@
+import { Data } from '@angular/router';
 export interface ClienteFilter {
   id: string;
   codigo_omie: string;
@@ -52,7 +53,11 @@ export class Cliente {
     public sincronizar: string = '',
     public id_empresa: number = null,
     public id_filial: number = null,
+    public nrolicenca: string = '',
     public created_at: string = '',
-    public updated_at: string = ''
+    public updated_at: string = '',
+    public dtemissaolicenca: Date = null,
+    public nroanoslicenca: number = null,
+    public dtvalidadelicenca: Date = null
   ) {}
 }
