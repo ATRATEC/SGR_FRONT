@@ -7,7 +7,7 @@ export class TokenManagerService {
   constructor() { }
 
   public store(content: Object) {
-    console.log(content);
+    // console.log(content);
     localStorage.setItem(this.tokenKey, JSON.stringify(content));
   }
 

@@ -1,3 +1,5 @@
+import { EnderecoService } from './endereco.service';
+import { ClienteModule } from './cliente/cliente.module';
 import { TipoTratamentoModule } from './tipotratamento/tipotratamento.module';
 import { ResiduoModule } from './residuo/residuo.module';
 import { TipoAtividadeModule } from './tipoatividade/tipoatividade.module';
@@ -21,7 +23,6 @@ import { FlexLayoutModule } from '@angular/flex-layout';
 import { LoginComponent } from './login/login.component';
 import { CommonModule } from '@angular/common';
 import { AppRoutingModule } from './/app-routing.module';
-import { ClienteComponent } from './cliente/cliente.component';
 import { MovimentoComponent } from './movimento/movimento.component';
 import { ProdutoModule } from './produto/produto.module';
 import { OnlyNumberDirective } from './only-number.directive';
@@ -32,7 +33,6 @@ import { DialogComponent } from './dialog/dialog.component';
   declarations: [
     AppComponent,
     LoginComponent,
-    ClienteComponent,
     MovimentoComponent,
     OnlyNumberDirective,
     AlertComponent,
@@ -54,10 +54,19 @@ import { DialogComponent } from './dialog/dialog.component';
     ClasseResiduoModule,
     TipoAtividadeModule,
     TipoTratamentoModule,
+    ClienteModule,
     ResiduoModule,
     AppRoutingModule
   ],
-  providers: [LoginService, UserService, TokenManagerService, AuthGuard, AlertsService, DialogService],
+  providers: [
+    LoginService,
+    UserService,
+    TokenManagerService,
+    AuthGuard,
+    AlertsService,
+    DialogService,
+    EnderecoService
+  ],
   entryComponents: [LoginComponent, DialogComponent],
   bootstrap: [AppComponent]
 })

@@ -1,0 +1,71 @@
+.frm_cliente_codigo {
+  min-width: 120px;
+  max-width: 120px;
+}
+
+.frm_cliente_razao_social {
+  min-width: 450px;
+  max-width: 500px;
+}
+
+.frm_cliente_cnpj_cpf {
+  width: 170px;
+}
+
+.frm_cliente_nome_fantasia {
+  min-width: 250px;
+  max-width: 500px;
+}
+
+.frm_cliente_telefone1_ddd {
+  width: 40px;
+}
+
+.frm_cliente_telefone1_numero {
+  width: 90px;
+}
+
+.frm_cliente_contato {
+  width: 220px;
+}
+
+.frm_cliente_endereco {
+  width: 480px;
+}
+
+.frm_cliente_endereco_numero {
+  width: 130px;
+}
+
+.frm_cliente_bairro {
+  width: 350px;
+}
+
+.frm_cliente_complemento {
+  width: 280px;
+}
+
+.frm_cliente_estado {
+  width: 170px;
+}
+
+.frm_cliente_cidade {
+  width: 300px;
+}
+
+.frm_cliente_cep {
+  width: 150px;
+}
+
+.frm_cliente-loading-shade {
+  /* position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 56px;
+  right: 0; */
+  background: rgba(255, 255, 255, 0.15);
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

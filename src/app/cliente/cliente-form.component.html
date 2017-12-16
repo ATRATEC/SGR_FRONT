@@ -1,0 +1,213 @@
+<div fxLayout="row" fxLayoutAlign="start start" fxLayoutGap="1px">
+  <div fxFlex="140px" style="padding: 10px;" fxLayoutGap="10px">
+    <div fxLayout="column" fxLayoutAlign="space-between center" fxLayoutGap="5px" style="height: 100%">
+      <div fxFlex="80%" fxFlexFill fxFlexAlign="center">
+        <button id="btnSalvar" mat-raised-button color="primary" style="width: 100%" (click)="btnSalvar_click()">
+          <mat-icon>save</mat-icon>
+          <span>Salvar</span>
+        </button>
+        <button id="btnIncluir" mat-raised-button color="primary" style="width: 100%" (click)="btnIncluir_click()" *ngIf="exibeIncluir">
+          <mat-icon>insert_drive_file</mat-icon>
+          <span>Incluir</span>
+        </button>
+      </div>
+      <div fxFlex="40px" fxFlexFill fxFlexAlign="end">
+
+        <a routerLink="/clientes" mat-raised-button color="primary" style="width: 120px">
+          <mat-icon>close</mat-icon>
+          <span>Fechar</span>
+        </a>
+      </div>
+    </div>
+  </div>
+  <div fxFlex="90%">
+    <div fxLayout="column" fxLayoutAlign="center center" fxLayoutGap="5px">
+      <div fxFlex="50px" fxFlexAlign="start" style="padding: 10px;">
+        <button id="lblTitulo" mat-raised-button style="width: 100%" disabled>
+          <i class="fa fa-user-o" aria-hidden="true"></i>
+          <span>CLIENTE</span>
+        </button>
+      </div>
+      <div fxFlex="80%" fxFlexAlign="center">
+        <div fxLayout="column" class="frm_cliente-loading-shade" fxLayoutAlign="center center" *ngIf="emProcessamento">
+          <div fxFlex="70" fxFlexAlign="center">
+            <mat-spinner></mat-spinner>
+          </div>
+          <div fxFlex="10" fxFlexAlign="center">
+            &nbsp;
+          </div>
+          <div fxFlex="20" fxFlexAlign="center">
+            <label>Aguarde...</label>
+          </div>
+        </div>
+        <mat-card *ngIf="!emProcessamento" style="width: 660px;">
+          <div fxLayout="column" fxLayoutAlign="start center" fxLayoutGap="5px">
+            <input type="hidden" value={{cliente.id}} tabindex="3">
+            <div fxFlex="60px" fxFlexAlign="start">
+              <mat-form-field class="frm_cliente_codigo">
+                <input matInput autofocus #codigo maxlength="9" [formControl]="valCodigo" type="number" tabindex="1" placeholder="Código"
+                  required (keypress)="onlyNumber($event)" [(ngModel)]="cliente.codigo_omie">
+                <mat-hint align="end">{{codigo.value?.length || 0}}/9</mat-hint>
+                <mat-error *ngIf="valCodigo.invalid">{{getCodigoErrorMessage()}}</mat-error>
+              </mat-form-field>
+            </div>
+            <div fxFlex="60px" fxFlexAlign="start">
+              <div fxLayout="row" fxLayoutAlign="space-between center" fxLayoutGap="20px" style="width: 100%">
+                <div fxFlex="450px" fxFlexAlign="start" fxFlexFill>
+                  <mat-form-field class="frm_cliente_razao_social">
+                    <input matInput #razaosocial maxlength="60" [formControl]="valRazaoSocial" placeholder="Razão Social (Nome Completo)" required
+                      tabindex="2" [(ngModel)]="cliente.razao_social">
+                    <mat-hint align="end">{{razaosocial.value?.length || 0}}/60</mat-hint>
+                    <mat-error *ngIf="valRazaoSocial.invalid">{{getRazaoSocialErrorMessage()}}</mat-error>
+                  </mat-form-field>
+                </div>
+                <div fxFlex="100px" fxFlexAlign="start" fxFlexFill>
+                  <mat-form-field class="frm_cliente_cnpj_cpf">
+                    <input matInput #cnpjcpf maxlength="18" [formControl]="valCnpjCpf" placeholder="CNPJ / CPF" required tabindex="3" [(ngModel)]="cliente.cnpj_cpf"
+                      (blur)="formataCnpjCpf($event)">
+                    <mat-hint align="end">{{cnpjcpf.value?.length || 0}}/18</mat-hint>
+                    <mat-error *ngIf="valCnpjCpf.invalid">{{getCnpjCpfErrorMessage()}}</mat-error>
+                  </mat-form-field>
+                </div>
+              </div>
+            </div>
+            <div fxFlex="60px" fxFlexAlign="start">
+              <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="20px" style="width: 100%">
+                <div fxFlex="250px" fxFlexAlign="start" fxFlexFill>
+                  <mat-form-field class="frm_cliente_nome_fantasia">
+                    <input matInput #nomefantasia maxlength="50" placeholder="Nome Fantasia (Nome Abreviado)" tabindex="4" [(ngModel)]="cliente.nome_fantasia">
+                    <mat-hint align="end">{{nomefantasia.value?.length || 0}}/50</mat-hint>
+                  </mat-form-field>
+                </div>
+                <div fxFlex="30px" fxFlexAlign="start" fxFlexFill>
+                  <mat-form-field class="frm_cliente_telefone1_ddd">
+                    <input matInput #telefone1DDD maxlength="2" [formControl]="valDDD" placeholder="DDD" tabindex="5" [(ngModel)]="cliente.telefone1_ddd"
+                      (keypress)="onlyNumber($event)">
+                    <mat-hint align="end">{{telefone1DDD.value?.length || 0}}/2</mat-hint>
+                    <mat-error *ngIf="valDDD.invalid">{{getDDDErrorMessage()}}</mat-error>
+                  </mat-form-field>
+                </div>
+                <div fxFlex="90px" fxFlexAlign="start" fxFlexFill>
+                  <mat-form-field class="frm_cliente_telefone1_numero">
+                    <input matInput #telefone1numero maxlength="10" [formControl]="valTelefone" placeholder="Telefone" tabindex="6" [(ngModel)]="cliente.telefone1_numero"
+                      (keypress)="onlyNumber($event)" (blur)="formataTelefone($event)">
+                    <mat-hint align="end">{{telefone1numero.value?.length || 0}}/10</mat-hint>
+                    <mat-error *ngIf="valTelefone.invalid">{{getDDDErrorMessage()}}</mat-error>
+                  </mat-form-field>
+                </div>
+                <div fxFlex="220px" fxFlexAlign="start" fxFlexFill>
+                  <mat-form-field class="frm_cliente_contato">
+                    <input matInput #contato maxlength="50" placeholder="Contato" tabindex="7" [(ngModel)]="cliente.contato">
+                    <mat-hint align="end">{{contato.value?.length || 0}}/50</mat-hint>
+                  </mat-form-field>
+                </div>
+              </div>
+            </div>
+            <div fxFlex="250px" fxFlexAlign="start" fxFlexFill>
+              <mat-tab-group tabindex="8">
+                <mat-tab label="Tab 1" tabindex="9">
+                  <ng-template mat-tab-label>Endereço</ng-template>
+                  <div fxLayou="column" fxLayoutAlign="start center" fxLayoutGap="10px">
+                    <div fxFlex="70px" fxFlexAlign="start" fxFlexFill>
+                      <div fxLayout="row" fxLayoutAlign="space-between center" fxLayoutGap="20px">
+                        <div fxFlex="480px" fxFlexFill>
+                          <mat-form-field class="frm_cliente_endereco">
+                            <input matInput #endereco maxlength="60" placeholder="Endereço" tabindex="10" [(ngModel)]="cliente.endereco">
+                            <mat-hint align="end">{{endereco.value?.length || 0}}/60</mat-hint>
+                          </mat-form-field>
+                        </div>
+                        <div fxFlex="130px" fxFlexFill>
+                          <mat-form-field class="frm_cliente_endereco_numero">
+                            <input matInput #endereconumero maxlength="10" placeholder="Numero" tabindex="11" [(ngModel)]="cliente.endereco_numero">
+                            <mat-hint align="end">{{endereconumero.value?.length || 0}}/10</mat-hint>
+                          </mat-form-field>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div fxLayou="column" fxLayoutAlign="start center" fxLayoutGap="10px">
+                    <div fxFlex="70px" fxFlexAlign="start" fxFlexFill>
+                      <div fxLayout="row" fxLayoutAlign="space-between center" fxLayoutGap="20px">
+                        <div fxFlex="350px" fxFlexFill>
+                          <mat-form-field class="frm_cliente_bairro">
+                            <input matInput #bairro maxlength="30" placeholder="Bairro" tabindex="10" [(ngModel)]="cliente.bairro">
+                            <mat-hint align="end">{{bairro.value?.length || 0}}/30</mat-hint>
+                          </mat-form-field>
+                        </div>
+                        <div fxFlex="280px" fxFlexFill>
+                          <mat-form-field class="frm_cliente_complemento">
+                            <input matInput #complemento maxlength="60" placeholder="Complemento" tabindex="11" [(ngModel)]="cliente.endereco_numero">
+                            <mat-hint align="end">{{complemento.value?.length || 0}}/60</mat-hint>
+                          </mat-form-field>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div fxLayou="column" fxLayoutAlign="start center" fxLayoutGap="10px">
+                    <div fxFlex="70px" fxFlexAlign="start" fxFlexFill>
+                      <div fxLayout="row" fxLayoutAlign="space-between center" fxLayoutGap="20px">
+                        <div fxFlex="170px" fxFlexFill>
+                          <mat-form-field class="frm_cliente_estado">
+                            <mat-select placeholder="Estado" [(value)]="cliente.estado" (change)="estadoChange($event)">
+                              <mat-option *ngFor="let estado of estados" [value]="estado.uf">
+                                {{ estado.nome }}
+                              </mat-option>
+                            </mat-select>
+                          </mat-form-field>
+
+                        </div>
+                        <div fxFlex="300px" fxFlexFill>
+                          <mat-form-field class="frm_cliente_cidade">
+                            <input matInput #cidade maxlength="40" placeholder="Cidade" [matAutocomplete]="auto" tabindex="11" [(ngModel)]="cliente.cidade" >
+                            <mat-hint align="end">{{cidade.value?.length || 0}}/40</mat-hint>
+                            <mat-autocomplete #auto="matAutocomplete">
+                                <mat-option *ngFor="let cidade of cidades" [value]="cidade.cCod">
+                                  <span>{{ cidade.cCod }}</span> |
+                                </mat-option>
+                              </mat-autocomplete>
+                          </mat-form-field>
+                        </div>
+                        <div fxFlex="150px" fxFlexFill>
+                          <mat-form-field class="frm_cliente_cep">
+                            <input matInput #cep maxlength="10" placeholder="CEP" tabindex="11" [(ngModel)]="cliente.endereco_numero">
+                            <mat-hint align="end">{{cep.value?.length || 0}}/10</mat-hint>
+                          </mat-form-field>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+
+
+
+                  <!-- <div fxLayou="row" fxLayoutAlign="space-between center" fxLayoutGap="20px" style="width: 100%">
+                    <div fxFlex="400px" fxFlexAlign="start" fxFlexFill>
+                      <mat-form-field class="frm_cliente_bairro">
+                        <input matInput #bairro maxlength="30" placeholder="Bairro" tabindex="10" [(ngModel)]="cliente.bairro">
+                        <mat-hint align="end">{{bairro.value?.length || 0}}/30</mat-hint>
+                      </mat-form-field>
+                    </div>
+                    <div fxFlex="200px" fxFlexAlign="start" fxFlexFill>
+                      <mat-form-field class="frm_cliente_complemento">
+                        <input matInput #complemento maxlength="10" placeholder="Complemento" tabindex="11" [(ngModel)]="cliente.endereco_numero">
+                        <mat-hint align="end">{{complemento.value?.length || 0}}/10</mat-hint>
+                      </mat-form-field>
+                    </div>
+                  </div> -->
+
+                </mat-tab>
+                <mat-tab label="Tab 2" tabindex="10">
+                  <ng-template mat-tab-label>Telefones e E-mail</ng-template>
+                </mat-tab>
+                <mat-tab label="Tab 2" tabindex="11">
+                  <ng-template mat-tab-label>Inscrições e outros</ng-template>
+                </mat-tab>
+              </mat-tab-group>
+            </div>
+          </div>
+        </mat-card>
+      </div>
+
+    </div>
+  </div>
+</div>

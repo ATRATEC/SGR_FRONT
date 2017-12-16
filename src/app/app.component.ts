@@ -187,7 +187,7 @@ export class AppComponent implements OnInit {
     });
 
     dialogLoginRef.afterClosed().subscribe(result => {
-      console.log('The dialog was closed');
+      // console.log('The dialog was closed');
       if ((result.Usuario != null) || (result.Usuario !== undefined)) {
         this.Usuario = result.Usuario;
         this.Logado = result.logado;
@@ -214,9 +214,9 @@ export class AppComponent implements OnInit {
     });
 
     dialogLoginRef.afterClosed().subscribe(result => {
-      console.log('The dialog was closed');
-      alert('sua mensagem de retorno foi' + result.retorno );
-      console.log(result.retorno);
+      // console.log('The dialog was closed');
+      // alert('sua mensagem de retorno foi' + result.retorno );
+      // console.log(result.retorno);
       // if ((result.Usuario != null) || (result.Usuario !== undefined)) {
       //   this.Usuario = result.Usuario;
       //   this.Logado = result.logado;
