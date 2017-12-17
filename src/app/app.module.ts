@@ -30,6 +30,7 @@ import { OnlyNumberDirective } from './only-number.directive';
 import { AlertComponent } from './alert/alert.component';
 import { AlertsComponent } from './alerts/alerts.component';
 import { DialogComponent } from './dialog/dialog.component';
+import { HomeComponent } from './home/home.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -38,7 +39,8 @@ import { DialogComponent } from './dialog/dialog.component';
     OnlyNumberDirective,
     AlertComponent,
     AlertsComponent,
-    DialogComponent
+    DialogComponent,
+    HomeComponent
   ],
   imports: [
     FlexLayoutModule,

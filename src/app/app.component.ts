@@ -1,3 +1,4 @@
+import { Router } from '@angular/router';
 import { DialogComponent } from './dialog/dialog.component';
 import { AlertSettings } from './alert-settings';
 import { AlertType } from './alert-type';
@@ -50,7 +51,8 @@ export class AppComponent implements OnInit {
               private loginService: LoginService,
               private userService: UserService,
               public dialog: MatDialog,
-              private _alert: AlertsService ) {
+              private _alert: AlertsService,
+              private _router: Router ) {
     if (!this.verificaLogin()) {
       // this.openLoginDialog();
       this.Logado = false;
@@ -191,6 +193,7 @@ export class AppComponent implements OnInit {
       if ((result.Usuario != null) || (result.Usuario !== undefined)) {
         this.Usuario = result.Usuario;
         this.Logado = result.logado;
+        this._router.navigate(['/']);
         this.tokenManager.store(result.token);
         localStorage.setItem('currentUser', JSON.stringify(this.Usuario));
         localStorage.setItem('Logado', JSON.stringify({Logado: this.Logado}));
