@@ -1,3 +1,4 @@
+import { FornecedorModule } from './fornecedor/fornecedor.module';
 import { EnderecoService } from './endereco.service';
 import { ClienteModule } from './cliente/cliente.module';
 import { TipoTratamentoModule } from './tipotratamento/tipotratamento.module';
@@ -55,6 +56,7 @@ import { DialogComponent } from './dialog/dialog.component';
     TipoAtividadeModule,
     TipoTratamentoModule,
     ClienteModule,
+    FornecedorModule,
     ResiduoModule,
     AppRoutingModule
   ],

@@ -43,6 +43,12 @@ export class ResiduoFormComponent implements OnInit, AfterViewInit, AfterViewChe
     private _route: ActivatedRoute,
     private dialog: DialogService) {}
 
+  validaCampos() {
+    return (
+      this.valCodigo.valid && this.valDescricao.valid
+    );
+  }
+
   ngOnInit() {
     this.emProcessamento = true;
     this.residuo = new Residuo(null, null, '', null, '', '', '');
@@ -82,39 +88,46 @@ export class ResiduoFormComponent implements OnInit, AfterViewInit, AfterViewChe
 
   btnSalvar_click() {
     this.emProcessamento = true;
-    if (isNullOrUndefined(this.residuo.id)) {
-      this._residuoService.addResiduo(
-        this._tokenManager.retrieve(),
-        this.residuo.codigo.toString(),
-        this.residuo.descricao,
-        this.residuo.id_classe).subscribe(
+    if (this.validaCampos()) {
+      if (isNullOrUndefined(this.residuo.id)) {
+        this._residuoService.addResiduo(
+          this._tokenManager.retrieve(),
+          this.residuo.codigo.toString(),
+          this.residuo.descricao,
+          this.residuo.id_classe).subscribe(
+            data => {
+              this.emProcessamento = false;
+              this.residuo = data;
+              this.exibeIncluir = true;
+              this.dialog.success('SGR', 'Tipo de Resíduo salvo com sucesso.');
+            },
+            error => {
+              this.emProcessamento = false;
+              this.dialog.error('SGR', 'Erro ao salvar o registro. msg: ' + error.error);
+            },
+          );
+      } else {
+        this._residuoService.editResiduo(
+          this._tokenManager.retrieve(),
+          this.residuo.id,
+          this.residuo.codigo.toString(),
+          this.residuo.descricao,
+          this.residuo.id_classe).subscribe(
           data => {
-            this.emProcessamento = false;
-            this.exibeIncluir = true;
-            this.dialog.success('SGR', 'Tipo de Resíduo salvo com sucesso.');
-          },
-          error => {
-            this.emProcessamento = false;
-            this.dialog.error('SGR', 'Erro ao salvar o registro. msg: ' + error.error);
-          },
-        );
+          this.emProcessamento = false;
+          this.residuo = data;
+          this.exibeIncluir = true;
+          this.dialog.success('SGR', 'Tipo de Resíduo salvo com sucesso.');
+        },
+        error => {
+          this.emProcessamento = false;
+          this.dialog.error('SGR', 'Erro ao salvar o registro. msg: ' + error.error);
+        },
+      );
+      }
     } else {
-      this._residuoService.editResiduo(
-        this._tokenManager.retrieve(),
-        this.residuo.id,
-        this.residuo.codigo.toString(),
-        this.residuo.descricao,
-        this.residuo.id_classe).subscribe(
-        data => {
-        this.emProcessamento = false;
-        this.exibeIncluir = true;
-        this.dialog.success('SGR', 'Tipo de Resíduo salvo com sucesso.');
-      },
-      error => {
-        this.emProcessamento = false;
-        this.dialog.error('SGR', 'Erro ao salvar o registro. msg: ' + error.error);
-      },
-    );
+      this.emProcessamento = false;
+      this.dialog.warning('SGR', 'Campos obrigatórios não preenchidos');
     }
   }
 

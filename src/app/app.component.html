@@ -7,7 +7,7 @@
     <span style="color: white">Cadastros</span>
   </button>
   <mat-menu #cadastros="matMenu" [overlapTrigger]="false">
-    <button mat-menu-item [routerLink]="['/produtos']">
+    <button mat-menu-item [routerLink]="['/']">
       <mat-icon fontSet="fontawesome" fontIcon="fa-handshake-o"></mat-icon>
       <span>Serviços</span>
     </button>
@@ -15,30 +15,30 @@
       <mat-icon fontSet="fontawesome" fontIcon="fa-group"></mat-icon>
       <span>Cliente</span>
     </button>
-    <button mat-menu-item [routerLink]="['/clientes']" [matMenuTriggerFor]="contrato">
+    <button mat-menu-item [matMenuTriggerFor]="contrato">
       <mat-icon fontSet="fontawesome" fontIcon="fa-book"></mat-icon>
       <span>Contrato</span>
     </button>
-    <button mat-menu-item [routerLink]="['/produtos/produto']">
+    <button mat-menu-item [routerLink]="['/fornecedores']">
       <mat-icon fontSet="fontawesome" fontIcon="fa-truck"></mat-icon>
       <span>Fornecedor</span>
     </button>
-    <button mat-menu-item [routerLink]="['/produtos']" [matMenuTriggerFor]="residuo">
+    <button mat-menu-item [matMenuTriggerFor]="residuo">
       <mat-icon fontSet="fontawesome" fontIcon="fa-recycle"></mat-icon>
       <span>Resíduo</span>
     </button>
-    <button mat-menu-item [routerLink]="['/produtos']">
+    <button mat-menu-item [routerLink]="['/']">
       <mat-icon fontSet="fontawesome" fontIcon="fa-usd"></mat-icon>
       <span>Preço</span>
     </button>
   </mat-menu>
   <!-- Contrato -->
   <mat-menu #contrato="matMenu">
-    <button mat-menu-item [routerLink]="['/produtos']">
+    <button mat-menu-item [routerLink]="['/']">
       <!-- <mat-icon fontSet="fontawesome" fontIcon="fa-truck"></mat-icon> -->
       <span>Cliente</span>
     </button>
-    <button mat-menu-item [routerLink]="['/produtos']">
+    <button mat-menu-item [routerLink]="['/']">
       <!-- <mat-icon fontSet="fontawesome" fontIcon="fa-truck"></mat-icon> -->
       <span>Fornecedor</span>
     </button>
@@ -53,7 +53,7 @@
         <!-- <mat-icon fontSet="fontawesome" fontIcon="fa-truck"></mat-icon> -->
         <span>Classe de Resíduos</span>
       </button>
-      <button mat-menu-item [routerLink]="['/produtos']">
+      <button mat-menu-item [routerLink]="['/']">
         <!-- <mat-icon fontSet="fontawesome" fontIcon="fa-truck"></mat-icon> -->
         <span>Pesagem</span>
       </button>
@@ -77,15 +77,11 @@
   <mat-menu #processos="matMenu" [overlapTrigger]="false">
     <button mat-menu-item>
       <mat-icon fontSet="fontawesome" fontIcon="fa-group"></mat-icon>
-      <span>Clientes</span>
+      <span>Monitoramento de Documentos</span>
     </button>
     <button mat-menu-item>
       <mat-icon fontSet="fontawesome" fontIcon="fa-cubes"></mat-icon>
-      <span>Produtos</span>
-    </button>
-    <button mat-menu-item>
-      <mat-icon fontSet="fontawesome" fontIcon="fa-exchange"></mat-icon>
-      <span>Movimentações</span>
+      <span>Medição e envio para Financeiro</span>
     </button>
   </mat-menu>
   <!-- Relatórios -->
@@ -96,19 +92,19 @@
   <mat-menu #relatorios="matMenu" [overlapTrigger]="false">
     <button mat-menu-item>
       <mat-icon fontSet="fontawesome" fontIcon="fa-group"></mat-icon>
-      <span>Clientes</span>
+      <span>Receitas</span>
     </button>
     <button mat-menu-item>
       <mat-icon fontSet="fontawesome" fontIcon="fa-cubes"></mat-icon>
-      <span>Produtos</span>
+      <span>Despesas</span>
     </button>
     <button mat-menu-item>
       <mat-icon fontSet="fontawesome" fontIcon="fa-exchange"></mat-icon>
-      <span>Movimentações</span>
+      <span>Medições</span>
     </button>
   </mat-menu>
   <!-- Utilitários -->
-  <button mat-button [matMenuTriggerFor]="utilitarios" *ngIf="Logado">
+  <!-- <button mat-button [matMenuTriggerFor]="utilitarios" *ngIf="Logado">
     <span style="color: white">Utilitários</span>
   </button>
   <mat-menu #utilitarios="matMenu" [overlapTrigger]="false">
@@ -124,7 +120,7 @@
       <mat-icon fontSet="fontawesome" fontIcon="fa-exchange"></mat-icon>
       <span>Movimentações</span>
     </button>
-  </mat-menu>
+  </mat-menu> -->
   <!-- Financeiro -->
   <button mat-button [matMenuTriggerFor]="financeiro" *ngIf="Logado">
       <span style="color: white">Financeiro</span>

@@ -1,0 +1,132 @@
+.frm_fornecedor_codigo {
+  min-width: 120px;
+  max-width: 120px;
+}
+
+.frm_fornecedor_tipo_atividade {
+  width: 150;
+}
+
+.frm_fornecedor_razao_social {
+  min-width: 450px;
+  max-width: 500px;
+}
+
+.frm_fornecedor_cnpj_cpf {
+  width: 170px;
+}
+
+.frm_fornecedor_nome_fantasia {
+  min-width: 250px;
+  max-width: 500px;
+}
+
+.frm_fornecedor_telefone1_ddd {
+  width: 40px;
+}
+
+.frm_fornecedor_telefone1_numero {
+  width: 90px;
+}
+
+.frm_fornecedor_telefone2_ddd {
+  width: 70px;
+}
+
+.frm_fornecedor_telefone2_numero {
+  width: 90px;
+}
+
+.frm_fornecedor_fax_ddd {
+  width: 70px;
+}
+
+.frm_fornecedor_fax_numero {
+  width: 90px;
+}
+
+
+.frm_fornecedor_contato {
+  width: 220px;
+}
+
+.frm_fornecedor_endereco {
+  width: 480px;
+}
+
+.frm_fornecedor_endereco_numero {
+  width: 130px;
+}
+
+.frm_fornecedor_bairro {
+  width: 350px;
+}
+
+.frm_fornecedor_complemento {
+  width: 280px;
+}
+
+.frm_fornecedor_estado {
+  width: 170px;
+}
+
+.frm_fornecedor_cidade {
+  width: 300px;
+}
+
+.frm_fornecedor_cep {
+  width: 150px;
+}
+
+.frm_fornecedor_email {
+  width: 430px;
+}
+
+.frm_fornecedor_homepage {
+  width: 430px;
+}
+
+.frm_fornecedor_inscrestadual {
+  width: 180px;
+}
+
+.frm_fornecedor_inscrmunicipal {
+  width: 180px;
+}
+
+.frm_fornecedor_inscrsuframa {
+  width: 180px;
+}
+
+.frm_fornecedor_nrolicenca {
+  width: 150px;
+}
+
+.frm_fornecedor_dtemissaolicenca {
+  width: 170px;
+}
+
+.frm_fornecedor_validadeano {
+  width: 90px;
+}
+
+.frm_fornecedor_dtvencimentolicenca {
+  width: 170px;
+}
+
+.frm_fornecedor_observacao {
+  width: 550px;
+}
+
+.frm_fornecedor-loading-shade {
+  /* position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 56px;
+  right: 0; */
+  background: rgba(255, 255, 255, 0.15);
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

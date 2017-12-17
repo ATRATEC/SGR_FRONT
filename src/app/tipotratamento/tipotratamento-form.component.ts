@@ -39,6 +39,12 @@ export class TipoTratamentoFormComponent implements OnInit, AfterViewInit, After
     private _route: ActivatedRoute,
     private dialog: DialogService) {}
 
+  validaCampos() {
+    return (
+      this.valCodigo.valid && this.valDescricao.valid
+    );
+  }
+
   ngOnInit() {
     this.emProcessamento = true;
     this.tipotratamento = new TipoTratamento(null, null, '', '', '');
@@ -74,37 +80,44 @@ export class TipoTratamentoFormComponent implements OnInit, AfterViewInit, After
 
   btnSalvar_click() {
     this.emProcessamento = true;
-    if (isNullOrUndefined(this.tipotratamento.id)) {
-      this._tipotratamentoService.addTipoTratamento(
-        this._tokenManager.retrieve(),
-        this.tipotratamento.codigo.toString(),
-        this.tipotratamento.descricao).subscribe(
+    if (this.validaCampos()) {
+      if (isNullOrUndefined(this.tipotratamento.id)) {
+        this._tipotratamentoService.addTipoTratamento(
+          this._tokenManager.retrieve(),
+          this.tipotratamento.codigo.toString(),
+          this.tipotratamento.descricao).subscribe(
+            data => {
+              this.emProcessamento = false;
+              this.tipotratamento = data;
+              this.exibeIncluir = true;
+              this.dialog.success('SGR', 'TipoTratamento salvo com sucesso.');
+            },
+            error => {
+              this.emProcessamento = false;
+              this.dialog.error('SGR', 'Erro ao salvar o registro. msg: ' + error.error);
+            },
+          );
+      } else {
+        this._tipotratamentoService.editTipoTratamento(
+          this._tokenManager.retrieve(),
+          this.tipotratamento.id,
+          this.tipotratamento.codigo.toString(),
+          this.tipotratamento.descricao).subscribe(
           data => {
-            this.emProcessamento = false;
-            this.exibeIncluir = true;
-            this.dialog.success('SGR', 'TipoTratamento salvo com sucesso.');
-          },
-          error => {
-            this.emProcessamento = false;
-            this.dialog.error('SGR', 'Erro ao salvar o registro. msg: ' + error.error);
-          },
-        );
+          this.emProcessamento = false;
+          this.tipotratamento = data;
+          this.exibeIncluir = true;
+          this.dialog.success('SGR', 'TipoTratamento salvo com sucesso.');
+        },
+        error => {
+          this.emProcessamento = false;
+          this.dialog.error('SGR', 'Erro ao salvar o registro. msg: ' + error.error);
+        },
+      );
+      }
     } else {
-      this._tipotratamentoService.editTipoTratamento(
-        this._tokenManager.retrieve(),
-        this.tipotratamento.id,
-        this.tipotratamento.codigo.toString(),
-        this.tipotratamento.descricao).subscribe(
-        data => {
-        this.emProcessamento = false;
-        this.exibeIncluir = true;
-        this.dialog.success('SGR', 'TipoTratamento salvo com sucesso.');
-      },
-      error => {
-        this.emProcessamento = false;
-        this.dialog.error('SGR', 'Erro ao salvar o registro. msg: ' + error.error);
-      },
-    );
+      this.emProcessamento = false;
+      this.dialog.warning('SGR', 'Campos obrigatórios não preenchidos');
     }
   }
 

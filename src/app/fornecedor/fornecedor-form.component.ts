@@ -1,14 +1,11 @@
+import { TipoAtividadeService } from './../tipoatividade/tipoatividade.service';
+import { TipoAtividade } from './../tipoatividade/tipoatividade';
 import { EnderecoService } from './../endereco.service';
 import { isNullOrUndefined } from 'util';
 import { DialogService } from './../dialog/dialog.service';
 import { TokenManagerService } from './../token-manager.service';
-import { ClienteService } from './cliente.service';
-import {
-  Component,
-  OnInit,
-  AfterViewInit,
-  AfterViewChecked
-} from '@angular/core';
+import { FornecedorService } from './fornecedor.service';
+import { Component, OnInit, AfterViewInit, AfterViewChecked } from '@angular/core';
 import { Router } from '@angular/router';
 import { by } from 'protractor';
 import { Observable } from 'rxjs/Observable';
@@ -20,99 +17,90 @@ import 'rxjs/add/operator/distinctUntilChanged';
 import 'rxjs/add/operator/debounceTime';
 import { ChangeDetectorRef, ViewChildren } from '@angular/core';
 import { OnlyNumberDirective } from './../only-number.directive';
-import { Cliente } from './cliente';
-import { ActivatedRoute, Params } from '@angular/router';
-import { FormControl, Validators } from '@angular/forms';
+import { Fornecedor } from './fornecedor';
+import { ActivatedRoute, Params} from '@angular/router';
+import {FormControl, Validators} from '@angular/forms';
 import { Estado, Cidade } from './../endereco';
-import { startWith } from 'rxjs/operators/startWith';
-import { map } from 'rxjs/operators/map';
+import {startWith} from 'rxjs/operators/startWith';
+import {map} from 'rxjs/operators/map';
 
 @Component({
-  selector: 'app-cliente-form',
-  templateUrl: './cliente-form.component.html',
-  styleUrls: ['./cliente-form.component.css']
+  selector: 'app-fornecedor-form',
+  templateUrl: './fornecedor-form.component.html',
+  styleUrls: ['./fornecedor-form.component.css']
 })
-export class ClienteFormComponent
-  implements OnInit, AfterViewInit, AfterViewChecked {
-  cliente: Cliente;
+export class FornecedorFormComponent implements OnInit, AfterViewInit, AfterViewChecked {
+
+  fornecedor: Fornecedor;
   emProcessamento = false;
   exibeIncluir = false;
   estados: Estado[];
   cidades: Cidade[];
-  ptn = '[0-9]{3}.[0-9]{3}.[0-9]{3}-[0-9]{2}|[0-9]{2}.[0-9]{3}.[0-9]{3}/[0-9]{4}-[0-9]{2}';
+  tipoAtividades: TipoAtividade[];
+  ptn = '[0-9]{3}\.[0-9]{3}\.[0-9]{3}\-[0-9]{2}|[0-9]{2}\.[0-9]{3}\.[0-9]{3}\/[0-9]{4}\-[0-9]{2}';
 
   valCodigo = new FormControl('', [Validators.required]);
+  valTipoAtividade = new FormControl('', [Validators.required]);
   valRazaoSocial = new FormControl('', [Validators.required]);
-  valCnpjCpf = new FormControl('', [
-    Validators.required,
-    Validators.pattern(this.ptn)
-  ]);
+  valCnpjCpf = new FormControl('', [Validators.required, Validators.pattern(  this.ptn)]);
   valDDD = new FormControl('', [Validators.pattern('[0-9]{2}')]);
   valDDD2 = new FormControl('', [Validators.pattern('[0-9]{2}')]);
   valDDDFax = new FormControl('', [Validators.pattern('[0-9]{2}')]);
-  valTelefone = new FormControl('', [
-    Validators.pattern('[0-9]{4}-[0-9]{4}|[0-9]{5}-[0-9]{4}')
-  ]);
-  valTelefone2 = new FormControl('', [
-    Validators.pattern('[0-9]{4}-[0-9]{4}|[0-9]{5}-[0-9]{4}')
-  ]);
-  valTelefoneFax = new FormControl('', [
-    Validators.pattern('[0-9]{4}-[0-9]{4}|[0-9]{5}-[0-9]{4}')
-  ]);
+  valTelefone = new FormControl('', [Validators.pattern('[0-9]{4}\-[0-9]{4}|[0-9]{5}\-[0-9]{4}')]);
+  valTelefone2 = new FormControl('', [Validators.pattern('[0-9]{4}\-[0-9]{4}|[0-9]{5}\-[0-9]{4}')]);
+  valTelefoneFax = new FormControl('', [Validators.pattern('[0-9]{4}\-[0-9]{4}|[0-9]{5}\-[0-9]{4}')]);
   cidadeFilter = new FormControl();
 
   filteredOptions: Observable<Cidade[]>;
 
   @ViewChildren('input') vc;
 
-  constructor(
-    private _clienteService: ClienteService,
+  constructor(private _fornecedorService: FornecedorService,
     private _tokenManager: TokenManagerService,
     private _route: ActivatedRoute,
     private _enderecoService: EnderecoService,
-    private dialog: DialogService
-  ) {}
+    private _tipoAtividadeService: TipoAtividadeService,
+    private dialog: DialogService) {}
 
   validaCampos() {
-    return (
-      this.valCodigo.valid && this.valRazaoSocial.valid && this.valCnpjCpf.valid
-    );
+    return this.valCodigo.valid && this.valRazaoSocial.valid && this.valTipoAtividade.valid && this.valCnpjCpf.valid;
   }
 
   ngOnInit() {
     this.emProcessamento = true;
-    this.cliente = new Cliente();
+    this.fornecedor = new Fornecedor();
 
-    this._enderecoService
-      .getListEstados(this._tokenManager.retrieve())
-      .subscribe(data => {
-        this.estados = JSON.parse(data._body);
-      });
+    this._enderecoService.getListEstados(this._tokenManager.retrieve()).subscribe(data => {
+      this.estados = JSON.parse(data._body);
+    });
+
+    this._tipoAtividadeService.getListTipoAtividades(this._tokenManager.retrieve()).subscribe(
+      data => {
+        this.tipoAtividades = JSON.parse(data._body);
+      }
+    );
 
     this._route.params.forEach((params: Params) => {
       const id: number = +params['id'];
       if (id) {
-        this._clienteService
-          .getCliente(this._tokenManager.retrieve(), id)
-          .subscribe(data => {
-            this.cliente = JSON.parse(data._body);
-            if (!isNullOrUndefined(this.cliente.estado)) {
-              this.loadCidades(this.cliente.estado);
-            }
-            this.emProcessamento = false;
-          });
+        this._fornecedorService.getFornecedor(this._tokenManager.retrieve(), id)
+        .subscribe( data => {
+          this.fornecedor = JSON.parse(data._body);
+          if (!isNullOrUndefined(this.fornecedor.estado)) {
+            this.loadCidades(this.fornecedor.estado);
+          }
+          this.emProcessamento = false;
+        });
       } else {
         this.emProcessamento = false;
       }
     });
 
-    this.filteredOptions = this.cidadeFilter.valueChanges.pipe(
+    this.filteredOptions = this.cidadeFilter.valueChanges
+    .pipe(
       startWith({} as Cidade),
-      map(
-        (cidade: any) =>
-          cidade && typeof cidade === 'object' ? cidade.cCod : cidade
-      ),
-      map((cCod: any) => (cCod ? this.filter(cCod) : this.cidades))
+      map((cidade: any) => cidade && typeof cidade === 'object' ? cidade.cCod : cidade),
+      map((cCod: any) => cCod ? this.filter(cCod) : this.cidades)
     );
 
     // const cidadeFilter$ = this.cidadeFilter.valueChanges.debounceTime(500).distinctUntilChanged().startWith('');
@@ -125,9 +113,8 @@ export class ClienteFormComponent
   }
 
   filter(name: string): Cidade[] {
-    return this.cidades.filter(
-      option => option.cCod.toLowerCase().indexOf(name.toLowerCase()) === 0
-    );
+    return this.cidades.filter(option =>
+      option.cCod.toLowerCase().indexOf(name.toLowerCase()) === 0);
   }
 
   // displayFn(cidade: Cidade): string {
@@ -142,44 +129,25 @@ export class ClienteFormComponent
     let cnpjcpf_umask: string;
     cnpjcpf_umask = cnpjcpf;
 
-    cnpjcpf_umask = cnpjcpf_umask
-      .replace('.', '')
-      .replace('.', '')
-      .replace('/', '')
-      .replace('-', '')
-      .trim();
+    cnpjcpf_umask = cnpjcpf_umask.replace('.', '').replace('.', '').replace('/', '').replace('-', '').trim();
 
     let mcpf: string;
 
     if (cnpjcpf_umask.length === 11) {
-      mcpf =
-        cnpjcpf_umask.substr(0, 3) +
-        '.' +
-        cnpjcpf_umask.substr(3, 3) +
-        '.' +
-        cnpjcpf_umask.substr(6, 3) +
-        '-' +
-        cnpjcpf_umask.substr(9, 2);
-      this.cliente.cnpj_cpf = mcpf;
+      mcpf = cnpjcpf_umask.substr(0, 3) + '.' + cnpjcpf_umask.substr(3, 3) + '.' +
+      cnpjcpf_umask.substr(6, 3) + '-' + cnpjcpf_umask.substr(9, 2);
+      this.fornecedor.cnpj_cpf = mcpf;
     }
 
     if (cnpjcpf_umask.length === 14) {
-      mcpf =
-        cnpjcpf_umask.substr(0, 2) +
-        '.' +
-        cnpjcpf_umask.substr(3, 3) +
-        '.' +
-        cnpjcpf_umask.substr(6, 3) +
-        '/' +
-        cnpjcpf_umask.substr(9, 4) +
-        '-' +
-        cnpjcpf_umask.substr(12, 2);
-      this.cliente.cnpj_cpf = mcpf;
+      mcpf = cnpjcpf_umask.substr(0, 2) + '.' + cnpjcpf_umask.substr(3, 3) + '.' +
+      cnpjcpf_umask.substr(6, 3) + '/' + cnpjcpf_umask.substr(9, 4) + '-' + cnpjcpf_umask.substr(12, 2);
+      this.fornecedor.cnpj_cpf = mcpf;
     }
 
-    // console.log(this.cliente.cnpj_cpf);
-    // const retorno = namere.test(this.cliente.cnpj_cpf);
-    // console.log(this.cliente.cnpj_cpf);
+    // console.log(this.fornecedor.cnpj_cpf);
+    // const retorno = namere.test(this.fornecedor.cnpj_cpf);
+    // console.log(this.fornecedor.cnpj_cpf);
     // console.log(retorno);
   }
 
@@ -191,13 +159,14 @@ export class ClienteFormComponent
     telefone_umask = telefone_umask.replace('-', '').trim();
     let tel: string;
     if (telefone_umask.length === 8) {
-      tel = telefone_umask.substr(0, 4) + '-' + telefone_umask.substr(4, 4);
-      this.cliente.telefone1_numero = tel;
+       tel = telefone_umask.substr(0, 4) + '-' + telefone_umask.substr(4, 4);
+       this.fornecedor.telefone1_numero = tel;
     }
+
 
     if (telefone_umask.length === 9) {
       tel = telefone_umask.substr(0, 5) + '-' + telefone_umask.substr(5, 4);
-      this.cliente.telefone1_numero = tel;
+      this.fornecedor.telefone1_numero = tel;
     }
   }
 
@@ -209,13 +178,14 @@ export class ClienteFormComponent
     telefone_umask = telefone_umask.replace('-', '').trim();
     let tel: string;
     if (telefone_umask.length === 8) {
-      tel = telefone_umask.substr(0, 4) + '-' + telefone_umask.substr(4, 4);
-      this.cliente.telefone2_numero = tel;
+       tel = telefone_umask.substr(0, 4) + '-' + telefone_umask.substr(4, 4);
+       this.fornecedor.telefone2_numero = tel;
     }
+
 
     if (telefone_umask.length === 9) {
       tel = telefone_umask.substr(0, 5) + '-' + telefone_umask.substr(5, 4);
-      this.cliente.telefone2_numero = tel;
+      this.fornecedor.telefone2_numero = tel;
     }
   }
 
@@ -227,28 +197,27 @@ export class ClienteFormComponent
     telefone_umask = telefone_umask.replace('-', '').trim();
     let tel: string;
     if (telefone_umask.length === 8) {
-      tel = telefone_umask.substr(0, 4) + '-' + telefone_umask.substr(4, 4);
-      this.cliente.fax_numero = tel;
+       tel = telefone_umask.substr(0, 4) + '-' + telefone_umask.substr(4, 4);
+       this.fornecedor.fax_numero = tel;
     }
+
 
     if (telefone_umask.length === 9) {
       tel = telefone_umask.substr(0, 5) + '-' + telefone_umask.substr(5, 4);
-      this.cliente.fax_numero = tel;
+      this.fornecedor.fax_numero = tel;
     }
   }
 
   estadoChange(event: any) {
     this.loadCidades(event.value);
-    this.cliente.cidade = '';
+    this.fornecedor.cidade = '';
     // console.log('mudou estado ' + event.value);
   }
 
   loadCidades(cUF: string) {
-    this._enderecoService
-      .getListCidades(this._tokenManager.retrieve(), cUF)
-      .subscribe(data => {
-        this.cidades = JSON.parse(data._body);
-      });
+    this._enderecoService.getListCidades(this._tokenManager.retrieve(), cUF).subscribe(data => {
+      this.cidades = JSON.parse(data._body);
+    });
   }
 
   // kpcpnjcpf(event: any) {
@@ -259,7 +228,9 @@ export class ClienteFormComponent
   //     }
   // }
 
-  ngAfterViewChecked(): void {}
+  ngAfterViewChecked(): void {
+
+  }
 
   ngAfterViewInit(): void {
     // this.vc.first.nativeElement.focus();
@@ -268,54 +239,40 @@ export class ClienteFormComponent
   onlyNumber(event: any) {
     const pattern = /[0-9\+\-\ ]/;
     const inputChar = String.fromCharCode(event.charCode);
-    if (!pattern.test(inputChar)) {
-      event.preventDefault();
-    }
+      if (!pattern.test(inputChar)) {
+        event.preventDefault();
+      }
   }
 
   btnSalvar_click() {
     this.emProcessamento = true;
     if (this.validaCampos()) {
-      if (isNullOrUndefined(this.cliente.id)) {
-        this._clienteService
-          .addCliente(this._tokenManager.retrieve(), this.cliente)
-          .subscribe(
+      if (isNullOrUndefined(this.fornecedor.id)) {
+        this._fornecedorService.addFornecedor(this._tokenManager.retrieve(), this.fornecedor).subscribe(
             data => {
-              this.cliente = data;
+              this.fornecedor = data;
               this.emProcessamento = false;
               this.exibeIncluir = true;
-              this.dialog.success('SGR', 'Cliente salvo com sucesso.');
+              this.dialog.success('SGR', 'Fornecedor salvo com sucesso.');
             },
             error => {
               this.emProcessamento = false;
-              this.dialog.error(
-                'SGR',
-                'Erro ao salvar o registro. msg: ' + error.error
-              );
-            }
+              this.dialog.error('SGR', 'Erro ao salvar o registro. msg: ' + error.error);
+            },
           );
       } else {
-        this._clienteService
-          .editCliente(
-            this._tokenManager.retrieve(),
-            this.cliente.id,
-            this.cliente
-          )
-          .subscribe(
-            data => {
-              this.cliente = data;
-              this.emProcessamento = false;
-              this.exibeIncluir = true;
-              this.dialog.success('SGR', 'Cliente salvo com sucesso.');
-            },
-            error => {
-              this.emProcessamento = false;
-              this.dialog.error(
-                'SGR',
-                'Erro ao salvar o registro. msg: ' + error.error
-              );
-            }
-          );
+        this._fornecedorService.editFornecedor(this._tokenManager.retrieve(), this.fornecedor.id, this.fornecedor).subscribe(
+          data => {
+            this.fornecedor = data;
+            this.emProcessamento = false;
+            this.exibeIncluir = true;
+            this.dialog.success('SGR', 'Fornecedor salvo com sucesso.');
+          },
+          error => {
+            this.emProcessamento = false;
+            this.dialog.error('SGR', 'Erro ao salvar o registro. msg: ' + error.error);
+          },
+        );
       }
     } else {
       this.emProcessamento = false;
@@ -324,7 +281,7 @@ export class ClienteFormComponent
   }
 
   btnIncluir_click() {
-    this.cliente = new Cliente();
+    this.fornecedor = new Fornecedor();
   }
 
   getCodigoErrorMessage() {
@@ -414,20 +371,32 @@ export class ClienteFormComponent
 
   parseDate(dateString: string): Date {
     if (dateString) {
-      return new Date(dateString);
+        return new Date(dateString);
     } else {
-      return null;
+        return null;
     }
   }
 
-  validadeanoChange(event: any) {
-    const dtemiss = new Date(this.cliente.dtemissaolicenca);
+  validadeanotranspChange(event: any) {
+    const dtemiss = new Date(this.fornecedor.dtemissaotransp);
     let ano = dtemiss.getFullYear();
     const mes = dtemiss.getMonth();
     const dia = dtemiss.getDate();
     ano = ano + parseInt(event.target.value, 10);
     const dt = new Date(ano, mes, dia);
-    this.cliente.dtvalidadelicenca = dt;
+    this.fornecedor.dtvalidadetransp = dt;
     console.log('data ' + dt.toLocaleDateString());
   }
+
+  validadeanorecebChange(event: any) {
+    const dtemiss = new Date(this.fornecedor.dtemissaorecep);
+    let ano = dtemiss.getFullYear();
+    const mes = dtemiss.getMonth();
+    const dia = dtemiss.getDate();
+    ano = ano + parseInt(event.target.value, 10);
+    const dt = new Date(ano, mes, dia);
+    this.fornecedor.dtvalidaderecep = dt;
+    console.log('data ' + dt.toLocaleDateString());
+  }
+
 }

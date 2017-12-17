@@ -39,6 +39,12 @@ export class TipoAtividadeFormComponent implements OnInit, AfterViewInit, AfterV
     private _route: ActivatedRoute,
     private dialog: DialogService) {}
 
+  validaCampos() {
+    return (
+      this.valCodigo.valid && this.valDescricao.valid
+    );
+  }
+
   ngOnInit() {
     this.emProcessamento = true;
     this.tipoatividade = new TipoAtividade(null, null, '', '', '');
@@ -74,37 +80,44 @@ export class TipoAtividadeFormComponent implements OnInit, AfterViewInit, AfterV
 
   btnSalvar_click() {
     this.emProcessamento = true;
-    if (isNullOrUndefined(this.tipoatividade.id)) {
-      this._tipoatividadeService.addTipoAtividade(
-        this._tokenManager.retrieve(),
-        this.tipoatividade.codigo.toString(),
-        this.tipoatividade.descricao).subscribe(
+    if (this.validaCampos()) {
+      if (isNullOrUndefined(this.tipoatividade.id)) {
+        this._tipoatividadeService.addTipoAtividade(
+          this._tokenManager.retrieve(),
+          this.tipoatividade.codigo.toString(),
+          this.tipoatividade.descricao).subscribe(
+            data => {
+              this.emProcessamento = false;
+              this.tipoatividade = data;
+              this.exibeIncluir = true;
+              this.dialog.success('SGR', 'TipoAtividade salvo com sucesso.');
+            },
+            error => {
+              this.emProcessamento = false;
+              this.dialog.error('SGR', 'Erro ao salvar o registro. msg: ' + error.error);
+            },
+          );
+      } else {
+        this._tipoatividadeService.editTipoAtividade(
+          this._tokenManager.retrieve(),
+          this.tipoatividade.id,
+          this.tipoatividade.codigo.toString(),
+          this.tipoatividade.descricao).subscribe(
           data => {
-            this.emProcessamento = false;
-            this.exibeIncluir = true;
-            this.dialog.success('SGR', 'TipoAtividade salvo com sucesso.');
-          },
-          error => {
-            this.emProcessamento = false;
-            this.dialog.error('SGR', 'Erro ao salvar o registro. msg: ' + error.error);
-          },
-        );
+          this.emProcessamento = false;
+          this.tipoatividade = data;
+          this.exibeIncluir = true;
+          this.dialog.success('SGR', 'TipoAtividade salvo com sucesso.');
+        },
+        error => {
+          this.emProcessamento = false;
+          this.dialog.error('SGR', 'Erro ao salvar o registro. msg: ' + error.error);
+        },
+      );
+      }
     } else {
-      this._tipoatividadeService.editTipoAtividade(
-        this._tokenManager.retrieve(),
-        this.tipoatividade.id,
-        this.tipoatividade.codigo.toString(),
-        this.tipoatividade.descricao).subscribe(
-        data => {
-        this.emProcessamento = false;
-        this.exibeIncluir = true;
-        this.dialog.success('SGR', 'TipoAtividade salvo com sucesso.');
-      },
-      error => {
-        this.emProcessamento = false;
-        this.dialog.error('SGR', 'Erro ao salvar o registro. msg: ' + error.error);
-      },
-    );
+      this.emProcessamento = false;
+      this.dialog.warning('SGR', 'Campos obrigatórios não preenchidos');
     }
   }
 

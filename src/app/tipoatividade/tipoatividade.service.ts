@@ -128,4 +128,19 @@ export class TipoAtividadeService {
         Observable.throw(error.json().error || 'Server error')
       );
   }
+
+  getListTipoAtividades(accessToken: string)  {
+    const listUrl = 'http://sgr.localhost/api/listtipoatividades';
+    const headers = new Headers({
+      Accept: 'application/json',
+      Authorization: 'Bearer ' + accessToken.toString().replace(/"/g, '')
+    });
+
+    return this._http
+      .get(listUrl, { headers: headers })
+      .map((res: Response) => res)
+      .catch((error: any) =>
+        Observable.throw(error.json().error || 'Server error')
+      );
+  }
 }

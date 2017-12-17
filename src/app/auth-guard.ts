@@ -6,7 +6,7 @@ export class AuthGuard implements CanActivate {
   constructor(private router: Router) { }
 
      canActivate() {
-         console.log('verificou login');
+        //  console.log('verificou login');
          if (sessionStorage.getItem('Logado')) {
              // logged in so return true
              return true;

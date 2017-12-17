@@ -1,0 +1,374 @@
+<div fxLayout="row" fxLayoutAlign="start start" fxLayoutGap="1px">
+  <div fxFlex="140px" style="padding: 10px;" fxLayoutGap="10px">
+    <div fxLayout="column" fxLayoutAlign="space-between center" fxLayoutGap="5px" style="height: 100%">
+      <div fxFlex="80%" fxFlexFill fxFlexAlign="center">
+        <button id="btnSalvar" mat-raised-button color="primary" style="width: 100%" (click)="btnSalvar_click()">
+          <mat-icon>save</mat-icon>
+          <span>Salvar</span>
+        </button>
+        <button id="btnIncluir" mat-raised-button color="primary" style="width: 100%" (click)="btnIncluir_click()" *ngIf="exibeIncluir">
+          <mat-icon>insert_drive_file</mat-icon>
+          <span>Incluir</span>
+        </button>
+      </div>
+      <div fxFlex="40px" fxFlexFill fxFlexAlign="end">
+
+        <a routerLink="/fornecedores" mat-raised-button color="primary" style="width: 120px">
+          <mat-icon>close</mat-icon>
+          <span>Fechar</span>
+        </a>
+      </div>
+    </div>
+  </div>
+  <div fxFlex="90%">
+    <div fxLayout="column" fxLayoutAlign="center center" fxLayoutGap="5px">
+      <div fxFlex="50px" fxFlexAlign="start" style="padding: 10px;">
+        <button id="lblTitulo" mat-raised-button style="width: 100%" disabled>
+          <i class="fa fa-truck" aria-hidden="true"></i>
+          <span>FORNECEDOR</span>
+        </button>
+      </div>
+      <div fxFlex="80%" fxFlexAlign="center">
+        <div fxLayout="column" class="frm_fornecedor-loading-shade" fxLayoutAlign="center center" *ngIf="emProcessamento">
+          <div fxFlex="70" fxFlexAlign="center">
+            <mat-spinner></mat-spinner>
+          </div>
+          <div fxFlex="10" fxFlexAlign="center">
+            &nbsp;
+          </div>
+          <div fxFlex="20" fxFlexAlign="center">
+            <label>Aguarde...</label>
+          </div>
+        </div>
+        <mat-card *ngIf="!emProcessamento" style="width: 660px;">
+          <div fxLayout="column" fxLayoutAlign="start center" fxLayoutGap="5px">
+            <input type="hidden" value={{fornecedor.id}} tabindex="-1">
+            <div fxFlex="60px" fxFlexAlign="start">
+              <div fxLayout="row" fxLayoutAlign="space-between center" fxLayoutGap="20px" style="width: 100%">
+                <div fxFlex="120px" fxFlexAlign="start" fxFlexFill>
+                  <mat-form-field class="frm_fornecedor_codigo">
+                    <input matInput autofocus #codigo maxlength="9" [formControl]="valCodigo" type="number" tabindex="1" placeholder="Código"
+                      required (keypress)="onlyNumber($event)" [(ngModel)]="fornecedor.codigo_omie">
+                    <mat-hint align="end">{{codigo.value?.length || 0}}/9</mat-hint>
+                    <mat-error *ngIf="valCodigo.invalid">{{getCodigoErrorMessage()}}</mat-error>
+                  </mat-form-field>
+                </div>
+                <div fxFlex="150px" fxFlexAlign="start" fxFlexFill>
+                  <mat-form-field class="frm_fornecedor_tipo_atividade">
+                    <mat-select placeholder="Tipo de Atividade" [(value)]="fornecedor.id_tipoatividade" tabindex="2" required [formControl]="valTipoAtividade">
+                      <mat-option *ngFor="let tipoatividade of tipoAtividades" [value]="tipoatividade.id">
+                        {{ tipoatividade.descricao }}
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </div>
+              </div>
+            </div>
+            <div fxFlex="60px" fxFlexAlign="start">
+              <div fxLayout="row" fxLayoutAlign="space-between center" fxLayoutGap="20px" style="width: 100%">
+                <div fxFlex="450px" fxFlexAlign="start" fxFlexFill>
+                  <mat-form-field class="frm_fornecedor_razao_social">
+                    <input matInput #razaosocial maxlength="60" [formControl]="valRazaoSocial" placeholder="Razão Social (Nome Completo)" required
+                      tabindex="3" [(ngModel)]="fornecedor.razao_social">
+                    <mat-hint align="end">{{razaosocial.value?.length || 0}}/60</mat-hint>
+                    <mat-error *ngIf="valRazaoSocial.invalid">{{getRazaoSocialErrorMessage()}}</mat-error>
+                  </mat-form-field>
+                </div>
+                <div fxFlex="100px" fxFlexAlign="start" fxFlexFill>
+                  <mat-form-field class="frm_fornecedor_cnpj_cpf">
+                    <input matInput #cnpjcpf maxlength="18" [formControl]="valCnpjCpf" placeholder="CNPJ / CPF" required tabindex="4" [(ngModel)]="fornecedor.cnpj_cpf"
+                      (blur)="formataCnpjCpf($event)">
+                    <mat-hint align="end">{{cnpjcpf.value?.length || 0}}/18</mat-hint>
+                    <mat-error *ngIf="valCnpjCpf.invalid">{{getCnpjCpfErrorMessage()}}</mat-error>
+                  </mat-form-field>
+                </div>
+              </div>
+            </div>
+            <div fxFlex="60px" fxFlexAlign="start">
+              <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="20px" style="width: 100%">
+                <div fxFlex="250px" fxFlexAlign="start" fxFlexFill>
+                  <mat-form-field class="frm_fornecedor_nome_fantasia">
+                    <input matInput #nomefantasia maxlength="50" placeholder="Nome Fantasia (Nome Abreviado)" tabindex="5" [(ngModel)]="fornecedor.nome_fantasia">
+                    <mat-hint align="end">{{nomefantasia.value?.length || 0}}/50</mat-hint>
+                  </mat-form-field>
+                </div>
+                <div fxFlex="30px" fxFlexAlign="start" fxFlexFill>
+                  <mat-form-field class="frm_fornecedor_telefone1_ddd">
+                    <input matInput #telefone1DDD maxlength="2" [formControl]="valDDD" placeholder="DDD" tabindex="6" [(ngModel)]="fornecedor.telefone1_ddd"
+                      (keypress)="onlyNumber($event)">
+                    <mat-hint align="end">{{telefone1DDD.value?.length || 0}}/2</mat-hint>
+                    <mat-error *ngIf="valDDD.invalid">{{getDDDErrorMessage()}}</mat-error>
+                  </mat-form-field>
+                </div>
+                <div fxFlex="90px" fxFlexAlign="start" fxFlexFill>
+                  <mat-form-field class="frm_fornecedor_telefone1_numero">
+                    <input matInput #telefone1numero maxlength="10" [formControl]="valTelefone" placeholder="Telefone" tabindex="7" [(ngModel)]="fornecedor.telefone1_numero"
+                      (keypress)="onlyNumber($event)" (blur)="formataTelefone($event)">
+                    <mat-hint align="end">{{telefone1numero.value?.length || 0}}/10</mat-hint>
+                    <mat-error *ngIf="valTelefone.invalid">{{getTelefoneErrorMessage()}}</mat-error>
+                  </mat-form-field>
+                </div>
+                <div fxFlex="220px" fxFlexAlign="start" fxFlexFill>
+                  <mat-form-field class="frm_fornecedor_contato">
+                    <input matInput #contato maxlength="50" placeholder="Contato" tabindex="8" [(ngModel)]="fornecedor.contato">
+                    <mat-hint align="end">{{contato.value?.length || 0}}/50</mat-hint>
+                  </mat-form-field>
+                </div>
+              </div>
+            </div>
+            <div fxFlex="250px" fxFlexAlign="start" fxFlexFill>
+              <mat-tab-group tabindex="9">
+                <mat-tab label="Tab 1" >
+                  <ng-template mat-tab-label>Endereço</ng-template>
+                  <div fxLayou="column" fxLayoutAlign="start center" fxLayoutGap="10px">
+                    <div fxFlex="70px" fxFlexAlign="start" fxFlexFill>
+                      <div fxLayout="row" fxLayoutAlign="space-between center" fxLayoutGap="20px">
+                        <div fxFlex="480px" fxFlexFill>
+                          <mat-form-field class="frm_fornecedor_endereco">
+                            <input matInput #endereco maxlength="60" placeholder="Endereço" tabindex="10" [(ngModel)]="fornecedor.endereco">
+                            <mat-hint align="end">{{endereco.value?.length || 0}}/60</mat-hint>
+                          </mat-form-field>
+                        </div>
+                        <div fxFlex="130px" fxFlexFill>
+                          <mat-form-field class="frm_fornecedor_endereco_numero">
+                            <input matInput #endereconumero maxlength="10" placeholder="Numero" tabindex="11" [(ngModel)]="fornecedor.endereco_numero">
+                            <mat-hint align="end">{{endereconumero.value?.length || 0}}/10</mat-hint>
+                          </mat-form-field>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div fxLayou="column" fxLayoutAlign="start center" fxLayoutGap="10px">
+                    <div fxFlex="70px" fxFlexAlign="start" fxFlexFill>
+                      <div fxLayout="row" fxLayoutAlign="space-between center" fxLayoutGap="20px">
+                        <div fxFlex="350px" fxFlexFill>
+                          <mat-form-field class="frm_fornecedor_bairro">
+                            <input matInput #bairro maxlength="30" placeholder="Bairro" tabindex="12" [(ngModel)]="fornecedor.bairro">
+                            <mat-hint align="end">{{bairro.value?.length || 0}}/30</mat-hint>
+                          </mat-form-field>
+                        </div>
+                        <div fxFlex="280px" fxFlexFill>
+                          <mat-form-field class="frm_fornecedor_complemento">
+                            <input matInput #complemento maxlength="60" placeholder="Complemento" tabindex="13" [(ngModel)]="fornecedor.complemento">
+                            <mat-hint align="end">{{complemento.value?.length || 0}}/60</mat-hint>
+                          </mat-form-field>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div fxLayou="column" fxLayoutAlign="start center" fxLayoutGap="10px">
+                    <div fxFlex="70px" fxFlexAlign="start" fxFlexFill>
+                      <div fxLayout="row" fxLayoutAlign="space-between center" fxLayoutGap="20px">
+                        <div fxFlex="170px" fxFlexFill>
+                          <mat-form-field class="frm_fornecedor_estado">
+                            <mat-select placeholder="Estado" [(value)]="fornecedor.estado" (change)="estadoChange($event)" tabindex="14">
+                              <mat-option *ngFor="let estado of estados" [value]="estado.uf">
+                                {{ estado.nome }}
+                              </mat-option>
+                            </mat-select>
+                          </mat-form-field>
+
+                        </div>
+                        <div fxFlex="300px" fxFlexFill>
+                          <mat-form-field class="frm_fornecedor_cidade">
+                            <input matInput #cidade maxlength="40" placeholder="Cidade" [matAutocomplete]="auto" tabindex="11" [(ngModel)]="fornecedor.cidade"
+                              [formControl]="cidadeFilter" tabindex="16">
+                            <mat-hint align="end">{{cidade.value?.length || 0}}/40</mat-hint>
+                            <mat-autocomplete #auto="matAutocomplete">
+                              <mat-option *ngFor="let cidade of filteredOptions | async" [value]="cidade.cCod">
+                                <span>{{ cidade.cCod }}</span>
+                              </mat-option>
+                            </mat-autocomplete>
+                          </mat-form-field>
+                        </div>
+                        <div fxFlex="150px" fxFlexFill>
+                          <mat-form-field class="frm_fornecedor_cep">
+                            <input matInput #cep maxlength="10" placeholder="CEP" tabindex="17" [(ngModel)]="fornecedor.cep">
+                            <mat-hint align="end">{{cep.value?.length || 0}}/10</mat-hint>
+                          </mat-form-field>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </mat-tab>
+                <mat-tab label="Tab 2" tabindex="18">
+                  <ng-template mat-tab-label>Telefones e E-mail</ng-template>
+                  <div fxLayou="column" fxLayoutAlign="start center" fxLayoutGap="10px">
+                    <div fxFlex="70px" fxFlexAlign="start" fxFlexFill>
+                      <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="30px">
+                        <div fxFlex="70px" fxFlexFill>
+                          <mat-form-field class="frm_fornecedor_telefone2_ddd">
+                            <input matInput #telefone2DDD maxlength="2" [formControl]="valDDD2" placeholder="DDD Tel2" tabindex="19" [(ngModel)]="fornecedor.telefone2_ddd"
+                              (keypress)="onlyNumber($event)">
+                            <mat-hint align="end">{{telefone2DDD.value?.length || 0}}/2</mat-hint>
+                            <mat-error *ngIf="valDDD.invalid">{{getDDD2ErrorMessage()}}</mat-error>
+                          </mat-form-field>
+                        </div>
+                        <div fxFlex="90px" fxFlexFill>
+                          <mat-form-field class="frm_fornecedor_telefone2_numero">
+                            <input matInput #telefone2numero maxlength="10" [formControl]="valTelefone2" placeholder="Telefone 2" tabindex="20" [(ngModel)]="fornecedor.telefone2_numero"
+                              (keypress)="onlyNumber($event)" (blur)="formataTelefone2($event)">
+                            <mat-hint align="end">{{telefone2numero.value?.length || 0}}/10</mat-hint>
+                            <mat-error *ngIf="valTelefone2.invalid">{{getTelefone2ErrorMessage()}}</mat-error>
+                          </mat-form-field>
+                        </div>
+                        <div fxFlex="70px" fxFlexFill>
+                          <mat-form-field class="frm_fornecedor_telefone2_ddd">
+                            <input matInput #telefoneDDDFax maxlength="2" [formControl]="valDDDFax" placeholder="DDD Fax" tabindex="21" [(ngModel)]="fornecedor.fax_ddd"
+                              (keypress)="onlyNumber($event)">
+                            <mat-hint align="end">{{telefoneDDDFax.value?.length || 0}}/2</mat-hint>
+                            <mat-error *ngIf="valDDDFax.invalid">{{getDDDFaxErrorMessage()}}</mat-error>
+                          </mat-form-field>
+                        </div>
+                        <div fxFlex="90px" fxFlexFill>
+                          <mat-form-field class="frm_fornecedor_telefone2_numero">
+                            <input matInput #telefoneFaxnumero maxlength="10" [formControl]="valTelefoneFax" placeholder="Fax" tabindex="22" [(ngModel)]="fornecedor.fax_numero"
+                              (keypress)="onlyNumber($event)" (blur)="formataTelefoneFax($event)">
+                            <mat-hint align="end">{{telefoneFaxnumero.value?.length || 0}}/10</mat-hint>
+                            <mat-error *ngIf="valTelefoneFax.invalid">{{getTelefoneFaxErrorMessage()}}</mat-error>
+                          </mat-form-field>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div fxLayou="column" fxLayoutAlign="start center" fxLayoutGap="10px">
+                    <div fxFlex="70px" fxFlexAlign="start" fxFlexFill>
+                      <div fxLayout="row" fxLayoutAlign="space-between center" fxLayoutGap="20px">
+                        <div fxFlex="430px" fxFlexFill>
+                          <mat-form-field class="frm_fornecedor_email">
+                            <input matInput #email maxlength="100" placeholder="E-mail" tabindex="23" [(ngModel)]="fornecedor.email">
+                            <mat-hint align="end">{{email.value?.length || 0}}/100</mat-hint>
+                          </mat-form-field>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div fxLayou="column" fxLayoutAlign="start center" fxLayoutGap="10px">
+                    <div fxFlex="70px" fxFlexAlign="start" fxFlexFill>
+                      <div fxLayout="row" fxLayoutAlign="space-between center" fxLayoutGap="20px">
+                        <div fxFlex="430px" fxFlexFill>
+                          <mat-form-field class="frm_fornecedor_homepage">
+                            <input matInput #homepahe maxlength="100" placeholder="WebSite" tabindex="24" [(ngModel)]="fornecedor.homepage">
+                            <mat-hint align="end">{{homepahe.value?.length || 0}}/100</mat-hint>
+                          </mat-form-field>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </mat-tab>
+                <mat-tab label="Tab 2" tabindex="25">
+                  <ng-template mat-tab-label>Inscrições e outros</ng-template>
+                  <div fxLayou="column" fxLayoutAlign="start center" fxLayoutGap="10px">
+                    <div fxFlex="70px" fxFlexAlign="start" fxFlexFill>
+                      <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="20px">
+                        <div fxFlex="180px" fxFlexFill>
+                          <mat-form-field class="frm_fornecedor_inscrestadual">
+                            <input matInput #inscrEstadual maxlength="20" placeholder="Inscrição Estadual" tabindex="26" [(ngModel)]="fornecedor.inscricao_estadual">
+                            <mat-hint align="end">{{inscrEstadual.value?.length || 0}}/20</mat-hint>
+                          </mat-form-field>
+                        </div>
+                        <div fxFlex="180px" fxFlexFill>
+                          <mat-form-field class="frm_fornecedor_inscrmunicipal">
+                            <input matInput #inscrMunicipal maxlength="20" placeholder="Inscrição Municipal" tabindex="27" [(ngModel)]="fornecedor.inscricao_municipal">
+                            <mat-hint align="end">{{inscrMunicipal.value?.length || 0}}/20</mat-hint>
+                          </mat-form-field>
+                        </div>
+                        <div fxFlex="180px" fxFlexFill>
+                          <mat-form-field class="frm_fornecedor_inscrsuframa">
+                            <input matInput #inscrSuframa maxlength="20" placeholder="Inscrição Suframa" tabindex="28" [(ngModel)]="fornecedor.inscricao_suframa">
+                            <mat-hint align="end">{{inscrSuframa.value?.length || 0}}/20</mat-hint>
+                          </mat-form-field>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div fxLayou="column" fxLayoutAlign="start center" fxLayoutGap="10px">
+                    <div fxFlex="70px" fxFlexAlign="start" fxFlexFill>
+                      <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="20px">
+                        <div fxFlex="150px" fxFlexFill>
+                          <mat-form-field class="frm_fornecedor_nrolicenca">
+                            <input matInput #nrolicencatransp maxlength="20" placeholder="Numero Licença Transporte" tabindex="29" [(ngModel)]="fornecedor.nrlicencatransp">
+                            <mat-hint align="end">{{nrolicencatransp.value?.length || 0}}/20</mat-hint>
+                          </mat-form-field>
+                        </div>
+                        <div fxFlex="170px" fxFlexFill>
+                          <mat-form-field class="frm_fornecedor_dtemissaolicenca">
+                            <input matInput type="date" #dtemissaolicencatransp maxlength="10" placeholder="Data Emissão" tabindex="30" [ngModel]="fornecedor.dtemissaotransp | date:'yyyy-MM-dd'"
+                              (ngModelChange)="fornecedor.dtemissaotransp = $event" [value]="fornecedor.dtemissaotransp | date:'yyyy-MM-dd'">
+                            <mat-hint align="end">{{dtemissaolicencatransp.value?.length || 0}}/10</mat-hint>
+                          </mat-form-field>
+                        </div>
+                        <div fxFlex="90px" fxFlexFill>
+                          <mat-form-field class="frm_fornecedor_validadeano">
+                            <input matInput type="number" #validadeanotransp maxlength="3" placeholder="Validade (Ano)" tabindex="31" [(ngModel)]="fornecedor.nranostransp"
+                              (keypress)="onlyNumber($event)" (change)="validadeanotranspChange($event)">
+                            <mat-hint align="end">{{validadeanotransp.value?.length || 0}}/3</mat-hint>
+                          </mat-form-field>
+                        </div>
+                        <div fxFlex="170px" fxFlexFill>
+                          <mat-form-field class="frm_fornecedor_dtvencimentolicenca">
+                            <input matInput type="date" #dtvencimentolicenca maxlength="20" placeholder="Data Vencimento" tabindex="32" [ngModel]="fornecedor.dtvalidadetransp | date:'yyyy-MM-dd'"
+                              (ngModelChange)="fornecedor.dtvalidadetransp = $event" [value]="fornecedor.dtvalidadetransp | date:'yyyy-MM-dd'">
+                            <mat-hint align="end">{{dtvencimentolicenca.value?.length || 0}}/20</mat-hint>
+                          </mat-form-field>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div fxLayou="column" fxLayoutAlign="start center" fxLayoutGap="10px">
+                    <div fxFlex="70px" fxFlexAlign="start" fxFlexFill>
+                      <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="20px">
+                        <div fxFlex="150px" fxFlexFill>
+                          <mat-form-field class="frm_fornecedor_nrolicenca">
+                            <input matInput #nrolicencareceb maxlength="20" placeholder="Numero Licença Recebimento" tabindex="29" [(ngModel)]="fornecedor.nrlicencarecep">
+                            <mat-hint align="end">{{nrolicencareceb.value?.length || 0}}/20</mat-hint>
+                          </mat-form-field>
+                        </div>
+                        <div fxFlex="170px" fxFlexFill>
+                          <mat-form-field class="frm_fornecedor_dtemissaolicenca">
+                            <input matInput type="date" #dtemissaolicencareceb maxlength="10" placeholder="Data Emissão" tabindex="30" [ngModel]="fornecedor.dtemissaorecep | date:'yyyy-MM-dd'"
+                              (ngModelChange)="fornecedor.dtemissaorecep = $event" [value]="fornecedor.dtemissaorecep | date:'yyyy-MM-dd'">
+                            <mat-hint align="end">{{dtemissaolicencareceb.value?.length || 0}}/10</mat-hint>
+                          </mat-form-field>
+                        </div>
+                        <div fxFlex="90px" fxFlexFill>
+                          <mat-form-field class="frm_fornecedor_validadeano">
+                            <input matInput type="number" #validadeanoreceb maxlength="3" placeholder="Validade (Ano)" tabindex="31" [(ngModel)]="fornecedor.nranosrecep"
+                              (keypress)="onlyNumber($event)" (change)="validadeanorecebChange($event)">
+                            <mat-hint align="end">{{validadeanoreceb.value?.length || 0}}/3</mat-hint>
+                          </mat-form-field>
+                        </div>
+                        <div fxFlex="170px" fxFlexFill>
+                          <mat-form-field class="frm_fornecedor_dtvencimentolicenca">
+                            <input matInput type="date" #dtvencimentolicencareceb maxlength="20" placeholder="Data Vencimento" tabindex="32" [ngModel]="fornecedor.dtvalidaderecep | date:'yyyy-MM-dd'"
+                              (ngModelChange)="fornecedor.dtvalidaderecep = $event" [value]="fornecedor.dtvalidaderecep | date:'yyyy-MM-dd'">
+                            <mat-hint align="end">{{dtvencimentolicencareceb.value?.length || 0}}/20</mat-hint>
+                          </mat-form-field>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </mat-tab>
+                <mat-tab label="Tab 3" tabindex="25">
+                  <ng-template mat-tab-label>Observação</ng-template>
+                  <div fxLayou="column" fxLayoutAlign="start center" fxLayoutGap="10px">
+                    <div fxFlex="70px" fxFlexAlign="start" fxFlexFill>
+                      <div fxLayout="row" fxLayoutAlign="space-between center" fxLayoutGap="20px">
+                        <div fxFlex="550px" fxFlexFill>
+                          <mat-form-field class="frm_fornecedor_observacao">
+                            <input matInput #observacao maxlength="500" placeholder="Observações" tabindex="33" [(ngModel)]="fornecedor.observacao">
+                            <mat-hint align="end">{{observacao.value?.length || 0}}/500</mat-hint>
+                          </mat-form-field>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </mat-tab>
+              </mat-tab-group>
+            </div>
+          </div>
+        </mat-card>
+      </div>
+    </div>
+  </div>
+</div>

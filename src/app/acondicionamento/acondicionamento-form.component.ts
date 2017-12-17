@@ -39,6 +39,12 @@ export class AcondicionamentoFormComponent implements OnInit, AfterViewInit, Aft
     private _route: ActivatedRoute,
     private dialog: DialogService) {}
 
+  validaCampos() {
+    return (
+      this.valCodigo.valid && this.valDescricao.valid
+    );
+  }
+
   ngOnInit() {
     this.emProcessamento = true;
     this.acondicionamento = new Acondicionamento(null, null, '', '', '');
@@ -74,37 +80,44 @@ export class AcondicionamentoFormComponent implements OnInit, AfterViewInit, Aft
 
   btnSalvar_click() {
     this.emProcessamento = true;
-    if (isNullOrUndefined(this.acondicionamento.id)) {
-      this._acondicionamentoService.addAcondicionamento(
-        this._tokenManager.retrieve(),
-        this.acondicionamento.codigo.toString(),
-        this.acondicionamento.descricao).subscribe(
+    if (this.validaCampos()) {
+      if (isNullOrUndefined(this.acondicionamento.id)) {
+        this._acondicionamentoService.addAcondicionamento(
+          this._tokenManager.retrieve(),
+          this.acondicionamento.codigo.toString(),
+          this.acondicionamento.descricao).subscribe(
+            data => {
+              this.emProcessamento = false;
+              this.acondicionamento = data;
+              this.exibeIncluir = true;
+              this.dialog.success('SGR', 'Acondicionamento salvo com sucesso.');
+            },
+            error => {
+              this.emProcessamento = false;
+              this.dialog.error('SGR', 'Erro ao salvar o registro. msg: ' + error.error);
+            },
+          );
+      } else {
+        this._acondicionamentoService.editAcondicionamento(
+          this._tokenManager.retrieve(),
+          this.acondicionamento.id,
+          this.acondicionamento.codigo.toString(),
+          this.acondicionamento.descricao).subscribe(
           data => {
-            this.emProcessamento = false;
-            this.exibeIncluir = true;
-            this.dialog.success('SGR', 'Acondicionamento salvo com sucesso.');
-          },
-          error => {
-            this.emProcessamento = false;
-            this.dialog.error('SGR', 'Erro ao salvar o registro. msg: ' + error.error);
-          },
-        );
+          this.emProcessamento = false;
+          this.acondicionamento = data;
+          this.exibeIncluir = true;
+          this.dialog.success('SGR', 'Acondicionamento salvo com sucesso.');
+        },
+        error => {
+          this.emProcessamento = false;
+          this.dialog.error('SGR', 'Erro ao salvar o registro. msg: ' + error.error);
+        },
+      );
+      }
     } else {
-      this._acondicionamentoService.editAcondicionamento(
-        this._tokenManager.retrieve(),
-        this.acondicionamento.id,
-        this.acondicionamento.codigo.toString(),
-        this.acondicionamento.descricao).subscribe(
-        data => {
-        this.emProcessamento = false;
-        this.exibeIncluir = true;
-        this.dialog.success('SGR', 'Acondicionamento salvo com sucesso.');
-      },
-      error => {
-        this.emProcessamento = false;
-        this.dialog.error('SGR', 'Erro ao salvar o registro. msg: ' + error.error);
-      },
-    );
+      this.emProcessamento = false;
+      this.dialog.warning('SGR', 'Campos obrigatórios não preenchidos');
     }
   }
 
