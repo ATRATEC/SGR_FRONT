@@ -1,3 +1,4 @@
+import { environment } from './../../environments/environment';
 import { isEmpty } from 'rxjs/operators';
 import { isNullOrUndefined } from 'util';
 import { Produto, ProdutoFilter } from './produto';
@@ -10,7 +11,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 
 @Injectable()
 export class ProdutoService {
-  private produtoUrl = 'http://sgr.localhost/api/produtos';
+  private produtoUrl = environment.urlbase + '/api/produtos';
 
   constructor(private _http: Http) {}
 

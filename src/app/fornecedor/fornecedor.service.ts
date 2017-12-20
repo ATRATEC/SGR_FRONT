@@ -1,3 +1,4 @@
+import { environment } from './../../environments/environment';
 import { isEmpty } from 'rxjs/operators';
 import { isNullOrUndefined } from 'util';
 import { Fornecedor, FornecedorFilter } from './fornecedor';
@@ -10,7 +11,7 @@ import { HttpErrorResponse, HttpParams } from '@angular/common/http';
 
 @Injectable()
 export class FornecedorService {
-  private fornecedorUrl = 'http://sgr.localhost/api/fornecedores';
+  private fornecedorUrl = environment.urlbase + '/api/fornecedores';
 
   constructor(private _http: Http) {}
 

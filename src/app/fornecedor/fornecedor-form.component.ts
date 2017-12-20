@@ -217,6 +217,7 @@ export class FornecedorFormComponent implements OnInit, AfterViewInit, AfterView
   loadCidades(cUF: string) {
     this._enderecoService.getListCidades(this._tokenManager.retrieve(), cUF).subscribe(data => {
       this.cidades = JSON.parse(data._body);
+      this.cidadeFilter.reset();
     });
   }
 

@@ -18,7 +18,7 @@ import 'rxjs/add/observable/fromEvent';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/distinctUntilChanged';
 import 'rxjs/add/operator/debounceTime';
-import { ChangeDetectorRef, ViewChildren } from '@angular/core';
+import { ChangeDetectorRef, ViewChildren, ElementRef, ViewChild } from '@angular/core';
 import { OnlyNumberDirective } from './../only-number.directive';
 import { Cliente } from './cliente';
 import { ActivatedRoute, Params } from '@angular/router';
@@ -248,6 +248,7 @@ export class ClienteFormComponent
       .getListCidades(this._tokenManager.retrieve(), cUF)
       .subscribe(data => {
         this.cidades = JSON.parse(data._body);
+        this.cidadeFilter.reset();
       });
   }
 
@@ -431,3 +432,5 @@ export class ClienteFormComponent
     console.log('data ' + dt.toLocaleDateString());
   }
 }
+
+

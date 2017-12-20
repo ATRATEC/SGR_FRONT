@@ -1,3 +1,4 @@
+import { environment } from './../../environments/environment';
 import { isEmpty } from 'rxjs/operators';
 import { isNullOrUndefined } from 'util';
 import { TipoAtividade, TipoAtividadeFilter } from './tipoatividade';
@@ -10,7 +11,7 @@ import { HttpErrorResponse, HttpParams } from '@angular/common/http';
 
 @Injectable()
 export class TipoAtividadeService {
-  private tipoatividadeUrl = 'http://sgr.localhost/api/tipoatividades';
+  private tipoatividadeUrl = environment.urlbase + '/api/tipoatividades';
 
   constructor(private _http: Http) {}
 
@@ -130,7 +131,7 @@ export class TipoAtividadeService {
   }
 
   getListTipoAtividades(accessToken: string)  {
-    const listUrl = 'http://sgr.localhost/api/listtipoatividades';
+    const listUrl = environment.urlbase + '/api/listtipoatividades';
     const headers = new Headers({
       Accept: 'application/json',
       Authorization: 'Bearer ' + accessToken.toString().replace(/"/g, '')

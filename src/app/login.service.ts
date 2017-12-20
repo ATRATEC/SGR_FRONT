@@ -1,3 +1,4 @@
+import { environment } from './../environments/environment';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Rx';
 import { Http, Headers, Response } from '@angular/http';
@@ -6,7 +7,7 @@ import { User } from './user';
 
 @Injectable()
 export class LoginService {
-  private loginUrl = 'http://sgr.localhost/api/login';
+  private loginUrl = environment.urlbase + '/api/login';
 
   constructor(private _http: Http) { }
 

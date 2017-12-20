@@ -1,3 +1,4 @@
+import { environment } from './../../environments/environment';
 import { isEmpty } from 'rxjs/operators';
 import { isNullOrUndefined } from 'util';
 import { TipoTratamento, TipoTratamentoFilter } from './tipotratamento';
@@ -10,7 +11,7 @@ import { HttpErrorResponse, HttpParams } from '@angular/common/http';
 
 @Injectable()
 export class TipoTratamentoService {
-  private tipotratamentoUrl = 'http://sgr.localhost/api/tipotratamentos';
+  private tipotratamentoUrl = environment.urlbase + '/api/tipotratamentos';
 
   constructor(private _http: Http) {}
 

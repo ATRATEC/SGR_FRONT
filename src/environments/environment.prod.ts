@@ -1,3 +1,4 @@
 export const environment = {
-  production: true
+  production: true,
+  urlbase: 'http://sgr.ambienteverde.eco.br'
 };

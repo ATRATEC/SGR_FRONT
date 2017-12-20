@@ -1,3 +1,4 @@
+import { environment } from './../../environments/environment';
 import { isEmpty } from 'rxjs/operators';
 import { isNullOrUndefined } from 'util';
 import { Acondicionamento, AcondicionamentoFilter } from './acondicionamento';
@@ -10,7 +11,7 @@ import { HttpErrorResponse, HttpParams } from '@angular/common/http';
 
 @Injectable()
 export class AcondicionamentoService {
-  private acondicionamentoUrl = 'http://sgr.localhost/api/acondicionamentos';
+  private acondicionamentoUrl = environment.urlbase + '/api/acondicionamentos';
 
   constructor(private _http: Http) {}
 

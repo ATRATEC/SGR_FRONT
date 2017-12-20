@@ -42,10 +42,10 @@
         </div>
         <mat-card *ngIf="!emProcessamento" style="width: 660px;">
           <div fxLayout="column" fxLayoutAlign="start center" fxLayoutGap="5px">
-            <input type="hidden" value={{cliente.id}} tabindex="3">
+            <input type="hidden" value={{cliente.id}} tabindex="50">
             <div fxFlex="60px" fxFlexAlign="start">
               <mat-form-field class="frm_cliente_codigo">
-                <input matInput autofocus #codigo maxlength="9" [formControl]="valCodigo" type="number" tabindex="1" placeholder="Código"
+                <input autofocus matInput #codigo maxlength="9" [formControl]="valCodigo" type="number" tabindex="1" placeholder="Código"
                   required (keypress)="onlyNumber($event)" [(ngModel)]="cliente.codigo_omie">
                 <mat-hint align="end">{{codigo.value?.length || 0}}/9</mat-hint>
                 <mat-error *ngIf="valCodigo.invalid">{{getCodigoErrorMessage()}}</mat-error>
@@ -105,7 +105,7 @@
             </div>
             <div fxFlex="250px" fxFlexAlign="start" fxFlexFill>
               <mat-tab-group>
-                <mat-tab label="Tab 1" tabindex="8">
+                <mat-tab label="Tab 6" tabindex="8" >
                   <ng-template mat-tab-label>Endereço</ng-template>
                   <div fxLayou="column" fxLayoutAlign="start center" fxLayoutGap="10px">
                     <div fxFlex="70px" fxFlexAlign="start" fxFlexFill>
@@ -170,7 +170,7 @@
                         </div>
                         <div fxFlex="150px" fxFlexFill>
                           <mat-form-field class="frm_cliente_cep">
-                            <input matInput #cep maxlength="10" placeholder="CEP" tabindex="17" [(ngModel)]="cliente.cep">
+                            <input matInput #cep maxlength="10" placeholder="CEP" tabindex="17" [(ngModel)]="cliente.cep" (keydown)="cep_keydown($event)">
                             <mat-hint align="end">{{cep.value?.length || 0}}/10</mat-hint>
                           </mat-form-field>
                         </div>
@@ -178,7 +178,7 @@
                     </div>
                   </div>
                 </mat-tab>
-                <mat-tab label="Tab 2" tabindex="18">
+                <mat-tab label="Tab 7" tabindex="18">
                   <ng-template mat-tab-label>Telefones e E-mail</ng-template>
                   <div fxLayou="column" fxLayoutAlign="start center" fxLayoutGap="10px">
                     <div fxFlex="70px" fxFlexAlign="start" fxFlexFill>
@@ -243,7 +243,7 @@
                     </div>
                   </div>
                 </mat-tab>
-                <mat-tab label="Tab 2" tabindex="25">
+                <mat-tab label="Tab 8" tabindex="25">
                   <ng-template mat-tab-label>Inscrições e outros</ng-template>
                   <div fxLayou="column" fxLayoutAlign="start center" fxLayoutGap="10px">
                     <div fxFlex="70px" fxFlexAlign="start" fxFlexFill>

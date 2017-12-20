@@ -1,3 +1,4 @@
+import { environment } from './../../environments/environment';
 import { isEmpty } from 'rxjs/operators';
 import { isNullOrUndefined } from 'util';
 import { Residuo, ResiduoFilter } from './residuo';
@@ -10,7 +11,7 @@ import { HttpErrorResponse, HttpParams } from '@angular/common/http';
 
 @Injectable()
 export class ResiduoService {
-  private residuoUrl = 'http://sgr.localhost/api/residuos';
+  private residuoUrl = environment.urlbase + '/api/residuos';
 
   constructor(private _http: Http) {}
 

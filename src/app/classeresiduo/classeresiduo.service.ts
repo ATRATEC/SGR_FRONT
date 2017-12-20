@@ -1,3 +1,4 @@
+import { environment } from './../../environments/environment';
 import { isEmpty } from 'rxjs/operators';
 import { isNullOrUndefined } from 'util';
 import { ClasseResiduo, ClasseResiduoFilter } from './classeresiduo';
@@ -10,7 +11,7 @@ import { HttpErrorResponse, HttpParams } from '@angular/common/http';
 
 @Injectable()
 export class ClasseResiduoService {
-  private classeresiduoUrl = 'http://sgr.localhost/api/classeresiduos';
+  private classeresiduoUrl = environment.urlbase + '/api/classeresiduos';
 
   constructor(private _http: Http) {}
 
@@ -194,7 +195,7 @@ export class ClasseResiduoService {
   }
 
   getListClasseResiduos(accessToken: string)  {
-    const listUrl = 'http://sgr.localhost/api/listclasseresiduos';
+    const listUrl = environment.urlbase + '/api/listclasseresiduos';
     const headers = new Headers({
       Accept: 'application/json',
       Authorization: 'Bearer ' + accessToken.toString().replace(/"/g, '')

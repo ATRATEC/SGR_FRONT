@@ -1,3 +1,4 @@
+import { environment } from './../../environments/environment';
 import { isEmpty } from 'rxjs/operators';
 import { isNullOrUndefined } from 'util';
 import { Cliente, ClienteFilter } from './cliente';
@@ -10,7 +11,7 @@ import { HttpErrorResponse, HttpParams } from '@angular/common/http';
 
 @Injectable()
 export class ClienteService {
-  private clienteUrl = 'http://sgr.localhost/api/clientes';
+  private clienteUrl = environment.urlbase + '/api/clientes';
 
   constructor(private _http: Http) {}
 

@@ -199,3 +199,7 @@ mat-row:nth-child(odd) {
 .filtro_cnpj_cpf {
   width: 150px;
 }
+
+.filtro_email {
+  width: 200px;
+}

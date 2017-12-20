@@ -1,3 +1,4 @@
+import { environment } from './../environments/environment';
 import { isEmpty } from 'rxjs/operators';
 import { isNullOrUndefined } from 'util';
 import { Injectable } from '@angular/core';
@@ -13,7 +14,7 @@ export class EnderecoService {
   constructor(private _http: Http) {}
 
   getListEstados(accessToken: string)  {
-    const listUrl = 'http://sgr.localhost/api/estados';
+    const listUrl = environment.urlbase + '/api/estados';
     const headers = new Headers({
       Accept: 'application/json',
       Authorization: 'Bearer ' + accessToken.toString().replace(/"/g, '')
@@ -29,7 +30,7 @@ export class EnderecoService {
   }
 
   getListCidades(accessToken: string, cUF: string)  {
-    const listUrl = 'http://sgr.localhost/api/cidades';
+    const listUrl = environment.urlbase + '/api/cidades';
     const headers = new Headers({
       Accept: 'application/json',
       Authorization: 'Bearer ' + accessToken.toString().replace(/"/g, '')

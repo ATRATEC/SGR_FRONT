@@ -1,3 +1,4 @@
+import { environment } from './../environments/environment';
 import { Router } from '@angular/router';
 import { DialogComponent } from './dialog/dialog.component';
 import { AlertSettings } from './alert-settings';
@@ -33,8 +34,8 @@ export class AppComponent implements OnInit {
   Logado: boolean;
   Usuario: User;
   users: User[];
-  private loginUrl = 'http://sgr.localhost/api/login';
-  private usersUrl = 'http://sgr.localhost/api/users';
+  private loginUrl = environment.urlbase + '/api/login';
+  private usersUrl = environment.urlbase + '/api/users';
 
   options = {
     direction: 'row',
@@ -208,7 +209,7 @@ export class AppComponent implements OnInit {
       height: '250px',
       disableClose: true,
       data: { title: 'SGR',
-              message: 'teste de mensagem do dialogo',
+              message: environment.urlbase,
               showOkButton: false,
               showYesNoButton: true,
               showCancelButton: false,
