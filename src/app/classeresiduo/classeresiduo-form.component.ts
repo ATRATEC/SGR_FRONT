@@ -12,7 +12,7 @@ import 'rxjs/add/observable/fromEvent';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/distinctUntilChanged';
 import 'rxjs/add/operator/debounceTime';
-import { ChangeDetectorRef, ViewChildren } from '@angular/core';
+import { ChangeDetectorRef, ViewChildren, ViewChild, ElementRef } from '@angular/core';
 import { OnlyNumberDirective } from './../only-number.directive';
 import { ClasseResiduo } from './classeresiduo';
 import { ActivatedRoute, Params} from '@angular/router';
@@ -29,10 +29,10 @@ export class ClasseResiduoFormComponent implements OnInit, AfterViewInit, AfterV
   emProcessamento = false;
   exibeIncluir = false;
 
-  valCodigo = new FormControl('', [Validators.required]);
   valDescricao = new FormControl('', [Validators.required]);
 
   @ViewChildren('input') vc;
+  @ViewChild('focuscomp') focuscomp: ElementRef;
 
   constructor(private _classeresiduoService: ClasseResiduoService,
     private _tokenManager: TokenManagerService,
@@ -41,13 +41,13 @@ export class ClasseResiduoFormComponent implements OnInit, AfterViewInit, AfterV
 
   validaCampos() {
     return (
-      this.valCodigo.valid && this.valDescricao.valid
+      this.valDescricao.valid
     );
   }
 
   ngOnInit() {
     this.emProcessamento = true;
-    this.classeresiduo = new ClasseResiduo(null, null, '', '', '');
+    this.classeresiduo = new ClasseResiduo();
     this._route.params.forEach((params: Params) => {
       const id: number = +params['id'];
       if (id) {
@@ -68,6 +68,7 @@ export class ClasseResiduoFormComponent implements OnInit, AfterViewInit, AfterV
 
   ngAfterViewInit(): void {
     // this.vc.first.nativeElement.focus();
+    Promise.resolve(null).then(() => this.focuscomp.nativeElement.focus());
   }
 
   keyPress(event: any) {
@@ -84,7 +85,6 @@ export class ClasseResiduoFormComponent implements OnInit, AfterViewInit, AfterV
       if (isNullOrUndefined(this.classeresiduo.id)) {
         this._classeresiduoService.addClasseResiduo(
         this._tokenManager.retrieve(),
-        this.classeresiduo.codigo.toString(),
         this.classeresiduo.descricao).subscribe(
           data => {
             // this.classeresiduo = data;
@@ -102,7 +102,6 @@ export class ClasseResiduoFormComponent implements OnInit, AfterViewInit, AfterV
         this._classeresiduoService.editClasseResiduo(
           this._tokenManager.retrieve(),
           this.classeresiduo.id,
-          this.classeresiduo.codigo.toString(),
           this.classeresiduo.descricao).subscribe(
           data => {
             // this.classeresiduo = data;
@@ -124,16 +123,7 @@ export class ClasseResiduoFormComponent implements OnInit, AfterViewInit, AfterV
   }
 
   btnIncluir_click() {
-    this.classeresiduo = new ClasseResiduo(null, null, '', '', '');
-  }
-
-  getCodigoErrorMessage() {
-    let mensagem = '';
-    if (this.valCodigo.hasError('required')) {
-      mensagem = 'Campo obrigatório.';
-    }
-
-    return mensagem;
+    this.classeresiduo = new ClasseResiduo();
   }
 
   getDescricaoErrorMessage() {

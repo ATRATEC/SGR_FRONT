@@ -1,6 +1,6 @@
 import { TokenManagerService } from './../token-manager.service';
 import { ResiduoService } from './residuo.service';
-import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, EventEmitter } from '@angular/core';
 import { DataSource} from '@angular/cdk/collections';
 import { MatSort } from '@angular/material';
 import { MatPaginator } from '@angular/material';
@@ -16,7 +16,9 @@ import 'rxjs/add/operator/debounceTime';
 import { Residuo, ResiduoFilter } from './residuo';
 
 export class DsResiduo extends DataSource<Residuo> {
-  _filterChange = new BehaviorSubject( {id: '', codigo: '', descricao: ''} );
+  _filterChange = new BehaviorSubject( {id: '', descricao: ''} );
+
+  public onChange: EventEmitter<boolean> = new EventEmitter<boolean>();
 
   get filter(): ResiduoFilter {
     return this._filterChange.value;
@@ -27,7 +29,7 @@ export class DsResiduo extends DataSource<Residuo> {
   }
 
   resultsLength = 0;
-  isLoadingResults: boolean;
+  // isLoadingResults: boolean;
 
   paginaInicial: number;
   paginaAtual: number;
@@ -41,7 +43,7 @@ export class DsResiduo extends DataSource<Residuo> {
               private _paginator: MatPaginator,
               private _sort: MatSort) {
     super();
-    this.isLoadingResults = false;
+    this.onChange.emit(false);
   }
   connect(): Observable<Residuo[]> {
     const displayDataChanges = [
@@ -54,13 +56,14 @@ export class DsResiduo extends DataSource<Residuo> {
     return Observable.merge(...displayDataChanges)
     .startWith(null)
     .switchMap(() => {
-      this.isLoadingResults = true;
+      this.onChange.emit(true);
       return this._residuoService.getResiduos(this._tokenManager.retrieve(),
         this._sort.active, this._sort.direction, this._paginator.pageIndex, this._paginator.pageSize, this.filter);
     })
+    .retry(3)
     .map(data => {
       // Flip flag to show that loading has finished.
-      this.isLoadingResults = false;
+      this.onChange.emit(false);
       this.paginaInicial = 1;
       this.paginaFinal = data.meta.last_page;
       this.registroDe = data.meta.from;
@@ -68,8 +71,8 @@ export class DsResiduo extends DataSource<Residuo> {
       this.nrRegistros = data.meta.total;
       return data.data;
     })
-    .catch(() => {
-      this.isLoadingResults = false;
+    .catch(err => {
+      console.log(err);
       return Observable.of([]);
     });
   }

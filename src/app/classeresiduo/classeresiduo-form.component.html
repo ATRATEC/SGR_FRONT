@@ -45,14 +45,12 @@
             <input type="hidden" value={{classeresiduo.id}} tabindex="3">
             <div fxFlex="50%" fxFlexAlign="start">
               <mat-form-field class="frm_classeresiduo_codigo">
-                <input matInput autofocus #codigo maxlength="9" [formControl]="valCodigo" type="number" tabindex="1" placeholder="Código" required (keypress)="keyPress($event)" [(ngModel)]="classeresiduo.codigo">
-                <mat-hint align="end">{{codigo.value?.length || 0}}/9</mat-hint>
-                <mat-error *ngIf="valCodigo.invalid">{{getCodigoErrorMessage()}}</mat-error>
+                <input matInput disabled #codigo maxlength="9" type="number" tabindex="-1" placeholder="Código" required [(ngModel)]="classeresiduo.id">
               </mat-form-field>
             </div>
             <div fxFlex="50%" fxFlexAlign="start" >
               <mat-form-field class="frm_classeresiduo_descricao">
-                <input matInput #descricao maxlength="50"  [formControl]="valDescricao" placeholder="Descrição" required tabindex="2" [(ngModel)]="classeresiduo.descricao">
+                <input matInput #descricao #focuscomp maxlength="50"  [formControl]="valDescricao" placeholder="Descrição" required tabindex="1" [(ngModel)]="classeresiduo.descricao">
                 <mat-hint align="end">{{descricao.value?.length || 0}}/50</mat-hint>
                 <mat-error *ngIf="valDescricao.invalid">{{getDescricaoErrorMessage()}}</mat-error>
               </mat-form-field>

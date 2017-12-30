@@ -15,7 +15,7 @@ import 'rxjs/add/observable/fromEvent';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/distinctUntilChanged';
 import 'rxjs/add/operator/debounceTime';
-import { ChangeDetectorRef, ViewChildren } from '@angular/core';
+import { ChangeDetectorRef, ViewChildren, ViewChild, ElementRef } from '@angular/core';
 import { OnlyNumberDirective } from './../only-number.directive';
 import { Fornecedor } from './fornecedor';
 import { ActivatedRoute, Params} from '@angular/router';
@@ -54,6 +54,7 @@ export class FornecedorFormComponent implements OnInit, AfterViewInit, AfterView
   filteredOptions: Observable<Cidade[]>;
 
   @ViewChildren('input') vc;
+  @ViewChild('focuscomp') focuscomp: ElementRef;
 
   constructor(private _fornecedorService: FornecedorService,
     private _tokenManager: TokenManagerService,
@@ -235,6 +236,7 @@ export class FornecedorFormComponent implements OnInit, AfterViewInit, AfterView
 
   ngAfterViewInit(): void {
     // this.vc.first.nativeElement.focus();
+    Promise.resolve(null).then(() => this.focuscomp.nativeElement.focus());
   }
 
   onlyNumber(event: any) {
@@ -378,26 +380,26 @@ export class FornecedorFormComponent implements OnInit, AfterViewInit, AfterView
     }
   }
 
-  validadeanotranspChange(event: any) {
-    const dtemiss = new Date(this.fornecedor.dtemissaotransp);
-    let ano = dtemiss.getFullYear();
-    const mes = dtemiss.getMonth();
-    const dia = dtemiss.getDate();
-    ano = ano + parseInt(event.target.value, 10);
-    const dt = new Date(ano, mes, dia);
-    this.fornecedor.dtvalidadetransp = dt;
-    console.log('data ' + dt.toLocaleDateString());
-  }
+  // validadeanotranspChange(event: any) {
+  //   const dtemiss = new Date(this.fornecedor.dtemissaotransp);
+  //   let ano = dtemiss.getFullYear();
+  //   const mes = dtemiss.getMonth();
+  //   const dia = dtemiss.getDate();
+  //   ano = ano + parseInt(event.target.value, 10);
+  //   const dt = new Date(ano, mes, dia);
+  //   this.fornecedor.dtvalidadetransp = dt;
+  //   console.log('data ' + dt.toLocaleDateString());
+  // }
 
-  validadeanorecebChange(event: any) {
-    const dtemiss = new Date(this.fornecedor.dtemissaorecep);
-    let ano = dtemiss.getFullYear();
-    const mes = dtemiss.getMonth();
-    const dia = dtemiss.getDate();
-    ano = ano + parseInt(event.target.value, 10);
-    const dt = new Date(ano, mes, dia);
-    this.fornecedor.dtvalidaderecep = dt;
-    console.log('data ' + dt.toLocaleDateString());
-  }
+  // validadeanorecebChange(event: any) {
+  //   const dtemiss = new Date(this.fornecedor.dtemissaorecep);
+  //   let ano = dtemiss.getFullYear();
+  //   const mes = dtemiss.getMonth();
+  //   const dia = dtemiss.getDate();
+  //   ano = ano + parseInt(event.target.value, 10);
+  //   const dt = new Date(ano, mes, dia);
+  //   this.fornecedor.dtvalidaderecep = dt;
+  //   console.log('data ' + dt.toLocaleDateString());
+  // }
 
 }

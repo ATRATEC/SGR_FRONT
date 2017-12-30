@@ -28,8 +28,7 @@ import { OnlyNumberDirective } from './../only-number.directive';
   styleUrls: ['./acondicionamento-list.component.css']
 })
 export class AcondicionamentoListComponent implements OnInit, AfterViewInit {
-  displayedColumns = ['codigo', 'descricao'];
-  // displayedColumns = ['id', 'codigo', 'descricao'];
+  displayedColumns = ['id', 'descricao'];
   dataSource: DsAcondicionamento | null;
   selectedRowIndex = -1;
   selectedRow: any | null;
@@ -38,7 +37,6 @@ export class AcondicionamentoListComponent implements OnInit, AfterViewInit {
 
 
   idFilter = new FormControl();
-  codigoFilter = new FormControl();
   descricaoFilter = new FormControl();
 
   @ViewChild(MatSort) sort: MatSort;
@@ -161,12 +159,12 @@ export class AcondicionamentoListComponent implements OnInit, AfterViewInit {
     this.dataSource = new DsAcondicionamento(this._tokenManager, this._acondicionamentoService, this.paginator, this.sort);
 
     const idFilter$ = this.idFilter.valueChanges.debounceTime(500).distinctUntilChanged().startWith('');
-    const codigoFilter$ = this.codigoFilter.valueChanges.debounceTime(500).distinctUntilChanged().startWith('');
+
     const descricaoFilter$ = this.descricaoFilter.valueChanges.debounceTime(500).distinctUntilChanged().startWith('');
 
-    Observable.combineLatest(idFilter$, codigoFilter$, descricaoFilter$).debounceTime(500).distinctUntilChanged().
+    Observable.combineLatest(idFilter$, descricaoFilter$).debounceTime(500).distinctUntilChanged().
     map(
-      ([id, codigo, descricao ]) => ({id, codigo, descricao})).subscribe(filter => {
+      ([id, descricao ]) => ({id, descricao})).subscribe(filter => {
         if (!this.dataSource) { return; }
         this.dataSource.filter = filter;
       });

@@ -28,7 +28,7 @@ import { OnlyNumberDirective } from './../only-number.directive';
   styleUrls: ['./cliente-list.component.css']
 })
 export class ClienteListComponent implements OnInit, AfterViewInit {
-  displayedColumns = ['codigo_omie',
+  displayedColumns = ['id',
                       'cnpj_cpf',
                       'razao_social',
                       'contato',
@@ -44,7 +44,6 @@ export class ClienteListComponent implements OnInit, AfterViewInit {
 
 
   idFilter = new FormControl();
-  codigoFilter = new FormControl();
   cnpjCpfFilter = new FormControl();
   razaoSocialFilter = new FormControl();
   contatoFilter = new FormControl();
@@ -171,7 +170,6 @@ export class ClienteListComponent implements OnInit, AfterViewInit {
     this.dataSource = new DsCliente(this._tokenManager, this._clienteService, this.paginator, this.sort);
 
     const idFilter$ = this.idFilter.valueChanges.debounceTime(500).distinctUntilChanged().startWith('');
-    const codigoFilter$ = this.codigoFilter.valueChanges.debounceTime(500).distinctUntilChanged().startWith('');
     const cnpjCpfFilter$ = this.cnpjCpfFilter.valueChanges.debounceTime(500).distinctUntilChanged().startWith('');
     const razaoSocialFilter$ = this.razaoSocialFilter.valueChanges.debounceTime(500).distinctUntilChanged().startWith('');
     const contatoFilter$ = this.contatoFilter.valueChanges.debounceTime(500).distinctUntilChanged().startWith('');
@@ -179,15 +177,14 @@ export class ClienteListComponent implements OnInit, AfterViewInit {
     const emailFilter$ = this.emailFilter.valueChanges.debounceTime(500).distinctUntilChanged().startWith('');
 
     Observable.combineLatest(idFilter$,
-                             codigoFilter$,
                              cnpjCpfFilter$,
                              razaoSocialFilter$,
                              contatoFilter$,
                              telefoneFilter$,
                              emailFilter$
                             ).debounceTime(500).distinctUntilChanged().map(
-      ([id, codigo_omie, cnpj_cpf, razao_social, contato, telefone, email ]) =>
-      ({id, codigo_omie, cnpj_cpf, razao_social, contato, telefone, email})).subscribe(filter => {
+      ([id, cnpj_cpf, razao_social, contato, telefone, email ]) =>
+      ({id, cnpj_cpf, razao_social, contato, telefone, email})).subscribe(filter => {
         if (!this.dataSource) { return; }
         this.dataSource.filter = filter;
       });

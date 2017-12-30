@@ -137,7 +137,7 @@ mat-row:nth-child(odd) {
 }
 
 .mat-column-id {
-  max-width: 40px;
+  max-width: 80px;
 }
 
 .mat-column-codigo {

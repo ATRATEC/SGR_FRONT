@@ -42,17 +42,17 @@
             </div>
         <mat-card *ngIf="!emProcessamento">
           <div fxLayout="column" fxLayoutAlign="start center" fxLayoutGap="5px">
-            <input type="hidden" value={{tipotratamento.id}} tabindex="3">
+
             <div fxFlex="50%" fxFlexAlign="start">
               <mat-form-field class="frm_tipotratamento_codigo">
-                <input matInput autofocus #codigo maxlength="9" [formControl]="valCodigo" type="number" tabindex="1" placeholder="Código" required (keypress)="keyPress($event)" [(ngModel)]="tipotratamento.codigo">
-                <mat-hint align="end">{{codigo.value?.length || 0}}/9</mat-hint>
-                <mat-error *ngIf="valCodigo.invalid">{{getCodigoErrorMessage()}}</mat-error>
+                <input matInput disabled #codigo maxlength="9" type="number" tabindex="2" placeholder="Código" required [(ngModel)]="tipotratamento.id">
+                <!-- <mat-hint align="end">{{codigo.value?.length || 0}}/9</mat-hint>
+                <mat-error *ngIf="valCodigo.invalid">{{getCodigoErrorMessage()}}</mat-error> -->
               </mat-form-field>
             </div>
             <div fxFlex="50%" fxFlexAlign="start" >
               <mat-form-field class="frm_tipotratamento_descricao">
-                <input matInput #descricao maxlength="50"  [formControl]="valDescricao" placeholder="Descrição" required tabindex="2" [(ngModel)]="tipotratamento.descricao">
+                <input matInput autofocus #descricao #focuscomp maxlength="50"  [formControl]="valDescricao" placeholder="Descrição" required tabindex="1" [(ngModel)]="tipotratamento.descricao">
                 <mat-hint align="end">{{descricao.value?.length || 0}}/50</mat-hint>
                 <mat-error *ngIf="valDescricao.invalid">{{getDescricaoErrorMessage()}}</mat-error>
               </mat-form-field>

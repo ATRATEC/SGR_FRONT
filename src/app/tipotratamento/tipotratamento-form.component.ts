@@ -12,7 +12,7 @@ import 'rxjs/add/observable/fromEvent';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/distinctUntilChanged';
 import 'rxjs/add/operator/debounceTime';
-import { ChangeDetectorRef, ViewChildren } from '@angular/core';
+import { ChangeDetectorRef, ViewChildren, ViewChild, ElementRef } from '@angular/core';
 import { OnlyNumberDirective } from './../only-number.directive';
 import { TipoTratamento } from './tipotratamento';
 import { ActivatedRoute, Params} from '@angular/router';
@@ -29,10 +29,10 @@ export class TipoTratamentoFormComponent implements OnInit, AfterViewInit, After
   emProcessamento = false;
   exibeIncluir = false;
 
-  valCodigo = new FormControl('', [Validators.required]);
   valDescricao = new FormControl('', [Validators.required]);
 
   @ViewChildren('input') vc;
+  @ViewChild('focuscomp') focuscomp: ElementRef;
 
   constructor(private _tipotratamentoService: TipoTratamentoService,
     private _tokenManager: TokenManagerService,
@@ -41,13 +41,13 @@ export class TipoTratamentoFormComponent implements OnInit, AfterViewInit, After
 
   validaCampos() {
     return (
-      this.valCodigo.valid && this.valDescricao.valid
+      this.valDescricao.valid
     );
   }
 
   ngOnInit() {
     this.emProcessamento = true;
-    this.tipotratamento = new TipoTratamento(null, null, '', '', '');
+    this.tipotratamento = new TipoTratamento();
     this._route.params.forEach((params: Params) => {
       const id: number = +params['id'];
       if (id) {
@@ -68,6 +68,7 @@ export class TipoTratamentoFormComponent implements OnInit, AfterViewInit, After
 
   ngAfterViewInit(): void {
     // this.vc.first.nativeElement.focus();
+    Promise.resolve(null).then(() => this.focuscomp.nativeElement.focus());
   }
 
   keyPress(event: any) {
@@ -84,7 +85,6 @@ export class TipoTratamentoFormComponent implements OnInit, AfterViewInit, After
       if (isNullOrUndefined(this.tipotratamento.id)) {
         this._tipotratamentoService.addTipoTratamento(
           this._tokenManager.retrieve(),
-          this.tipotratamento.codigo.toString(),
           this.tipotratamento.descricao).subscribe(
             data => {
               this.emProcessamento = false;
@@ -101,7 +101,6 @@ export class TipoTratamentoFormComponent implements OnInit, AfterViewInit, After
         this._tipotratamentoService.editTipoTratamento(
           this._tokenManager.retrieve(),
           this.tipotratamento.id,
-          this.tipotratamento.codigo.toString(),
           this.tipotratamento.descricao).subscribe(
           data => {
           this.emProcessamento = false;
@@ -122,16 +121,7 @@ export class TipoTratamentoFormComponent implements OnInit, AfterViewInit, After
   }
 
   btnIncluir_click() {
-    this.tipotratamento = new TipoTratamento(null, null, '', '', '');
-  }
-
-  getCodigoErrorMessage() {
-    let mensagem = '';
-    if (this.valCodigo.hasError('required')) {
-      mensagem = 'Campo obrigatório.';
-    }
-
-    return mensagem;
+    this.tipotratamento = new TipoTratamento();
   }
 
   getDescricaoErrorMessage() {

@@ -19,6 +19,10 @@
       <mat-icon fontSet="fontawesome" fontIcon="fa-book"></mat-icon>
       <span>Contrato</span>
     </button>
+    <button mat-menu-item [matMenuTriggerFor]="documento">
+      <mat-icon fontSet="fontawesome" fontIcon="fa-id-card"></mat-icon>
+      <span>Documento</span>
+    </button>
     <button mat-menu-item [routerLink]="['/fornecedores']">
       <mat-icon fontSet="fontawesome" fontIcon="fa-truck"></mat-icon>
       <span>Fornecedor</span>
@@ -41,6 +45,21 @@
     <button mat-menu-item [routerLink]="['/']">
       <!-- <mat-icon fontSet="fontawesome" fontIcon="fa-truck"></mat-icon> -->
       <span>Fornecedor</span>
+    </button>
+  </mat-menu>
+  <!-- Documento -->
+  <mat-menu #documento="matMenu">
+    <button mat-menu-item [routerLink]="['/']">
+      <!-- <mat-icon fontSet="fontawesome" fontIcon="fa-truck"></mat-icon> -->
+      <span>Cliente</span>
+    </button>
+    <button mat-menu-item [routerLink]="['/']">
+      <!-- <mat-icon fontSet="fontawesome" fontIcon="fa-truck"></mat-icon> -->
+      <span>Fornecedor</span>
+    </button>
+    <button mat-menu-item [routerLink]="['/']">
+      <!-- <mat-icon fontSet="fontawesome" fontIcon="fa-truck"></mat-icon> -->
+      <span>Tipo de Documento</span>
     </button>
   </mat-menu>
   <!-- Residuo -->

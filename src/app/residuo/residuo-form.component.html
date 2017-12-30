@@ -45,14 +45,14 @@
             <input type="hidden" value={{residuo.id}} tabindex="3">
             <div fxFlex="33.3%" fxFlexAlign="start">
               <mat-form-field class="frm_residuo_codigo">
-                <input matInput autofocus #codigo maxlength="9" [formControl]="valCodigo" type="number" tabindex="1" placeholder="Código" required (keypress)="keyPress($event)" [(ngModel)]="residuo.codigo">
-                <mat-hint align="end">{{codigo.value?.length || 0}}/9</mat-hint>
-                <mat-error *ngIf="valCodigo.invalid">{{getCodigoErrorMessage()}}</mat-error>
+                <input matInput disabled #codigo maxlength="9" type="number" tabindex="-1" placeholder="Código" required [(ngModel)]="residuo.id">
+                <!-- <mat-hint align="end">{{codigo.value?.length || 0}}/9</mat-hint>
+                <mat-error *ngIf="valCodigo.invalid">{{getCodigoErrorMessage()}}</mat-error> -->
               </mat-form-field>
             </div>
             <div fxFlex="33.3%" fxFlexAlign="start" >
               <mat-form-field class="frm_residuo_descricao">
-                <input matInput #descricao maxlength="50"  [formControl]="valDescricao" placeholder="Descrição" required tabindex="2" [(ngModel)]="residuo.descricao">
+                <input matInput autofocus #descricao #focuscomp maxlength="50"  [formControl]="valDescricao" placeholder="Descrição" required tabindex="1" [(ngModel)]="residuo.descricao">
                 <mat-hint align="end">{{descricao.value?.length || 0}}/50</mat-hint>
                 <mat-error *ngIf="valDescricao.invalid">{{getDescricaoErrorMessage()}}</mat-error>
               </mat-form-field>

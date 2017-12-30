@@ -28,7 +28,7 @@ import { OnlyNumberDirective } from './../only-number.directive';
   styleUrls: ['./tipoatividade-list.component.css']
 })
 export class TipoAtividadeListComponent implements OnInit, AfterViewInit {
-  displayedColumns = ['codigo', 'descricao'];
+  displayedColumns = ['id', 'descricao'];
   // displayedColumns = ['id', 'codigo', 'descricao'];
   dataSource: DsTipoAtividade | null;
   selectedRowIndex = -1;
@@ -38,7 +38,6 @@ export class TipoAtividadeListComponent implements OnInit, AfterViewInit {
 
 
   idFilter = new FormControl();
-  codigoFilter = new FormControl();
   descricaoFilter = new FormControl();
 
   @ViewChild(MatSort) sort: MatSort;
@@ -158,12 +157,11 @@ export class TipoAtividadeListComponent implements OnInit, AfterViewInit {
     this.dataSource = new DsTipoAtividade(this._tokenManager, this._tipoatividadeService, this.paginator, this.sort);
 
     const idFilter$ = this.idFilter.valueChanges.debounceTime(500).distinctUntilChanged().startWith('');
-    const codigoFilter$ = this.codigoFilter.valueChanges.debounceTime(500).distinctUntilChanged().startWith('');
     const descricaoFilter$ = this.descricaoFilter.valueChanges.debounceTime(500).distinctUntilChanged().startWith('');
 
-    Observable.combineLatest(idFilter$, codigoFilter$, descricaoFilter$).debounceTime(500).distinctUntilChanged().
+    Observable.combineLatest(idFilter$, descricaoFilter$).debounceTime(500).distinctUntilChanged().
     map(
-      ([id, codigo, descricao ]) => ({id, codigo, descricao})).subscribe(filter => {
+      ([id, descricao ]) => ({id, descricao})).subscribe(filter => {
         if (!this.dataSource) { return; }
         this.dataSource.filter = filter;
       });

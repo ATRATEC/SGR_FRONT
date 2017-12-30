@@ -57,11 +57,7 @@ export class ClienteService {
       importado_api: _cliente.importado_api,
       cnae: _cliente.cnae,
       obsEndereco: _cliente.obsEndereco,
-      obsTelefonesEmail: _cliente.obsTelefonesEmail,
-      nrolicenca: _cliente.nrolicenca,
-      dtemissaolicenca: _cliente.dtemissaolicenca,
-      nroanoslicenca: _cliente.nroanoslicenca,
-      dtvalidadelicenca: _cliente.dtvalidadelicenca
+      obsTelefonesEmail: _cliente.obsTelefonesEmail
     };
     // _params.set('codigo', '1');
 
@@ -116,11 +112,7 @@ export class ClienteService {
       importado_api: _cliente.importado_api,
       cnae: _cliente.cnae,
       obsEndereco: _cliente.obsEndereco,
-      obsTelefonesEmail: _cliente.obsTelefonesEmail,
-      nrolicenca: _cliente.nrolicenca,
-      dtemissaolicenca: _cliente.dtemissaolicenca,
-      nroanoslicenca: _cliente.nroanoslicenca,
-      dtvalidadelicenca: _cliente.dtvalidadelicenca
+      obsTelefonesEmail: _cliente.obsTelefonesEmail
     };
     // _params.set('id', _id.toString());
 
@@ -192,10 +184,6 @@ export class ClienteService {
 
     if ((!isNullOrUndefined(filter.id)) && (filter.id.toString().length > 0)) {
       search.set('id', filter.id.toString());
-    }
-
-    if ((!isNullOrUndefined(filter.codigo_omie)) && (filter.codigo_omie.toString().length > 0)) {
-      search.set('codigo_omie', filter.codigo_omie.toString());
     }
 
     if ((!isNullOrUndefined(filter.cnpj_cpf)) && (filter.cnpj_cpf.length > 0)) {

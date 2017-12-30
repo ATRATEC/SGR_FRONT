@@ -16,7 +16,7 @@ import 'rxjs/add/operator/debounceTime';
 import { TipoTratamento, TipoTratamentoFilter } from './tipotratamento';
 
 export class DsTipoTratamento extends DataSource<TipoTratamento> {
-  _filterChange = new BehaviorSubject( {id: '', codigo: '', descricao: ''} );
+  _filterChange = new BehaviorSubject( {id: '', descricao: ''} );
 
   public onChange: EventEmitter<boolean> = new EventEmitter<boolean>();
 
@@ -61,6 +61,7 @@ export class DsTipoTratamento extends DataSource<TipoTratamento> {
       return this._tipotratamentoService.getTipoTratamentos(this._tokenManager.retrieve(),
         this._sort.active, this._sort.direction, this._paginator.pageIndex, this._paginator.pageSize, this.filter);
     })
+    .retry(3)
     .map(data => {
       // Flip flag to show that loading has finished.
       // this.isLoadingResults = false;
@@ -72,7 +73,8 @@ export class DsTipoTratamento extends DataSource<TipoTratamento> {
       this.nrRegistros = data.meta.total;
       return data.data;
     })
-    .catch(() => {
+    .catch(err => {
+      console.log(err);
       return Observable.of([]);
     });
   }

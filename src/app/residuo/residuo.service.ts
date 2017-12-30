@@ -15,14 +15,14 @@ export class ResiduoService {
 
   constructor(private _http: Http) {}
 
-  addResiduo(accessToken: string, _codigo: string, _descricao: string, _id_classe: number): Observable<any> {
+  addResiduo(accessToken: string, _descricao: string, _id_classe: number): Observable<any> {
     const headers = new Headers({
       Accept: 'application/json',
       Authorization: 'Bearer ' + accessToken.toString().replace(/"/g, '')
     });
 
     // const _params: HttpParams = new HttpParams();
-    const _body = { codigo: _codigo, descricao: _descricao, id_classe: _id_classe };
+    const _body = { descricao: _descricao, id_classe: _id_classe };
     // _params.set('codigo', '1');
 
     return this._http
@@ -34,14 +34,14 @@ export class ResiduoService {
 
   }
 
-  editResiduo(accessToken: string, _id: number, _codigo: string, _descricao: string, _id_classe: number): Observable<any> {
+  editResiduo(accessToken: string, _id: number, _descricao: string, _id_classe: number): Observable<any> {
     const headers = new Headers({
       Accept: 'application/json',
       Authorization: 'Bearer ' + accessToken.toString().replace(/"/g, '')
     });
 
     // const _params: HttpParams = new HttpParams();
-    const _body = {id: _id,  codigo: _codigo, descricao: _descricao, id_classe: _id_classe };
+    const _body = {id: _id, descricao: _descricao, id_classe: _id_classe };
     // _params.set('id', _id.toString());
 
     return this._http
@@ -112,10 +112,6 @@ export class ResiduoService {
 
     if ((!isNullOrUndefined(filter.id)) && (filter.id.toString().length > 0)) {
       search.set('id', filter.id.toString());
-    }
-
-    if ((!isNullOrUndefined(filter.codigo)) && (filter.codigo.length > 0)) {
-      search.set('codigo', filter.codigo);
     }
 
     if ((!isNullOrUndefined(filter.descricao)) && (filter.descricao.length > 0)) {

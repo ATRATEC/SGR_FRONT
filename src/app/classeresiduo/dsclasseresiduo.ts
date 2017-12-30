@@ -16,7 +16,7 @@ import 'rxjs/add/operator/debounceTime';
 import { ClasseResiduo, ClasseResiduoFilter } from './classeresiduo';
 
 export class DsClasseResiduo extends DataSource<ClasseResiduo> {
-  _filterChange = new BehaviorSubject( {id: '', codigo: '', descricao: ''} );
+  _filterChange = new BehaviorSubject( {id: '', descricao: ''} );
 
   public onChange: EventEmitter<boolean> = new EventEmitter<boolean>();
 

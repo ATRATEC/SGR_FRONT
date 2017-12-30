@@ -1,3 +1,4 @@
+import { TipoDocumentoModule } from './tipodocumento/tipodocumento.module';
 import { FornecedorModule } from './fornecedor/fornecedor.module';
 import { EnderecoService } from './endereco.service';
 import { ClienteModule } from './cliente/cliente.module';
@@ -57,6 +58,7 @@ import { HomeComponent } from './home/home.component';
     ClasseResiduoModule,
     TipoAtividadeModule,
     TipoTratamentoModule,
+    TipoDocumentoModule,
     ClienteModule,
     FornecedorModule,
     ResiduoModule,

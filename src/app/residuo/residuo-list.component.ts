@@ -20,7 +20,7 @@ import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/distinctUntilChanged';
 import 'rxjs/add/operator/debounceTime';
 import { Residuo } from './residuo';
-import { ChangeDetectorRef } from '@angular/core';
+import { ChangeDetectorRef, AfterViewInit } from '@angular/core';
 import { OnlyNumberDirective } from './../only-number.directive';
 
 @Component({
@@ -28,13 +28,14 @@ import { OnlyNumberDirective } from './../only-number.directive';
   templateUrl: './residuo-list.component.html',
   styleUrls: ['./residuo-list.component.css']
 })
-export class ResiduoListComponent implements OnInit {
-  displayedColumns = ['codigo', 'descricao', 'descricao_classe'];
+export class ResiduoListComponent implements OnInit, AfterViewInit {
+  displayedColumns = ['id', 'descricao', 'descricao_classe'];
   // displayedColumns = ['id', 'codigo', 'descricao', ];
   dataSource: DsResiduo | null;
   selectedRowIndex = -1;
   selectedRow: any | null;
   residuos: Residuo[];
+  isLoadingResults: boolean;
 
 
   idFilter = new FormControl();
@@ -145,20 +146,28 @@ export class ResiduoListComponent implements OnInit {
     }
   }
 
+  ngAfterViewInit(): void {
+    this.dataSource.onChange.subscribe({next: (event: boolean) => {
+      this.isLoadingResults = event;
+      // console.log('estatus do datasource: ' + event);
+    }});
+  }
+
   ngOnInit() {
     this.paginator._intl.itemsPerPageLabel = 'Itens por pagina';
     this.paginator._intl.nextPageLabel = 'Próxima Página';
     this.paginator._intl.previousPageLabel = 'Voltar Página';
 
+    this.isLoadingResults = false;
+
     this.dataSource = new DsResiduo(this._tokenManager, this._residuoService, this.paginator, this.sort);
 
     const idFilter$ = this.idFilter.valueChanges.debounceTime(500).distinctUntilChanged().startWith('');
-    const codigoFilter$ = this.codigoFilter.valueChanges.debounceTime(500).distinctUntilChanged().startWith('');
     const descricaoFilter$ = this.descricaoFilter.valueChanges.debounceTime(500).distinctUntilChanged().startWith('');
 
-    Observable.combineLatest(idFilter$, codigoFilter$, descricaoFilter$).debounceTime(500).distinctUntilChanged().
+    Observable.combineLatest(idFilter$, descricaoFilter$).debounceTime(500).distinctUntilChanged().
     map(
-      ([id, codigo, descricao ]) => ({id, codigo, descricao})).subscribe(filter => {
+      ([id, descricao ]) => ({id, descricao})).subscribe(filter => {
         if (!this.dataSource) { return; }
         this.dataSource.filter = filter;
       });

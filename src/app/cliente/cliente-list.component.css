@@ -137,12 +137,8 @@ mat-row:nth-child(odd) {
 }
 
 .mat-column-id {
-  max-width: 40px;
-}
-
-.mat-column-codigo_omie {
-  min-width: 90px;
-  max-width: 130px;
+  min-width: 80px;
+  max-width: 80px;
 }
 
 .mat-column-cnpj_cpf {
@@ -193,7 +189,7 @@ mat-row:nth-child(odd) {
 }
 
 .filtro_codigo {
-  width: 90px;
+  width: 75px;
 }
 
 .filtro_cnpj_cpf {

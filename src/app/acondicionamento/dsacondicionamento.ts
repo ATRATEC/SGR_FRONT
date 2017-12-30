@@ -16,7 +16,7 @@ import 'rxjs/add/operator/debounceTime';
 import { Acondicionamento, AcondicionamentoFilter } from './acondicionamento';
 
 export class DsAcondicionamento extends DataSource<Acondicionamento> {
-  _filterChange = new BehaviorSubject( {id: '', codigo: '', descricao: ''} );
+  _filterChange = new BehaviorSubject( {id: '', descricao: ''} );
 
   public onChange: EventEmitter<boolean> = new EventEmitter<boolean>();
 
@@ -61,6 +61,7 @@ export class DsAcondicionamento extends DataSource<Acondicionamento> {
       return this._acondicionamentoService.getAcondicionamentos(this._tokenManager.retrieve(),
         this._sort.active, this._sort.direction, this._paginator.pageIndex, this._paginator.pageSize, this.filter);
     })
+    .retry(3)
     .map(data => {
       // Flip flag to show that loading has finished.
       // this.isLoadingResults = false;
@@ -72,7 +73,8 @@ export class DsAcondicionamento extends DataSource<Acondicionamento> {
       this.nrRegistros = data.meta.total;
       return data.data;
     })
-    .catch(() => {
+    .catch(err => {
+      console.log(err);
       return Observable.of([]);
     });
   }

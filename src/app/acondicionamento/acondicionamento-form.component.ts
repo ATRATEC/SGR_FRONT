@@ -2,7 +2,7 @@ import { isNullOrUndefined } from 'util';
 import { DialogService } from './../dialog/dialog.service';
 import { TokenManagerService } from './../token-manager.service';
 import { AcondicionamentoService } from './acondicionamento.service';
-import { Component, OnInit, AfterViewInit, AfterViewChecked } from '@angular/core';
+import { Component, OnInit, AfterViewInit, AfterViewChecked, ViewChild, ElementRef } from '@angular/core';
 import { Router } from '@angular/router';
 import { by } from 'protractor';
 import { Observable } from 'rxjs/Observable';
@@ -29,10 +29,10 @@ export class AcondicionamentoFormComponent implements OnInit, AfterViewInit, Aft
   emProcessamento = false;
   exibeIncluir = false;
 
-  valCodigo = new FormControl('', [Validators.required]);
   valDescricao = new FormControl('', [Validators.required]);
 
   @ViewChildren('input') vc;
+  @ViewChild('focuscomp') focuscomp: ElementRef;
 
   constructor(private _acondicionamentoService: AcondicionamentoService,
     private _tokenManager: TokenManagerService,
@@ -41,13 +41,13 @@ export class AcondicionamentoFormComponent implements OnInit, AfterViewInit, Aft
 
   validaCampos() {
     return (
-      this.valCodigo.valid && this.valDescricao.valid
+      this.valDescricao.valid
     );
   }
 
   ngOnInit() {
     this.emProcessamento = true;
-    this.acondicionamento = new Acondicionamento(null, null, '', '', '');
+    this.acondicionamento = new Acondicionamento();
     this._route.params.forEach((params: Params) => {
       const id: number = +params['id'];
       if (id) {
@@ -68,6 +68,7 @@ export class AcondicionamentoFormComponent implements OnInit, AfterViewInit, Aft
 
   ngAfterViewInit(): void {
     // this.vc.first.nativeElement.focus();
+    Promise.resolve(null).then(() => this.focuscomp.nativeElement.focus());
   }
 
   keyPress(event: any) {
@@ -84,7 +85,6 @@ export class AcondicionamentoFormComponent implements OnInit, AfterViewInit, Aft
       if (isNullOrUndefined(this.acondicionamento.id)) {
         this._acondicionamentoService.addAcondicionamento(
           this._tokenManager.retrieve(),
-          this.acondicionamento.codigo.toString(),
           this.acondicionamento.descricao).subscribe(
             data => {
               this.emProcessamento = false;
@@ -101,7 +101,6 @@ export class AcondicionamentoFormComponent implements OnInit, AfterViewInit, Aft
         this._acondicionamentoService.editAcondicionamento(
           this._tokenManager.retrieve(),
           this.acondicionamento.id,
-          this.acondicionamento.codigo.toString(),
           this.acondicionamento.descricao).subscribe(
           data => {
           this.emProcessamento = false;
@@ -122,16 +121,7 @@ export class AcondicionamentoFormComponent implements OnInit, AfterViewInit, Aft
   }
 
   btnIncluir_click() {
-    this.acondicionamento = new Acondicionamento(null, null, '', '', '');
-  }
-
-  getCodigoErrorMessage() {
-    let mensagem = '';
-    if (this.valCodigo.hasError('required')) {
-      mensagem = 'Campo obrigatório.';
-    }
-
-    return mensagem;
+    this.acondicionamento = new Acondicionamento();
   }
 
   getDescricaoErrorMessage() {

@@ -16,7 +16,7 @@ import 'rxjs/add/operator/debounceTime';
 import { Cliente, ClienteFilter } from './cliente';
 
 export class DsCliente extends DataSource<Cliente> {
-  _filterChange = new BehaviorSubject( {id: '', codigo_omie: '', cnpj_cpf: '', razao_social: '', contato: '', telefone: '', email: ''} );
+  _filterChange = new BehaviorSubject( {id: '', cnpj_cpf: '', razao_social: '', contato: '', telefone: '', email: ''} );
 
   public onChange: EventEmitter<boolean> = new EventEmitter<boolean>();
 

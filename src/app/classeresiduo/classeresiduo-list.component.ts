@@ -28,7 +28,7 @@ import { OnlyNumberDirective } from './../only-number.directive';
   styleUrls: ['./classeresiduo-list.component.css']
 })
 export class ClasseResiduoListComponent implements OnInit, AfterViewInit {
-  displayedColumns = ['codigo', 'descricao'];
+  displayedColumns = ['id', 'descricao'];
   // displayedColumns = ['id', 'codigo', 'descricao'];
   dataSource: DsClasseResiduo | null;
   selectedRowIndex = -1;
@@ -37,7 +37,6 @@ export class ClasseResiduoListComponent implements OnInit, AfterViewInit {
   isLoadingResults: boolean;
 
   idFilter = new FormControl();
-  codigoFilter = new FormControl();
   descricaoFilter = new FormControl();
 
   @ViewChild(MatSort) sort: MatSort;
@@ -162,12 +161,11 @@ export class ClasseResiduoListComponent implements OnInit, AfterViewInit {
     this.dataSource = new DsClasseResiduo(this._tokenManager, this._classeresiduoService, this.paginator, this.sort);
 
     const idFilter$ = this.idFilter.valueChanges.debounceTime(500).distinctUntilChanged().startWith('');
-    const codigoFilter$ = this.codigoFilter.valueChanges.debounceTime(500).distinctUntilChanged().startWith('');
     const descricaoFilter$ = this.descricaoFilter.valueChanges.debounceTime(500).distinctUntilChanged().startWith('');
 
-    Observable.combineLatest(idFilter$, codigoFilter$, descricaoFilter$).debounceTime(500).distinctUntilChanged().
+    Observable.combineLatest(idFilter$, descricaoFilter$).debounceTime(500).distinctUntilChanged().
     map(
-      ([id, codigo, descricao ]) => ({id, codigo, descricao})).subscribe(filter => {
+      ([id, descricao ]) => ({id, descricao})).subscribe(filter => {
         if (!this.dataSource) { return; }
         this.dataSource.filter = filter;
       });

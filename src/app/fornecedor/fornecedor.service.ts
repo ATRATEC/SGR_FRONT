@@ -24,7 +24,6 @@ export class FornecedorService {
     // const _params: HttpParams = new HttpParams();
     const _body = {
       codigo_omie: _fornecedor.codigo_omie,
-      id_tipoatividade: _fornecedor.id_tipoatividade,
       codigo_integracao: _fornecedor.codigo_integracao,
       cnpj_cpf: _fornecedor.cnpj_cpf,
       razao_social: _fornecedor.razao_social,
@@ -58,15 +57,7 @@ export class FornecedorService {
       importado_api: _fornecedor.importado_api,
       cnae: _fornecedor.cnae,
       obsEndereco: _fornecedor.obsEndereco,
-      obsTelefonesEmail: _fornecedor.obsTelefonesEmail,
-      nrlicencatransp: _fornecedor.nrlicencatransp,
-      dtemissaotransp: _fornecedor.dtemissaotransp,
-      nranostransp: _fornecedor.nranostransp,
-      dtvalidadetransp: _fornecedor.dtvalidadetransp,
-      nrlicencarecep: _fornecedor.nrlicencarecep,
-      dtemissaorecep: _fornecedor.dtemissaorecep,
-      nranosrecep: _fornecedor.nranosrecep,
-      dtvalidaderecep: _fornecedor.dtvalidaderecep
+      obsTelefonesEmail: _fornecedor.obsTelefonesEmail
     };
     // _params.set('codigo', '1');
 
@@ -88,7 +79,6 @@ export class FornecedorService {
     // const _params: HttpParams = new HttpParams();
     const _body = {
       codigo_omie: _fornecedor.codigo_omie,
-      id_tipoatividade: _fornecedor.id_tipoatividade,
       codigo_integracao: _fornecedor.codigo_integracao,
       cnpj_cpf: _fornecedor.cnpj_cpf,
       razao_social: _fornecedor.razao_social,
@@ -122,15 +112,7 @@ export class FornecedorService {
       importado_api: _fornecedor.importado_api,
       cnae: _fornecedor.cnae,
       obsEndereco: _fornecedor.obsEndereco,
-      obsTelefonesEmail: _fornecedor.obsTelefonesEmail,
-      nrlicencatransp: _fornecedor.nrlicencatransp,
-      dtemissaotransp: _fornecedor.dtemissaotransp,
-      nranostransp: _fornecedor.nranostransp,
-      dtvalidadetransp: _fornecedor.dtvalidadetransp,
-      nrlicencarecep: _fornecedor.nrlicencarecep,
-      dtemissaorecep: _fornecedor.dtemissaorecep,
-      nranosrecep: _fornecedor.nranosrecep,
-      dtvalidaderecep: _fornecedor.dtvalidaderecep
+      obsTelefonesEmail: _fornecedor.obsTelefonesEmail
     };
     // _params.set('id', _id.toString());
 

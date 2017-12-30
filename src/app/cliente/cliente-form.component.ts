@@ -41,7 +41,6 @@ export class ClienteFormComponent
   cidades: Cidade[];
   ptn = '[0-9]{3}.[0-9]{3}.[0-9]{3}-[0-9]{2}|[0-9]{2}.[0-9]{3}.[0-9]{3}/[0-9]{4}-[0-9]{2}';
 
-  valCodigo = new FormControl('', [Validators.required]);
   valRazaoSocial = new FormControl('', [Validators.required]);
   valCnpjCpf = new FormControl('', [
     Validators.required,
@@ -64,6 +63,7 @@ export class ClienteFormComponent
   filteredOptions: Observable<Cidade[]>;
 
   @ViewChildren('input') vc;
+  @ViewChild('focuscomp') focuscomp: ElementRef;
 
   constructor(
     private _clienteService: ClienteService,
@@ -75,7 +75,7 @@ export class ClienteFormComponent
 
   validaCampos() {
     return (
-      this.valCodigo.valid && this.valRazaoSocial.valid && this.valCnpjCpf.valid
+      this.valRazaoSocial.valid && this.valCnpjCpf.valid
     );
   }
 
@@ -264,6 +264,7 @@ export class ClienteFormComponent
 
   ngAfterViewInit(): void {
     // this.vc.first.nativeElement.focus();
+    Promise.resolve(null).then(() => this.focuscomp.nativeElement.focus());
   }
 
   onlyNumber(event: any) {
@@ -326,15 +327,6 @@ export class ClienteFormComponent
 
   btnIncluir_click() {
     this.cliente = new Cliente();
-  }
-
-  getCodigoErrorMessage() {
-    let mensagem = '';
-    if (this.valCodigo.hasError('required')) {
-      mensagem = 'Campo obrigatório.';
-    }
-
-    return mensagem;
   }
 
   getRazaoSocialErrorMessage() {
@@ -421,16 +413,16 @@ export class ClienteFormComponent
     }
   }
 
-  validadeanoChange(event: any) {
-    const dtemiss = new Date(this.cliente.dtemissaolicenca);
-    let ano = dtemiss.getFullYear();
-    const mes = dtemiss.getMonth();
-    const dia = dtemiss.getDate();
-    ano = ano + parseInt(event.target.value, 10);
-    const dt = new Date(ano, mes, dia);
-    this.cliente.dtvalidadelicenca = dt;
-    console.log('data ' + dt.toLocaleDateString());
-  }
+  // validadeanoChange(event: any) {
+  //   const dtemiss = new Date(this.cliente.dtemissaolicenca);
+  //   let ano = dtemiss.getFullYear();
+  //   const mes = dtemiss.getMonth();
+  //   const dia = dtemiss.getDate();
+  //   ano = ano + parseInt(event.target.value, 10);
+  //   const dt = new Date(ano, mes, dia);
+  //   this.cliente.dtvalidadelicenca = dt;
+  //   console.log('data ' + dt.toLocaleDateString());
+  // }
 }
 
 

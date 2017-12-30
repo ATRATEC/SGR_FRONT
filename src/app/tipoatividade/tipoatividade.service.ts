@@ -15,14 +15,14 @@ export class TipoAtividadeService {
 
   constructor(private _http: Http) {}
 
-  addTipoAtividade(accessToken: string, _codigo: string, _descricao: string): Observable<any> {
+  addTipoAtividade(accessToken: string, _descricao: string): Observable<any> {
     const headers = new Headers({
       Accept: 'application/json',
       Authorization: 'Bearer ' + accessToken.toString().replace(/"/g, '')
     });
 
     // const _params: HttpParams = new HttpParams();
-    const _body = { codigo: _codigo, descricao: _descricao };
+    const _body = { descricao: _descricao };
     // _params.set('codigo', '1');
 
     return this._http
@@ -34,14 +34,14 @@ export class TipoAtividadeService {
 
   }
 
-  editTipoAtividade(accessToken: string, _id: number, _codigo: string, _descricao: string): Observable<any> {
+  editTipoAtividade(accessToken: string, _id: number, _descricao: string): Observable<any> {
     const headers = new Headers({
       Accept: 'application/json',
       Authorization: 'Bearer ' + accessToken.toString().replace(/"/g, '')
     });
 
     // const _params: HttpParams = new HttpParams();
-    const _body = {id: _id,  codigo: _codigo, descricao: _descricao };
+    const _body = {id: _id, descricao: _descricao };
     // _params.set('id', _id.toString());
 
     return this._http
@@ -112,10 +112,6 @@ export class TipoAtividadeService {
 
     if ((!isNullOrUndefined(filter.id)) && (filter.id.toString().length > 0)) {
       search.set('id', filter.id.toString());
-    }
-
-    if ((!isNullOrUndefined(filter.codigo)) && (filter.codigo.length > 0)) {
-      search.set('codigo', filter.codigo);
     }
 
     if ((!isNullOrUndefined(filter.descricao)) && (filter.descricao.length > 0)) {

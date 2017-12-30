@@ -25,7 +25,7 @@
   </div>
   <div fxFlex="90%">
     <div fxLayout="column" fxLayoutAlign="center center" fxLayoutGap="10px">
-      <div fxFlex="25px" fxFlexAlign="start" style="padding: 10px;">
+      <div fxFlex="33px" fxFlexAlign="start" style="padding: 10px;">
         <button id="lblTitulo" mat-raised-button style="width: 100%" disabled>
           <i class="fa fa-cogs" aria-hidden="true"></i>
           <span>TIPOs DE ATIVIDADES</span>
@@ -35,7 +35,7 @@
         <table>
           <tr>
             <td>
-              <mat-form-field class="mat-column-codigo" style="margin-left: 5px">
+              <mat-form-field class="mat-column-id" style="margin-left: 5px">
                 <input matInput #filter placeholder="Código" [formControl]="codigoFilter">
               </mat-form-field>
             </td>
@@ -56,14 +56,8 @@
         <mat-table #table [dataSource]="dataSource" matSort>
           <!-- ID Column -->
           <ng-container matColumnDef="id">
-            <mat-header-cell *matHeaderCellDef mat-sort-header> ID </mat-header-cell>
-            <mat-cell *matCellDef="let row"> {{row.id}} </mat-cell>
-          </ng-container>
-
-          <!-- Progress Column -->
-          <ng-container matColumnDef="codigo">
             <mat-header-cell *matHeaderCellDef mat-sort-header> Código </mat-header-cell>
-            <mat-cell *matCellDef="let row"> {{row.codigo}} </mat-cell>
+            <mat-cell *matCellDef="let row"> {{row.id}} </mat-cell>
           </ng-container>
 
           <!-- Name Column -->

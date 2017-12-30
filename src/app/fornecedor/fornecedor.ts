@@ -12,7 +12,6 @@ export class Fornecedor {
   constructor(
     public id: number = null,
     public codigo_omie: number = null,
-    public id_tipoatividade = null,
     public codigo_integracao: string = '',
     public cnpj_cpf: string = '',
     public razao_social: string = '',
@@ -54,15 +53,7 @@ export class Fornecedor {
     public sincronizar: string = '',
     public id_empresa: number = null,
     public id_filial: number = null,
-    public nrlicencatransp: string = '',
     public created_at: string = '',
-    public updated_at: string = '',
-    public dtemissaotransp: Date = null,
-    public nranostransp: number = null,
-    public dtvalidadetransp: Date = null,
-    public nrlicencarecep: string = '',
-    public dtemissaorecep: Date = null,
-    public nranosrecep: number = null,
-    public dtvalidaderecep: Date = null
+    public updated_at: string = ''
   ) {}
 }

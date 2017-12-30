@@ -12,7 +12,7 @@ import 'rxjs/add/observable/fromEvent';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/distinctUntilChanged';
 import 'rxjs/add/operator/debounceTime';
-import { ChangeDetectorRef, ViewChildren } from '@angular/core';
+import { ChangeDetectorRef, ViewChildren, ViewChild, ElementRef } from '@angular/core';
 import { OnlyNumberDirective } from './../only-number.directive';
 import { TipoAtividade } from './tipoatividade';
 import { ActivatedRoute, Params} from '@angular/router';
@@ -29,10 +29,10 @@ export class TipoAtividadeFormComponent implements OnInit, AfterViewInit, AfterV
   emProcessamento = false;
   exibeIncluir = false;
 
-  valCodigo = new FormControl('', [Validators.required]);
   valDescricao = new FormControl('', [Validators.required]);
 
   @ViewChildren('input') vc;
+  @ViewChild('focuscomp') focuscomp: ElementRef;
 
   constructor(private _tipoatividadeService: TipoAtividadeService,
     private _tokenManager: TokenManagerService,
@@ -41,13 +41,13 @@ export class TipoAtividadeFormComponent implements OnInit, AfterViewInit, AfterV
 
   validaCampos() {
     return (
-      this.valCodigo.valid && this.valDescricao.valid
+      this.valDescricao.valid
     );
   }
 
   ngOnInit() {
     this.emProcessamento = true;
-    this.tipoatividade = new TipoAtividade(null, null, '', '', '');
+    this.tipoatividade = new TipoAtividade();
     this._route.params.forEach((params: Params) => {
       const id: number = +params['id'];
       if (id) {
@@ -68,6 +68,7 @@ export class TipoAtividadeFormComponent implements OnInit, AfterViewInit, AfterV
 
   ngAfterViewInit(): void {
     // this.vc.first.nativeElement.focus();
+    Promise.resolve(null).then(() => this.focuscomp.nativeElement.focus());
   }
 
   keyPress(event: any) {
@@ -84,7 +85,6 @@ export class TipoAtividadeFormComponent implements OnInit, AfterViewInit, AfterV
       if (isNullOrUndefined(this.tipoatividade.id)) {
         this._tipoatividadeService.addTipoAtividade(
           this._tokenManager.retrieve(),
-          this.tipoatividade.codigo.toString(),
           this.tipoatividade.descricao).subscribe(
             data => {
               this.emProcessamento = false;
@@ -101,7 +101,6 @@ export class TipoAtividadeFormComponent implements OnInit, AfterViewInit, AfterV
         this._tipoatividadeService.editTipoAtividade(
           this._tokenManager.retrieve(),
           this.tipoatividade.id,
-          this.tipoatividade.codigo.toString(),
           this.tipoatividade.descricao).subscribe(
           data => {
           this.emProcessamento = false;
@@ -122,16 +121,7 @@ export class TipoAtividadeFormComponent implements OnInit, AfterViewInit, AfterV
   }
 
   btnIncluir_click() {
-    this.tipoatividade = new TipoAtividade(null, null, '', '', '');
-  }
-
-  getCodigoErrorMessage() {
-    let mensagem = '';
-    if (this.valCodigo.hasError('required')) {
-      mensagem = 'Campo obrigatório.';
-    }
-
-    return mensagem;
+    this.tipoatividade = new TipoAtividade();
   }
 
   getDescricaoErrorMessage() {
