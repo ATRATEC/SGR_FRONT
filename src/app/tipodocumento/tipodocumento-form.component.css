@@ -1,0 +1,22 @@
+.frm_tipodocumento_codigo {
+  min-width: 120px;
+  max-width: 120px;
+}
+
+.frm_tipodocumento_descricao {
+  min-width: 450px;
+  max-width: 500px;
+}
+
+.frm_tipodocumento-loading-shade {
+  /* position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 56px;
+  right: 0; */
+  background: rgba(255, 255, 255, 0.15);
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
