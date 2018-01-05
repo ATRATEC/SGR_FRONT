@@ -5,7 +5,7 @@ import { isNullOrUndefined } from 'util';
 import { DialogService } from './../dialog/dialog.service';
 import { TokenManagerService } from './../token-manager.service';
 import { FornecedorService } from './fornecedor.service';
-import { Component, OnInit, AfterViewInit, AfterViewChecked } from '@angular/core';
+import { Component, OnInit, AfterViewInit, AfterViewChecked, Renderer } from '@angular/core';
 import { Router } from '@angular/router';
 import { by } from 'protractor';
 import { Observable } from 'rxjs/Observable';
@@ -59,6 +59,7 @@ export class FornecedorFormComponent implements OnInit, AfterViewInit, AfterView
   constructor(private _fornecedorService: FornecedorService,
     private _tokenManager: TokenManagerService,
     private _route: ActivatedRoute,
+    private _renderer: Renderer,
     private _enderecoService: EnderecoService,
     private _tipoAtividadeService: TipoAtividadeService,
     private dialog: DialogService) {}
@@ -236,7 +237,8 @@ export class FornecedorFormComponent implements OnInit, AfterViewInit, AfterView
 
   ngAfterViewInit(): void {
     // this.vc.first.nativeElement.focus();
-    Promise.resolve(null).then(() => this.focuscomp.nativeElement.focus());
+    // Promise.resolve(null).then(() => this.focuscomp.nativeElement.focus());
+    // Promise.resolve(null).then(() => this._renderer.invokeElementMethod(this.focuscomp.nativeElement, 'focus'));
   }
 
   onlyNumber(event: any) {

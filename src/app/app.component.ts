@@ -1,3 +1,6 @@
+import { ClienteFindComponent } from './cliente/cliente-find.component';
+import { isNullOrUndefined } from 'util';
+import { FornecedorFindComponent } from './fornecedor/fornecedor-find.component';
 import { environment } from './../environments/environment';
 import { Router } from '@angular/router';
 import { DialogComponent } from './dialog/dialog.component';
@@ -254,6 +257,34 @@ export class AppComponent implements OnInit {
 
   lerToken() {
     alert(this.tokenManager.retrieve());
+  }
+
+  openPesquisa(): void {
+    const dialogLoginRef = this.dialog.open(ClienteFindComponent, {
+      width: '600px',
+      height: '400px',
+      disableClose: true,
+      data: { id: null,
+              razao_social: null
+            }
+    });
+
+    dialogLoginRef.afterClosed().subscribe(result => {
+      this.animal = '';
+      if ((result.id != null) && (result.id !== undefined)) {
+        this.animal = result.id + '' + result.razao_social;
+      }
+      // console.log('The dialog was closed');
+      // alert('sua mensagem de retorno foi' + result.retorno );
+      // console.log(result.retorno);
+      // if ((result.Usuario != null) || (result.Usuario !== undefined)) {
+      //   this.Usuario = result.Usuario;
+      //   this.Logado = result.logado;
+      //   this.tokenManager.store(result.token);
+      //   localStorage.setItem('currentUser', JSON.stringify(this.Usuario));
+      //   localStorage.setItem('Logado', JSON.stringify({Logado: this.Logado}));
+      // }
+    });
   }
 
   // emailFormControl = new FormControl('', [

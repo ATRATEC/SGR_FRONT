@@ -1,0 +1,158 @@
+.customHr {
+  width: 95%;
+  font-size: 1px;
+  color: rgba(0, 0, 0, 0);
+  line-height: 1px;
+
+  background-color: grey;
+  margin-top: -6px;
+  margin-bottom: 10px;
+}
+
+.customHrFull {
+  width: 100%;
+  font-size: 1px;
+  color: rgba(0, 0, 0, 0);
+  line-height: 1px;
+
+  background-color: grey;
+  margin-top: -6px;
+  margin-bottom: 5px;
+}
+
+.mat-icon-button.size-25 {
+  width: 25px;
+  height: 25px;
+  line-height: 25px;
+}
+
+.mat-table {
+  overflow: vertical;
+  min-height: 140px;
+  max-height: 140px;
+}
+
+.mat-header-cell .mat-sort-header-sorted {
+  color: black;
+}
+
+.mat-header-cell {
+  min-height: 25px;
+  display: flex;
+  align-items: center;
+  padding-left: 0px;
+  font-size: 15px;
+  font-weight: bold;
+}
+
+.mat-header-row {
+  min-height: 25px;
+  display: flex;
+  align-items: center;
+  padding-left: 10px;
+  font-size: 15px;
+}
+
+.mat-row {
+  min-height: 25px;
+  display: flex;
+  align-items: center;
+  padding-left: 10px;
+  font-size: 15px;
+  font-weight: normal;
+}
+
+mat-row:nth-child(even) {
+  background-color: white;
+}
+
+mat-row:nth-child(odd) {
+  background-color: rgb(226, 221, 221);
+}
+
+.highlight {
+  background-color: rgb(3, 12, 248) !important; /* green */
+}
+
+/* .mat-form-field {
+  font-size: 14px;
+  flex-grow: 1;
+  margin-top: 8px;
+} */
+
+.mat-form-field {
+  font-size: 14px;
+  flex-grow: 1;
+  /* margin-left: 10px; */
+}
+
+.example-no-results {
+  display: flex;
+  justify-content: center;
+  padding: 24px;
+  font-size: 12px;
+  font-style: italic;
+}
+
+/** Selection styles */
+.example-selection-header {
+  font-size: 18px;
+}
+
+.mat-column-select {
+  max-width: 54px;
+}
+
+.mat-column-id {
+  max-width: 40px;
+}
+
+.mat-column-codigo_omie {
+  min-width: 90px;
+  max-width: 90px;
+}
+
+.mat-column-cnpj_cpf {
+  min-width: 150px;
+  max-width: 150px;
+}
+
+.mat-column-razao_social {
+  min-width: 280px;
+  max-width: 280px;
+}
+
+.mat-row:hover, .example-selected-row {
+  background: #f5f5f5;
+}
+
+.mat-row:active, .mat-row.example-selected-row {
+  background: #eaeaea;
+}
+
+.example-loading-shade {
+  /* position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 56px;
+  right: 0; */
+  position: relative;
+  background: rgba(255, 255, 255, 0.15);
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.filtro_codigo {
+  width: 90px;
+}
+
+.filtro_cnpj_cpf {
+  width: 130px;
+}
+
+.filtro_razao_social {
+  width: 280px;
+}
+

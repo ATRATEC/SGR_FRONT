@@ -1,7 +1,7 @@
 import { environment } from './../../environments/environment';
 import { isEmpty } from 'rxjs/operators';
 import { isNullOrUndefined } from 'util';
-import { TipoDocumento, TipoDocumentoFilter } from './tipodocumento';
+import { Unidade, UnidadeFilter } from './unidade';
 import { Injectable } from '@angular/core';
 import 'rxjs/add/observable/of';
 import 'rxjs/add/operator/map';
@@ -10,23 +10,26 @@ import { Http, Headers, Response, RequestOptions, URLSearchParams } from '@angul
 import { HttpErrorResponse, HttpParams } from '@angular/common/http';
 
 @Injectable()
-export class TipoDocumentoService {
-  private tipodocumentoUrl = environment.urlbase + '/api/tipodocumentos';
+export class UnidadeService {
+  private unidadeUrl = environment.urlbase + '/api/unidades';
 
   constructor(private _http: Http) {}
 
-  addTipoDocumento(accessToken: string, _descricao: string): Observable<any> {
+  addUnidade(accessToken: string, _codigo: string, _descricao: string): Observable<any> {
     const headers = new Headers({
       Accept: 'application/json',
       Authorization: 'Bearer ' + accessToken.toString().replace(/"/g, '')
     });
 
     // const _params: HttpParams = new HttpParams();
-    const _body = { descricao: _descricao };
+    const _body = {
+      codigo: _codigo,
+      descricao: _descricao
+    };
     // _params.set('codigo', '1');
 
     return this._http
-      .post(this.tipodocumentoUrl, _body, { headers: headers})
+      .post(this.unidadeUrl, _body, { headers: headers})
       .map((res: Response) => res.json())
       .catch((error: any) =>
         Observable.throw(error.json().error || 'Server error')
@@ -34,18 +37,22 @@ export class TipoDocumentoService {
 
   }
 
-  editTipoDocumento(accessToken: string, _id: number, _descricao: string): Observable<any> {
+  editUnidade(accessToken: string, _id: number, _codigo: string, _descricao: string): Observable<any> {
     const headers = new Headers({
       Accept: 'application/json',
       Authorization: 'Bearer ' + accessToken.toString().replace(/"/g, '')
     });
 
     // const _params: HttpParams = new HttpParams();
-    const _body = {id: _id, descricao: _descricao };
+    const _body = {
+      id: _id,
+      codigo: _codigo,
+      descricao: _descricao
+    };
     // _params.set('id', _id.toString());
 
     return this._http
-      .put(this.tipodocumentoUrl + '/' + _id.toString(), _body, { headers: headers })
+      .put(this.unidadeUrl + '/' + _id.toString(), _body, { headers: headers })
       .map((res: Response) => res.json())
       .catch((error: any) =>
         Observable.throw(error.json().error || 'Server error')
@@ -53,38 +60,38 @@ export class TipoDocumentoService {
 
   }
 
-  deleteTipoDocumento(accessToken: string, _id: number) {
+  deleteUnidade(accessToken: string, _id: number) {
     const headers = new Headers({
       Accept: 'application/json',
       Authorization: 'Bearer ' + accessToken.toString().replace(/"/g, '')
     });
 
     return this._http
-      .delete(this.tipodocumentoUrl + '/' + _id.toString(), { headers: headers })
+      .delete(this.unidadeUrl + '/' + _id.toString(), { headers: headers })
       .map((res: Response) => res.json())
       .catch((error: any) =>
         Observable.throw(error.json().error || 'Server error')
       );
   }
 
-  getTipoDocumento(accessToken: string, _id: number)  {
+  getUnidade(accessToken: string, _id: number)  {
     const headers = new Headers({
       Accept: 'application/json',
       Authorization: 'Bearer ' + accessToken.toString().replace(/"/g, '')
     });
 
     return this._http
-      .get(this.tipodocumentoUrl + '/' + _id.toString(), { headers: headers })
+      .get(this.unidadeUrl + '/' + _id.toString(), { headers: headers })
       .map((res: Response) => res)
       .catch((error: any) =>
         Observable.throw(error.json().error || 'Server error')
       );
   }
 
-  /** Metodo que retorna um observable com dados da listagem de tipodocumentos
+  /** Metodo que retorna um observable com dados da listagem de unidades
    *  parametro: acessToken: string
   */
-  getTipoDocumentos(accessToken: string, sort: string, order: string, page: number, pagesize: number, filter: TipoDocumentoFilter) {
+  getUnidades(accessToken: string, sort: string, order: string, page: number, pagesize: number, filter: UnidadeFilter) {
     const headers = new Headers({
       Accept: 'application/json',
       Authorization: 'Bearer ' + accessToken.toString().replace(/"/g, '')
@@ -114,20 +121,24 @@ export class TipoDocumentoService {
       search.set('id', filter.id.toString());
     }
 
+    if ((!isNullOrUndefined(filter.codigo)) && (filter.codigo.length > 0)) {
+      search.set('codigo', filter.codigo);
+    }
+
     if ((!isNullOrUndefined(filter.descricao)) && (filter.descricao.length > 0)) {
       search.set('descricao', filter.descricao);
     }
 
     return this._http
-      .get(this.tipodocumentoUrl, { headers: headers, search: search })
+      .get(this.unidadeUrl, { headers: headers, search: search })
       .map((res: Response) => res.json())
       .catch((error: any) =>
         Observable.throw(error.json().error || 'Server error')
       );
   }
 
-  getListTipoDocumentos(accessToken: string)  {
-    const listUrl = environment.urlbase + '/api/listtipodocumentos';
+  getListUnidades(accessToken: string)  {
+    const listUrl = environment.urlbase + '/api/listunidades';
     const headers = new Headers({
       Accept: 'application/json',
       Authorization: 'Bearer ' + accessToken.toString().replace(/"/g, '')

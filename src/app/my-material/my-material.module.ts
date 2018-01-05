@@ -37,7 +37,9 @@ import {
   MatTooltipModule,
   MatStepperModule,
   MAT_DATE_LOCALE,
+  DateAdapter,
 } from '@angular/material';
+import {MatMomentDateModule, MomentDateAdapter} from '@angular/material/material-moment-adapter';
 import {HttpModule} from '@angular/http';
 import {CdkTableModule} from '@angular/cdk/table';
 
@@ -61,6 +63,7 @@ import {CdkTableModule} from '@angular/cdk/table';
     MatListModule,
     MatMenuModule,
     MatNativeDateModule,
+    MatMomentDateModule,
     MatPaginatorModule,
     MatProgressBarModule,
     MatProgressSpinnerModule,
@@ -79,7 +82,7 @@ import {CdkTableModule} from '@angular/cdk/table';
   ],
 providers: [
   MatIconRegistry,
-  {provide: MAT_DATE_LOCALE, useValue: 'pt-BR'},
+  {provide: MAT_DATE_LOCALE, useValue: 'pt-br'},
 ]
 })
 export class MyMaterialModule {

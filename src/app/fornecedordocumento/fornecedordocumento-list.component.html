@@ -1,0 +1,110 @@
+<div fxLayout="row" fxLayoutAlign="start start" fxLayoutGap="1px">
+  <div fxFlex="140px" style="padding: 10px;" fxLayoutGap="10px">
+    <div fxLayout="column" fxLayoutAlign="space-between center" fxLayoutGap="5px" style="height: 100%">
+      <div fxFlex="80%" fxFlexFill fxFlexAlign="center">
+        <button id="btnEditar" mat-raised-button color="primary" style="width: 100%" (click)="btnEditar_click()">
+          <mat-icon>edit</mat-icon>
+          <span>Editar</span>
+        </button>
+        <button id="btnIncluir" mat-raised-button color="primary" style="width: 100%" (click)="btnIncluir_click()">
+          <mat-icon>insert_drive_file</mat-icon>
+          <span>Incluir</span>
+        </button>
+        <button id="btnExcluir" mat-raised-button color="primary" style="width: 100%" (click)="btnExcluir_click()">
+          <mat-icon>delete</mat-icon>
+          <span>Excluir</span>
+        </button>
+      </div>
+      <div fxFlex="40px" fxFlexFill fxFlexAlign="end">
+        <a routerLink="/" mat-raised-button color="primary" style="width: 120px">
+          <mat-icon>close</mat-icon>
+          <span>Fechar</span>
+        </a>
+      </div>
+    </div>
+  </div>
+  <div fxFlex="90%">
+    <div fxLayout="column" fxLayoutAlign="center center" fxLayoutGap="10px">
+      <div fxFlex="33px" fxFlexAlign="start" style="padding: 10px;">
+        <button id="lblTitulo" mat-raised-button style="width: 100%" disabled>
+          <i class="fa fa-leaf" aria-hidden="true"></i>
+          <span>DOCUMENTOS DE FORNECEDORES</span>
+        </button>
+      </div>
+      <div fxFlex="47px" fxFlexAlign="start" style="width: 100%">
+        <table>
+          <tr>
+            <td>
+              <mat-form-field class="mat-column-id" style="margin-left: 5px">
+                <input matInput #filter placeholder="Código" [formControl]="idFilter">
+              </mat-form-field>
+            </td>
+            <td class="mat-column-descricao">
+              <!-- style="width: 500px" -->
+              <mat-form-field class="mat-column-descricao">
+                <input matInput #filter placeholder="Documento" [formControl]="descricaoFilter">
+              </mat-form-field>
+            </td>
+            <td class="mat-column-razao_social">
+              <!-- style="width: 500px" -->
+              <mat-form-field class="mat-column-razao_social">
+                <input matInput #filter placeholder="Fornecedor" [formControl]="razaosocialFilter">
+              </mat-form-field>
+            </td>
+            <td class="mat-column-numero">
+                <!-- style="width: 500px" -->
+                <mat-form-field class="mat-column-numero">
+                  <input matInput #filter placeholder="Numero" [formControl]="numeroFilter">
+                </mat-form-field>
+              </td>
+          </tr>
+        </table>
+      </div>
+      <div fxFlex="1px" class="customHrFull"></div>
+      <div fxFlex="400px" class="example-loading-shade" fxFlexAlign="start" *ngIf="isLoadingResults" style="height: 100%">
+        <mat-spinner *ngIf="isLoadingResults"></mat-spinner>
+      </div>
+      <div fxFlex="400px" fxFlexAlign="start" style="width: 100%">
+        <mat-table #table [dataSource]="dataSource" matSort>
+          <!-- ID Column -->
+          <ng-container matColumnDef="id">
+            <mat-header-cell *matHeaderCellDef mat-sort-header> Código </mat-header-cell>
+            <mat-cell *matCellDef="let row"> {{row.id}} </mat-cell>
+          </ng-container>
+
+          <!-- Name Column -->
+          <ng-container matColumnDef="descricao">
+            <mat-header-cell *matHeaderCellDef mat-sort-header> Documento </mat-header-cell>
+            <mat-cell *matCellDef="let row"> {{row.descricao}} </mat-cell>
+          </ng-container>
+
+          <ng-container matColumnDef="razao_social">
+            <mat-header-cell *matHeaderCellDef mat-sort-header> Fornecedor </mat-header-cell>
+            <mat-cell *matCellDef="let row"> {{row.razao_social}} </mat-cell>
+          </ng-container>
+
+          <ng-container matColumnDef="numero">
+            <mat-header-cell *matHeaderCellDef mat-sort-header> Numero </mat-header-cell>
+            <mat-cell *matCellDef="let row"> {{row.numero}} </mat-cell>
+          </ng-container>
+
+          <ng-container matColumnDef="emissao">
+            <mat-header-cell *matHeaderCellDef mat-sort-header> Dt. Emissão </mat-header-cell>
+            <mat-cell *matCellDef="let row"> {{row.emissao | date:'dd/MM/yyyy'}} </mat-cell>
+          </ng-container>
+
+          <ng-container matColumnDef="vencimento">
+            <mat-header-cell *matHeaderCellDef mat-sort-header> Dt. Vencimento </mat-header-cell>
+            <mat-cell *matCellDef="let row"> {{row.vencimento | date:'dd/MM/yyyy'}} </mat-cell>
+          </ng-container>
+
+          <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+          <mat-row *matRowDef="let row; columns: displayedColumns;" [ngClass]="{'highlight': selectedRowIndex == row.id}" (click)="highlight(row)"
+            (dblclick)="dblck(row)"></mat-row>
+        </mat-table>
+        <mat-paginator #paginator [length]="dataSource.nrRegistros" [pageIndex]="0" [pageSize]="25" [pageSizeOptions]="[5, 10, 15, 25, 100]">
+        </mat-paginator>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,3 +1,6 @@
+import { UnidadeModule } from './unidade/unidade.module';
+import { FornecedorDocumentoModule } from './fornecedordocumento/fornecedordocumento.module';
+import { ClienteDocumentoModule } from './clientedocumento/clientedocumento.module';
 import { TipoDocumentoModule } from './tipodocumento/tipodocumento.module';
 import { FornecedorModule } from './fornecedor/fornecedor.module';
 import { EnderecoService } from './endereco.service';
@@ -59,8 +62,11 @@ import { HomeComponent } from './home/home.component';
     TipoAtividadeModule,
     TipoTratamentoModule,
     TipoDocumentoModule,
+    ClienteDocumentoModule,
     ClienteModule,
+    FornecedorDocumentoModule,
     FornecedorModule,
+    UnidadeModule,
     ResiduoModule,
     AppRoutingModule
   ],

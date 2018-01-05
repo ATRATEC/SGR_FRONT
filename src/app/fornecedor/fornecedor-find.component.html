@@ -1,0 +1,68 @@
+<h1 mat-dialog-title>Pesquisar Fornecedor</h1>
+<div mat-dialog-content>
+  <div fxLayout="column" fxLayoutAlign="center center" fxLayoutGap="10px">
+    <div fxFlex="47px" fxFlexAlign="start" style="width: 100%">
+      <table>
+        <tr>
+          <td class="filtro_codigo">
+            <mat-form-field class="filtro_codigo">
+              <input matInput #filter placeholder="Código" [formControl]="codigoFilter">
+            </mat-form-field>
+          </td>
+          <td class="mat-column-cnpj_cpf">
+            <!-- style="width: 500px" -->
+            <mat-form-field class="mat-column-cnpj_cpf">
+              <input matInput #filter placeholder="CNPJ / CPF" [formControl]="cnpjCpfFilter">
+            </mat-form-field>
+          </td>
+          <td class="filtro_razao_social">
+            <!-- style="width: 500px" -->
+            <mat-form-field class="filtro_razao_social">
+              <input matInput #filter placeholder="Razão Social (Nome Completo)" [formControl]="razaoSocialFilter">
+            </mat-form-field>
+          </td>
+        </tr>
+      </table>
+    </div>
+    <div fxFlex="1px" class="customHrFull"></div>
+    <div fxFlex="200px" class="example-loading-shade" fxFlexAlign="center" *ngIf="isLoadingResults" style="height: 100%">
+      <mat-spinner *ngIf="isLoadingResults"></mat-spinner>
+    </div>
+    <div fxFlex="200px" fxFlexAlign="start" style="width: 100%">
+      <mat-table #table [dataSource]="dataSource" matSort>
+        <!-- ID Column -->
+        <ng-container matColumnDef="id">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> ID </mat-header-cell>
+          <mat-cell *matCellDef="let row"> {{row.id}} </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="codigo_omie">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> Código </mat-header-cell>
+          <mat-cell *matCellDef="let row"> {{row.codigo_omie}} </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="cnpj_cpf">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> CNPJ / CPF </mat-header-cell>
+          <mat-cell *matCellDef="let row"> {{row.cnpj_cpf}} </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="razao_social">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> Razão Social (Nome Completo) </mat-header-cell>
+          <mat-cell *matCellDef="let row"> {{row.razao_social}} </mat-cell>
+        </ng-container>
+
+        <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+        <mat-row *matRowDef="let row; columns: displayedColumns;" [ngClass]="{'highlight': selectedRowIndex == row.id}" (click)="highlight(row)"
+          (dblclick)="dblck(row)"></mat-row>
+      </mat-table>
+      <mat-paginator #paginator [length]="dataSource.nrRegistros" [pageIndex]="0" [pageSize]="25" [pageSizeOptions]="[5, 10, 15, 25, 100]">
+      </mat-paginator>
+    </div>
+  </div>
+</div>
+<div mat-dialog-actions>
+  <div fxLayout="row" fxLayoutAlign="end center" fxFill>
+    <button mat-raised-button color="primary" (click)="btnOkClick()" tabindex="2" style="width: 100px">OK</button>
+    <button mat-raised-button color="primary" (click)="btnCancelarClick()" tabindex="-1" style="width: 100px">Cancelar</button>
+  </div>
+</div>

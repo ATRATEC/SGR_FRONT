@@ -1,0 +1,48 @@
+mat-icon-button.size-25 {
+  width: 25px;
+  height: 25px;
+  line-height: 25px;
+}
+
+.frm_fornecedordocumento_codigo {
+  min-width: 120px;
+  max-width: 120px;
+}
+
+.frm_fornecedordocumento_tipodocumento {
+  min-width: 220px;
+  max-width: 220px;
+}
+
+.frm_fornecedordocumento_razao_social {
+  min-width: 320px;
+  max-width: 320px;
+}
+
+.frm_fornecedordocumento_nrolicenca {
+  min-width: 150px;
+  max-width: 150px;
+}
+
+.frm_fornecedordocumento_dtemissao {
+  min-width: 170px;
+  max-width: 170px;
+}
+
+.frm_fornecedordocumento_dtvencimento {
+  min-width: 170px;
+  max-width: 170px;
+}
+
+.frm_fornecedordocumento-loading-shade {
+  /* position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 56px;
+  right: 0; */
+  background: rgba(255, 255, 255, 0.15);
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

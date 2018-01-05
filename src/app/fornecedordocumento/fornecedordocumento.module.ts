@@ -1,17 +1,16 @@
-import { ClienteFindComponent } from './cliente-find.component';
 import { MatNativeDateModule } from '@angular/material';
 import { MyMaterialModule } from './../my-material/my-material.module';
 import { HttpModule } from '@angular/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { BrowserModule } from '@angular/platform-browser';
 import { FlexLayoutModule } from '@angular/flex-layout';
-import { ClienteListComponent } from './cliente-list.component';
-import { ClienteFormComponent } from './cliente-form.component';
-import { ClienteService } from './cliente.service';
+import { FornecedorDocumentoListComponent } from './fornecedordocumento-list.component';
+import { FornecedorDocumentoFormComponent } from './fornecedordocumento-form.component';
+import { FornecedorDocumentoService } from './fornecedordocumento.service';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { ClienteRoutingModule } from './cliente-routing.module';
+import { FornecedorDocumentoRoutingModule } from './fornecedordocumento-routing.module';
 
 @NgModule({
   imports: [
@@ -24,14 +23,12 @@ import { ClienteRoutingModule } from './cliente-routing.module';
     MyMaterialModule,
     MatNativeDateModule,
     ReactiveFormsModule,
-    ClienteRoutingModule
+    FornecedorDocumentoRoutingModule
   ],
   declarations: [
-    ClienteListComponent,
-    ClienteFormComponent,
-    ClienteFindComponent
+    FornecedorDocumentoListComponent,
+    FornecedorDocumentoFormComponent
   ],
-  providers: [ClienteService],
-  entryComponents: [ClienteFindComponent]
+  providers: [FornecedorDocumentoService]
 })
-export class ClienteModule { }
+export class FornecedorDocumentoModule { }

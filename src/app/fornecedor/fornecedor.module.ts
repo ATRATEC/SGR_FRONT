@@ -1,3 +1,4 @@
+import { FornecedorFindComponent } from './fornecedor-find.component';
 import { MatNativeDateModule } from '@angular/material';
 import { MyMaterialModule } from './../my-material/my-material.module';
 import { HttpModule } from '@angular/http';
@@ -27,8 +28,10 @@ import { FornecedorRoutingModule } from './fornecedor-routing.module';
   ],
   declarations: [
     FornecedorListComponent,
-    FornecedorFormComponent
+    FornecedorFormComponent,
+    FornecedorFindComponent
   ],
-  providers: [FornecedorService]
+  providers: [FornecedorService],
+  entryComponents: [FornecedorFindComponent]
 })
 export class FornecedorModule { }
