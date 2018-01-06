@@ -80,14 +80,14 @@
         <mat-table #table [dataSource]="dataSource" matSort>
           <!-- ID Column -->
           <ng-container matColumnDef="id">
-            <mat-header-cell *matHeaderCellDef mat-sort-header> ID </mat-header-cell>
+            <mat-header-cell *matHeaderCellDef mat-sort-header> Código </mat-header-cell>
             <mat-cell *matCellDef="let row"> {{row.id}} </mat-cell>
           </ng-container>
 
-          <ng-container matColumnDef="codigo_omie">
+          <!-- <ng-container matColumnDef="codigo_omie">
             <mat-header-cell *matHeaderCellDef mat-sort-header> Código </mat-header-cell>
             <mat-cell *matCellDef="let row"> {{row.codigo_omie}} </mat-cell>
-          </ng-container>
+          </ng-container> -->
 
           <ng-container matColumnDef="cnpj_cpf">
             <mat-header-cell *matHeaderCellDef mat-sort-header> CNPJ / CPF </mat-header-cell>

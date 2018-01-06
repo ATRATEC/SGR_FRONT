@@ -1,3 +1,4 @@
+import { environment } from './../../environments/environment';
 import { Moment } from 'moment/moment';
 import { MomentDateAdapter, MAT_MOMENT_DATE_FORMATS } from '@angular/material/material-moment-adapter';
 import { ClienteFindComponent } from './../cliente/cliente-find.component';
@@ -45,6 +46,7 @@ export class ClienteDocumentoFormComponent implements OnInit, AfterViewInit, Aft
   emProcessamento = false;
   exibeIncluir = false;
   tipodocumentos: TipoDocumento[];
+  linkDownload = environment.urlbase + '/api/documentos/downloadanexo?arquivo=';
 
   valCodigo = new FormControl('', [Validators.required]);
   valTipoDocumento = new FormControl('', [Validators.required]);
@@ -81,6 +83,10 @@ export class ClienteDocumentoFormComponent implements OnInit, AfterViewInit, Aft
         this._clientedocumentoService.getClienteDocumento(this._tokenManager.retrieve(), id)
         .subscribe( data => {
           this.clientedocumento = JSON.parse(data._body);
+          this.linkDownload = this.linkDownload + 'CLI_' +
+                              this.clientedocumento.id_cliente + '_DOC_' +
+                              this.clientedocumento.id + '_' +
+                              this.clientedocumento.caminho;
           this.emProcessamento = false;
         });
       } else {
@@ -170,6 +176,10 @@ export class ClienteDocumentoFormComponent implements OnInit, AfterViewInit, Aft
     this._clientedocumentoService.uploadDocumento(this._tokenManager.retrieve(), _clienteDocumento, _file).subscribe(
       data => {
         this.clientedocumento.caminho = data.anexo;
+        this.linkDownload = this.linkDownload + 'CLI_' +
+                              this.clientedocumento.id_cliente + '_DOC_' +
+                              this.clientedocumento.id + '_' +
+                              this.clientedocumento.caminho;
         // console.log('upload ok ' + data.anexo);
       },
       error => {

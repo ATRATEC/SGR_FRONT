@@ -39,8 +39,8 @@ export class FornecedorFormComponent implements OnInit, AfterViewInit, AfterView
   tipoAtividades: TipoAtividade[];
   ptn = '[0-9]{3}\.[0-9]{3}\.[0-9]{3}\-[0-9]{2}|[0-9]{2}\.[0-9]{3}\.[0-9]{3}\/[0-9]{4}\-[0-9]{2}';
 
-  valCodigo = new FormControl('', [Validators.required]);
-  valTipoAtividade = new FormControl('', [Validators.required]);
+  valCodigo = new FormControl();
+  // valTipoAtividade = new FormControl('', [Validators.required]);
   valRazaoSocial = new FormControl('', [Validators.required]);
   valCnpjCpf = new FormControl('', [Validators.required, Validators.pattern(  this.ptn)]);
   valDDD = new FormControl('', [Validators.pattern('[0-9]{2}')]);
@@ -65,7 +65,7 @@ export class FornecedorFormComponent implements OnInit, AfterViewInit, AfterView
     private dialog: DialogService) {}
 
   validaCampos() {
-    return this.valCodigo.valid && this.valRazaoSocial.valid && this.valTipoAtividade.valid && this.valCnpjCpf.valid;
+    return this.valCodigo.valid && this.valRazaoSocial.valid && this.valCnpjCpf.valid;
   }
 
   ngOnInit() {

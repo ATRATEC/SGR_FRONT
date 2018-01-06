@@ -123,10 +123,15 @@
             </div>
             <div fxFlex="70px" fxFlexAlign="start" *ngIf="clientedocumento.caminho">
                 <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="20px">
-                  <div fxFlex="350px" fxFlexFill>
+                  <div fxFlex="300px" fxFlexFill>
                       <mat-form-field style="width: 300px;" *ngIf="clientedocumento.caminho">
                           <input matInput disabled placeholder="Documento Anexado" [(ngModel)]="clientedocumento.caminho">
                       </mat-form-field>
+                  </div>
+                  <div fxFlex="120px" fxFlexFill>
+                      <a mat-button href={{linkDownload}}>
+                        Download
+                      </a>
                   </div>
                 </div>
               </div>

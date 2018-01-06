@@ -1,3 +1,4 @@
+import { environment } from './../../environments/environment';
 import { Moment } from 'moment/moment';
 import { MomentDateAdapter, MAT_MOMENT_DATE_FORMATS } from '@angular/material/material-moment-adapter';
 import { FornecedorFindComponent } from './../fornecedor/fornecedor-find.component';
@@ -45,6 +46,7 @@ export class FornecedorDocumentoFormComponent implements OnInit, AfterViewInit, 
   emProcessamento = false;
   exibeIncluir = false;
   tipodocumentos: TipoDocumento[];
+  linkDownload = environment.urlbase + '/api/documentos/downloadanexo?arquivo=';
 
   valCodigo = new FormControl('', [Validators.required]);
   valTipoDocumento = new FormControl('', [Validators.required]);
@@ -81,6 +83,10 @@ export class FornecedorDocumentoFormComponent implements OnInit, AfterViewInit, 
         this._fornecedordocumentoService.getFornecedorDocumento(this._tokenManager.retrieve(), id)
         .subscribe( data => {
           this.fornecedordocumento = JSON.parse(data._body);
+          this.linkDownload = this.linkDownload + 'FOR_' +
+                              this.fornecedordocumento.id_fornecedor + '_DOC_' +
+                              this.fornecedordocumento.id + '_' +
+                              this.fornecedordocumento.caminho;
           this.emProcessamento = false;
         });
       } else {
@@ -170,6 +176,10 @@ export class FornecedorDocumentoFormComponent implements OnInit, AfterViewInit, 
     this._fornecedordocumentoService.uploadDocumento(this._tokenManager.retrieve(), _fornecedorDocumento, _file).subscribe(
       data => {
         this.fornecedordocumento.caminho = data.anexo;
+        this.linkDownload = this.linkDownload + 'FOR_' +
+                              this.fornecedordocumento.id_fornecedor + '_DOC_' +
+                              this.fornecedordocumento.id + '_' +
+                              this.fornecedordocumento.caminho;
         // console.log('upload ok ' + data.anexo);
       },
       error => {
