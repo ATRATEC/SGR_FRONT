@@ -61,7 +61,7 @@ export class ClasseResiduoService {
       .post(this.classeresiduoUrl, _body, { headers: headers})
       .map((res: Response) => res.json())
       .catch((error: any) =>
-        Observable.throw(error.json().error || 'Server error')
+        Observable.throw(error.json() || 'Server error')
       );
 
   }
@@ -112,7 +112,7 @@ export class ClasseResiduoService {
       .put(this.classeresiduoUrl + '/' + _id.toString(), _body, { headers: headers })
       .map((res: Response) => res.json())
       .catch((error: any) =>
-        Observable.throw(error.json().error || 'Server error')
+        Observable.throw(error.json() || 'Server error')
       );
 
   }
@@ -127,7 +127,7 @@ export class ClasseResiduoService {
       .delete(this.classeresiduoUrl + '/' + _id.toString(), { headers: headers })
       .map((res: Response) => res.json())
       .catch((error: any) =>
-        Observable.throw(error.json().error || 'Server error')
+        Observable.throw(error.json() || 'Server error')
       );
   }
 
@@ -141,7 +141,7 @@ export class ClasseResiduoService {
       .get(this.classeresiduoUrl + '/' + _id.toString(), { headers: headers })
       .map((res: Response) => res)
       .catch((error: any) =>
-        Observable.throw(error.json().error || 'Server error')
+        Observable.throw(error.json() || 'Server error')
       );
   }
 
@@ -186,7 +186,7 @@ export class ClasseResiduoService {
       .get(this.classeresiduoUrl, { headers: headers, search: search })
       .map((res: Response) => res.json())
       .catch((error: any) =>
-        Observable.throw(error.json().error || 'Server error')
+        Observable.throw(error.json() || 'Server error')
       );
   }
 
@@ -201,7 +201,7 @@ export class ClasseResiduoService {
       .get(listUrl, { headers: headers })
       .map((res: Response) => res)
       .catch((error: any) =>
-        Observable.throw(error.json().error || 'Server error')
+        Observable.throw(error.json() || 'Server error')
       );
   }
 }

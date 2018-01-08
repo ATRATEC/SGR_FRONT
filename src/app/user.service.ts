@@ -20,7 +20,7 @@ export class UserService {
     return this._http.get(this.usersUrl, {headers: headers})
       .map((res: Response) => res.json())
       .catch((error: any) =>
-        Observable.throw(error.json().error || 'Server error')
+        Observable.throw(error.json() || 'Server error')
       );
   }
 

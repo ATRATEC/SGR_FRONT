@@ -1,3 +1,4 @@
+import { ClienteFilter } from './cliente';
 import { Data } from '@angular/router';
 export interface ClienteFilter {
   id: string;
@@ -6,6 +7,16 @@ export interface ClienteFilter {
   contato: string;
   telefone: string;
   email: string;
+}
+export class ClienteFiltro implements ClienteFilter {
+  constructor(
+    public id: string = '',
+    public cnpj_cpf: string = '',
+    public razao_social: string = '',
+    public contato: string = '',
+    public telefone: string = '',
+    public email: string = '',
+  ) {}
 }
 export class Cliente {
   constructor(

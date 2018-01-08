@@ -1,8 +1,8 @@
 import { isNullOrUndefined } from 'util';
 import { DialogService } from './../dialog/dialog.service';
 import { TokenManagerService } from './../token-manager.service';
-import { AcondicionamentoService } from './acondicionamento.service';
-import { Component, OnInit, AfterViewInit, AfterViewChecked, ViewChild, ElementRef } from '@angular/core';
+import { ServicoService } from './servico.service';
+import { Component, OnInit, AfterViewInit, AfterViewChecked } from '@angular/core';
 import { Router } from '@angular/router';
 import { by } from 'protractor';
 import { Observable } from 'rxjs/Observable';
@@ -12,20 +12,20 @@ import 'rxjs/add/observable/fromEvent';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/distinctUntilChanged';
 import 'rxjs/add/operator/debounceTime';
-import { ChangeDetectorRef, ViewChildren } from '@angular/core';
+import { ChangeDetectorRef, ViewChildren, ViewChild, ElementRef } from '@angular/core';
 import { OnlyNumberDirective } from './../only-number.directive';
-import { Acondicionamento } from './acondicionamento';
+import { Servico } from './servico';
 import { ActivatedRoute, Params} from '@angular/router';
 import {FormControl, Validators} from '@angular/forms';
 
 @Component({
-  selector: 'app-acondicionamento-form',
-  templateUrl: './acondicionamento-form.component.html',
-  styleUrls: ['./acondicionamento-form.component.css']
+  selector: 'app-servico-form',
+  templateUrl: './servico-form.component.html',
+  styleUrls: ['./servico-form.component.css']
 })
-export class AcondicionamentoFormComponent implements OnInit, AfterViewInit, AfterViewChecked {
+export class ServicoFormComponent implements OnInit, AfterViewInit, AfterViewChecked {
 
-  acondicionamento: Acondicionamento;
+  servico: Servico;
   emProcessamento = false;
   exibeIncluir = false;
 
@@ -34,7 +34,7 @@ export class AcondicionamentoFormComponent implements OnInit, AfterViewInit, Aft
   @ViewChildren('input') vc;
   @ViewChild('focuscomp') focuscomp: ElementRef;
 
-  constructor(private _acondicionamentoService: AcondicionamentoService,
+  constructor(private _servicoService: ServicoService,
     private _tokenManager: TokenManagerService,
     private _route: ActivatedRoute,
     private dialog: DialogService) {}
@@ -47,13 +47,13 @@ export class AcondicionamentoFormComponent implements OnInit, AfterViewInit, Aft
 
   ngOnInit() {
     this.emProcessamento = true;
-    this.acondicionamento = new Acondicionamento();
+    this.servico = new Servico();
     this._route.params.forEach((params: Params) => {
       const id: number = +params['id'];
       if (id) {
-        this._acondicionamentoService.getAcondicionamento(this._tokenManager.retrieve(), id)
+        this._servicoService.getServico(this._tokenManager.retrieve(), id)
         .subscribe( data => {
-          this.acondicionamento = JSON.parse(data._body);
+          this.servico = JSON.parse(data._body);
           this.emProcessamento = false;
         });
       } else {
@@ -82,15 +82,15 @@ export class AcondicionamentoFormComponent implements OnInit, AfterViewInit, Aft
   btnSalvar_click() {
     this.emProcessamento = true;
     if (this.validaCampos()) {
-      if (isNullOrUndefined(this.acondicionamento.id)) {
-        this._acondicionamentoService.addAcondicionamento(
+      if (isNullOrUndefined(this.servico.id)) {
+        this._servicoService.addServico(
           this._tokenManager.retrieve(),
-          this.acondicionamento.descricao).subscribe(
+          this.servico.descricao).subscribe(
             data => {
               this.emProcessamento = false;
-              this.acondicionamento = data;
+              this.servico = data;
               this.exibeIncluir = true;
-              this.dialog.success('SGR', 'Acondicionamento salvo com sucesso.');
+              this.dialog.success('SGR', 'Servico salvo com sucesso.');
             },
             error => {
               this.emProcessamento = false;
@@ -98,15 +98,15 @@ export class AcondicionamentoFormComponent implements OnInit, AfterViewInit, Aft
             },
           );
       } else {
-        this._acondicionamentoService.editAcondicionamento(
+        this._servicoService.editServico(
           this._tokenManager.retrieve(),
-          this.acondicionamento.id,
-          this.acondicionamento.descricao).subscribe(
+          this.servico.id,
+          this.servico.descricao).subscribe(
           data => {
           this.emProcessamento = false;
-          this.acondicionamento = data;
+          this.servico = data;
           this.exibeIncluir = true;
-          this.dialog.success('SGR', 'Acondicionamento salvo com sucesso.');
+          this.dialog.success('SGR', 'Servico salvo com sucesso.');
         },
         error => {
           this.emProcessamento = false;
@@ -121,7 +121,7 @@ export class AcondicionamentoFormComponent implements OnInit, AfterViewInit, Aft
   }
 
   btnIncluir_click() {
-    this.acondicionamento = new Acondicionamento();
+    this.servico = new Servico();
   }
 
   getDescricaoErrorMessage() {

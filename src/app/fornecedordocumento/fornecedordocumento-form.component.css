@@ -10,8 +10,8 @@ mat-icon-button.size-25 {
 }
 
 .frm_fornecedordocumento_tipodocumento {
-  min-width: 220px;
-  max-width: 220px;
+  min-width: 230px;
+  max-width: 230px;
 }
 
 .frm_fornecedordocumento_razao_social {
@@ -25,13 +25,13 @@ mat-icon-button.size-25 {
 }
 
 .frm_fornecedordocumento_dtemissao {
-  min-width: 170px;
-  max-width: 170px;
+  min-width: 140px;
+  max-width: 140px;
 }
 
 .frm_fornecedordocumento_dtvencimento {
-  min-width: 170px;
-  max-width: 170px;
+  min-width: 140px;
+  max-width: 140px;
 }
 
 .frm_fornecedordocumento-loading-shade {

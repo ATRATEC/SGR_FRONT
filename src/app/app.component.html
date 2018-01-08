@@ -7,7 +7,7 @@
     <span style="color: white">Cadastros</span>
   </button>
   <mat-menu #cadastros="matMenu" [overlapTrigger]="false">
-    <button mat-menu-item [routerLink]="['/']">
+    <button mat-menu-item [routerLink]="['/servicos']">
       <mat-icon fontSet="fontawesome" fontIcon="fa-handshake-o"></mat-icon>
       <span>Serviços</span>
     </button>
@@ -76,10 +76,9 @@
       <!-- <mat-icon fontSet="fontawesome" fontIcon="fa-truck"></mat-icon> -->
       <span>Pesagem</span>
     </button>
-    <button mat-menu-item [routerLink]="['/tipoatividades']">
-      <!-- <mat-icon fontSet="fontawesome" fontIcon="fa-truck"></mat-icon> -->
+    <!-- <button mat-menu-item [routerLink]="['/tipoatividades']">
       <span>Tipo de Atividades</span>
-    </button>
+    </button> -->
     <button mat-menu-item [routerLink]="['/residuos']">
       <!-- <mat-icon fontSet="fontawesome" fontIcon="fa-truck"></mat-icon> -->
       <span>Resíduos</span>

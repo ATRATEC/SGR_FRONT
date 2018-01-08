@@ -1,3 +1,4 @@
+import { DatepipeModule } from './../datepipe.module';
 import { MatNativeDateModule } from '@angular/material';
 import { MyMaterialModule } from './../my-material/my-material.module';
 import { HttpModule } from '@angular/http';
@@ -12,6 +13,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { FornecedorDocumentoRoutingModule } from './fornecedordocumento-routing.module';
 
+
 @NgModule({
   imports: [
     CommonModule,
@@ -23,6 +25,7 @@ import { FornecedorDocumentoRoutingModule } from './fornecedordocumento-routing.
     MyMaterialModule,
     MatNativeDateModule,
     ReactiveFormsModule,
+    DatepipeModule,
     FornecedorDocumentoRoutingModule
   ],
   declarations: [

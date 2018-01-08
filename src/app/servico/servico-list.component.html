@@ -27,8 +27,8 @@
     <div fxLayout="column" fxLayoutAlign="center center" fxLayoutGap="10px">
       <div fxFlex="33px" fxFlexAlign="start" style="padding: 10px;">
         <button id="lblTitulo" mat-raised-button style="width: 100%" disabled>
-          <i class="fa fa-leaf" aria-hidden="true"></i>
-          <span>DOCUMENTOS DE CLIENTES</span>
+          <i class="fa fa-handshake-o" aria-hidden="true"></i>
+          <span>SERVIÇOS</span>
         </button>
       </div>
       <div fxFlex="47px" fxFlexAlign="start" style="width: 100%">
@@ -42,21 +42,9 @@
             <td class="mat-column-descricao">
               <!-- style="width: 500px" -->
               <mat-form-field class="mat-column-descricao">
-                <input matInput #filter placeholder="Documento" [formControl]="descricaoFilter">
+                <input matInput #filter placeholder="Descrição" [formControl]="descricaoFilter">
               </mat-form-field>
             </td>
-            <td class="mat-column-razao_social">
-              <!-- style="width: 500px" -->
-              <mat-form-field class="mat-column-razao_social">
-                <input matInput #filter placeholder="Cliente" [formControl]="razaosocialFilter">
-              </mat-form-field>
-            </td>
-            <td class="mat-column-numero">
-                <!-- style="width: 500px" -->
-                <mat-form-field class="mat-column-numero">
-                  <input matInput #filter placeholder="Numero" [formControl]="numeroFilter">
-                </mat-form-field>
-              </td>
           </tr>
         </table>
       </div>
@@ -74,33 +62,12 @@
 
           <!-- Name Column -->
           <ng-container matColumnDef="descricao">
-            <mat-header-cell *matHeaderCellDef mat-sort-header> Documento </mat-header-cell>
+            <mat-header-cell *matHeaderCellDef mat-sort-header> Descrição </mat-header-cell>
             <mat-cell *matCellDef="let row"> {{row.descricao}} </mat-cell>
           </ng-container>
 
-          <ng-container matColumnDef="razao_social">
-            <mat-header-cell *matHeaderCellDef mat-sort-header> Cliente </mat-header-cell>
-            <mat-cell *matCellDef="let row"> {{row.razao_social}} </mat-cell>
-          </ng-container>
-
-          <ng-container matColumnDef="numero">
-            <mat-header-cell *matHeaderCellDef mat-sort-header> Numero </mat-header-cell>
-            <mat-cell *matCellDef="let row"> {{row.numero}} </mat-cell>
-          </ng-container>
-
-          <ng-container matColumnDef="emissao">
-            <mat-header-cell *matHeaderCellDef mat-sort-header> Dt. Emissão </mat-header-cell>
-            <mat-cell *matCellDef="let row"> {{row.emissao | formatDate}} </mat-cell>
-          </ng-container>
-
-          <ng-container matColumnDef="vencimento">
-            <mat-header-cell *matHeaderCellDef mat-sort-header> Dt. Vencimento </mat-header-cell>
-            <mat-cell *matCellDef="let row"> {{row.vencimento | formatDate}} </mat-cell>
-          </ng-container>
-
           <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-          <mat-row *matRowDef="let row; columns: displayedColumns;" [ngClass]="{'highlight': selectedRowIndex == row.id}" (click)="highlight(row)"
-            (dblclick)="dblck(row)"></mat-row>
+          <mat-row *matRowDef="let row; columns: displayedColumns;" [ngClass]="{'highlight': selectedRowIndex == row.id}" (click)="highlight(row)" (dblclick)="dblck(row)"></mat-row>
         </mat-table>
         <mat-paginator #paginator [length]="dataSource.nrRegistros" [pageIndex]="0" [pageSize]="25" [pageSizeOptions]="[5, 10, 15, 25, 100]">
         </mat-paginator>

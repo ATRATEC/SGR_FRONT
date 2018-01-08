@@ -65,7 +65,7 @@ export class FornecedorService {
       .post(this.fornecedorUrl, _body, { headers: headers})
       .map((res: Response) => res.json())
       .catch((error: any) =>
-        Observable.throw(error.json().error || 'Server error')
+        Observable.throw(error.json() || 'Server error')
       );
 
   }
@@ -120,7 +120,7 @@ export class FornecedorService {
       .put(this.fornecedorUrl + '/' + _id.toString(), _body, { headers: headers })
       .map((res: Response) => res.json())
       .catch((error: any) =>
-        Observable.throw(error.json().error || 'Server error')
+        Observable.throw(error.json() || 'Server error')
       );
 
   }
@@ -135,7 +135,7 @@ export class FornecedorService {
       .delete(this.fornecedorUrl + '/' + _id.toString(), { headers: headers })
       .map((res: Response) => res.json())
       .catch((error: any) =>
-        Observable.throw(error.json().error || 'Server error')
+        Observable.throw(error.json() || 'Server error')
       );
   }
 
@@ -149,7 +149,7 @@ export class FornecedorService {
       .get(this.fornecedorUrl + '/' + _id.toString(), { headers: headers })
       .map((res: Response) => res)
       .catch((error: any) =>
-        Observable.throw(error.json().error || 'Server error')
+        Observable.throw(error.json() || 'Server error')
       );
   }
 

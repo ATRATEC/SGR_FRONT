@@ -28,7 +28,7 @@ export class AcondicionamentoService {
       .post(this.acondicionamentoUrl, _body, { headers: headers})
       .map((res: Response) => res.json())
       .catch((error: any) =>
-        Observable.throw(error.json().error || 'Server error')
+        Observable.throw(error.json() || 'Server error')
       );
 
   }
@@ -47,7 +47,7 @@ export class AcondicionamentoService {
       .put(this.acondicionamentoUrl + '/' + _id.toString(), _body, { headers: headers })
       .map((res: Response) => res.json())
       .catch((error: any) =>
-        Observable.throw(error.json().error || 'Server error')
+        Observable.throw(error.json() || 'Server error')
       );
 
   }
@@ -62,7 +62,7 @@ export class AcondicionamentoService {
       .delete(this.acondicionamentoUrl + '/' + _id.toString(), { headers: headers })
       .map((res: Response) => res.json())
       .catch((error: any) =>
-        Observable.throw(error.json().error || 'Server error')
+        Observable.throw(error.json() || 'Server error')
       );
   }
 
@@ -76,7 +76,7 @@ export class AcondicionamentoService {
       .get(this.acondicionamentoUrl + '/' + _id.toString(), { headers: headers })
       .map((res: Response) => res)
       .catch((error: any) =>
-        Observable.throw(error.json().error || 'Server error')
+        Observable.throw(error.json() || 'Server error')
       );
   }
 
@@ -121,7 +121,7 @@ export class AcondicionamentoService {
       .get(this.acondicionamentoUrl, { headers: headers, search: search })
       .map((res: Response) => res.json())
       .catch((error: any) =>
-        Observable.throw(error.json().error || 'Server error')
+        Observable.throw(error.json() || 'Server error')
       );
   }
 }

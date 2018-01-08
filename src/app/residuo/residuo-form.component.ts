@@ -103,7 +103,7 @@ export class ResiduoFormComponent implements OnInit, AfterViewInit, AfterViewChe
             },
             error => {
               this.emProcessamento = false;
-              this.dialog.error('SGR', 'Erro ao salvar o registro. msg: ' + error.error);
+              this.dialog.error('SGR', 'Erro ao salvar o registro.', error.error + ' - Detalhe: ' + error.message);
             },
           );
       } else {
@@ -120,7 +120,7 @@ export class ResiduoFormComponent implements OnInit, AfterViewInit, AfterViewChe
         },
         error => {
           this.emProcessamento = false;
-          this.dialog.error('SGR', 'Erro ao salvar o registro. msg: ' + error.error);
+          this.dialog.error('SGR', 'Erro ao salvar o registro.', error.error + ' - Detalhe: ' + error.message);
         },
       );
       }

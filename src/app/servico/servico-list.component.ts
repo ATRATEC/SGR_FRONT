@@ -2,9 +2,9 @@ import { Router } from '@angular/router';
 import { DialogService } from './../dialog/dialog.service';
 import { by } from 'protractor';
 import { FormControl } from '@angular/forms';
-import { DsFornecedor } from './dsfornecedor';
+import { DsServico } from './dsservico';
 import { TokenManagerService } from './../token-manager.service';
-import { FornecedorService } from './fornecedor.service';
+import { ServicoService } from './servico.service';
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { DataSource} from '@angular/cdk/collections';
 import { MatSort } from '@angular/material';
@@ -18,38 +18,27 @@ import 'rxjs/add/observable/fromEvent';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/distinctUntilChanged';
 import 'rxjs/add/operator/debounceTime';
-import { Fornecedor } from './fornecedor';
+import { Servico } from './servico';
 import { ChangeDetectorRef, AfterViewInit } from '@angular/core';
 import { OnlyNumberDirective } from './../only-number.directive';
 
 @Component({
-  selector: 'app-fornecedor',
-  templateUrl: './fornecedor-list.component.html',
-  styleUrls: ['./fornecedor-list.component.css']
+  selector: 'app-servico',
+  templateUrl: './servico-list.component.html',
+  styleUrls: ['./servico-list.component.css']
 })
-export class FornecedorListComponent implements OnInit, AfterViewInit {
-  displayedColumns = ['id',
-                      'cnpj_cpf',
-                      'razao_social',
-                      'contato',
-                      'telefone1_numero',
-                      'email'
-                    ];
+export class ServicoListComponent implements OnInit, AfterViewInit {
+  displayedColumns = ['id', 'descricao'];
   // displayedColumns = ['id', 'codigo', 'descricao'];
-  dataSource: DsFornecedor | null;
+  dataSource: DsServico | null;
   selectedRowIndex = -1;
   selectedRow: any | null;
-  fornecedors: Fornecedor[];
+  servicos: Servico[];
   isLoadingResults: boolean;
 
 
   idFilter = new FormControl();
-  codigoFilter = new FormControl();
-  cnpjCpfFilter = new FormControl();
-  razaoSocialFilter = new FormControl();
-  contatoFilter = new FormControl();
-  telefoneFilter = new FormControl();
-  emailFilter = new FormControl();
+  descricaoFilter = new FormControl();
 
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild(MatPaginator) paginator: MatPaginator;
@@ -62,17 +51,17 @@ export class FornecedorListComponent implements OnInit, AfterViewInit {
     }
   }
 
-  constructor(private _fornecedorService: FornecedorService,
+  constructor(private _servicoService: ServicoService,
               private _tokenManager: TokenManagerService,
               private dialog: DialogService,
-              private _router: Router) { }
+              private _router: Router) {}
 
-  obterFornecedors() {
+  obterServicos() {
     // const token = this._tokenManager.retrieve();
-    // this._fornecedorService.getFornecedors(token).subscribe(data => {
-    //   this.fornecedors = data.data;
+    // this._servicoService.getServicos(token).subscribe(data => {
+    //   this.servicos = data.data;
     //   console.log(data);
-    //   console.log(this.fornecedors.length);
+    //   console.log(this.servicos.length);
     //   console.log(token);
     // });
   }
@@ -88,9 +77,8 @@ export class FornecedorListComponent implements OnInit, AfterViewInit {
   }
 
   dblck(row) {
-    this._router.navigate(['/fornecedores/fornecedor', {id: row.id}]);
+    this._router.navigate(['/servicos/servico', {id: row.id}]);
   }
-
 
   //#region botões de ação
   btnEditar_click() {
@@ -119,13 +107,13 @@ export class FornecedorListComponent implements OnInit, AfterViewInit {
   }
 
   incluirRegistro() {
-    this._router.navigate(['/fornecedores/fornecedor']);
+    this._router.navigate(['/servicos/servico']);
   }
 
 
   editarRegistro() {
     if (this.validaSelecao()) {
-      this._router.navigate(['/fornecedores/fornecedor', {id: this.selectedRow.id}]);
+      this._router.navigate(['/servicos/servico', {id: this.selectedRow.id}]);
       this.ngOnInit();
       this.selectedRowIndex = -1;
       this.selectedRow = null;
@@ -134,12 +122,12 @@ export class FornecedorListComponent implements OnInit, AfterViewInit {
 
   excluirRegistro() {
     if (this.validaSelecao()) {
-      this.dialog.question('SGR', 'Deseja realmente excluir o fornecedor: ' + this.selectedRow.id + '?').subscribe(
+      this.dialog.question('SGR', 'Deseja realmente excluir o servico: ' + this.selectedRow.id + '?').subscribe(
         result => {
           if (result.retorno) {
-            this._fornecedorService.deleteFornecedor(this._tokenManager.retrieve(), this.selectedRow.id).subscribe(
+            this._servicoService.deleteServico(this._tokenManager.retrieve(), this.selectedRow.id).subscribe(
               data => {
-                this.dialog.success('SGR', 'Fornecedor excluído com sucesso.');
+                this.dialog.success('SGR', 'Servico excluído com sucesso.');
                 this.ngOnInit();
               },
               error => {
@@ -166,32 +154,17 @@ export class FornecedorListComponent implements OnInit, AfterViewInit {
     this.paginator._intl.nextPageLabel = 'Próxima Página';
     this.paginator._intl.previousPageLabel = 'Voltar Página';
 
-    this.isLoadingResults = false;
-
-    this.dataSource = new DsFornecedor(this._tokenManager, this._fornecedorService, this.paginator, this.sort);
+    this.dataSource = new DsServico(this._tokenManager, this._servicoService, this.paginator, this.sort);
 
     const idFilter$ = this.idFilter.valueChanges.debounceTime(500).distinctUntilChanged().startWith('');
-    const codigoFilter$ = this.codigoFilter.valueChanges.debounceTime(500).distinctUntilChanged().startWith('');
-    const cnpjCpfFilter$ = this.cnpjCpfFilter.valueChanges.debounceTime(500).distinctUntilChanged().startWith('');
-    const razaoSocialFilter$ = this.razaoSocialFilter.valueChanges.debounceTime(500).distinctUntilChanged().startWith('');
-    const contatoFilter$ = this.contatoFilter.valueChanges.debounceTime(500).distinctUntilChanged().startWith('');
-    const telefoneFilter$ = this.telefoneFilter.valueChanges.debounceTime(500).distinctUntilChanged().startWith('');
-    const emailFilter$ = this.emailFilter.valueChanges.debounceTime(500).distinctUntilChanged().startWith('');
+    const descricaoFilter$ = this.descricaoFilter.valueChanges.debounceTime(500).distinctUntilChanged().startWith('');
 
-    Observable.combineLatest(idFilter$,
-                             codigoFilter$,
-                             cnpjCpfFilter$,
-                             razaoSocialFilter$,
-                             contatoFilter$,
-                             telefoneFilter$,
-                             emailFilter$
-                            ).debounceTime(500).distinctUntilChanged().map(
-      ([id, codigo_omie, cnpj_cpf, razao_social, contato, telefone, email ]) =>
-      ({id, codigo_omie, cnpj_cpf, razao_social, contato, telefone, email})).subscribe(filter => {
+    Observable.combineLatest(idFilter$, descricaoFilter$).debounceTime(500).distinctUntilChanged().
+    map(
+      ([id, descricao ]) => ({id, descricao})).subscribe(filter => {
         if (!this.dataSource) { return; }
         this.dataSource.filter = filter;
       });
   }
 }
-
 

@@ -17,7 +17,7 @@ import 'rxjs/add/operator/distinctUntilChanged';
 import 'rxjs/add/operator/debounceTime';
 import { ChangeDetectorRef, ViewChildren, ViewChild, ElementRef } from '@angular/core';
 import { OnlyNumberDirective } from './../only-number.directive';
-import { Fornecedor } from './fornecedor';
+import { Fornecedor, FornecedorFiltro } from './fornecedor';
 import { ActivatedRoute, Params} from '@angular/router';
 import {FormControl, Validators} from '@angular/forms';
 import { Estado, Cidade } from './../endereco';
@@ -147,6 +147,23 @@ export class FornecedorFormComponent implements OnInit, AfterViewInit, AfterView
       this.fornecedor.cnpj_cpf = mcpf;
     }
 
+    if (this.fornecedor.cnpj_cpf) {
+      let listfornecedor: Fornecedor[];
+      let filtro: FornecedorFiltro;
+
+      filtro = new FornecedorFiltro('', '', this.fornecedor.cnpj_cpf, '', '', '', '');
+
+      this._fornecedorService.getFornecedors(this._tokenManager.retrieve(), 'id', 'id', 0, 15, filtro).subscribe(data => {
+        listfornecedor = data.data;
+        if (listfornecedor.length > 0) {
+          if (listfornecedor[0].id !== this.fornecedor.id) {
+            this.dialog.warning('SGR', 'CNPJ / CPF informado já se encontra cadastrado no sistema.');
+            this.fornecedor.cnpj_cpf = '';
+          }
+        }
+      });
+    }
+
     // console.log(this.fornecedor.cnpj_cpf);
     // const retorno = namere.test(this.fornecedor.cnpj_cpf);
     // console.log(this.fornecedor.cnpj_cpf);
@@ -262,7 +279,7 @@ export class FornecedorFormComponent implements OnInit, AfterViewInit, AfterView
             },
             error => {
               this.emProcessamento = false;
-              this.dialog.error('SGR', 'Erro ao salvar o registro. msg: ' + error.error);
+              this.dialog.error('SGR', 'Erro ao salvar o registro.', error.error + ' - Detalhe: ' + error.message);
             },
           );
       } else {
@@ -275,7 +292,7 @@ export class FornecedorFormComponent implements OnInit, AfterViewInit, AfterView
           },
           error => {
             this.emProcessamento = false;
-            this.dialog.error('SGR', 'Erro ao salvar o registro. msg: ' + error.error);
+            this.dialog.error('SGR', 'Erro ao salvar o registro.', error.error + ' - Detalhe: ' + error.message);
           },
         );
       }

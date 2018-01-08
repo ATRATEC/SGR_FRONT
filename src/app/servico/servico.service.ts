@@ -1,7 +1,7 @@
 import { environment } from './../../environments/environment';
 import { isEmpty } from 'rxjs/operators';
 import { isNullOrUndefined } from 'util';
-import { TipoAtividade, TipoAtividadeFilter } from './tipoatividade';
+import { Servico, ServicoFilter } from './servico';
 import { Injectable } from '@angular/core';
 import 'rxjs/add/observable/of';
 import 'rxjs/add/operator/map';
@@ -10,12 +10,12 @@ import { Http, Headers, Response, RequestOptions, URLSearchParams } from '@angul
 import { HttpErrorResponse, HttpParams } from '@angular/common/http';
 
 @Injectable()
-export class TipoAtividadeService {
-  private tipoatividadeUrl = environment.urlbase + '/api/tipoatividades';
+export class ServicoService {
+  private servicoUrl = environment.urlbase + '/api/servicos';
 
   constructor(private _http: Http) {}
 
-  addTipoAtividade(accessToken: string, _descricao: string): Observable<any> {
+  addServico(accessToken: string, _descricao: string): Observable<any> {
     const headers = new Headers({
       Accept: 'application/json',
       Authorization: 'Bearer ' + accessToken.toString().replace(/"/g, '')
@@ -26,7 +26,7 @@ export class TipoAtividadeService {
     // _params.set('codigo', '1');
 
     return this._http
-      .post(this.tipoatividadeUrl, _body, { headers: headers})
+      .post(this.servicoUrl, _body, { headers: headers})
       .map((res: Response) => res.json())
       .catch((error: any) =>
         Observable.throw(error.json() || 'Server error')
@@ -34,7 +34,7 @@ export class TipoAtividadeService {
 
   }
 
-  editTipoAtividade(accessToken: string, _id: number, _descricao: string): Observable<any> {
+  editServico(accessToken: string, _id: number, _descricao: string): Observable<any> {
     const headers = new Headers({
       Accept: 'application/json',
       Authorization: 'Bearer ' + accessToken.toString().replace(/"/g, '')
@@ -45,7 +45,7 @@ export class TipoAtividadeService {
     // _params.set('id', _id.toString());
 
     return this._http
-      .put(this.tipoatividadeUrl + '/' + _id.toString(), _body, { headers: headers })
+      .put(this.servicoUrl + '/' + _id.toString(), _body, { headers: headers })
       .map((res: Response) => res.json())
       .catch((error: any) =>
         Observable.throw(error.json() || 'Server error')
@@ -53,38 +53,38 @@ export class TipoAtividadeService {
 
   }
 
-  deleteTipoAtividade(accessToken: string, _id: number) {
+  deleteServico(accessToken: string, _id: number) {
     const headers = new Headers({
       Accept: 'application/json',
       Authorization: 'Bearer ' + accessToken.toString().replace(/"/g, '')
     });
 
     return this._http
-      .delete(this.tipoatividadeUrl + '/' + _id.toString(), { headers: headers })
+      .delete(this.servicoUrl + '/' + _id.toString(), { headers: headers })
       .map((res: Response) => res.json())
       .catch((error: any) =>
-        Observable.throw(error.json() || 'Server error')
+        Observable.throw(error.json().error || 'Server error')
       );
   }
 
-  getTipoAtividade(accessToken: string, _id: number)  {
+  getServico(accessToken: string, _id: number)  {
     const headers = new Headers({
       Accept: 'application/json',
       Authorization: 'Bearer ' + accessToken.toString().replace(/"/g, '')
     });
 
     return this._http
-      .get(this.tipoatividadeUrl + '/' + _id.toString(), { headers: headers })
+      .get(this.servicoUrl + '/' + _id.toString(), { headers: headers })
       .map((res: Response) => res)
       .catch((error: any) =>
-        Observable.throw(error.json() || 'Server error')
+        Observable.throw(error.json().error || 'Server error')
       );
   }
 
-  /** Metodo que retorna um observable com dados da listagem de tipoatividades
+  /** Metodo que retorna um observable com dados da listagem de servicos
    *  parametro: acessToken: string
   */
-  getTipoAtividades(accessToken: string, sort: string, order: string, page: number, pagesize: number, filter: TipoAtividadeFilter) {
+  getServicos(accessToken: string, sort: string, order: string, page: number, pagesize: number, filter: ServicoFilter) {
     const headers = new Headers({
       Accept: 'application/json',
       Authorization: 'Bearer ' + accessToken.toString().replace(/"/g, '')
@@ -119,15 +119,15 @@ export class TipoAtividadeService {
     }
 
     return this._http
-      .get(this.tipoatividadeUrl, { headers: headers, search: search })
+      .get(this.servicoUrl, { headers: headers, search: search })
       .map((res: Response) => res.json())
       .catch((error: any) =>
-        Observable.throw(error.json() || 'Server error')
+        Observable.throw(error.json().error || 'Server error')
       );
   }
 
-  getListTipoAtividades(accessToken: string)  {
-    const listUrl = environment.urlbase + '/api/listtipoatividades';
+  getListServicos(accessToken: string)  {
+    const listUrl = environment.urlbase + '/api/listservicos';
     const headers = new Headers({
       Accept: 'application/json',
       Authorization: 'Bearer ' + accessToken.toString().replace(/"/g, '')

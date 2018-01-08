@@ -42,7 +42,6 @@
         </div>
         <mat-card *ngIf="!emProcessamento" style="width: 750px;">
           <div fxLayout="column" fxLayoutAlign="start center" fxLayoutGap="5px">
-
             <div fxFlex="70px" fxFlexAlign="start">
               <mat-form-field class="frm_clientedocumento_codigo">
                 <input matInput disabled #codigo maxlength="9" type="number" tabindex="-1" placeholder="Código" required [(ngModel)]="clientedocumento.id">
@@ -52,63 +51,56 @@
             </div>
             <div fxFlex="70px" fxFlexAlign="start">
               <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="20px" style="width: 100%">
-                <div fxFlex="160px" fxFlexAlign="start" fxFlexFill>
-                  <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="10px">
-                    <div fxFlex="120px" fxFlexAlign="start" fxFlexFill>
-                      <mat-form-field class="frm_clientedocumento_codigo">
-                        <input matInput #codigocli maxlength="9" [formControl]="valCodigo" placeholder="Cliente" required tabindex="1" [(ngModel)]="clientedocumento.id_cliente"
-                          (change)="buscaCliente($event)" (keypress)="onlyNumber($event)">
-                        <mat-hint align="end">{{codigocli.value?.length || 0}}/9</mat-hint>
-                        <mat-error *ngIf="valCodigo.invalid">{{getCodigoErrorMessage()}}</mat-error>
-                      </mat-form-field>
-                    </div>
-                    <div fxFlex="45px" fxFlexAlign="center" fxFlexFill>
-                      <button mat-icon-button color="primary" (click)="openPesquisa()">
-                        <mat-icon>search</mat-icon>
-                      </button>
-                    </div>
-                    <div fxFlex="320px" fxFlexAlign="start" fxFlexFill>
-                      <mat-form-field class="frm_clientedocumento_razao_social">
-                        <input matInput disabled [(ngModel)]="clientedocumento.razao_social">
-                        <!-- <mat-hint align="end">{{codigocli.value?.length || 0}}/9</mat-hint>
-                          <mat-error *ngIf="valCodigo.invalid">{{getCodigoErrorMessage()}}</mat-error> -->
-                      </mat-form-field>
-                    </div>
-                    <div fxFlex="220px" fxFlexAlign="start" fxFlexFill>
-                        <mat-form-field class="frm_clientedocumento_tipodocumento">
-                          <mat-select placeholder="Tipo de Documento" [(value)]="clientedocumento.id_tipo_documento" required tabindex="1">
-                            <mat-option *ngFor="let tipodocumento of tipodocumentos" [value]="tipodocumento.id">
-                              {{ tipodocumento.descricao }}
-                            </mat-option>
-                          </mat-select>
-                          <!-- [formControl]="valTipoDocumento" -->
-                          <!-- <mat-error *ngIf="valTipoDocumento.invalid">{{getTipoDocumentoErrorMessage()}}</mat-error> -->
-                        </mat-form-field>
-                      </div>
-                  </div>
+                <div fxFlex="120px" fxFlexAlign="start" fxFlexFill>
+                  <mat-form-field class="frm_clientedocumento_codigo">
+                    <input matInput #codigocli maxlength="9" [formControl]="valCodigo" placeholder="Cliente" required tabindex="1" [(ngModel)]="clientedocumento.id_cliente"
+                      (keyup)="validaSaida($event.target.value)" (keypress)="onlyNumber($event)">
+                    <mat-hint align="end">{{codigocli.value?.length || 0}}/9</mat-hint>
+                    <mat-error *ngIf="valCodigo.invalid">{{getCodigoErrorMessage()}}</mat-error>
+                  </mat-form-field>
+                </div>
+                <div fxFlex="45px" fxFlexAlign="center" fxFlexFill>
+                  <button mat-icon-button color="primary" (click)="openPesquisa()">
+                    <mat-icon>search</mat-icon>
+                  </button>
+                </div>
+                <div fxFlex="400px" fxFlexAlign="start" fxFlexFill>
+                  <mat-form-field class="frm_clientedocumento_razao_social">
+                    <input matInput disabled [(value)]="clientedocumento.razao_social">
+                  </mat-form-field>
                 </div>
               </div>
             </div>
             <div fxFlex="70px" fxFlexAlign="start">
               <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="20px">
+                <div fxFlex="230px" fxFlexFill>
+                  <mat-form-field class="frm_clientedocumento_tipodocumento">
+                    <mat-select [formControl]="valTipoDocumento" placeholder="Tipo de Documento" [(value)]="clientedocumento.id_tipo_documento" required tabindex="1">
+                      <mat-option *ngIf="modelLoaded" [value]="clientedocumento.id_tipo_documento">{{clientedocumento.descricao}}</mat-option>
+                      <mat-option *ngFor="let tipodocumento of tipodocumentos" [value]="tipodocumento.id">
+                        {{ tipodocumento.descricao }}
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </div>
                 <div fxFlex="150px" fxFlexFill>
                   <mat-form-field class="frm_clientedocumento_nrolicenca">
                     <input matInput #nrolicencatransp maxlength="20" placeholder="Numero" tabindex="29" [(ngModel)]="clientedocumento.numero">
                     <mat-hint align="end">{{nrolicencatransp.value?.length || 0}}/20</mat-hint>
                   </mat-form-field>
                 </div>
-                <div fxFlex="170px" fxFlexFill>
+                <div fxFlex="140px" fxFlexFill>
                   <mat-form-field class="frm_clientedocumento_dtemissao">
-                    <input matInput type="date" #dtemissao maxlength="10" placeholder="Data Emissão" tabindex="30" [ngModel]="clientedocumento.emissao | date:'yyyy-MM-dd'"
-                      (ngModelChange)="clientedocumento.emissao = $event" [value]="clientedocumento.emissao | date:'yyyy-MM-dd'">
+                    <input matInput type="date" #dtemissao maxlength="10" placeholder="Data Emissão" tabindex="30" [ngModel]="clientedocumento.emissao"
+                      (ngModelChange)="clientedocumento.emissao = $event" [value]="clientedocumento.emissao">
                     <mat-hint align="end">{{dtemissao.value?.length || 0}}/10</mat-hint>
                   </mat-form-field>
                 </div>
-                <div fxFlex="170px" fxFlexFill>
+                <div fxFlex="140px" fxFlexFill>
                   <mat-form-field class="frm_clientedocumento_dtvencimento">
-                    <input matInput type="date" #dtvencimento maxlength="20" placeholder="Data Vencimento" tabindex="32" [ngModel]="clientedocumento.vencimento | date:'yyyy-MM-dd'"
-                      (ngModelChange)="clientedocumento.vencimento = $event" [value]="clientedocumento.vencimento | date:'yyyy-MM-dd'">
-                    <mat-hint align="end">{{dtvencimento.value?.length || 0}}/20</mat-hint>
+                    <input matInput type="date" #dtvencimento maxlength="10" placeholder="Data Vencimento" tabindex="32" [ngModel]="clientedocumento.vencimento"
+                      (ngModelChange)="clientedocumento.vencimento = $event" [value]="clientedocumento.vencimento">
+                    <mat-hint align="end">{{dtvencimento.value?.length || 0}}/10</mat-hint>
                   </mat-form-field>
                 </div>
               </div>
@@ -122,19 +114,19 @@
               </div>
             </div>
             <div fxFlex="70px" fxFlexAlign="start" *ngIf="clientedocumento.caminho">
-                <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="20px">
-                  <div fxFlex="300px" fxFlexFill>
-                      <mat-form-field style="width: 300px;" *ngIf="clientedocumento.caminho">
-                          <input matInput disabled placeholder="Documento Anexado" [(ngModel)]="clientedocumento.caminho">
-                      </mat-form-field>
-                  </div>
-                  <div fxFlex="120px" fxFlexFill>
-                      <a mat-button href={{linkDownload}}>
-                        Download
-                      </a>
-                  </div>
+              <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="20px">
+                <div fxFlex="300px" fxFlexFill>
+                  <mat-form-field style="width: 300px;" *ngIf="clientedocumento.caminho">
+                    <input matInput disabled placeholder="Documento Anexado" [(ngModel)]="clientedocumento.caminho">
+                  </mat-form-field>
+                </div>
+                <div fxFlex="120px" fxFlexFill>
+                  <a mat-button href={{linkDownload}}>
+                    Download
+                  </a>
                 </div>
               </div>
+            </div>
           </div>
         </mat-card>
       </div>

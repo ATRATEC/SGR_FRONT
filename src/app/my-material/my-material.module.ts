@@ -82,7 +82,7 @@ import {CdkTableModule} from '@angular/cdk/table';
   ],
 providers: [
   MatIconRegistry,
-  {provide: MAT_DATE_LOCALE, useValue: 'pt-br'},
+  {provide: MAT_DATE_LOCALE, useValue: 'pt-BR'},
 ]
 })
 export class MyMaterialModule {

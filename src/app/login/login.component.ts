@@ -88,6 +88,12 @@ export class LoginComponent implements OnInit {
     return mensagem;
   }
 
+  onEnter(value: string) {
+    if (value !== '') {
+      this.onEntrarClick();
+    }
+  }
+
   getPasswordErrorMessage() {
     let mensagem = '';
 

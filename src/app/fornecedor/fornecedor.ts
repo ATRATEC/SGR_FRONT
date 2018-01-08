@@ -1,3 +1,4 @@
+import { FornecedorFilter } from './fornecedor';
 import { Data } from '@angular/router';
 export interface FornecedorFilter {
   id: string;
@@ -7,6 +8,17 @@ export interface FornecedorFilter {
   contato: string;
   telefone: string;
   email: string;
+}
+export class FornecedorFiltro implements FornecedorFilter {
+  constructor(
+    public id: string = '',
+    public codigo_omie: string = '',
+    public cnpj_cpf: string = '',
+    public razao_social: string = '',
+    public contato: string = '',
+    public telefone: string = '',
+    public email: string = '',
+  ) {}
 }
 export class Fornecedor {
   constructor(

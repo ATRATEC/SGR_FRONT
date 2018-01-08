@@ -44,6 +44,7 @@ export class ClienteDocumentoFormComponent implements OnInit, AfterViewInit, Aft
 
   clientedocumento: ClienteDocumento;
   emProcessamento = false;
+  modelLoaded = false;
   exibeIncluir = false;
   tipodocumentos: TipoDocumento[];
   linkDownload = environment.urlbase + '/api/documentos/downloadanexo?arquivo=';
@@ -73,39 +74,37 @@ export class ClienteDocumentoFormComponent implements OnInit, AfterViewInit, Aft
   ngOnInit() {
     this.emProcessamento = true;
     this.clientedocumento = new ClienteDocumento();
-    this._tipoDocumentoService.getListTipoDocumentos(this._tokenManager.retrieve())
-                                                .subscribe(data => {
-                                                   this.tipodocumentos = JSON.parse(data._body);
-                                                 });
+
     this._route.params.forEach((params: Params) => {
       const id: number = +params['id'];
       if (id) {
         this._clientedocumentoService.getClienteDocumento(this._tokenManager.retrieve(), id)
         .subscribe( data => {
           this.clientedocumento = JSON.parse(data._body);
+
           this.linkDownload = this.linkDownload + 'CLI_' +
                               this.clientedocumento.id_cliente + '_DOC_' +
                               this.clientedocumento.id + '_' +
                               this.clientedocumento.caminho;
           this.emProcessamento = false;
+          this.modelLoaded = true;
+          this.valTipoDocumento.setValue(this.clientedocumento.id_tipo_documento);
         });
       } else {
         this.emProcessamento = false;
       }
     });
-
     const idFilter$ = this.valCodigo.valueChanges.debounceTime(500).distinctUntilChanged().startWith('');
     Observable.combineLatest(idFilter$).debounceTime(500).distinctUntilChanged().
     map(
       ([id]) => ({id})).subscribe(filter => {
-        if ((!isNullOrUndefined(filter.id) && (filter.id !== ''))) {
-          this.buscaCliente(filter);
-        } else {
-          this.clientedocumento.id_cliente = null;
-          this.clientedocumento.razao_social = '';
-        }
+        this.buscaCliente(filter);
       });
 
+    this._tipoDocumentoService.getListTipoDocumentos(this._tokenManager.retrieve())
+                                                .subscribe(data => {
+                                                   this.tipodocumentos = JSON.parse(data._body);
+                                                 });
   }
 
   ngAfterViewChecked(): void {
@@ -139,11 +138,14 @@ export class ClienteDocumentoFormComponent implements OnInit, AfterViewInit, Aft
               this.clientedocumento = data;
               this.exibeIncluir = true;
               this.dialog.success('SGR', 'Documento salvo com sucesso.');
-              this.uploadDocumento(this.clientedocumento, fileBrowser.files[0]);
+              this.valTipoDocumento.setValue(this.clientedocumento.id_tipo_documento);
+              if (fileBrowser.files.length > 0) {
+                this.uploadDocumento(this.clientedocumento, fileBrowser.files[0]);
+              }
             },
             error => {
               this.emProcessamento = false;
-              this.dialog.error('SGR', 'Erro ao salvar o registro. msg: ' + error.error);
+              this.dialog.error('SGR', 'Erro ao salvar o registro.', error.error + ' - Detalhe: ' + error.message);
             },
           );
       } else {
@@ -155,14 +157,17 @@ export class ClienteDocumentoFormComponent implements OnInit, AfterViewInit, Aft
           data => {
           this.emProcessamento = false;
           // fileBrowser.files[0]
-          this.uploadDocumento(this.clientedocumento, fileBrowser.files[0]);
+          if (fileBrowser.files.length > 0) {
+            this.uploadDocumento(this.clientedocumento, fileBrowser.files[0]);
+          }
           this.clientedocumento = data;
           this.exibeIncluir = true;
           this.dialog.success('SGR', 'Documento salvo com sucesso.');
+          this.valTipoDocumento.setValue(this.clientedocumento.id_tipo_documento);
         },
         error => {
           this.emProcessamento = false;
-          this.dialog.error('SGR', 'Erro ao salvar o registro. msg: ' + error.error);
+          this.dialog.error('SGR', 'Erro ao salvar o registro.', error.error + ' - Detalhe: ' + error.message);
         },
       );
       }
@@ -210,20 +215,29 @@ export class ClienteDocumentoFormComponent implements OnInit, AfterViewInit, Aft
     return mensagem;
   }
 
+  validaSaida(event: string) {
+    if (event === '') {
+      this.clientedocumento.id_cliente = null;
+      this.clientedocumento.razao_social = '';
+    }
+  }
+
   buscaCliente(event: any) {
     let cliente: Cliente;
     // this.clientedocumento.id_cliente = null;
     // this.clientedocumento.razao_social = '';
-    this._clienteService.getCliente(this._tokenManager.retrieve(), Number(event.id))
-    .subscribe( data => {
-      cliente = JSON.parse(data._body);
-      this.clientedocumento.id_cliente = cliente.id;
-      this.clientedocumento.razao_social = cliente.razao_social;
-    },
-    (err: HttpErrorResponse) => {
-      this.clientedocumento.id_cliente = null;
-      this.clientedocumento.razao_social = '';
-    });
+    if (event.id) {
+      this._clienteService.getCliente(this._tokenManager.retrieve(), Number(event.id))
+      .subscribe( data => {
+        cliente = JSON.parse(data._body);
+        this.clientedocumento.id_cliente = cliente.id;
+        this.clientedocumento.razao_social = cliente.razao_social;
+      },
+      (err: HttpErrorResponse) => {
+        this.clientedocumento.id_cliente = null;
+        this.clientedocumento.razao_social = '';
+      });
+    }
     // console.log('mudou estado ' + event.value);
   }
 

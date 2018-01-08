@@ -9,13 +9,14 @@ export class DialogService {
   constructor(private dialog: MatDialog) { }
 
 
-  success(_title: string, _message: string) {
+  success(_title: string, _message: string, _detail: string = '') {
     const dialogLoginRef = this.dialog.open(DialogComponent, {
       width: '450px',
       height: '250px',
       disableClose: true,
       data: { title: _title,
               message: _message,
+              detail: _detail,
               showOkButton: true,
               showYesNoButton: false,
               showCancelButton: false,
@@ -24,13 +25,14 @@ export class DialogService {
     });
   }
 
-  error(_title: string, _message: string) {
+  error(_title: string, _message: string, _detail: string = '') {
     const dialogLoginRef = this.dialog.open(DialogComponent, {
       width: '450px',
-      height: '250px',
+      height: '300px',
       disableClose: true,
       data: { title: _title,
               message: _message,
+              detail: _detail,
               showOkButton: true,
               showYesNoButton: false,
               showCancelButton: false,
@@ -39,13 +41,14 @@ export class DialogService {
     });
   }
 
-  warning(_title: string, _message: string) {
+  warning(_title: string, _message: string, _detail: string = '') {
     const dialogLoginRef = this.dialog.open(DialogComponent, {
       width: '450px',
       height: '250px',
       disableClose: true,
       data: { title: _title,
               message: _message,
+              detail: _detail,
               showOkButton: true,
               showYesNoButton: false,
               showCancelButton: false,
@@ -54,13 +57,14 @@ export class DialogService {
     });
   }
 
-  info(_title: string, _message: string) {
+  info(_title: string, _message: string, _detail: string = '') {
     const dialogLoginRef = this.dialog.open(DialogComponent, {
       width: '450px',
       height: '250px',
       disableClose: true,
       data: { title: _title,
               message: _message,
+              detail: _detail,
               showOkButton: true,
               showYesNoButton: false,
               showCancelButton: false,
@@ -69,13 +73,14 @@ export class DialogService {
     });
   }
 
-  question(_title: string, _message: string): Observable<any> {
+  question(_title: string, _message: string, _detail: string = ''): Observable<any> {
     const dialogLoginRef = this.dialog.open(DialogComponent, {
       width: '450px',
       height: '250px',
       disableClose: true,
       data: { title: _title,
               message: _message,
+              detail: _detail,
               showOkButton: false,
               showYesNoButton: true,
               showCancelButton: false,

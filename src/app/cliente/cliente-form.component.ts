@@ -1,3 +1,4 @@
+import { ClienteDocumento } from './../clientedocumento/clientedocumento';
 import { EnderecoService } from './../endereco.service';
 import { isNullOrUndefined } from 'util';
 import { DialogService } from './../dialog/dialog.service';
@@ -20,7 +21,7 @@ import 'rxjs/add/operator/distinctUntilChanged';
 import 'rxjs/add/operator/debounceTime';
 import { ChangeDetectorRef, ViewChildren, ElementRef, ViewChild } from '@angular/core';
 import { OnlyNumberDirective } from './../only-number.directive';
-import { Cliente } from './cliente';
+import { Cliente, ClienteFilter, ClienteFiltro } from './cliente';
 import { ActivatedRoute, Params } from '@angular/router';
 import { FormControl, Validators } from '@angular/forms';
 import { Estado, Cidade } from './../endereco';
@@ -177,11 +178,47 @@ export class ClienteFormComponent
       this.cliente.cnpj_cpf = mcpf;
     }
 
+    if (this.cliente.cnpj_cpf) {
+      let listcliente: Cliente[];
+      let filtro: ClienteFiltro;
+
+      filtro = new ClienteFiltro('', this.cliente.cnpj_cpf, '', '', '', '');
+
+      this._clienteService.getClientes(this._tokenManager.retrieve(), 'id', 'id', 0, 15, filtro).subscribe(data => {
+        listcliente = data.data;
+        if (listcliente.length > 0) {
+          if (listcliente[0].id !== this.cliente.id) {
+            this.dialog.warning('SGR', 'CNPJ / CPF informado já se encontra cadastrado no sistema.');
+            this.cliente.cnpj_cpf = '';
+          }
+        }
+      });
+    }
+
     // console.log(this.cliente.cnpj_cpf);
     // const retorno = namere.test(this.cliente.cnpj_cpf);
     // console.log(this.cliente.cnpj_cpf);
     // console.log(retorno);
   }
+
+  // validaCnpjCpf() {
+  //   if (this.cliente.cnpj_cpf) {
+  //     let listcliente: Cliente[];
+  //     let filtro: ClienteFiltro;
+
+  //     filtro = new ClienteFiltro('', cliente.cnpj_cpf, '', '', '', '');
+
+  //     this._clienteService.getClientes(this._tokenManager.retrieve(), 'id', 'id', 1, 15, filtro).subscribe(data => {
+  //       listcliente = JSON.parse(data._body);
+  //       if (listcliente.length > 0) {
+  //         if (listcliente[0].id !== cliente.id) {
+  //           this.dialog.warning('SGR', 'CNPJ / CPF informado já se encontra cadastrado no sistema.');
+  //           this.cliente.cnpj_cpf = '';
+  //         }
+  //       }
+  //     });
+  //   }
+  // }
 
   formataTelefone(event: any) {
     // const namere = new RegExp('[0-9]{3}\.[0-9]{3}\.[0-9]{3}\-[0-9]{2}|[0-9]{2}\.[0-9]{3}\.[0-9]{3}\/[0-9]{4}\-[0-9]{2}');
@@ -290,10 +327,7 @@ export class ClienteFormComponent
             },
             error => {
               this.emProcessamento = false;
-              this.dialog.error(
-                'SGR',
-                'Erro ao salvar o registro. msg: ' + error.error
-              );
+              this.dialog.error('SGR', 'Erro ao salvar o registro.', error.error + ' - Detalhe: ' + error.message);
             }
           );
       } else {
@@ -312,10 +346,7 @@ export class ClienteFormComponent
             },
             error => {
               this.emProcessamento = false;
-              this.dialog.error(
-                'SGR',
-                'Erro ao salvar o registro. msg: ' + error.error
-              );
+              this.dialog.error('SGR', 'Erro ao salvar o registro.', error.error + ' - Detalhe: ' + error.message);
             }
           );
       }

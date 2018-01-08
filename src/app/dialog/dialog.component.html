@@ -41,6 +41,9 @@
             <div fxFlex="100%">
               <p>{{data.message}}</p>
             </div>
+            <div fxFlex="100%" *ngIf="data.detail">
+              <p>{{data.detail}}</p>
+            </div>
           </div>
         </div>
       </div>

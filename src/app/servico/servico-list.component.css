@@ -62,7 +62,7 @@
 .mat-table {
   overflow: auto;
   min-height: 300px;
-  max-height: 390px;
+  max-height: 440px;
 }
 
 .mat-header-cell .mat-sort-header-sorted {
@@ -141,29 +141,20 @@ mat-row:nth-child(odd) {
   max-width: 80px;
 }
 
-.mat-column-cnpj_cpf {
-  min-width: 150px;
+.mat-column-codigo {
+  max-width: 100px;
+}
+
+.mat-column-descricao {
+  max-width: 500px;
+}
+
+.mat-column-unidade {
+  max-width: 80px;
+}
+
+.mat-column-quantidade_estoque {
   max-width: 150px;
-}
-
-.mat-column-razao_social {
-  min-width: 380px;
-  max-width: 380px;
-}
-
-.mat-column-contato {
-  min-width: 200px;
-  max-width: 200px;
-}
-
-.mat-column-telefone1_numero {
-  min-width: 160px;
-  max-width: 160px;
-}
-
-.mat-column-email {
-  min-width: 300px;
-  max-width: 300px;
 }
 
 .mat-row:hover, .example-selected-row {
@@ -175,7 +166,7 @@ mat-row:nth-child(odd) {
 }
 
 .example-loading-shade {
-  position: relative;
+  position: absolute;
   top: 0;
   left: 0;
   bottom: 56px;
@@ -186,16 +177,4 @@ mat-row:nth-child(odd) {
   align-items: center;
   justify-content: center;
   width: 100%;
-}
-
-.filtro_codigo {
-  width: 75px;
-}
-
-.filtro_cnpj_cpf {
-  width: 150px;
-}
-
-.filtro_email {
-  width: 200px;
 }

@@ -44,8 +44,10 @@ export class FornecedorDocumentoFormComponent implements OnInit, AfterViewInit, 
 
   fornecedordocumento: FornecedorDocumento;
   emProcessamento = false;
+  modelLoaded = false;
   exibeIncluir = false;
   tipodocumentos: TipoDocumento[];
+  tipodocumentos2: TipoDocumento[];
   linkDownload = environment.urlbase + '/api/documentos/downloadanexo?arquivo=';
 
   valCodigo = new FormControl('', [Validators.required]);
@@ -73,10 +75,7 @@ export class FornecedorDocumentoFormComponent implements OnInit, AfterViewInit, 
   ngOnInit() {
     this.emProcessamento = true;
     this.fornecedordocumento = new FornecedorDocumento();
-    this._tipoDocumentoService.getListTipoDocumentos(this._tokenManager.retrieve())
-                                                .subscribe(data => {
-                                                   this.tipodocumentos = JSON.parse(data._body);
-                                                 });
+
     this._route.params.forEach((params: Params) => {
       const id: number = +params['id'];
       if (id) {
@@ -88,6 +87,11 @@ export class FornecedorDocumentoFormComponent implements OnInit, AfterViewInit, 
                               this.fornecedordocumento.id + '_' +
                               this.fornecedordocumento.caminho;
           this.emProcessamento = false;
+          this.modelLoaded = true;
+          // const tp = new TipoDocumento(this.fornecedordocumento.id_tipo_documento, this.fornecedordocumento.descricao);
+
+          this.valTipoDocumento.setValue(this.fornecedordocumento.id_tipo_documento);
+          // console.log('objeto: ' + this.fornecedordocumento.id_tipo_documento.toString());
         });
       } else {
         this.emProcessamento = false;
@@ -98,14 +102,17 @@ export class FornecedorDocumentoFormComponent implements OnInit, AfterViewInit, 
     Observable.combineLatest(idFilter$).debounceTime(500).distinctUntilChanged().
     map(
       ([id]) => ({id})).subscribe(filter => {
-        if ((!isNullOrUndefined(filter.id) && (filter.id !== ''))) {
-          this.buscaFornecedor(filter);
-        } else {
-          this.fornecedordocumento.id_fornecedor = null;
-          this.fornecedordocumento.razao_social = '';
-        }
+        this.buscaFornecedor(filter);
       });
 
+    this._tipoDocumentoService.getListTipoDocumentos(this._tokenManager.retrieve())
+        .subscribe(dt => {
+          this.tipodocumentos = JSON.parse(dt._body);
+          // if ((this.tipodocumentos.length > 0) && (!isNullOrUndefined(this.fornecedordocumento.id_tipo_documento))) {
+          //   const index = this.tipodocumentos.findIndex(d => d.id === this.fornecedordocumento.id_tipo_documento);
+          //   this.tipodocumentos.splice(index, 1);
+          // }
+    });
   }
 
   ngAfterViewChecked(): void {
@@ -115,6 +122,13 @@ export class FornecedorDocumentoFormComponent implements OnInit, AfterViewInit, 
   ngAfterViewInit(): void {
     // this.vc.first.nativeElement.focus();
     // Promise.resolve(null).then(() => this.focuscomp.nativeElement.focus());
+    // for (let index = 0; index < this.tipodocumentos2.length; index++) {
+    //   const element = this.tipodocumentos2[index];
+    //   this.tipodocumentos.push(element);
+    // }
+    // this.tipodocumentos2.forEach(element => {
+    //   this.tipodocumentos.push(element);
+    // });
   }
 
   onlyNumber(event: any) {
@@ -138,12 +152,15 @@ export class FornecedorDocumentoFormComponent implements OnInit, AfterViewInit, 
               this.emProcessamento = false;
               this.fornecedordocumento = data;
               this.exibeIncluir = true;
+              if (fileBrowser.files.length > 0) {
+                this.uploadDocumento(this.fornecedordocumento, fileBrowser.files[0]);
+              }
               this.dialog.success('SGR', 'Documento salvo com sucesso.');
-              this.uploadDocumento(this.fornecedordocumento, fileBrowser.files[0]);
+              this.valTipoDocumento.setValue(this.fornecedordocumento.id_tipo_documento);
             },
             error => {
               this.emProcessamento = false;
-              this.dialog.error('SGR', 'Erro ao salvar o registro. msg: ' + error.error);
+              this.dialog.error('SGR', 'Erro ao salvar o registro.', error.error + ' - Detalhe: ' + error.message);
             },
           );
       } else {
@@ -155,14 +172,17 @@ export class FornecedorDocumentoFormComponent implements OnInit, AfterViewInit, 
           data => {
           this.emProcessamento = false;
           // fileBrowser.files[0]
-          this.uploadDocumento(this.fornecedordocumento, fileBrowser.files[0]);
           this.fornecedordocumento = data;
+          if (fileBrowser.files.length > 0) {
+            this.uploadDocumento(this.fornecedordocumento, fileBrowser.files[0]);
+          }
           this.exibeIncluir = true;
           this.dialog.success('SGR', 'Documento salvo com sucesso.');
+          this.valTipoDocumento.setValue(this.fornecedordocumento.id_tipo_documento);
         },
         error => {
           this.emProcessamento = false;
-          this.dialog.error('SGR', 'Erro ao salvar o registro. msg: ' + error.error);
+          this.dialog.error('SGR', 'Erro ao salvar o registro.', error.error + ' - Detalhe: ' + error.message);
         },
       );
       }
@@ -210,21 +230,28 @@ export class FornecedorDocumentoFormComponent implements OnInit, AfterViewInit, 
     return mensagem;
   }
 
-  buscaFornecedor(event: any) {
-    let fornecedor: Fornecedor;
-    // this.fornecedordocumento.id_fornecedor = null;
-    // this.fornecedordocumento.razao_social = '';
-    this._fornecedorService.getFornecedor(this._tokenManager.retrieve(), Number(event.id))
-    .subscribe( data => {
-      fornecedor = JSON.parse(data._body);
-      this.fornecedordocumento.id_fornecedor = fornecedor.id;
-      this.fornecedordocumento.razao_social = fornecedor.razao_social;
-    },
-    (err: HttpErrorResponse) => {
+  validaSaida(event: string) {
+    console.log(event);
+    if (event === '') {
       this.fornecedordocumento.id_fornecedor = null;
       this.fornecedordocumento.razao_social = '';
-    });
-    // console.log('mudou estado ' + event.value);
+    }
+  }
+
+  buscaFornecedor(event: any) {
+    let fornecedor: Fornecedor;
+    if (event.id) {
+      this._fornecedorService.getFornecedor(this._tokenManager.retrieve(), Number(event.id))
+      .subscribe( data => {
+        fornecedor = JSON.parse(data._body);
+        this.fornecedordocumento.id_fornecedor = fornecedor.id;
+        this.fornecedordocumento.razao_social = fornecedor.razao_social;
+      },
+      (err: HttpErrorResponse) => {
+        this.fornecedordocumento.id_fornecedor = null;
+        this.fornecedordocumento.razao_social = '';
+      });
+    }
   }
 
   openPesquisa(): void {

@@ -90,12 +90,12 @@
 
           <ng-container matColumnDef="emissao">
             <mat-header-cell *matHeaderCellDef mat-sort-header> Dt. Emissão </mat-header-cell>
-            <mat-cell *matCellDef="let row"> {{row.emissao | date:'dd/MM/yyyy'}} </mat-cell>
+            <mat-cell *matCellDef="let row"> {{row.emissao | formatDate}} </mat-cell>
           </ng-container>
 
           <ng-container matColumnDef="vencimento">
             <mat-header-cell *matHeaderCellDef mat-sort-header> Dt. Vencimento </mat-header-cell>
-            <mat-cell *matCellDef="let row"> {{row.vencimento | date:'dd/MM/yyyy'}} </mat-cell>
+            <mat-cell *matCellDef="let row"> {{row.vencimento | formatDate}} </mat-cell>
           </ng-container>
 
           <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
