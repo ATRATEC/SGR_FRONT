@@ -1,3 +1,4 @@
+import { ContratoFornecedorModule } from './contratofornecedor/contratofornecedor.module';
 import { ServicoModule } from './servico/servico.module';
 import { UnidadeModule } from './unidade/unidade.module';
 import { FornecedorDocumentoModule } from './fornecedordocumento/fornecedordocumento.module';
@@ -70,6 +71,7 @@ import { HomeComponent } from './home/home.component';
     UnidadeModule,
     ResiduoModule,
     ServicoModule,
+    ContratoFornecedorModule,
     AppRoutingModule
   ],
   providers: [
