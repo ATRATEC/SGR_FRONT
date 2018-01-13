@@ -15,14 +15,17 @@ export class ContratoFornecedorServicoService {
 
   constructor(private _http: Http) {}
 
-  addContratoFornecedorServico(accessToken: string, _contratofornecedorservico: ContratoFornecedorServico[]): Observable<any> {
+  addContratoFornecedorServico(accessToken: string, _id: number, _contratofornecedorservico: ContratoFornecedorServico[]): Observable<any> {
     const headers = new Headers({
       Accept: 'application/json',
       Authorization: 'Bearer ' + accessToken.toString().replace(/"/g, '')
     });
 
     // const _params: HttpParams = new HttpParams();
-    const _body = { data: JSON.stringify(_contratofornecedorservico)};
+    const _body = {
+      id: _id,
+      data: _contratofornecedorservico
+    };
     // _params.set('codigo', '1');
 
     return this._http

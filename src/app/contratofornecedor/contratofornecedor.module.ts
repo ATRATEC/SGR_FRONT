@@ -14,6 +14,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ContratoFornecedorRoutingModule } from './contratofornecedor-routing.module';
 
+
 @NgModule({
   imports: [
     CommonModule,

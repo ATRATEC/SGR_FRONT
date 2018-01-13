@@ -19,7 +19,7 @@ import { TokenManagerService } from './token-manager.service';
 import { UserService } from './user.service';
 import { LoginService } from './login.service';
 import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
+import { NgModule, LOCALE_ID } from '@angular/core';
 import { AppComponent } from './app.component';
 import { MyMaterialModule} from './my-material/my-material.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -82,6 +82,7 @@ import { HomeComponent } from './home/home.component';
     AlertsService,
     DialogService,
     EnderecoService,
+    {provide: LOCALE_ID, useValue: 'pt-BR'}
   ],
   entryComponents: [LoginComponent, DialogComponent],
   bootstrap: [AppComponent]

@@ -93,23 +93,23 @@
           <!-- Name Column -->
           <ng-container matColumnDef="cliente">
             <mat-header-cell *matHeaderCellDef mat-sort-header> Cliente </mat-header-cell>
-            <mat-cell *matCellDef="let row"> {{row.cliente != null ? row.cliente.razao_social : ''}} </mat-cell>
+            <mat-cell *matCellDef="let row"> {{row.cliente != null ? row.cliente : ''}} </mat-cell>
           </ng-container>
 
           <!-- Name Column -->
           <ng-container matColumnDef="fornecedor">
             <mat-header-cell *matHeaderCellDef mat-sort-header> Fornecedor </mat-header-cell>
-            <mat-cell *matCellDef="let row"> {{row.fornecedor.razao_social}} </mat-cell>
+            <mat-cell *matCellDef="let row"> {{row.fornecedor}} </mat-cell>
           </ng-container>
 
           <ng-container matColumnDef="vigencia_inicio">
             <mat-header-cell *matHeaderCellDef mat-sort-header> Dt. Inicio Vigência </mat-header-cell>
-            <mat-cell *matCellDef="let row"> {{row.vigencia_inicio | formatDate}} </mat-cell>
+            <mat-cell *matCellDef="let row"> {{row.vigencia_inicio|formatDate}} </mat-cell>
           </ng-container>
 
           <ng-container matColumnDef="vigencia_final">
             <mat-header-cell *matHeaderCellDef mat-sort-header> Dt. Final Vigência </mat-header-cell>
-            <mat-cell *matCellDef="let row"> {{row.vigencia_final | formatDate}} </mat-cell>
+            <mat-cell *matCellDef="let row"> {{row.vigencia_final | date: 'dd/MM/yyyy'}} </mat-cell>
           </ng-container>
 
           <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>

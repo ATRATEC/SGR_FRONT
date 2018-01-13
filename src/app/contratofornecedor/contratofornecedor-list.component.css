@@ -45,6 +45,8 @@
   padding-left: 0px;
   font-size: 15px;
   font-weight: bold;
+  width: 100%;
+  position: relative;
 }
 
 .mat-header-row {

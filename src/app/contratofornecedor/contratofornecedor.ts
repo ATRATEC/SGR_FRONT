@@ -1,5 +1,5 @@
-import { Fornecedor } from './../fornecedor/fornecedor';
-import { Cliente } from './../cliente/cliente';
+import { Moment } from 'moment/moment';
+
 export interface ContratoFornecedorFilter {
   id: string;
   cliente: string;
@@ -13,14 +13,15 @@ export class ContratoFornecedor {
     public id: number = null,
     public id_cliente: number = null,
     public id_fornecedor: number = null,
+    public descricao: string = '',
     public vigencia_inicio: Date = null,
     public vigencia_final: Date = null,
-    public exclusivo: boolean = false,
+    public exclusico: boolean = false,
+    public observacao: string = '',
     public caminho: string = '',
-    public descricao: string = '',
     public created_at: string = '',
     public updated_at: string = '',
-    public cliente: Cliente = null,
-    public fornecedor: Fornecedor = null
+    public fornecedor: string = '',
+    public cliente: string = ''
   ) {}
 }

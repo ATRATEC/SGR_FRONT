@@ -15,14 +15,23 @@ export class ContratoFornecedorService {
 
   constructor(private _http: Http) {}
 
-  addContratoFornecedor(accessToken: string, _descricao: string): Observable<any> {
+  addContratoFornecedor(accessToken: string, _contratofornecedor: ContratoFornecedor): Observable<any> {
     const headers = new Headers({
       Accept: 'application/json',
       Authorization: 'Bearer ' + accessToken.toString().replace(/"/g, '')
     });
 
     // const _params: HttpParams = new HttpParams();
-    const _body = { descricao: _descricao };
+    const _body = {
+      id_cliente: _contratofornecedor.id_cliente,
+      id_fornecedor: _contratofornecedor.id_fornecedor,
+      descricao: _contratofornecedor.descricao,
+      vigencia_inicio: _contratofornecedor.vigencia_inicio,
+      vigencia_final: _contratofornecedor.vigencia_final,
+      exclusivo: _contratofornecedor.exclusico,
+      observacao: _contratofornecedor.observacao,
+      caminho: _contratofornecedor.caminho
+    };
     // _params.set('codigo', '1');
 
     return this._http
@@ -34,14 +43,24 @@ export class ContratoFornecedorService {
 
   }
 
-  editContratoFornecedor(accessToken: string, _id: number, _descricao: string): Observable<any> {
+  editContratoFornecedor(accessToken: string, _id: number, _contratofornecedor: ContratoFornecedor): Observable<any> {
     const headers = new Headers({
       Accept: 'application/json',
       Authorization: 'Bearer ' + accessToken.toString().replace(/"/g, '')
     });
 
     // const _params: HttpParams = new HttpParams();
-    const _body = {id: _id, descricao: _descricao };
+    const _body = {
+      id: _id,
+      id_cliente: _contratofornecedor.id_cliente,
+      id_fornecedor: _contratofornecedor.id_fornecedor,
+      descricao: _contratofornecedor.descricao,
+      vigencia_inicio: _contratofornecedor.vigencia_inicio,
+      vigencia_final: _contratofornecedor.vigencia_final,
+      exclusivo: _contratofornecedor.exclusico,
+      observacao: _contratofornecedor.observacao,
+      caminho: _contratofornecedor.caminho
+    };
     // _params.set('id', _id.toString());
 
     return this._http

@@ -1,16 +1,27 @@
+mat-icon-button.size-25 {
+  width: 25px;
+  height: 25px;
+  line-height: 25px;
+}
+
 .frm_contratofornecedor_codigo {
   min-width: 120px;
   max-width: 120px;
 }
 
 .frm_contratofornecedor_descricao {
-  min-width: 450px;
-  max-width: 500px;
+  min-width: 370px;
+  max-width: 370px;
 }
 
 .frm_contratofornecedor_razao_social {
   min-width: 320px;
   max-width: 320px;
+}
+
+.frm_contratofornecedor_data {
+  min-width: 160px;
+  max-width: 160px;
 }
 
 .frm_contratofornecedor-loading-shade {
@@ -19,9 +30,84 @@
   left: 0;
   bottom: 56px;
   right: 0; */
+  position: relative;
   background: rgba(255, 255, 255, 0.15);
   z-index: 1;
   display: flex;
   align-items: center;
   justify-content: center;
 }
+
+table {
+  font-family: Roboto, Arial, sans-serif;
+  font-size: 15px;
+  border: none;
+  border-collapse: collapse;
+  width: 100%;
+  max-height: 150px;
+  overflow: none;
+}
+
+td, th {
+  border: 1px solid #dddddd;
+  text-align: left;
+  padding: 8px;
+}
+
+th {
+  color: rgb(139, 138, 138);
+  background-color: #dddddd;
+  border-bottom-width: 1px;
+  border-bottom-color: rgb(182, 179, 179);
+  align-items: center;
+}
+
+td {
+  min-height: 25px;
+}
+
+.celula {
+  text-align: center;
+}
+
+.cell {
+  color: rgb(139, 138, 138);
+  min-height: 25px;
+  display: flex;
+  align-items: center;
+  padding-left: 0px;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+tr:nth-child(odd) {
+  background-color: #dddddd;
+}
+
+tr:nth-child(even) {
+  background-color: #ffffff;
+}
+
+.frm_contratofornecedor_servico_selecionado{
+  width: 150px;
+}
+
+.frm_contratofornecedor_servico_descricao{
+  width: 350px;
+}
+
+.frm_contratofornecedor_servico_preco{
+  width: 250px;
+}
+
+.preco {
+  border: none;
+  background-color:transparent;
+  height: 17px;
+  width: 100%
+}
+
+.preco:focus {
+  background-color:#ffffff !important;
+}
+
