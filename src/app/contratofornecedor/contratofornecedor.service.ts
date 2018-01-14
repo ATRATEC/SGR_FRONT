@@ -176,4 +176,33 @@ export class ContratoFornecedorService {
         Observable.throw(error.json() || 'Server error')
       );
   }
+
+  uploadContrato(accessToken: string, _contratofornecedor: ContratoFornecedor, _file: File): Observable<any> {
+    const UrlUpload = environment.urlbase + '/api/contratofornecedores/upload';
+    const headers = new Headers({
+      Accept: 'application/json',
+      Authorization: 'Bearer ' + accessToken.toString().replace(/"/g, '')
+    });
+
+    // const _params: HttpParams = new HttpParams();
+    // const _body = {
+    //   id_documento: _fornecedorDocumento.id,
+    //   id_fornecedor: _fornecedorDocumento.id_fornecedor,
+    //   arquivo: _file
+    // };
+
+    const formData = new FormData();
+    formData.append('arquivo', _file, _file.name);
+    formData.append('id_fornecedor', _contratofornecedor.id_fornecedor.toString());
+    formData.append('id_contrato', _contratofornecedor.id.toString());
+    // _params.set('codigo', '1');
+
+    return this._http
+      .post(UrlUpload, formData, { headers: headers})
+      .map((res: Response) => res.json())
+      .catch((error: any) =>
+        Observable.throw(error.json() || 'Server error')
+      );
+
+  }
 }

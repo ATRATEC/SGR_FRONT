@@ -81,11 +81,13 @@ export class ClienteDocumentoFormComponent implements OnInit, AfterViewInit, Aft
         this._clientedocumentoService.getClienteDocumento(this._tokenManager.retrieve(), id)
         .subscribe( data => {
           this.clientedocumento = JSON.parse(data._body);
-
-          this.linkDownload = this.linkDownload + 'CLI_' +
+          if (this.clientedocumento.caminho) {
+            this.linkDownload = this.linkDownload + 'CLI_' +
                               this.clientedocumento.id_cliente + '_DOC_' +
                               this.clientedocumento.id + '_' +
                               this.clientedocumento.caminho;
+          }
+
           this.emProcessamento = false;
           this.modelLoaded = true;
           this.valTipoDocumento.setValue(this.clientedocumento.id_tipo_documento);

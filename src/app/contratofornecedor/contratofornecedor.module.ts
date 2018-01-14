@@ -1,3 +1,6 @@
+import { CustomCurrencyMaskConfig } from './../customcurrencymaskconfig';
+import { CURRENCY_MASK_CONFIG } from 'ng2-currency-mask/src/currency-mask.config';
+import { CurrencyMaskModule } from 'ng2-currency-mask';
 import { ContratoFornecedorServicoService } from './contratofornecedorservico.service';
 import { DatepipeModule } from './../datepipe.module';
 import { MatNativeDateModule } from '@angular/material';
@@ -27,12 +30,17 @@ import { ContratoFornecedorRoutingModule } from './contratofornecedor-routing.mo
     MatNativeDateModule,
     ReactiveFormsModule,
     DatepipeModule,
+    CurrencyMaskModule,
     ContratoFornecedorRoutingModule
   ],
   declarations: [
     ContratoFornecedorListComponent,
     ContratoFornecedorFormComponent
   ],
-  providers: [ContratoFornecedorService, ContratoFornecedorServicoService]
+  providers: [
+    ContratoFornecedorService,
+    ContratoFornecedorServicoService,
+    { provide: CURRENCY_MASK_CONFIG, useValue: CustomCurrencyMaskConfig }
+  ]
 })
 export class ContratoFornecedorModule { }

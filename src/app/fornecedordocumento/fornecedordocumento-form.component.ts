@@ -82,10 +82,12 @@ export class FornecedorDocumentoFormComponent implements OnInit, AfterViewInit, 
         this._fornecedordocumentoService.getFornecedorDocumento(this._tokenManager.retrieve(), id)
         .subscribe( data => {
           this.fornecedordocumento = JSON.parse(data._body);
-          this.linkDownload = this.linkDownload + 'FOR_' +
+          if (this.fornecedordocumento.caminho) {
+            this.linkDownload = this.linkDownload + 'FOR_' +
                               this.fornecedordocumento.id_fornecedor + '_DOC_' +
                               this.fornecedordocumento.id + '_' +
                               this.fornecedordocumento.caminho;
+          }
           this.emProcessamento = false;
           this.modelLoaded = true;
           // const tp = new TipoDocumento(this.fornecedordocumento.id_tipo_documento, this.fornecedordocumento.descricao);

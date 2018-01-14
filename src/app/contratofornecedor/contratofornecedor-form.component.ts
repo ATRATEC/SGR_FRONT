@@ -80,7 +80,7 @@ export class ContratoFornecedorFormComponent
   exibeIncluir = false;
   tipodocumentos: TipoDocumento[];
   tipodocumentos2: TipoDocumento[];
-  linkDownload = environment.urlbase + '/api/documentos/downloadanexo?arquivo=';
+  linkDownload = environment.urlbase + '/api/contratos/downloadanexo?arquivo=';
   trocacor = false;
 
   valCodigo = new FormControl('', [Validators.required]);
@@ -121,10 +121,19 @@ export class ContratoFornecedorFormComponent
           .getContratoFornecedor(this._tokenManager.retrieve(), id)
           .subscribe(data => {
             this.contratofornecedor = JSON.parse(data._body);
-            // this.linkDownload = this.linkDownload + 'FOR_' +
-            //                     this.contratofornecedor.id_fornecedor + '_DOC_' +
-            //                     this.contratofornecedor.id + '_' +
-            //                     this.contratofornecedor.caminho;
+            if (JSON.parse(data._body).exclusivo === 1) {
+              this.contratofornecedor.exclusico = true;
+            } else {
+              this.contratofornecedor.exclusico = false;
+            }
+
+            if (this.contratofornecedor.caminho) {
+              this.linkDownload = this.linkDownload + 'FOR_' +
+                                this.contratofornecedor.id_fornecedor + '_CTR_' +
+                                this.contratofornecedor.id + '_' +
+                                this.contratofornecedor.caminho;
+            }
+
             this.emProcessamento = false;
             // this.modelLoaded = true;
             // const tp = new TipoDocumento(this.contratofornecedor.id_tipo_documento, this.contratofornecedor.descricao);
@@ -229,6 +238,7 @@ export class ContratoFornecedorFormComponent
 
   btnSalvar_click() {
     this.emProcessamento = true;
+    const fileBrowser = this.fileInput.nativeElement;
     if (this.validaCampos()) {
       if (!this.contratofornecedor.exclusico) {
         this.contratofornecedor.id_cliente = null;
@@ -239,6 +249,11 @@ export class ContratoFornecedorFormComponent
         this._contratofornecedorService.addContratoFornecedor(this._tokenManager.retrieve(), this.contratofornecedor)
           .subscribe( data => {
               this.contratofornecedor = data;
+              if (data.exclusivo === 1) {
+                this.contratofornecedor.exclusico = true;
+              } else {
+                this.contratofornecedor.exclusico = false;
+              }
               // Salvando lista de serviços
               for (let index = 0; index < this.contratofornecedorservicos.length; index++) {
                 if (this.contratofornecedorservicos[index].selecionado) {
@@ -265,9 +280,9 @@ export class ContratoFornecedorFormComponent
                   this.dialog.error('SGR', 'Erro ao salvar lista de serviços.', error.error + ' - Detalhe: ' + error.message);
                 }
               );
-              // if (fileBrowser.files.length > 0) {
-              //   this.uploadDocumento(this.contratofornecedor, fileBrowser.files[0]);
-              // }
+              if (fileBrowser.files.length > 0) {
+                this.uploadContrato(this.contratofornecedor, fileBrowser.files[0]);
+              }
               // this.exibeIncluir = true;
               // this.dialog.success('SGR', 'Documento salvo com sucesso.');
               // this.valTipoDocumento.setValue(this.contratofornecedor.id_tipo_documento);
@@ -289,6 +304,11 @@ export class ContratoFornecedorFormComponent
               // this.emProcessamento = false;
               // fileBrowser.files[0]
               this.contratofornecedor = data;
+              if (data.exclusivo === 1) {
+                this.contratofornecedor.exclusico = true;
+              } else {
+                this.contratofornecedor.exclusico = false;
+              }
               for (let index = 0; index < this.contratofornecedorservicos.length; index++) {
                 if (this.contratofornecedorservicos[index].selecionado) {
                   this.contratofornecedorservicos[
@@ -313,9 +333,9 @@ export class ContratoFornecedorFormComponent
                   this.dialog.error('SGR', 'Erro ao salvar lista de serviços.', error.error + ' - Detalhe: ' + error.message);
                 }
               );
-              // if (fileBrowser.files.length > 0) {
-              //   this.uploadDocumento(this.contratofornecedor, fileBrowser.files[0]);
-              // }
+              if (fileBrowser.files.length > 0) {
+                this.uploadContrato(this.contratofornecedor, fileBrowser.files[0]);
+              }
               // this.exibeIncluir = true;
               // this.dialog.success('SGR', 'Documento salvo com sucesso.');
               // this.valTipoDocumento.setValue(this.contratofornecedor.id_tipo_documento);
@@ -336,21 +356,23 @@ export class ContratoFornecedorFormComponent
     }
   }
 
-  // uploadDocumento(_fornecedorDocumento: ContratoFornecedor, _file: File) {
-  //   this._contratofornecedorService.uploadDocumento(this._tokenManager.retrieve(), _fornecedorDocumento, _file).subscribe(
-  //     data => {
-  //       this.contratofornecedor.caminho = data.anexo;
-  //       this.linkDownload = this.linkDownload + 'FOR_' +
-  //                             this.contratofornecedor.id_fornecedor + '_DOC_' +
-  //                             this.contratofornecedor.id + '_' +
-  //                             this.contratofornecedor.caminho;
-  //       // console.log('upload ok ' + data.anexo);
-  //     },
-  //     error => {
-  //       console.log('falha no upload ' + error);
-  //     },
-  //   );
-  // }
+  uploadContrato(_contratofornecedor: ContratoFornecedor, _file: File) {
+    this._contratofornecedorService.uploadContrato(this._tokenManager.retrieve(), _contratofornecedor, _file).subscribe(
+      data => {
+        this.contratofornecedor.caminho = data.anexo;
+        if (this.contratofornecedor.caminho) {
+          this.linkDownload = this.linkDownload + 'FOR_' +
+                              this.contratofornecedor.id_fornecedor + '_CTR_' +
+                              this.contratofornecedor.id + '_' +
+                              this.contratofornecedor.caminho;
+        }
+        // console.log('upload ok ' + data.anexo);
+      },
+      error => {
+        console.log('falha no upload ' + error.error + ' - ' + error.message);
+      },
+    );
+  }
 
   btnIncluir_click() {
     this.contratofornecedor = new ContratoFornecedor();
@@ -384,7 +406,6 @@ export class ContratoFornecedorFormComponent
   }
 
   validaSaida(event: string) {
-    console.log(event);
     if (event === '') {
       this.contratofornecedor.id_fornecedor = null;
       this.contratofornecedor.fornecedor = '';
@@ -489,16 +510,10 @@ export class ContratoFornecedorFormComponent
         this.contratofornecedor.id_cliente = result.id;
         this.contratofornecedor.cliente = result.razao_social;
       }
-      // console.log('The dialog was closed');
-      // alert('sua mensagem de retorno foi' + result.retorno );
-      // console.log(result.retorno);
-      // if ((result.Usuario != null) || (result.Usuario !== undefined)) {
-      //   this.Usuario = result.Usuario;
-      //   this.Logado = result.logado;
-      //   this.tokenManager.store(result.token);
-      //   localStorage.setItem('currentUser', JSON.stringify(this.Usuario));
-      //   localStorage.setItem('Logado', JSON.stringify({Logado: this.Logado}));
-      // }
     });
+  }
+
+  limpacampo(servico: ContratoFornecedorServico, event: any) {
+    servico.preco = null;
   }
 }

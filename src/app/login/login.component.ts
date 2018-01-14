@@ -55,13 +55,19 @@ export class LoginComponent implements OnInit {
           this.data.logado = data.logado;
           this.dialogLoginRef.close(this.data);
         },
-          error => this.setErroLogin(error),
-        );
+          error => {
+            this.setErroLogin(error);
+        });
     }
   }
 
-  setErroLogin(erro: string) {
-    this.msgErroLogin = erro;
+  setErroLogin(erro: any) {
+    if ((!isNullOrUndefined(erro.error)) && (isNullOrUndefined(erro.message))) {
+      this.msgErroLogin = erro.error + ' ' + erro.message;
+    } else {
+      this.msgErroLogin = 'Não foi possivel se comunicar com o servidor';
+    }
+
     this.erroLogin = true;
     this.emProcessamento = false;
   }

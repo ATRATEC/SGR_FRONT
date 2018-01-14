@@ -1,3 +1,6 @@
+import { CustomCurrencyMaskConfig } from './customcurrencymaskconfig';
+import { CURRENCY_MASK_CONFIG } from 'ng2-currency-mask/src/currency-mask.config';
+import { CurrencyMaskModule } from 'ng2-currency-mask';
 import { ContratoFornecedorModule } from './contratofornecedor/contratofornecedor.module';
 import { ServicoModule } from './servico/servico.module';
 import { UnidadeModule } from './unidade/unidade.module';
@@ -82,7 +85,9 @@ import { HomeComponent } from './home/home.component';
     AlertsService,
     DialogService,
     EnderecoService,
-    {provide: LOCALE_ID, useValue: 'pt-BR'}
+    CurrencyMaskModule,
+    {provide: LOCALE_ID, useValue: 'pt-BR'},
+    { provide: CURRENCY_MASK_CONFIG, useValue: CustomCurrencyMaskConfig }
   ],
   entryComponents: [LoginComponent, DialogComponent],
   bootstrap: [AppComponent]
