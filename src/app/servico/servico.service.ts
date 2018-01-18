@@ -63,7 +63,7 @@ export class ServicoService {
       .delete(this.servicoUrl + '/' + _id.toString(), { headers: headers })
       .map((res: Response) => res.json())
       .catch((error: any) =>
-        Observable.throw(error.json().error || 'Server error')
+        Observable.throw(error.json() || 'Server error')
       );
   }
 
@@ -77,7 +77,7 @@ export class ServicoService {
       .get(this.servicoUrl + '/' + _id.toString(), { headers: headers })
       .map((res: Response) => res)
       .catch((error: any) =>
-        Observable.throw(error.json().error || 'Server error')
+        Observable.throw(error.json() || 'Server error')
       );
   }
 
@@ -122,7 +122,7 @@ export class ServicoService {
       .get(this.servicoUrl, { headers: headers, search: search })
       .map((res: Response) => res.json())
       .catch((error: any) =>
-        Observable.throw(error.json().error || 'Server error')
+        Observable.throw(error.json() || 'Server error')
       );
   }
 

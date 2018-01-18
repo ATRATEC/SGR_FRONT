@@ -82,7 +82,7 @@ export class ContratoFornecedorService {
       .delete(this.contratofornecedorUrl + '/' + _id.toString(), { headers: headers })
       .map((res: Response) => res.json())
       .catch((error: any) =>
-        Observable.throw(error.json().error || 'Server error')
+        Observable.throw(error.json() || 'Server error')
       );
   }
 
@@ -96,7 +96,7 @@ export class ContratoFornecedorService {
       .get(this.contratofornecedorUrl + '/' + _id.toString(), { headers: headers })
       .map((res: Response) => res)
       .catch((error: any) =>
-        Observable.throw(error.json().error || 'Server error')
+        Observable.throw(error.json() || 'Server error')
       );
   }
 
@@ -158,7 +158,7 @@ export class ContratoFornecedorService {
       .get(this.contratofornecedorUrl, { headers: headers, search: search })
       .map((res: Response) => res.json())
       .catch((error: any) =>
-        Observable.throw(error.json().error || 'Server error')
+        Observable.throw(error.json() || 'Server error')
       );
   }
 

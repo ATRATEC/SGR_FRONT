@@ -45,7 +45,7 @@ export class ContratoFornecedorServicoService {
     });
 
     // const _params: HttpParams = new HttpParams();
-    const _body = {data: JSON.stringify(_contratofornecedorservico) };
+    const _body = {data: _contratofornecedorservico };
     // _params.set('id', _id.toString());
 
     return this._http
@@ -67,7 +67,7 @@ export class ContratoFornecedorServicoService {
       .delete(this.contratofornecedorservicoUrl + '/' + _id.toString(), { headers: headers })
       .map((res: Response) => res.json())
       .catch((error: any) =>
-        Observable.throw(error.json().error || 'Server error')
+        Observable.throw(error.json() || 'Server error')
       );
   }
 
@@ -81,7 +81,7 @@ export class ContratoFornecedorServicoService {
       .get(this.contratofornecedorservicoUrl + '/' + _id.toString(), { headers: headers })
       .map((res: Response) => res)
       .catch((error: any) =>
-        Observable.throw(error.json().error || 'Server error')
+        Observable.throw(error.json() || 'Server error')
       );
   }
 
@@ -143,7 +143,7 @@ export class ContratoFornecedorServicoService {
       .get(this.contratofornecedorservicoUrl, { headers: headers, search: search })
       .map((res: Response) => res.json())
       .catch((error: any) =>
-        Observable.throw(error.json().error || 'Server error')
+        Observable.throw(error.json() || 'Server error')
       );
   }
 

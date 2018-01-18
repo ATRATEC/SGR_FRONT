@@ -133,7 +133,7 @@ export class UnidadeListComponent implements OnInit, AfterViewInit {
                 this.ngOnInit();
               },
               error => {
-                this.dialog.error('SGR', 'Erro ao excluir o registro. msg: ' + error.error);
+                this.dialog.error('SGR', 'Erro ao excluir o registro.', error.error + ' - Detalhe: ' + error.message);
               },
             );
             this.selectedRowIndex = -1;

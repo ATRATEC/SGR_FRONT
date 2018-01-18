@@ -29,7 +29,7 @@ export class ProdutoService {
       .delete(this.produtoUrl + '/' + _id.toString(), { headers: headers })
       .map((res: Response) => res.json())
       .catch((error: any) =>
-        Observable.throw(error.json().error || 'Server error')
+        Observable.throw(error.json() || 'Server error')
       );
   }
 
@@ -43,7 +43,7 @@ export class ProdutoService {
       .get(this.produtoUrl + '/' + _id.toString(), { headers: headers })
       .map((res: Response) => res)
       .catch((error: any) =>
-        Observable.throw(error.json().error || 'Server error')
+        Observable.throw(error.json() || 'Server error')
       );
   }
 
@@ -91,7 +91,7 @@ export class ProdutoService {
       .get(this.produtoUrl, { headers: headers, search: search })
       .map((res: Response) => res.json())
       .catch((error: any) =>
-        Observable.throw(error.json().error || 'Server error')
+        Observable.throw(error.json() || 'Server error')
       );
   }
 }

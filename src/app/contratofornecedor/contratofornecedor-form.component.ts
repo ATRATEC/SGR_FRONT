@@ -1,3 +1,5 @@
+import { UnidadeService } from './../unidade/unidade.service';
+import { Unidade } from './../unidade/unidade';
 import { ClienteFindComponent } from './../cliente/cliente-find.component';
 import { ClienteService } from './../cliente/cliente.service';
 import { ContratoFornecedorServicoService } from './contratofornecedorservico.service';
@@ -50,10 +52,12 @@ import {
   MAT_DIALOG_DATA,
   DateAdapter,
   MAT_DATE_LOCALE,
-  MAT_DATE_FORMATS
+  MAT_DATE_FORMATS,
+  FloatPlaceholderType
 } from '@angular/material';
 import { Servico } from '../servico/servico';
 import { Cliente } from '../cliente/cliente';
+import {FormBuilder, FormGroup} from '@angular/forms';
 
 @Component({
   selector: 'app-contratofornecedor-form',
@@ -75,12 +79,15 @@ export class ContratoFornecedorFormComponent
   implements OnInit, AfterViewInit, AfterViewChecked {
   contratofornecedor: ContratoFornecedor;
   contratofornecedorservicos: ContratoFornecedorServico[];
+  unidades: Unidade[];
   emProcessamento = false;
   modelLoaded = false;
   exibeIncluir = false;
   tipodocumentos: TipoDocumento[];
   tipodocumentos2: TipoDocumento[];
   linkDownload = environment.urlbase + '/api/contratos/downloadanexo?arquivo=';
+  opt: FloatPlaceholderType;
+
   trocacor = false;
 
   valCodigo = new FormControl('', [Validators.required]);
@@ -97,14 +104,51 @@ export class ContratoFornecedorFormComponent
     private _fornecedorService: FornecedorService,
     private _clienteService: ClienteService,
     private _servicoService: ServicoService,
+    private _unidadeService: UnidadeService,
     private _tokenManager: TokenManagerService,
     private _route: ActivatedRoute,
     private dialog: DialogService,
     private pesquisa: MatDialog
-  ) {}
+  ) {
+    this.opt = 'never';
+  }
 
   validaCampos() {
-    return this.valCodigo.valid;
+    return this.valCodigo.valid && this.validaServicos();
+  }
+
+  /**
+   * Validação de Serviços marcados
+   */
+
+  validaServicos(): boolean {
+    let retorno: boolean;
+    let msgRetorno = '';
+    retorno = true;
+    for (let index = 0; index < this.contratofornecedorservicos.length; index++) {
+      const cfs = this.contratofornecedorservicos[index];
+      if (cfs.selecionado) {
+        if (cfs.unidade === '') {
+          msgRetorno = 'Unidade do serviço ' + cfs.descricao + ' deve ser informada.';
+          break;
+        }
+
+        if (msgRetorno === '') {
+          if (((isNullOrUndefined(cfs.preco_compra)) || (cfs.preco_compra === 0)) &&
+            ((isNullOrUndefined(cfs.preco_servico)) || (cfs.preco_servico === 0))) {
+              msgRetorno = 'Preço de compra ou preço de serviço deve ser informado em ' + cfs.descricao;
+              break;
+          }
+        }
+      }
+    }
+
+    if (msgRetorno !== '') {
+      retorno = false;
+      this.dialog.warning('SGR', 'Campos obrigatórios não preenchidos. ', msgRetorno);
+    }
+
+    return retorno;
   }
 
   ngOnInit() {
@@ -113,6 +157,11 @@ export class ContratoFornecedorFormComponent
     this.contratofornecedorservicos = new Array<ContratoFornecedorServico>();
     // this.contratofornecedorservicos.push(new ContratoFornecedorServico(1, 1, 1, 1, 56.87, true, '', '', 'TRANSPORTE'));
     // this.contratofornecedorservicos.push(new ContratoFornecedorServico(1, 1, 1, 1, 123.47, true, '', '', 'RECEPÇÃO'));
+    this._unidadeService.getListUnidades(this._tokenManager.retrieve()).subscribe(
+      data => {
+        this.unidades = JSON.parse(data._body);
+      }
+    );
 
     this._route.params.forEach((params: Params) => {
       const id: number = +params['id'];
@@ -168,6 +217,8 @@ export class ContratoFornecedorFormComponent
                   null,
                   null,
                   servico.id,
+                  '',
+                  null,
                   null,
                   false,
                   '',
@@ -514,6 +565,8 @@ export class ContratoFornecedorFormComponent
   }
 
   limpacampo(servico: ContratoFornecedorServico, event: any) {
-    servico.preco = null;
+    servico.preco_compra = null;
+    servico.preco_servico = null;
+    servico.unidade = '';
   }
 }

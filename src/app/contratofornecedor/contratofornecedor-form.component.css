@@ -44,7 +44,7 @@ table {
   border: none;
   border-collapse: collapse;
   width: 100%;
-  max-height: 150px;
+  max-height: 100px;
   overflow: none;
 }
 
@@ -63,7 +63,8 @@ th {
 }
 
 td {
-  min-height: 25px;
+  min-height: 18px;
+  max-height: 18px;
 }
 
 .celula {
@@ -72,7 +73,8 @@ td {
 
 .cell {
   color: rgb(139, 138, 138);
-  min-height: 25px;
+  min-height: 18px;
+  max-height: 18px;
   display: flex;
   align-items: center;
   padding-left: 0px;
@@ -89,15 +91,19 @@ tr:nth-child(even) {
 }
 
 .frm_contratofornecedor_servico_selecionado{
-  width: 150px;
+  width: 100px;
 }
 
 .frm_contratofornecedor_servico_descricao{
-  width: 350px;
+  width: 250px;
+}
+
+.frm_contratofornecedor_servico_unidade{
+  width: 90px;
 }
 
 .frm_contratofornecedor_servico_preco{
-  width: 250px;
+  width: 230px;
 }
 
 .preco {

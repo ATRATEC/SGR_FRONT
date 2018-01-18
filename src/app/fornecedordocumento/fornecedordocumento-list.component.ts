@@ -125,7 +125,7 @@ export class FornecedorDocumentoListComponent implements OnInit, AfterViewInit {
 
   excluirRegistro() {
     if (this.validaSelecao()) {
-      this.dialog.question('SGR', 'Deseja realmente excluir o fornecedordocumento: ' + this.selectedRow.id + '?').subscribe(
+      this.dialog.question('SGR', 'Deseja realmente excluir o documento : ' + this.selectedRow.id + '?').subscribe(
         result => {
           if (result.retorno) {
             this._fornecedordocumentoService.deleteFornecedorDocumento(this._tokenManager.retrieve(), this.selectedRow.id).subscribe(
@@ -134,7 +134,7 @@ export class FornecedorDocumentoListComponent implements OnInit, AfterViewInit {
                 this.ngOnInit();
               },
               error => {
-                this.dialog.error('SGR', 'Erro ao excluir o registro. msg: ' + error.error);
+                this.dialog.error('SGR', 'Erro ao excluir o registro.', error.error + ' - Detalhe: ' + error.message);
               },
             );
             this.selectedRowIndex = -1;
