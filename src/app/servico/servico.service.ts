@@ -136,6 +136,7 @@ export class ServicoService {
     return this._http
       .get(listUrl, { headers: headers })
       .map((res: Response) => res)
+      .retry(3)
       .catch((error: any) =>
         Observable.throw(error.json() || 'Server error')
       );

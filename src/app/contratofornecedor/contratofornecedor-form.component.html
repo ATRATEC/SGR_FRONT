@@ -153,7 +153,7 @@
                             <mat-checkbox class="example-margin" [(ngModel)]="servico.selecionado" (click)="limpacampo(servico,$event)"></mat-checkbox>
                           </td>
                           <td class="frm_contratofornecedor_servico_descricao">
-                            {{servico.descricao}}
+                            {{servico.servico}}
                           </td>
                           <td class="frm_contratofornecedor_servico_unidade" style="max-height: 18px;">
                             <select class="preco" [(ngModel)]="servico.unidade" style="max-height: 18px;" [disabled]="!servico.selecionado" [required]="servico.selecionado" >

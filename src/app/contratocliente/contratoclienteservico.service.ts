@@ -1,7 +1,7 @@
 import { environment } from './../../environments/environment';
 import { isEmpty } from 'rxjs/operators';
 import { isNullOrUndefined } from 'util';
-import { Residuo, ResiduoFilter } from './residuo';
+import { ContratoClienteServico, ContratoClienteServicoFilter } from './contratoclienteservico';
 import { Injectable } from '@angular/core';
 import 'rxjs/add/observable/of';
 import 'rxjs/add/operator/map';
@@ -10,23 +10,26 @@ import { Http, Headers, Response, RequestOptions, URLSearchParams } from '@angul
 import { HttpErrorResponse, HttpParams } from '@angular/common/http';
 
 @Injectable()
-export class ResiduoService {
-  private residuoUrl = environment.urlbase + '/api/residuos';
+export class ContratoClienteServicoService {
+  private contratoclienteservicoUrl = environment.urlbase + '/api/contratoclienteservicos';
 
   constructor(private _http: Http) {}
 
-  addResiduo(accessToken: string, _descricao: string, _id_classe: number): Observable<any> {
+  addContratoClienteServico(accessToken: string, _id: number, _contratoclienteservico: ContratoClienteServico[]): Observable<any> {
     const headers = new Headers({
       Accept: 'application/json',
       Authorization: 'Bearer ' + accessToken.toString().replace(/"/g, '')
     });
 
     // const _params: HttpParams = new HttpParams();
-    const _body = { descricao: _descricao, id_classe: _id_classe };
+    const _body = {
+      id: _id,
+      data: _contratoclienteservico
+    };
     // _params.set('codigo', '1');
 
     return this._http
-      .post(this.residuoUrl, _body, { headers: headers})
+      .post(this.contratoclienteservicoUrl, _body, { headers: headers})
       .map((res: Response) => res.json())
       .catch((error: any) =>
         Observable.throw(error.json() || 'Server error')
@@ -34,18 +37,19 @@ export class ResiduoService {
 
   }
 
-  editResiduo(accessToken: string, _id: number, _descricao: string, _id_classe: number): Observable<any> {
+  editContratoClienteServico(accessToken: string, _id: number,
+    _contratoclienteservico: ContratoClienteServico[]): Observable<any> {
     const headers = new Headers({
       Accept: 'application/json',
       Authorization: 'Bearer ' + accessToken.toString().replace(/"/g, '')
     });
 
     // const _params: HttpParams = new HttpParams();
-    const _body = {id: _id, descricao: _descricao, id_classe: _id_classe };
+    const _body = {data: _contratoclienteservico };
     // _params.set('id', _id.toString());
 
     return this._http
-      .put(this.residuoUrl + '/' + _id.toString(), _body, { headers: headers })
+      .put(this.contratoclienteservicoUrl + '/' + _id.toString(), _body, { headers: headers })
       .map((res: Response) => res.json())
       .catch((error: any) =>
         Observable.throw(error.json() || 'Server error')
@@ -53,38 +57,39 @@ export class ResiduoService {
 
   }
 
-  deleteResiduo(accessToken: string, _id: number) {
+  deleteContratoClienteServico(accessToken: string, _id: number) {
     const headers = new Headers({
       Accept: 'application/json',
       Authorization: 'Bearer ' + accessToken.toString().replace(/"/g, '')
     });
 
     return this._http
-      .delete(this.residuoUrl + '/' + _id.toString(), { headers: headers })
+      .delete(this.contratoclienteservicoUrl + '/' + _id.toString(), { headers: headers })
       .map((res: Response) => res.json())
       .catch((error: any) =>
         Observable.throw(error.json() || 'Server error')
       );
   }
 
-  getResiduo(accessToken: string, _id: number)  {
+  getContratoClienteServico(accessToken: string, _id: number)  {
     const headers = new Headers({
       Accept: 'application/json',
       Authorization: 'Bearer ' + accessToken.toString().replace(/"/g, '')
     });
 
     return this._http
-      .get(this.residuoUrl + '/' + _id.toString(), { headers: headers })
+      .get(this.contratoclienteservicoUrl + '/' + _id.toString(), { headers: headers })
       .map((res: Response) => res)
       .catch((error: any) =>
         Observable.throw(error.json() || 'Server error')
       );
   }
 
-  /** Metodo que retorna um observable com dados da listagem de residuos
+  /** Metodo que retorna um observable com dados da listagem de contratoclienteservicos
    *  parametro: acessToken: string
   */
-  getResiduos(accessToken: string, sort: string, order: string, page: number, pagesize: number, filter: ResiduoFilter) {
+  getContratoClienteServicos(accessToken: string, sort: string, order: string, page: number,
+                         pagesize: number, filter: ContratoClienteServicoFilter) {
     const headers = new Headers({
       Accept: 'application/json',
       Authorization: 'Bearer ' + accessToken.toString().replace(/"/g, '')
@@ -114,20 +119,36 @@ export class ResiduoService {
       search.set('id', filter.id.toString());
     }
 
-    if ((!isNullOrUndefined(filter.descricao)) && (filter.descricao.length > 0)) {
-      search.set('descricao', filter.descricao);
+    // if ((!isNullOrUndefined(filter.descricao)) && (filter.descricao.length > 0)) {
+    //   search.set('descricao', filter.descricao);
+    // }
+
+    // if ((!isNullOrUndefined(filter.cliente)) && (filter.cliente.length > 0)) {
+    //   search.set('cliente', filter.cliente);
+    // }
+
+    if ((!isNullOrUndefined(filter.cliente)) && (filter.cliente.length > 0)) {
+      search.set('cliente', filter.cliente);
     }
 
+    // if ((!isNullOrUndefined(filter.vigencia_inicio)) && (filter.vigencia_inicio.length > 0)) {
+    //   search.set('vigencia_inicio', filter.vigencia_inicio);
+    // }
+
+    // if ((!isNullOrUndefined(filter.vigencia_final)) && (filter.vigencia_final.length > 0)) {
+    //   search.set('vigencia_final', filter.vigencia_final);
+    // }
+
     return this._http
-      .get(this.residuoUrl, { headers: headers, search: search })
+      .get(this.contratoclienteservicoUrl, { headers: headers, search: search })
       .map((res: Response) => res.json())
       .catch((error: any) =>
         Observable.throw(error.json() || 'Server error')
       );
   }
 
-  getListResiduos(accessToken: string)  {
-    const listUrl = environment.urlbase + '/api/listresiduos';
+  getListContratoClienteServicos(accessToken: string)  {
+    const listUrl = environment.urlbase + '/api/listcontratoclienteservicos';
     const headers = new Headers({
       Accept: 'application/json',
       Authorization: 'Bearer ' + accessToken.toString().replace(/"/g, '')
@@ -136,7 +157,6 @@ export class ResiduoService {
     return this._http
       .get(listUrl, { headers: headers })
       .map((res: Response) => res)
-      .retry(3)
       .catch((error: any) =>
         Observable.throw(error.json() || 'Server error')
       );

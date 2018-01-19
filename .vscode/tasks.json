@@ -17,6 +17,11 @@
           "kind": "build",
           "isDefault": true
         }
+      },
+      {
+        "type": "npm",
+        "script": "ng",
+        "problemMatcher": []
       }
     ]
   }

@@ -88,8 +88,7 @@ export class ContratoFornecedorServicoService {
   /** Metodo que retorna um observable com dados da listagem de contratofornecedorservicos
    *  parametro: acessToken: string
   */
-  getContratoFornecedorServicos(accessToken: string, sort: string, order: string, page: number,
-                         pagesize: number, filter: ContratoFornecedorServicoFilter) {
+  getContratoFornecedorServicos(accessToken: string, filter: ContratoFornecedorServicoFilter) {
     const headers = new Headers({
       Accept: 'application/json',
       Authorization: 'Bearer ' + accessToken.toString().replace(/"/g, '')
@@ -97,51 +96,30 @@ export class ContratoFornecedorServicoService {
 
     const params: HttpParams = new HttpParams();
     const search: URLSearchParams =  new URLSearchParams();
-    search.set('nrcount', pagesize.toString());
-    page++;
-    search.set('page', page.toString());
-
-    if ((!isNullOrUndefined(order)) && (order.length > 0)) {
-      search.set('order', order);
-    } else {
-      order = 'asc';
-      search.set('order', order);
-    }
-
-    if ((!isNullOrUndefined(sort))) {
-      search.set('orderkey', sort);
-    } else {
-      sort = 'id';
-      search.set('orderkey', sort);
-    }
 
     if ((!isNullOrUndefined(filter.id)) && (filter.id.toString().length > 0)) {
       search.set('id', filter.id.toString());
     }
 
-    // if ((!isNullOrUndefined(filter.descricao)) && (filter.descricao.length > 0)) {
-    //   search.set('descricao', filter.descricao);
-    // }
-
-    // if ((!isNullOrUndefined(filter.cliente)) && (filter.cliente.length > 0)) {
-    //   search.set('cliente', filter.cliente);
-    // }
-
-    if ((!isNullOrUndefined(filter.fornecedor)) && (filter.fornecedor.length > 0)) {
-      search.set('fornecedor', filter.fornecedor);
+    if ((!isNullOrUndefined(filter.id_cliente)) && (filter.id_cliente.toString().length > 0)) {
+      search.set('id_cliente', filter.id_cliente.toString());
     }
 
-    // if ((!isNullOrUndefined(filter.vigencia_inicio)) && (filter.vigencia_inicio.length > 0)) {
-    //   search.set('vigencia_inicio', filter.vigencia_inicio);
-    // }
+    if ((!isNullOrUndefined(filter.id_contrato)) && (filter.id_contrato.toString().length > 0)) {
+      search.set('id_contrato', filter.id_contrato.toString());
+    }
 
-    // if ((!isNullOrUndefined(filter.vigencia_final)) && (filter.vigencia_final.length > 0)) {
-    //   search.set('vigencia_final', filter.vigencia_final);
-    // }
+    if ((!isNullOrUndefined(filter.id_servico)) && (filter.id_servico.toString().length > 0)) {
+      search.set('id_servico', filter.id_servico.toString());
+    }
+
+    if ((!isNullOrUndefined(filter.unidade)) && (filter.unidade.toString().length > 0)) {
+      search.set('unidade', filter.unidade);
+    }
 
     return this._http
       .get(this.contratofornecedorservicoUrl, { headers: headers, search: search })
-      .map((res: Response) => res.json())
+      .map((res: Response) => res)
       .catch((error: any) =>
         Observable.throw(error.json() || 'Server error')
       );

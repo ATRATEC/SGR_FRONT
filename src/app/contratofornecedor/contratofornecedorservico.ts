@@ -1,9 +1,20 @@
+import { ContratoFornecedorFilter } from './contratofornecedor';
 export interface ContratoFornecedorServicoFilter {
-  id: string;
-  fornecedor: string;
-  descricao: string;
-  vigencia_inicio: string;
-  vigencia_final: string;
+  id: number;
+  id_cliente: number;
+  id_contrato: number;
+  id_servico: number;
+  unidade: string;
+}
+
+export class ContratoFornecedorServicoFiltro implements ContratoFornecedorServicoFilter {
+  constructor(
+    public id: number = null,
+    public id_cliente: number = null,
+    public id_contrato: number = null,
+    public id_servico: number = null,
+    public unidade: string = '',
+  ) {}
 }
 export class ContratoFornecedorServico {
   constructor(
@@ -17,6 +28,7 @@ export class ContratoFornecedorServico {
     public selecionado: boolean = false,
     public created_at: string = '',
     public updated_at: string = '',
-    public descricao: string = '',
+    public servico: string = '',
+    public fornecedor: string = ''
   ) {}
 }

@@ -1,3 +1,4 @@
+import { ContratoClienteModule } from './contratocliente/contratocliente.module';
 import { CustomCurrencyMaskConfig } from './customcurrencymaskconfig';
 import { CURRENCY_MASK_CONFIG } from 'ng2-currency-mask/src/currency-mask.config';
 import { CurrencyMaskModule } from 'ng2-currency-mask';
@@ -75,6 +76,7 @@ import { HomeComponent } from './home/home.component';
     ResiduoModule,
     ServicoModule,
     ContratoFornecedorModule,
+    ContratoClienteModule,
     AppRoutingModule
   ],
   providers: [

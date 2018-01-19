@@ -1,7 +1,7 @@
 import { environment } from './../../environments/environment';
 import { isEmpty } from 'rxjs/operators';
 import { isNullOrUndefined } from 'util';
-import { Unidade, UnidadeFilter } from './unidade';
+import { ContratoCliente, ContratoClienteFilter } from './contratocliente';
 import { Injectable } from '@angular/core';
 import 'rxjs/add/observable/of';
 import 'rxjs/add/operator/map';
@@ -10,12 +10,12 @@ import { Http, Headers, Response, RequestOptions, URLSearchParams } from '@angul
 import { HttpErrorResponse, HttpParams } from '@angular/common/http';
 
 @Injectable()
-export class UnidadeService {
-  private unidadeUrl = environment.urlbase + '/api/unidades';
+export class ContratoClienteService {
+  private contratoclienteUrl = environment.urlbase + '/api/contratoclientes';
 
   constructor(private _http: Http) {}
 
-  addUnidade(accessToken: string, _codigo: string, _descricao: string): Observable<any> {
+  addContratoCliente(accessToken: string, _contratocliente: ContratoCliente): Observable<any> {
     const headers = new Headers({
       Accept: 'application/json',
       Authorization: 'Bearer ' + accessToken.toString().replace(/"/g, '')
@@ -23,13 +23,18 @@ export class UnidadeService {
 
     // const _params: HttpParams = new HttpParams();
     const _body = {
-      codigo: _codigo,
-      descricao: _descricao
+      id_cliente: _contratocliente.id_cliente,
+      descricao: _contratocliente.descricao,
+      vigencia_inicio: _contratocliente.vigencia_inicio,
+      vigencia_final: _contratocliente.vigencia_final,
+      exclusivo: _contratocliente.exclusico,
+      observacao: _contratocliente.observacao,
+      caminho: _contratocliente.caminho
     };
     // _params.set('codigo', '1');
 
     return this._http
-      .post(this.unidadeUrl, _body, { headers: headers})
+      .post(this.contratoclienteUrl, _body, { headers: headers})
       .map((res: Response) => res.json())
       .catch((error: any) =>
         Observable.throw(error.json() || 'Server error')
@@ -37,7 +42,7 @@ export class UnidadeService {
 
   }
 
-  editUnidade(accessToken: string, _id: number, _codigo: string, _descricao: string): Observable<any> {
+  editContratoCliente(accessToken: string, _id: number, _contratocliente: ContratoCliente): Observable<any> {
     const headers = new Headers({
       Accept: 'application/json',
       Authorization: 'Bearer ' + accessToken.toString().replace(/"/g, '')
@@ -46,13 +51,18 @@ export class UnidadeService {
     // const _params: HttpParams = new HttpParams();
     const _body = {
       id: _id,
-      codigo: _codigo,
-      descricao: _descricao
+      id_cliente: _contratocliente.id_cliente,
+      descricao: _contratocliente.descricao,
+      vigencia_inicio: _contratocliente.vigencia_inicio,
+      vigencia_final: _contratocliente.vigencia_final,
+      exclusivo: _contratocliente.exclusico,
+      observacao: _contratocliente.observacao,
+      caminho: _contratocliente.caminho
     };
     // _params.set('id', _id.toString());
 
     return this._http
-      .put(this.unidadeUrl + '/' + _id.toString(), _body, { headers: headers })
+      .put(this.contratoclienteUrl + '/' + _id.toString(), _body, { headers: headers })
       .map((res: Response) => res.json())
       .catch((error: any) =>
         Observable.throw(error.json() || 'Server error')
@@ -60,38 +70,39 @@ export class UnidadeService {
 
   }
 
-  deleteUnidade(accessToken: string, _id: number) {
+  deleteContratoCliente(accessToken: string, _id: number) {
     const headers = new Headers({
       Accept: 'application/json',
       Authorization: 'Bearer ' + accessToken.toString().replace(/"/g, '')
     });
 
     return this._http
-      .delete(this.unidadeUrl + '/' + _id.toString(), { headers: headers })
+      .delete(this.contratoclienteUrl + '/' + _id.toString(), { headers: headers })
       .map((res: Response) => res.json())
       .catch((error: any) =>
         Observable.throw(error.json() || 'Server error')
       );
   }
 
-  getUnidade(accessToken: string, _id: number)  {
+  getContratoCliente(accessToken: string, _id: number)  {
     const headers = new Headers({
       Accept: 'application/json',
       Authorization: 'Bearer ' + accessToken.toString().replace(/"/g, '')
     });
 
     return this._http
-      .get(this.unidadeUrl + '/' + _id.toString(), { headers: headers })
+      .get(this.contratoclienteUrl + '/' + _id.toString(), { headers: headers })
       .map((res: Response) => res)
       .catch((error: any) =>
         Observable.throw(error.json() || 'Server error')
       );
   }
 
-  /** Metodo que retorna um observable com dados da listagem de unidades
+  /** Metodo que retorna um observable com dados da listagem de contratoclientes
    *  parametro: acessToken: string
   */
-  getUnidades(accessToken: string, sort: string, order: string, page: number, pagesize: number, filter: UnidadeFilter) {
+  getContratoClientes(accessToken: string, sort: string, order: string, page: number,
+                         pagesize: number, filter: ContratoClienteFilter) {
     const headers = new Headers({
       Accept: 'application/json',
       Authorization: 'Bearer ' + accessToken.toString().replace(/"/g, '')
@@ -121,24 +132,32 @@ export class UnidadeService {
       search.set('id', filter.id.toString());
     }
 
-    if ((!isNullOrUndefined(filter.codigo)) && (filter.codigo.length > 0)) {
-      search.set('codigo', filter.codigo);
-    }
-
     if ((!isNullOrUndefined(filter.descricao)) && (filter.descricao.length > 0)) {
       search.set('descricao', filter.descricao);
     }
 
+    if ((!isNullOrUndefined(filter.cliente)) && (filter.cliente.length > 0)) {
+      search.set('cliente', filter.cliente);
+    }
+
+    if ((!isNullOrUndefined(filter.vigencia_inicio)) && (filter.vigencia_inicio.length > 0)) {
+      search.set('vigencia_inicio', filter.vigencia_inicio);
+    }
+
+    if ((!isNullOrUndefined(filter.vigencia_final)) && (filter.vigencia_final.length > 0)) {
+      search.set('vigencia_final', filter.vigencia_final);
+    }
+
     return this._http
-      .get(this.unidadeUrl, { headers: headers, search: search })
+      .get(this.contratoclienteUrl, { headers: headers, search: search })
       .map((res: Response) => res.json())
       .catch((error: any) =>
         Observable.throw(error.json() || 'Server error')
       );
   }
 
-  getListUnidades(accessToken: string)  {
-    const listUrl = environment.urlbase + '/api/listunidades';
+  getListContratoClientes(accessToken: string)  {
+    const listUrl = environment.urlbase + '/api/listcontratoclientes';
     const headers = new Headers({
       Accept: 'application/json',
       Authorization: 'Bearer ' + accessToken.toString().replace(/"/g, '')
@@ -147,11 +166,37 @@ export class UnidadeService {
     return this._http
       .get(listUrl, { headers: headers })
       .map((res: Response) => res)
-      .retry(3)
       .catch((error: any) =>
         Observable.throw(error.json() || 'Server error')
       );
   }
 
+  uploadContrato(accessToken: string, _contratocliente: ContratoCliente, _file: File): Observable<any> {
+    const UrlUpload = environment.urlbase + '/api/contratoclientes/upload';
+    const headers = new Headers({
+      Accept: 'application/json',
+      Authorization: 'Bearer ' + accessToken.toString().replace(/"/g, '')
+    });
 
+    // const _params: HttpParams = new HttpParams();
+    // const _body = {
+    //   id_documento: _clienteDocumento.id,
+    //   id_cliente: _clienteDocumento.id_cliente,
+    //   arquivo: _file
+    // };
+
+    const formData = new FormData();
+    formData.append('arquivo', _file, _file.name);
+    formData.append('id_cliente', _contratocliente.id_cliente.toString());
+    formData.append('id_contrato', _contratocliente.id.toString());
+    // _params.set('codigo', '1');
+
+    return this._http
+      .post(UrlUpload, formData, { headers: headers})
+      .map((res: Response) => res.json())
+      .catch((error: any) =>
+        Observable.throw(error.json() || 'Server error')
+      );
+
+  }
 }

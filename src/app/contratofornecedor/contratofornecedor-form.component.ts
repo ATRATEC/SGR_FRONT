@@ -129,14 +129,14 @@ export class ContratoFornecedorFormComponent
       const cfs = this.contratofornecedorservicos[index];
       if (cfs.selecionado) {
         if (cfs.unidade === '') {
-          msgRetorno = 'Unidade do serviço ' + cfs.descricao + ' deve ser informada.';
+          msgRetorno = 'Unidade do serviço ' + cfs.servico + ' deve ser informada.';
           break;
         }
 
         if (msgRetorno === '') {
           if (((isNullOrUndefined(cfs.preco_compra)) || (cfs.preco_compra === 0)) &&
             ((isNullOrUndefined(cfs.preco_servico)) || (cfs.preco_servico === 0))) {
-              msgRetorno = 'Preço de compra ou preço de serviço deve ser informado em ' + cfs.descricao;
+              msgRetorno = 'Preço de compra ou preço de serviço deve ser informado em ' + cfs.servico;
               break;
           }
         }
@@ -223,7 +223,8 @@ export class ContratoFornecedorFormComponent
                   false,
                   '',
                   '',
-                  servico.descricao
+                  servico.descricao,
+                  ''
                 )
               );
             }
