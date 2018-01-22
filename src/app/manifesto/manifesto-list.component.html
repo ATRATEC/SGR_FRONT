@@ -27,9 +27,8 @@
     <div fxLayout="column" fxLayoutAlign="center center" fxLayoutGap="10px">
       <div fxFlex="33px" fxFlexAlign="start" style="padding: 10px;">
         <button id="lblTitulo" mat-raised-button style="width: 100%" disabled>
-          <i class="fa fa-book" aria-hidden="true"></i>
-          <i class="fa fa-users" aria-hidden="true"></i>
-          <span>CONTRATOS DE CLIENTES</span>
+          <i class="fa fa-recycle" aria-hidden="true"></i>
+          <span>MANIFESTOS DE TRANSPORTE</span>
         </button>
       </div>
       <div fxFlex="47px" fxFlexAlign="start" style="width: 100%">
@@ -40,10 +39,10 @@
                 <input matInput #filter placeholder="Código" [formControl]="idFilter">
               </mat-form-field>
             </td>
-            <td class="mat-column-descricao">
+            <td class="mat-column-numero">
               <!-- style="width: 500px" -->
-              <mat-form-field class="mat-column-descricao">
-                <input matInput #filter placeholder="Descrição" [formControl]="descricaoFilter">
+              <mat-form-field class="mat-column-numero">
+                <input matInput #filter placeholder="Numero" [formControl]="numeroFilter">
               </mat-form-field>
             </td>
             <td class="mat-column-cliente">
@@ -52,16 +51,10 @@
                 <input matInput #filter placeholder="Cliente" [formControl]="clienteFilter">
               </mat-form-field>
             </td>
-            <td class="mat-column-vigencia_inicio">
+            <td class="mat-column-data">
               <!-- style="width: 500px" -->
-              <mat-form-field class="mat-column-vigencia_inicio">
-                <input matInput type="date" #filter placeholder="Dt. Inicio Vigência" [formControl]="vigenciaInicioFilter">
-              </mat-form-field>
-            </td>
-            <td class="mat-column-vigencia_final">
-              <!-- style="width: 500px" -->
-              <mat-form-field class="mat-column-vigencia_final">
-                <input matInput type="date" #filter placeholder="Dt. Final Vigência" [formControl]="vigenciaFinalFilter">
+              <mat-form-field class="mat-column-data">
+                <input matInput type="date" #filter placeholder="Data" [formControl]="dataFilter">
               </mat-form-field>
             </td>
           </tr>
@@ -80,9 +73,9 @@
           </ng-container>
 
           <!-- Name Column -->
-          <ng-container matColumnDef="descricao">
-            <mat-header-cell *matHeaderCellDef mat-sort-header> Descrição </mat-header-cell>
-            <mat-cell *matCellDef="let row"> {{row.descricao}} </mat-cell>
+          <ng-container matColumnDef="numero">
+            <mat-header-cell *matHeaderCellDef mat-sort-header> Numero </mat-header-cell>
+            <mat-cell *matCellDef="let row"> {{row.numero}} </mat-cell>
           </ng-container>
 
           <!-- Name Column -->
@@ -91,14 +84,9 @@
             <mat-cell *matCellDef="let row"> {{row.cliente != null ? row.cliente : ''}} </mat-cell>
           </ng-container>
 
-          <ng-container matColumnDef="vigencia_inicio">
-            <mat-header-cell *matHeaderCellDef mat-sort-header> Dt. Inicio Vigência </mat-header-cell>
-            <mat-cell *matCellDef="let row"> {{row.vigencia_inicio|formatDate}} </mat-cell>
-          </ng-container>
-
-          <ng-container matColumnDef="vigencia_final">
-            <mat-header-cell *matHeaderCellDef mat-sort-header> Dt. Final Vigência </mat-header-cell>
-            <mat-cell *matCellDef="let row"> {{row.vigencia_final | date: 'dd/MM/yyyy'}} </mat-cell>
+          <ng-container matColumnDef="data">
+            <mat-header-cell *matHeaderCellDef mat-sort-header> Data </mat-header-cell>
+            <mat-cell *matCellDef="let row"> {{row.data|formatDate}} </mat-cell>
           </ng-container>
 
           <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>

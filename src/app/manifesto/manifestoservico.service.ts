@@ -1,7 +1,7 @@
 import { environment } from './../../environments/environment';
 import { isEmpty } from 'rxjs/operators';
 import { isNullOrUndefined } from 'util';
-import { TipoTratamento, TipoTratamentoFilter } from './tipotratamento';
+import { ManifestoServico, ManifestoServicoFilter } from './manifestoservico';
 import { Injectable } from '@angular/core';
 import 'rxjs/add/observable/of';
 import 'rxjs/add/operator/map';
@@ -10,23 +10,26 @@ import { Http, Headers, Response, RequestOptions, URLSearchParams } from '@angul
 import { HttpErrorResponse, HttpParams } from '@angular/common/http';
 
 @Injectable()
-export class TipoTratamentoService {
-  private tipotratamentoUrl = environment.urlbase + '/api/tipotratamentos';
+export class ManifestoServicoService {
+  private manifestoservicoUrl = environment.urlbase + '/api/manifestoservicos';
 
   constructor(private _http: Http) {}
 
-  addTipoTratamento(accessToken: string, _descricao: string): Observable<any> {
+  addManifestoServico(accessToken: string, _id: number, _manifestoservico: ManifestoServico[]): Observable<any> {
     const headers = new Headers({
       Accept: 'application/json',
       Authorization: 'Bearer ' + accessToken.toString().replace(/"/g, '')
     });
 
     // const _params: HttpParams = new HttpParams();
-    const _body = { descricao: _descricao };
+    const _body = {
+      id: _id,
+      data: _manifestoservico
+    };
     // _params.set('codigo', '1');
 
     return this._http
-      .post(this.tipotratamentoUrl, _body, { headers: headers})
+      .post(this.manifestoservicoUrl, _body, { headers: headers})
       .map((res: Response) => res.json())
       .catch((error: any) =>
         Observable.throw(error.json() || 'Server error')
@@ -34,18 +37,19 @@ export class TipoTratamentoService {
 
   }
 
-  editTipoTratamento(accessToken: string, _id: number, _descricao: string): Observable<any> {
+  editManifestoServico(accessToken: string, _id: number,
+    _manifestoservico: ManifestoServico[]): Observable<any> {
     const headers = new Headers({
       Accept: 'application/json',
       Authorization: 'Bearer ' + accessToken.toString().replace(/"/g, '')
     });
 
     // const _params: HttpParams = new HttpParams();
-    const _body = {id: _id, descricao: _descricao };
+    const _body = {data: _manifestoservico };
     // _params.set('id', _id.toString());
 
     return this._http
-      .put(this.tipotratamentoUrl + '/' + _id.toString(), _body, { headers: headers })
+      .put(this.manifestoservicoUrl + '/' + _id.toString(), _body, { headers: headers })
       .map((res: Response) => res.json())
       .catch((error: any) =>
         Observable.throw(error.json() || 'Server error')
@@ -53,38 +57,39 @@ export class TipoTratamentoService {
 
   }
 
-  deleteTipoTratamento(accessToken: string, _id: number) {
+  deleteManifestoServico(accessToken: string, _id: number) {
     const headers = new Headers({
       Accept: 'application/json',
       Authorization: 'Bearer ' + accessToken.toString().replace(/"/g, '')
     });
 
     return this._http
-      .delete(this.tipotratamentoUrl + '/' + _id.toString(), { headers: headers })
+      .delete(this.manifestoservicoUrl + '/' + _id.toString(), { headers: headers })
       .map((res: Response) => res.json())
       .catch((error: any) =>
         Observable.throw(error.json() || 'Server error')
       );
   }
 
-  getTipoTratamento(accessToken: string, _id: number)  {
+  getManifestoServico(accessToken: string, _id: number)  {
     const headers = new Headers({
       Accept: 'application/json',
       Authorization: 'Bearer ' + accessToken.toString().replace(/"/g, '')
     });
 
     return this._http
-      .get(this.tipotratamentoUrl + '/' + _id.toString(), { headers: headers })
+      .get(this.manifestoservicoUrl + '/' + _id.toString(), { headers: headers })
       .map((res: Response) => res)
       .catch((error: any) =>
         Observable.throw(error.json() || 'Server error')
       );
   }
 
-  /** Metodo que retorna um observable com dados da listagem de tipotratamentos
+  /** Metodo que retorna um observable com dados da listagem de manifestoservicos
    *  parametro: acessToken: string
   */
-  getTipoTratamentos(accessToken: string, sort: string, order: string, page: number, pagesize: number, filter: TipoTratamentoFilter) {
+  getManifestoServicos(accessToken: string, sort: string, order: string, page: number,
+                         pagesize: number, filter: ManifestoServicoFilter) {
     const headers = new Headers({
       Accept: 'application/json',
       Authorization: 'Bearer ' + accessToken.toString().replace(/"/g, '')
@@ -114,20 +119,36 @@ export class TipoTratamentoService {
       search.set('id', filter.id.toString());
     }
 
-    if ((!isNullOrUndefined(filter.descricao)) && (filter.descricao.length > 0)) {
-      search.set('descricao', filter.descricao);
-    }
+    // if ((!isNullOrUndefined(filter.descricao)) && (filter.descricao.length > 0)) {
+    //   search.set('descricao', filter.descricao);
+    // }
+
+    // if ((!isNullOrUndefined(filter.cliente)) && (filter.cliente.length > 0)) {
+    //   search.set('cliente', filter.cliente);
+    // }
+
+    // if ((!isNullOrUndefined(filter.cliente)) && (filter.cliente.length > 0)) {
+    //   search.set('cliente', filter.cliente);
+    // }
+
+    // if ((!isNullOrUndefined(filter.vigencia_inicio)) && (filter.vigencia_inicio.length > 0)) {
+    //   search.set('vigencia_inicio', filter.vigencia_inicio);
+    // }
+
+    // if ((!isNullOrUndefined(filter.vigencia_final)) && (filter.vigencia_final.length > 0)) {
+    //   search.set('vigencia_final', filter.vigencia_final);
+    // }
 
     return this._http
-      .get(this.tipotratamentoUrl, { headers: headers, search: search })
+      .get(this.manifestoservicoUrl, { headers: headers, search: search })
       .map((res: Response) => res.json())
       .catch((error: any) =>
         Observable.throw(error.json() || 'Server error')
       );
   }
 
-  getListTipoTratamento(accessToken: string)  {
-    const listUrl = environment.urlbase + '/api/listtipotratamentos';
+  getListManifestoServicos(accessToken: string)  {
+    const listUrl = environment.urlbase + '/api/listmanifestoservicos';
     const headers = new Headers({
       Accept: 'application/json',
       Authorization: 'Bearer ' + accessToken.toString().replace(/"/g, '')

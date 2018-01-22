@@ -1,7 +1,7 @@
 import { environment } from './../../environments/environment';
 import { isEmpty } from 'rxjs/operators';
 import { isNullOrUndefined } from 'util';
-import { ContratoCliente, ContratoClienteFilter } from './contratocliente';
+import { Manifesto, ManifestoFilter } from './manifesto';
 import { Injectable } from '@angular/core';
 import 'rxjs/add/observable/of';
 import 'rxjs/add/operator/map';
@@ -10,12 +10,12 @@ import { Http, Headers, Response, RequestOptions, URLSearchParams } from '@angul
 import { HttpErrorResponse, HttpParams } from '@angular/common/http';
 
 @Injectable()
-export class ContratoClienteService {
-  private contratoclienteUrl = environment.urlbase + '/api/contratoclientes';
+export class ManifestoService {
+  private manifestoUrl = environment.urlbase + '/api/manifestos';
 
   constructor(private _http: Http) {}
 
-  addContratoCliente(accessToken: string, _contratocliente: ContratoCliente): Observable<any> {
+  addManifesto(accessToken: string, _manifesto: Manifesto): Observable<any> {
     const headers = new Headers({
       Accept: 'application/json',
       Authorization: 'Bearer ' + accessToken.toString().replace(/"/g, '')
@@ -23,18 +23,17 @@ export class ContratoClienteService {
 
     // const _params: HttpParams = new HttpParams();
     const _body = {
-      id_cliente: _contratocliente.id_cliente,
-      descricao: _contratocliente.descricao,
-      vigencia_inicio: _contratocliente.vigencia_inicio,
-      vigencia_final: _contratocliente.vigencia_final,
-      observacao: _contratocliente.observacao,
-      caminho: _contratocliente.caminho,
-      faturamento_minimo: _contratocliente.faturamento_minimo
+      id_cliente: _manifesto.id_cliente,
+      id_contrato_cliente: _manifesto.id_contrato_cliente,
+      data: _manifesto.data,
+      numero: _manifesto.numero,
+      observacao: _manifesto.observacao,
+      caminho: _manifesto.caminho
     };
     // _params.set('codigo', '1');
 
     return this._http
-      .post(this.contratoclienteUrl, _body, { headers: headers})
+      .post(this.manifestoUrl, _body, { headers: headers})
       .map((res: Response) => res.json())
       .catch((error: any) =>
         Observable.throw(error.json() || 'Server error')
@@ -42,7 +41,7 @@ export class ContratoClienteService {
 
   }
 
-  editContratoCliente(accessToken: string, _id: number, _contratocliente: ContratoCliente): Observable<any> {
+  editManifesto(accessToken: string, _id: number, _manifesto: Manifesto): Observable<any> {
     const headers = new Headers({
       Accept: 'application/json',
       Authorization: 'Bearer ' + accessToken.toString().replace(/"/g, '')
@@ -51,18 +50,17 @@ export class ContratoClienteService {
     // const _params: HttpParams = new HttpParams();
     const _body = {
       id: _id,
-      id_cliente: _contratocliente.id_cliente,
-      descricao: _contratocliente.descricao,
-      vigencia_inicio: _contratocliente.vigencia_inicio,
-      vigencia_final: _contratocliente.vigencia_final,
-      observacao: _contratocliente.observacao,
-      caminho: _contratocliente.caminho,
-      faturamento_minimo: _contratocliente.faturamento_minimo
+      id_cliente: _manifesto.id_cliente,
+      id_contrato_cliente: _manifesto.id_contrato_cliente,
+      data: _manifesto.data,
+      numero: _manifesto.numero,
+      observacao: _manifesto.observacao,
+      caminho: _manifesto.caminho
     };
     // _params.set('id', _id.toString());
 
     return this._http
-      .put(this.contratoclienteUrl + '/' + _id.toString(), _body, { headers: headers })
+      .put(this.manifestoUrl + '/' + _id.toString(), _body, { headers: headers })
       .map((res: Response) => res.json())
       .catch((error: any) =>
         Observable.throw(error.json() || 'Server error')
@@ -70,39 +68,39 @@ export class ContratoClienteService {
 
   }
 
-  deleteContratoCliente(accessToken: string, _id: number) {
+  deleteManifesto(accessToken: string, _id: number) {
     const headers = new Headers({
       Accept: 'application/json',
       Authorization: 'Bearer ' + accessToken.toString().replace(/"/g, '')
     });
 
     return this._http
-      .delete(this.contratoclienteUrl + '/' + _id.toString(), { headers: headers })
+      .delete(this.manifestoUrl + '/' + _id.toString(), { headers: headers })
       .map((res: Response) => res.json())
       .catch((error: any) =>
         Observable.throw(error.json() || 'Server error')
       );
   }
 
-  getContratoCliente(accessToken: string, _id: number)  {
+  getManifesto(accessToken: string, _id: number)  {
     const headers = new Headers({
       Accept: 'application/json',
       Authorization: 'Bearer ' + accessToken.toString().replace(/"/g, '')
     });
 
     return this._http
-      .get(this.contratoclienteUrl + '/' + _id.toString(), { headers: headers })
+      .get(this.manifestoUrl + '/' + _id.toString(), { headers: headers })
       .map((res: Response) => res)
       .catch((error: any) =>
         Observable.throw(error.json() || 'Server error')
       );
   }
 
-  /** Metodo que retorna um observable com dados da listagem de contratoclientes
+  /** Metodo que retorna um observable com dados da listagem de manifestos
    *  parametro: acessToken: string
   */
-  getContratoClientes(accessToken: string, sort: string, order: string, page: number,
-                         pagesize: number, filter: ContratoClienteFilter) {
+  getManifestos(accessToken: string, sort: string, order: string, page: number,
+                         pagesize: number, filter: ManifestoFilter) {
     const headers = new Headers({
       Accept: 'application/json',
       Authorization: 'Bearer ' + accessToken.toString().replace(/"/g, '')
@@ -132,36 +130,28 @@ export class ContratoClienteService {
       search.set('id', filter.id.toString());
     }
 
-    if ((!isNullOrUndefined(filter.descricao)) && (filter.descricao.length > 0)) {
-      search.set('descricao', filter.descricao);
+    if ((!isNullOrUndefined(filter.numero)) && (filter.numero.length > 0)) {
+      search.set('numero', filter.numero);
     }
 
     if ((!isNullOrUndefined(filter.cliente)) && (filter.cliente.length > 0)) {
       search.set('cliente', filter.cliente);
     }
 
-    if ((!isNullOrUndefined(filter.id_cliente)) && (filter.id_cliente.toString().length > 0)) {
-      search.set('id_cliente', filter.id_cliente.toString());
-    }
-
-    if ((!isNullOrUndefined(filter.vigencia_inicio)) && (filter.vigencia_inicio.length > 0)) {
-      search.set('vigencia_inicio', filter.vigencia_inicio);
-    }
-
-    if ((!isNullOrUndefined(filter.vigencia_final)) && (filter.vigencia_final.length > 0)) {
-      search.set('vigencia_final', filter.vigencia_final);
+    if ((!isNullOrUndefined(filter.data)) && (filter.data.length > 0)) {
+      search.set('data', filter.data);
     }
 
     return this._http
-      .get(this.contratoclienteUrl, { headers: headers, search: search })
+      .get(this.manifestoUrl, { headers: headers, search: search })
       .map((res: Response) => res.json())
       .catch((error: any) =>
         Observable.throw(error.json() || 'Server error')
       );
   }
 
-  getListContratoClientes(accessToken: string)  {
-    const listUrl = environment.urlbase + '/api/listcontratoclientes';
+  getListManifestos(accessToken: string)  {
+    const listUrl = environment.urlbase + '/api/listmanifestos';
     const headers = new Headers({
       Accept: 'application/json',
       Authorization: 'Bearer ' + accessToken.toString().replace(/"/g, '')
@@ -175,8 +165,8 @@ export class ContratoClienteService {
       );
   }
 
-  uploadContrato(accessToken: string, _contratocliente: ContratoCliente, _file: File): Observable<any> {
-    const UrlUpload = environment.urlbase + '/api/contratoclientes/upload';
+  uploadManifesto(accessToken: string, _manifesto: Manifesto, _file: File): Observable<any> {
+    const UrlUpload = environment.urlbase + '/api/manifestos/upload';
     const headers = new Headers({
       Accept: 'application/json',
       Authorization: 'Bearer ' + accessToken.toString().replace(/"/g, '')
@@ -191,8 +181,8 @@ export class ContratoClienteService {
 
     const formData = new FormData();
     formData.append('arquivo', _file, _file.name);
-    formData.append('id_cliente', _contratocliente.id_cliente.toString());
-    formData.append('id_contrato', _contratocliente.id.toString());
+    formData.append('id_cliente', _manifesto.id_cliente.toString());
+    formData.append('id_manifesto', _manifesto.id.toString());
     // _params.set('codigo', '1');
 
     return this._http

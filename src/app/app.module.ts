@@ -1,3 +1,4 @@
+import { ManifestoModule } from './manifesto/manifesto.module';
 import { ContratoClienteModule } from './contratocliente/contratocliente.module';
 import { CustomCurrencyMaskConfig } from './customcurrencymaskconfig';
 import { CURRENCY_MASK_CONFIG } from 'ng2-currency-mask/src/currency-mask.config';
@@ -77,6 +78,7 @@ import { HomeComponent } from './home/home.component';
     ServicoModule,
     ContratoFornecedorModule,
     ContratoClienteModule,
+    ManifestoModule,
     AppRoutingModule
   ],
   providers: [

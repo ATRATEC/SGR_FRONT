@@ -2,9 +2,9 @@ import { Router } from '@angular/router';
 import { DialogService } from './../dialog/dialog.service';
 import { by } from 'protractor';
 import { FormControl } from '@angular/forms';
-import { DsContratoCliente } from './dscontratocliente';
+import { DsManifesto } from './dsmanifesto';
 import { TokenManagerService } from './../token-manager.service';
-import { ContratoClienteService } from './contratocliente.service';
+import { ManifestoService } from './manifesto.service';
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { DataSource} from '@angular/cdk/collections';
 import { MatSort } from '@angular/material';
@@ -18,31 +18,31 @@ import 'rxjs/add/observable/fromEvent';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/distinctUntilChanged';
 import 'rxjs/add/operator/debounceTime';
-import { ContratoCliente } from './contratocliente';
+import { Manifesto } from './manifesto';
 import { ChangeDetectorRef, AfterViewInit } from '@angular/core';
 import { OnlyNumberDirective } from './../only-number.directive';
 
 @Component({
-  selector: 'app-contratocliente',
-  templateUrl: './contratocliente-list.component.html',
-  styleUrls: ['./contratocliente-list.component.css']
+  selector: 'app-manifesto',
+  templateUrl: './manifesto-list.component.html',
+  styleUrls: ['./manifesto-list.component.css']
 })
-export class ContratoClienteListComponent implements OnInit, AfterViewInit {
-  displayedColumns = ['id', 'descricao', 'cliente', 'vigencia_inicio', 'vigencia_final'];
+export class ManifestoListComponent implements OnInit, AfterViewInit {
+  displayedColumns = ['id', 'numero', 'cliente', 'data'];
   // displayedColumns = ['id', 'codigo', 'descricao'];
-  dataSource: DsContratoCliente | null;
+  dataSource: DsManifesto | null;
   selectedRowIndex = -1;
   selectedRow: any | null;
-  contratoclientes: ContratoCliente[];
+  manifestos: Manifesto[];
   isLoadingResults: boolean;
 
 
   idFilter = new FormControl();
-  idclienteFilter = new FormControl();
-  descricaoFilter = new FormControl();
+  numeroFilter = new FormControl();
   clienteFilter = new FormControl();
-  vigenciaInicioFilter = new FormControl();
-  vigenciaFinalFilter = new FormControl();
+  dataFilter = new FormControl();
+  contratoFilter = new FormControl();
+
 
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild(MatPaginator) paginator: MatPaginator;
@@ -55,17 +55,17 @@ export class ContratoClienteListComponent implements OnInit, AfterViewInit {
     }
   }
 
-  constructor(private _contratoclienteService: ContratoClienteService,
+  constructor(private _manifestoService: ManifestoService,
               private _tokenManager: TokenManagerService,
               private dialog: DialogService,
               private _router: Router) {}
 
-  obterContratoClientes() {
+  obterManifestos() {
     // const token = this._tokenManager.retrieve();
-    // this._contratoclienteService.getContratoClientes(token).subscribe(data => {
-    //   this.contratoclientes = data.data;
+    // this._manifestoService.getManifestos(token).subscribe(data => {
+    //   this.manifestos = data.data;
     //   console.log(data);
-    //   console.log(this.contratoclientes.length);
+    //   console.log(this.manifestos.length);
     //   console.log(token);
     // });
   }
@@ -81,7 +81,7 @@ export class ContratoClienteListComponent implements OnInit, AfterViewInit {
   }
 
   dblck(row) {
-    this._router.navigate(['/contratoclientes/contratocliente', {id: row.id}]);
+    this._router.navigate(['/manifestos/manifesto', {id: row.id}]);
   }
 
   //#region botões de ação
@@ -111,13 +111,13 @@ export class ContratoClienteListComponent implements OnInit, AfterViewInit {
   }
 
   incluirRegistro() {
-    this._router.navigate(['/contratoclientes/contratocliente']);
+    this._router.navigate(['/manifestos/manifesto']);
   }
 
 
   editarRegistro() {
     if (this.validaSelecao()) {
-      this._router.navigate(['/contratoclientes/contratocliente', {id: this.selectedRow.id}]);
+      this._router.navigate(['/manifestos/manifesto', {id: this.selectedRow.id}]);
       this.ngOnInit();
       this.selectedRowIndex = -1;
       this.selectedRow = null;
@@ -126,12 +126,12 @@ export class ContratoClienteListComponent implements OnInit, AfterViewInit {
 
   excluirRegistro() {
     if (this.validaSelecao()) {
-      this.dialog.question('SGR', 'Deseja realmente excluir o contratocliente: ' + this.selectedRow.id + '?').subscribe(
+      this.dialog.question('SGR', 'Deseja realmente excluir o Manifesto: ' + this.selectedRow.id + '?').subscribe(
         result => {
           if (result.retorno) {
-            this._contratoclienteService.deleteContratoCliente(this._tokenManager.retrieve(), this.selectedRow.id).subscribe(
+            this._manifestoService.deleteManifesto(this._tokenManager.retrieve(), this.selectedRow.id).subscribe(
               data => {
-                this.dialog.success('SGR', 'Contrato de Cliente excluído com sucesso.');
+                this.dialog.success('SGR', 'Manifesto excluído com sucesso.');
                 this.ngOnInit();
               },
               error => {
@@ -158,20 +158,20 @@ export class ContratoClienteListComponent implements OnInit, AfterViewInit {
     this.paginator._intl.nextPageLabel = 'Próxima Página';
     this.paginator._intl.previousPageLabel = 'Voltar Página';
 
-    this.dataSource = new DsContratoCliente(this._tokenManager, this._contratoclienteService, this.paginator, this.sort);
+    this.dataSource = new DsManifesto(this._tokenManager, this._manifestoService, this.paginator, this.sort);
 
     const idFilter$ = this.idFilter.valueChanges.debounceTime(500).distinctUntilChanged().startWith('');
-    const idclienteFilter$ = this.idclienteFilter.valueChanges.debounceTime(500).distinctUntilChanged().startWith('');
-    const descricaoFilter$ = this.descricaoFilter.valueChanges.debounceTime(500).distinctUntilChanged().startWith('');
+    const numeroFilter$ = this.numeroFilter.valueChanges.debounceTime(500).distinctUntilChanged().startWith('');
     const clienteFilter$ = this.clienteFilter.valueChanges.debounceTime(500).distinctUntilChanged().startWith('');
-    const vigenciaInicioFilter$ = this.vigenciaInicioFilter.valueChanges.debounceTime(500).distinctUntilChanged().startWith('');
-    const vigenciaFinalFilter$ = this.vigenciaFinalFilter.valueChanges.debounceTime(500).distinctUntilChanged().startWith('');
+    const dataFilter$ = this.dataFilter.valueChanges.debounceTime(500).distinctUntilChanged().startWith('');
+    const contratoFilter$ = this.contratoFilter.valueChanges.debounceTime(500).distinctUntilChanged().startWith('');
 
-    Observable.combineLatest(idFilter$, idclienteFilter$, descricaoFilter$, clienteFilter$,
-                            vigenciaInicioFilter$, vigenciaFinalFilter$).debounceTime(500).distinctUntilChanged().
+
+    Observable.combineLatest(idFilter$, numeroFilter$, clienteFilter$,
+                            dataFilter$, contratoFilter$).debounceTime(500).distinctUntilChanged().
     map(
-      ([id, id_cliente, descricao, cliente, vigencia_inicio, vigencia_final]) =>
-      ({id, id_cliente, descricao, cliente, vigencia_inicio, vigencia_final})).subscribe(filter => {
+      ([id, numero, cliente, data, contrato]) =>
+      ({id, numero, cliente, data, contrato})).subscribe(filter => {
         if (!this.dataSource) { return; }
         this.dataSource.filter = filter;
       });

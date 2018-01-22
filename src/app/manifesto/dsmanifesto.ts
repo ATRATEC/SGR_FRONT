@@ -1,5 +1,5 @@
 import { TokenManagerService } from './../token-manager.service';
-import { ContratoClienteService } from './contratocliente.service';
+import { ManifestoService } from './manifesto.service';
 import { Component, OnInit, ViewChild, ElementRef, EventEmitter } from '@angular/core';
 import { DataSource} from '@angular/cdk/collections';
 import { MatSort } from '@angular/material';
@@ -13,18 +13,18 @@ import 'rxjs/add/observable/fromEvent';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/distinctUntilChanged';
 import 'rxjs/add/operator/debounceTime';
-import { ContratoCliente, ContratoClienteFilter } from './contratocliente';
+import { Manifesto, ManifestoFilter } from './manifesto';
 
-export class DsContratoCliente extends DataSource<ContratoCliente> {
-  _filterChange = new BehaviorSubject( {id: '', id_cliente: null, cliente: '', descricao: '', vigencia_inicio: '', vigencia_final: ''} );
+export class DsManifesto extends DataSource<Manifesto> {
+  _filterChange = new BehaviorSubject( {id: '', cliente: '', numero: '', data: '', contrato: ''} );
 
   public onChange: EventEmitter<boolean> = new EventEmitter<boolean>();
 
-  get filter(): ContratoClienteFilter {
+  get filter(): ManifestoFilter {
     return this._filterChange.value;
   }
 
-  set filter(filter: ContratoClienteFilter) {
+  set filter(filter: ManifestoFilter) {
     this._filterChange.next(filter);
   }
 
@@ -39,13 +39,13 @@ export class DsContratoCliente extends DataSource<ContratoCliente> {
   nrRegistros: number;
 
   constructor(private _tokenManager: TokenManagerService,
-              private _contratoclienteService: ContratoClienteService,
+              private _manifestoService: ManifestoService,
               private _paginator: MatPaginator,
               private _sort: MatSort) {
     super();
     this.onChange.emit(false);
   }
-  connect(): Observable<ContratoCliente[]> {
+  connect(): Observable<Manifesto[]> {
     const displayDataChanges = [
       this._sort.sortChange,
       this._paginator.page,
@@ -57,7 +57,7 @@ export class DsContratoCliente extends DataSource<ContratoCliente> {
     .startWith(null)
     .switchMap(() => {
       this.onChange.emit(true);
-      return this._contratoclienteService.getContratoClientes(this._tokenManager.retrieve(),
+      return this._manifestoService.getManifestos(this._tokenManager.retrieve(),
         this._sort.active, this._sort.direction, this._paginator.pageIndex, this._paginator.pageSize, this.filter);
     })
     .retry(3)

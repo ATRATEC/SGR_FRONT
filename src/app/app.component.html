@@ -97,6 +97,10 @@
     <span style="color: white">Processos</span>
   </button>
   <mat-menu #processos="matMenu" [overlapTrigger]="false">
+    <button mat-menu-item [routerLink]="['/manifestos']">
+      <mat-icon fontSet="fontawesome" fontIcon="fa-recycle"></mat-icon>
+      <span>Manifesto</span>
+    </button>
     <button mat-menu-item>
       <mat-icon fontSet="fontawesome" fontIcon="fa-group"></mat-icon>
       <span>Monitoramento de Documentos</span>

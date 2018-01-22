@@ -1,11 +1,15 @@
+import { isNullOrUndefined } from 'util';
+import { isEmpty } from 'rxjs/operators';
+import { Data } from '@angular/router';
+import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material';
+import {FormControl, Validators} from '@angular/forms';
 import { Router } from '@angular/router';
 import { DialogService } from './../dialog/dialog.service';
 import { by } from 'protractor';
-import { FormControl } from '@angular/forms';
 import { DsContratoCliente } from './dscontratocliente';
 import { TokenManagerService } from './../token-manager.service';
 import { ContratoClienteService } from './contratocliente.service';
-import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, Inject } from '@angular/core';
 import { DataSource} from '@angular/cdk/collections';
 import { MatSort } from '@angular/material';
 import { MatPaginator } from '@angular/material';
@@ -23,11 +27,12 @@ import { ChangeDetectorRef, AfterViewInit } from '@angular/core';
 import { OnlyNumberDirective } from './../only-number.directive';
 
 @Component({
-  selector: 'app-contratocliente',
-  templateUrl: './contratocliente-list.component.html',
-  styleUrls: ['./contratocliente-list.component.css']
+  selector: 'app-contratocliente-find',
+  templateUrl: './contratocliente-find.component.html',
+  styleUrls: ['./contratocliente-find.component.css']
 })
-export class ContratoClienteListComponent implements OnInit, AfterViewInit {
+export class ContratoClienteFindComponent implements OnInit, AfterViewInit {
+
   displayedColumns = ['id', 'descricao', 'cliente', 'vigencia_inicio', 'vigencia_final'];
   // displayedColumns = ['id', 'codigo', 'descricao'];
   dataSource: DsContratoCliente | null;
@@ -58,17 +63,10 @@ export class ContratoClienteListComponent implements OnInit, AfterViewInit {
   constructor(private _contratoclienteService: ContratoClienteService,
               private _tokenManager: TokenManagerService,
               private dialog: DialogService,
-              private _router: Router) {}
-
-  obterContratoClientes() {
-    // const token = this._tokenManager.retrieve();
-    // this._contratoclienteService.getContratoClientes(token).subscribe(data => {
-    //   this.contratoclientes = data.data;
-    //   console.log(data);
-    //   console.log(this.contratoclientes.length);
-    //   console.log(token);
-    // });
-  }
+              private _router: Router,
+              public dialogLoginRef: MatDialogRef<ContratoClienteFindComponent>,
+              @Inject(MAT_DIALOG_DATA) public data: any
+            ) { }
 
   highlight(row) {
     if (this.selectedRowIndex === row.id) {
@@ -81,22 +79,27 @@ export class ContratoClienteListComponent implements OnInit, AfterViewInit {
   }
 
   dblck(row) {
-    this._router.navigate(['/contratoclientes/contratocliente', {id: row.id}]);
+    // this._router.navigate(['/contratoclientees/contratocliente', {id: row.id}]);
+    this.retornarPesquisa(row);
   }
 
-  //#region botões de ação
-  btnEditar_click() {
-    this.editarRegistro();
+  btnOkClick() {
+    if (this.validaSelecao()) {
+      this.retornarPesquisa(this.selectedRow);
+    }
   }
 
-  btnIncluir_click() {
-    this.incluirRegistro();
+  retornarPesquisa(row) {
+    this.data.id = row.id;
+    this.data.descricao = row.descricao;
+    this.dialogLoginRef.close(this.data);
   }
 
-  btnExcluir_click() {
-    this.excluirRegistro();
+  btnCancelarClick() {
+    this.data.id = null;
+    this.data.descricao = null;
+    this.dialogLoginRef.close(this.data);
   }
-  //#endregion
 
  /**
   * Metodo que verifica se existe registro selecionado na grid.
@@ -107,42 +110,6 @@ export class ContratoClienteListComponent implements OnInit, AfterViewInit {
       return false;
     } else {
       return true;
-    }
-  }
-
-  incluirRegistro() {
-    this._router.navigate(['/contratoclientes/contratocliente']);
-  }
-
-
-  editarRegistro() {
-    if (this.validaSelecao()) {
-      this._router.navigate(['/contratoclientes/contratocliente', {id: this.selectedRow.id}]);
-      this.ngOnInit();
-      this.selectedRowIndex = -1;
-      this.selectedRow = null;
-    }
-  }
-
-  excluirRegistro() {
-    if (this.validaSelecao()) {
-      this.dialog.question('SGR', 'Deseja realmente excluir o contratocliente: ' + this.selectedRow.id + '?').subscribe(
-        result => {
-          if (result.retorno) {
-            this._contratoclienteService.deleteContratoCliente(this._tokenManager.retrieve(), this.selectedRow.id).subscribe(
-              data => {
-                this.dialog.success('SGR', 'Contrato de Cliente excluído com sucesso.');
-                this.ngOnInit();
-              },
-              error => {
-                this.dialog.error('SGR', 'Erro ao excluir o registro.', error.error + ' - Detalhe: ' + error.message);
-              },
-            );
-            this.selectedRowIndex = -1;
-            this.selectedRow = null;
-          }
-        }
-      );
     }
   }
 
@@ -157,6 +124,8 @@ export class ContratoClienteListComponent implements OnInit, AfterViewInit {
     this.paginator._intl.itemsPerPageLabel = 'Itens por pagina';
     this.paginator._intl.nextPageLabel = 'Próxima Página';
     this.paginator._intl.previousPageLabel = 'Voltar Página';
+
+    this.isLoadingResults = false;
 
     this.dataSource = new DsContratoCliente(this._tokenManager, this._contratoclienteService, this.paginator, this.sort);
 
@@ -173,8 +142,13 @@ export class ContratoClienteListComponent implements OnInit, AfterViewInit {
       ([id, id_cliente, descricao, cliente, vigencia_inicio, vigencia_final]) =>
       ({id, id_cliente, descricao, cliente, vigencia_inicio, vigencia_final})).subscribe(filter => {
         if (!this.dataSource) { return; }
+
+        if (!isNullOrUndefined(this.data.id_cliente)) {
+          filter.id_cliente = this.data.id_cliente;
+        }
+
         this.dataSource.filter = filter;
       });
   }
-}
 
+}

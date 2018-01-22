@@ -11,47 +11,52 @@ mat-icon-button.size-15 {
   display: block !important;
 }
 
-.frm_contratocliente_codigo {
+.frm_manifesto_codigo {
   min-width: 120px;
   max-width: 120px;
 }
 
-.frm_contratocliente_descricao {
-  min-width: 370px;
-  max-width: 370px;
+.frm_manifesto_numero {
+  min-width: 150px;
+  max-width: 150px;
 }
 
-.frm_contratocliente_razao_social {
-  min-width: 320px;
-  max-width: 320px;
+.frm_manifesto_descricao {
+  min-width: 300px;
+  max-width: 300px;
 }
 
-.frm_contratocliente_data {
+.frm_manifesto_razao_social {
+  min-width: 300px;
+  max-width: 300px;
+}
+
+.frm_manifesto_data {
   min-width: 160px;
   max-width: 160px;
 }
 
-.frm_contratocliente_servico {
+.frm_manifesto_servico {
   min-width: 200px;
   max-width: 200px;
 }
 
-.frm_contratocliente_unidade {
+.frm_manifesto_unidade {
   min-width: 100px;
   max-width: 100px;
 }
 
-.frm_contratocliente_fornecedor {
+.frm_manifesto_fornecedor {
   min-width: 600px;
   max-width: 600px;
 }
 
-.frm_contratocliente_preco {
+.frm_manifesto_preco {
   min-width: 120px;
   max-width: 120px;
 }
 
-.frm_contratocliente-loading-shade {
+.frm_manifesto-loading-shade {
   /* position: absolute;
   top: 0;
   left: 0;
@@ -118,27 +123,31 @@ tr:nth-child(even) {
   background-color: #ffffff;
 }
 
-.frm_contratocliente_servico_fornecedor {
-  width: 280px;
+.frm_manifesto_servico_residuo {
+  width: 180px;
 }
 
-.frm_contratocliente_servico_residuo {
-  width: 200px;
+.frm_manifesto_servico_servico {
+  width: 180px;
 }
 
-.frm_contratocliente_servico_servico {
-  width: 200px;
+.frm_manifesto_servico_acondicionamento {
+  width: 180px;
 }
 
-.frm_contratocliente_servico_unidade {
+.frm_manifesto_servico_tratamento {
+  width: 180px;
+}
+
+.frm_manifesto_servico_unidade {
   width: 60px;
 }
 
-.frm_contratocliente_servico_preco {
+.frm_manifesto_servico_quantidade {
   width: 130px;
 }
 
-.frm_contratocliente_servico_botao {
+.frm_manifesto_servico_botao {
   width: 15px;
 }
 

@@ -124,4 +124,19 @@ export class AcondicionamentoService {
         Observable.throw(error.json() || 'Server error')
       );
   }
+
+  getListAcondicionamentos(accessToken: string)  {
+    const listUrl = environment.urlbase + '/api/listacondicionamentos';
+    const headers = new Headers({
+      Accept: 'application/json',
+      Authorization: 'Bearer ' + accessToken.toString().replace(/"/g, '')
+    });
+
+    return this._http
+      .get(listUrl, { headers: headers })
+      .map((res: Response) => res)
+      .catch((error: any) =>
+        Observable.throw(error.json() || 'Server error')
+      );
+  }
 }

@@ -172,11 +172,6 @@ export class ContratoClienteFormComponent
           .getContratoCliente(this._tokenManager.retrieve(), id)
           .subscribe(data => {
             this.contratocliente = JSON.parse(data._body);
-            if (JSON.parse(data._body).exclusivo === 1) {
-              this.contratocliente.exclusico = true;
-            } else {
-              this.contratocliente.exclusico = false;
-            }
 
             if (this.contratocliente.caminho) {
               this.linkDownload = this.linkDownload + 'CLI_' +
