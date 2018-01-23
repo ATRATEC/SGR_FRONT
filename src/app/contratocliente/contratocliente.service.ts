@@ -175,6 +175,51 @@ export class ContratoClienteService {
       );
   }
 
+  getTransportador(accessToken: string, _id: number)  {
+    const listUrl = environment.urlbase + '/api/gettransportadorcontratoclientes';
+    const headers = new Headers({
+      Accept: 'application/json',
+      Authorization: 'Bearer ' + accessToken.toString().replace(/"/g, '')
+    });
+
+    return this._http
+      .get(listUrl + '/' + _id.toString(), { headers: headers })
+      .map((res: Response) => res)
+      .catch((error: any) =>
+        Observable.throw(error.json() || 'Server error')
+      );
+  }
+
+  getDestinador(accessToken: string, _id: number)  {
+    const listUrl = environment.urlbase + '/api/getdestinadorcontratoclientes';
+    const headers = new Headers({
+      Accept: 'application/json',
+      Authorization: 'Bearer ' + accessToken.toString().replace(/"/g, '')
+    });
+
+    return this._http
+      .get(listUrl + '/' + _id.toString(), { headers: headers })
+      .map((res: Response) => res)
+      .catch((error: any) =>
+        Observable.throw(error.json() || 'Server error')
+      );
+  }
+
+  getArmazenador(accessToken: string, _id: number)  {
+    const listUrl = environment.urlbase + '/api/getarmazenadorcontratoclientes';
+    const headers = new Headers({
+      Accept: 'application/json',
+      Authorization: 'Bearer ' + accessToken.toString().replace(/"/g, '')
+    });
+
+    return this._http
+      .get(listUrl + '/' + _id.toString(), { headers: headers })
+      .map((res: Response) => res)
+      .catch((error: any) =>
+        Observable.throw(error.json() || 'Server error')
+      );
+  }
+
   uploadContrato(accessToken: string, _contratocliente: ContratoCliente, _file: File): Observable<any> {
     const UrlUpload = environment.urlbase + '/api/contratoclientes/upload';
     const headers = new Headers({

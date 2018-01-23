@@ -2,9 +2,9 @@ import { Router } from '@angular/router';
 import { DialogService } from './../dialog/dialog.service';
 import { by } from 'protractor';
 import { FormControl } from '@angular/forms';
-import { DsManifesto } from './dsmanifesto';
+import { DsTipoResiduo } from './dstiporesiduo';
 import { TokenManagerService } from './../token-manager.service';
-import { ManifestoService } from './manifesto.service';
+import { TipoResiduoService } from './tiporesiduo.service';
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { DataSource} from '@angular/cdk/collections';
 import { MatSort } from '@angular/material';
@@ -18,33 +18,27 @@ import 'rxjs/add/observable/fromEvent';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/distinctUntilChanged';
 import 'rxjs/add/operator/debounceTime';
-import { Manifesto } from './manifesto';
+import { TipoResiduo } from './tiporesiduo';
 import { ChangeDetectorRef, AfterViewInit } from '@angular/core';
 import { OnlyNumberDirective } from './../only-number.directive';
 
 @Component({
-  selector: 'app-manifesto',
-  templateUrl: './manifesto-list.component.html',
-  styleUrls: ['./manifesto-list.component.css']
+  selector: 'app-tiporesiduo',
+  templateUrl: './tiporesiduo-list.component.html',
+  styleUrls: ['./tiporesiduo-list.component.css']
 })
-export class ManifestoListComponent implements OnInit, AfterViewInit {
-  displayedColumns = ['id', 'numero', 'cliente', 'data', 'transportador', 'destinador'];
+export class TipoResiduoListComponent implements OnInit, AfterViewInit {
+  displayedColumns = ['id', 'descricao'];
   // displayedColumns = ['id', 'codigo', 'descricao'];
-  dataSource: DsManifesto | null;
+  dataSource: DsTipoResiduo | null;
   selectedRowIndex = -1;
   selectedRow: any | null;
-  manifestos: Manifesto[];
+  tiporesiduos: TipoResiduo[];
   isLoadingResults: boolean;
 
 
   idFilter = new FormControl();
-  numeroFilter = new FormControl();
-  clienteFilter = new FormControl();
-  dataFilter = new FormControl();
-  contratoFilter = new FormControl();
-  transportadorFilter = new FormControl();
-  destinadorFilter = new FormControl();
-
+  descricaoFilter = new FormControl();
 
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild(MatPaginator) paginator: MatPaginator;
@@ -57,17 +51,17 @@ export class ManifestoListComponent implements OnInit, AfterViewInit {
     }
   }
 
-  constructor(private _manifestoService: ManifestoService,
+  constructor(private _tiporesiduoService: TipoResiduoService,
               private _tokenManager: TokenManagerService,
               private dialog: DialogService,
               private _router: Router) {}
 
-  obterManifestos() {
+  obterTipoResiduos() {
     // const token = this._tokenManager.retrieve();
-    // this._manifestoService.getManifestos(token).subscribe(data => {
-    //   this.manifestos = data.data;
+    // this._tiporesiduoService.getTipoResiduos(token).subscribe(data => {
+    //   this.tiporesiduos = data.data;
     //   console.log(data);
-    //   console.log(this.manifestos.length);
+    //   console.log(this.tiporesiduos.length);
     //   console.log(token);
     // });
   }
@@ -83,8 +77,9 @@ export class ManifestoListComponent implements OnInit, AfterViewInit {
   }
 
   dblck(row) {
-    this._router.navigate(['/manifestos/manifesto', {id: row.id}]);
+    this._router.navigate(['/tiporesiduos/tiporesiduo', {id: row.id}]);
   }
+
 
   //#region botões de ação
   btnEditar_click() {
@@ -113,13 +108,13 @@ export class ManifestoListComponent implements OnInit, AfterViewInit {
   }
 
   incluirRegistro() {
-    this._router.navigate(['/manifestos/manifesto']);
+    this._router.navigate(['/tiporesiduos/tiporesiduo']);
   }
 
 
   editarRegistro() {
     if (this.validaSelecao()) {
-      this._router.navigate(['/manifestos/manifesto', {id: this.selectedRow.id}]);
+      this._router.navigate(['/tiporesiduos/tiporesiduo', {id: this.selectedRow.id}]);
       this.ngOnInit();
       this.selectedRowIndex = -1;
       this.selectedRow = null;
@@ -128,12 +123,12 @@ export class ManifestoListComponent implements OnInit, AfterViewInit {
 
   excluirRegistro() {
     if (this.validaSelecao()) {
-      this.dialog.question('SGR', 'Deseja realmente excluir o Manifesto: ' + this.selectedRow.id + '?').subscribe(
+      this.dialog.question('SGR', 'Deseja realmente excluir o tiporesiduo: ' + this.selectedRow.id + '?').subscribe(
         result => {
           if (result.retorno) {
-            this._manifestoService.deleteManifesto(this._tokenManager.retrieve(), this.selectedRow.id).subscribe(
+            this._tiporesiduoService.deleteTipoResiduo(this._tokenManager.retrieve(), this.selectedRow.id).subscribe(
               data => {
-                this.dialog.success('SGR', 'Manifesto excluído com sucesso.');
+                this.dialog.success('SGR', 'TipoResiduo excluído com sucesso.');
                 this.ngOnInit();
               },
               error => {
@@ -160,22 +155,16 @@ export class ManifestoListComponent implements OnInit, AfterViewInit {
     this.paginator._intl.nextPageLabel = 'Próxima Página';
     this.paginator._intl.previousPageLabel = 'Voltar Página';
 
-    this.dataSource = new DsManifesto(this._tokenManager, this._manifestoService, this.paginator, this.sort);
+    this.isLoadingResults = false;
+
+    this.dataSource = new DsTipoResiduo(this._tokenManager, this._tiporesiduoService, this.paginator, this.sort);
 
     const idFilter$ = this.idFilter.valueChanges.debounceTime(500).distinctUntilChanged().startWith('');
-    const numeroFilter$ = this.numeroFilter.valueChanges.debounceTime(500).distinctUntilChanged().startWith('');
-    const clienteFilter$ = this.clienteFilter.valueChanges.debounceTime(500).distinctUntilChanged().startWith('');
-    const dataFilter$ = this.dataFilter.valueChanges.debounceTime(500).distinctUntilChanged().startWith('');
-    const contratoFilter$ = this.contratoFilter.valueChanges.debounceTime(500).distinctUntilChanged().startWith('');
-    const transportadorFilter$ = this.transportadorFilter.valueChanges.debounceTime(500).distinctUntilChanged().startWith('');
-    const destinadorFilter$ = this.destinadorFilter.valueChanges.debounceTime(500).distinctUntilChanged().startWith('');
+    const descricaoFilter$ = this.descricaoFilter.valueChanges.debounceTime(500).distinctUntilChanged().startWith('');
 
-
-    Observable.combineLatest(idFilter$, numeroFilter$, clienteFilter$,
-                            dataFilter$, contratoFilter$, transportadorFilter$, destinadorFilter$).debounceTime(500).distinctUntilChanged().
+    Observable.combineLatest(idFilter$, descricaoFilter$).debounceTime(500).distinctUntilChanged().
     map(
-      ([id, numero, cliente, data, contrato, transportador, destinador]) =>
-      ({id, numero, cliente, data, contrato, transportador, destinador})).subscribe(filter => {
+      ([id, descricao ]) => ({id, descricao})).subscribe(filter => {
         if (!this.dataSource) { return; }
         this.dataSource.filter = filter;
       });

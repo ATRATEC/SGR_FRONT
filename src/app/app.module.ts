@@ -1,3 +1,4 @@
+import { TipoResiduoModule } from './tiporesiduo/tiporesiduo.module';
 import { ManifestoModule } from './manifesto/manifesto.module';
 import { ContratoClienteModule } from './contratocliente/contratocliente.module';
 import { CustomCurrencyMaskConfig } from './customcurrencymaskconfig';
@@ -79,6 +80,7 @@ import { HomeComponent } from './home/home.component';
     ContratoFornecedorModule,
     ContratoClienteModule,
     ManifestoModule,
+    TipoResiduoModule,
     AppRoutingModule
   ],
   providers: [

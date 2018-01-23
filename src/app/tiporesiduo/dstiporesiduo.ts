@@ -1,5 +1,5 @@
 import { TokenManagerService } from './../token-manager.service';
-import { ManifestoService } from './manifesto.service';
+import { TipoResiduoService } from './tiporesiduo.service';
 import { Component, OnInit, ViewChild, ElementRef, EventEmitter } from '@angular/core';
 import { DataSource} from '@angular/cdk/collections';
 import { MatSort } from '@angular/material';
@@ -13,18 +13,18 @@ import 'rxjs/add/observable/fromEvent';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/distinctUntilChanged';
 import 'rxjs/add/operator/debounceTime';
-import { Manifesto, ManifestoFilter } from './manifesto';
+import { TipoResiduo, TipoResiduoFilter } from './tiporesiduo';
 
-export class DsManifesto extends DataSource<Manifesto> {
-  _filterChange = new BehaviorSubject( {id: '', cliente: '', numero: '', data: '', contrato: '', transportador: '', destinador: ''} );
+export class DsTipoResiduo extends DataSource<TipoResiduo> {
+  _filterChange = new BehaviorSubject( {id: '', descricao: ''} );
 
   public onChange: EventEmitter<boolean> = new EventEmitter<boolean>();
 
-  get filter(): ManifestoFilter {
+  get filter(): TipoResiduoFilter {
     return this._filterChange.value;
   }
 
-  set filter(filter: ManifestoFilter) {
+  set filter(filter: TipoResiduoFilter) {
     this._filterChange.next(filter);
   }
 
@@ -39,13 +39,13 @@ export class DsManifesto extends DataSource<Manifesto> {
   nrRegistros: number;
 
   constructor(private _tokenManager: TokenManagerService,
-              private _manifestoService: ManifestoService,
+              private _tiporesiduoService: TipoResiduoService,
               private _paginator: MatPaginator,
               private _sort: MatSort) {
     super();
     this.onChange.emit(false);
   }
-  connect(): Observable<Manifesto[]> {
+  connect(): Observable<TipoResiduo[]> {
     const displayDataChanges = [
       this._sort.sortChange,
       this._paginator.page,
@@ -56,19 +56,21 @@ export class DsManifesto extends DataSource<Manifesto> {
     return Observable.merge(...displayDataChanges)
     .startWith(null)
     .switchMap(() => {
+      // this.isLoadingResults = true;
       this.onChange.emit(true);
-      return this._manifestoService.getManifestos(this._tokenManager.retrieve(),
+      return this._tiporesiduoService.getTipoResiduos(this._tokenManager.retrieve(),
         this._sort.active, this._sort.direction, this._paginator.pageIndex, this._paginator.pageSize, this.filter);
     })
     .retry(3)
     .map(data => {
       // Flip flag to show that loading has finished.
+      // this.isLoadingResults = false;
       this.onChange.emit(false);
       this.paginaInicial = 1;
-      this.paginaFinal = data.last_page;
-      this.registroDe = data.from;
-      this.registroAte = data.to;
-      this.nrRegistros = data.total;
+      this.paginaFinal = data.meta.last_page;
+      this.registroDe = data.meta.from;
+      this.registroAte = data.meta.to;
+      this.nrRegistros = data.meta.total;
       return data.data;
     })
     .catch(err => {

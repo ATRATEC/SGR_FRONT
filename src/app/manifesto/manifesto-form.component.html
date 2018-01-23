@@ -116,13 +116,37 @@
                                 <mat-icon>playlist_add</mat-icon>
                                 <span>Adicionar Itens</span>
                               </button>
-                              <!-- <button mat-icon-button color="primary" (click)="addlinha()" tabindex="2">
-                                  <mat-icon>search</mat-icon>
-                                </button> -->
                             </div>
                           </div>
                         </div>
                       </div>
+                      <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="0px" style="overflow-y:auto;">
+                        <div fxFlex="60px" fxFlexAlign="start">
+                          <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="20px">
+                            <div fxFlex="120px" fxFlexAlign="start" fxFlexFill>
+                              <mat-form-field class="frm_manifesto_codigo">
+                                <input matInput disabled placeholder="Transportador" tabindex="5" [(ngModel)]="manifesto.id_transportador">
+                              </mat-form-field>
+                            </div>
+                            <div fxFlex="320px" fxFlexAlign="start" fxFlexFill>
+                              <mat-form-field class="frm_manifesto_razao_social">
+                                <input matInput disabled [(ngModel)]="manifesto.transportador">
+                              </mat-form-field>
+                            </div>
+                            <div fxFlex="120px" fxFlexAlign="start" fxFlexFill>
+                              <mat-form-field class="frm_manifesto_codigo">
+                                <input matInput disabled placeholder="Destinador" tabindex="5" [(ngModel)]="manifesto.id_destinador">
+                              </mat-form-field>
+                            </div>
+                            <div fxFlex="320px" fxFlexAlign="start" fxFlexFill>
+                              <mat-form-field class="frm_manifesto_razao_social">
+                                <input matInput disabled [(ngModel)]="manifesto.destinador">
+                              </mat-form-field>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
                       <!-- <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="0px">
                         <div fxFlex="40px" fxFlexAlign="start">
                           <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="5px">
@@ -207,8 +231,8 @@
                               <th class="frm_manifesto_servico_residuo">
                                 <label>Residuo</label>
                               </th>
-                              <th class="frm_manifesto_servico_servico">
-                                <label>Serviço</label>
+                              <th class="frm_manifesto_servico_tipo_residuo">
+                                <label>Tipo de Resíduo</label>
                               </th>
                               <th class="frm_manifesto_servico_acondicionamento">
                                 <label>Acondicionamento</label>
@@ -231,8 +255,12 @@
                               <td class="frm_manifesto_servico_residuo">
                                 {{servico.residuo}}
                               </td>
-                              <td class="frm_manifesto_servico_servico">
-                                {{servico.servico}}
+                              <td class="frm_manifesto_servico_tipo_residuo">
+                                <select class="preco" [(ngModel)]="servico.id_tipo_residuo" style="max-height: 18px;">
+                                  <option class="preco" *ngIf="servico.id_tipo_residuo" [ngValue]="servico.id_tipo_residuo">{{servico.tipo_residuo}}</option>
+                                  <!-- <option class="preco" *ngIf="!servico.id_acondicionamento" [value]=""></option> -->
+                                  <option class="preco" *ngFor="let tiporesiduo of tiporesiduos" [ngValue]="tiporesiduo.id">{{ tiporesiduo.descricao }}</option>
+                                </select>
                               </td>
                               <td class="frm_manifesto_servico_acondicionamento">
                                 <select class="preco" [(ngModel)]="servico.id_acondicionamento" style="max-height: 18px;">
@@ -242,12 +270,12 @@
                                 </select>
                               </td>
                               <td class="frm_manifesto_servico_tratamento">
-                                  <select class="preco" [(ngModel)]="servico.id_tratamento" style="max-height: 18px;">
-                                    <option class="preco" *ngIf="servico.id_tratamento" [ngValue]="servico.id_tratamento">{{servico.tratamento}}</option>
-                                    <!-- <option class="preco" *ngIf="!servico.id_tratamento" [value]=""></option> -->
-                                    <option class="preco" *ngFor="let tratamento of tipotratamentos" [ngValue]="tratamento.id">{{ tratamento.descricao }}</option>
-                                  </select>
-                                </td>
+                                <select class="preco" [(ngModel)]="servico.id_tratamento" style="max-height: 18px;">
+                                  <option class="preco" *ngIf="servico.id_tratamento" [ngValue]="servico.id_tratamento">{{servico.tratamento}}</option>
+                                  <!-- <option class="preco" *ngIf="!servico.id_tratamento" [value]=""></option> -->
+                                  <option class="preco" *ngFor="let tratamento of tipotratamentos" [ngValue]="tratamento.id">{{ tratamento.descricao }}</option>
+                                </select>
+                              </td>
                               <td class="frm_manifesto_servico_unidade" style="max-height: 18px;">
                                 {{servico.unidade}}
                               </td>

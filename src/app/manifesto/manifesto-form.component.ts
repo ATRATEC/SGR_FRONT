@@ -1,3 +1,6 @@
+import { TipoResiduoService } from './../tiporesiduo/tiporesiduo.service';
+import { TipoResiduo } from './../tiporesiduo/tiporesiduo';
+import { Fornecedor } from './../fornecedor/fornecedor';
 import { ContratoClienteServicoService } from './../contratocliente/contratoclienteservico.service';
 import { TipoTratamentoService } from './../tipotratamento/tipotratamento.service';
 import { AcondicionamentoService } from './../acondicionamento/acondicionamento.service';
@@ -69,6 +72,7 @@ export class ManifestoFormComponent
   // manifestoservico: ManifestoServico;
   acondicionamentos: Acondicionamento[];
   tipotratamentos: TipoTratamento[];
+  tiporesiduos: TipoResiduo[];
   emProcessamento = false;
   modelLoaded = false;
   exibeIncluir = false;
@@ -99,6 +103,7 @@ export class ManifestoFormComponent
     private _contratoclienteService: ContratoClienteService,
     private _acondicionamentoService: AcondicionamentoService,
     private _tipotratamentoService: TipoTratamentoService,
+    private _tiporesiduoService: TipoResiduoService,
     private _tokenManager: TokenManagerService,
     private _route: ActivatedRoute,
     private dialog: DialogService,
@@ -139,6 +144,13 @@ export class ManifestoFormComponent
         }
       }
 
+      if (msgRetorno === '') {
+        if (isNullOrUndefined(servico.id_tipo_residuo)) {
+            msgRetorno = 'Tipo do resíduo ' + servico.residuo + ' não informado.';
+            break;
+        }
+      }
+
     }
 
     if (msgRetorno !== '') {
@@ -165,6 +177,12 @@ export class ManifestoFormComponent
     this._tipotratamentoService.getListTipoTratamento(this._tokenManager.retrieve()).subscribe(
       data => {
         this.tipotratamentos = JSON.parse(data._body);
+      }
+    );
+
+    this._tiporesiduoService.getListTipoResiduo(this._tokenManager.retrieve()).subscribe(
+      data => {
+        this.tiporesiduos = JSON.parse(data._body);
       }
     );
 
@@ -433,6 +451,8 @@ export class ManifestoFormComponent
             contrato = JSON.parse(data._body);
             this.manifesto.id_contrato_cliente = contrato.id;
             this.manifesto.descricao = contrato.descricao;
+            this.buscarTransportador(this.manifesto.id_contrato_cliente);
+            this.buscarDestinador(this.manifesto.id_contrato_cliente);
           },
           (err: HttpErrorResponse) => {
             this.manifesto.id_contrato_cliente = null;
@@ -479,10 +499,34 @@ export class ManifestoFormComponent
         if (result.id != null && result.id !== undefined) {
           this.manifesto.id_contrato_cliente = result.id;
           this.manifesto.descricao = result.descricao;
+          this.buscarTransportador(this.manifesto.id_contrato_cliente);
+          this.buscarDestinador(this.manifesto.id_contrato_cliente);
         }
       });
     }
 
+  }
+
+  buscarTransportador(_id_contrato_cliente: number) {
+    if (!isNullOrUndefined(_id_contrato_cliente)) {
+      this._contratoclienteService.getTransportador(this._tokenManager.retrieve(), _id_contrato_cliente)
+      .subscribe(data => {
+        const fornecedor: Fornecedor = JSON.parse(data._body);
+        this.manifesto.id_transportador = fornecedor.id;
+        this.manifesto.transportador = fornecedor.razao_social;
+      });
+    }
+  }
+
+  buscarDestinador(_id_contrato_cliente: number) {
+    if (!isNullOrUndefined(_id_contrato_cliente)) {
+      this._contratoclienteService.getDestinador(this._tokenManager.retrieve(), _id_contrato_cliente)
+      .subscribe(data => {
+        const fornecedor: Fornecedor = JSON.parse(data._body);
+        this.manifesto.id_destinador = fornecedor.id;
+        this.manifesto.destinador = fornecedor.razao_social;
+      });
+    }
   }
 
   // limpacampo(servico: ManifestoServico, event: any) {
@@ -541,22 +585,26 @@ export class ManifestoFormComponent
                 if (servicos.length > 0) {
                   for (let index = 0; index < servicos.length; index++) {
                     const servico = servicos[index];
-                    this.manifestoservicos.push(new ManifestoServico(
-                      null,
-                      null,
-                      servico.id_servico,
-                      servico.id_residuo,
-                      null,
-                      null,
-                      servico.unidade,
-                      null,
-                      '',
-                      '',
-                      servico.servico,
-                      servico.residuo,
-                      '',
-                      ''
-                    ));
+
+                    // Verificar se o residuo já existe na lista.
+                    if (this.manifestoservicos.findIndex(p => p.id_residuo === servico.id_residuo) === -1) {
+                      this.manifestoservicos.push(new ManifestoServico(
+                        null,
+                        null,
+                        servico.id_residuo,
+                        null,
+                        null,
+                        null,
+                        servico.unidade,
+                        null,
+                        '',
+                        '',
+                        servico.residuo,
+                        '',
+                        '',
+                        ''
+                      ));
+                    }
                   }
                 }
               });
@@ -564,6 +612,7 @@ export class ManifestoFormComponent
           }
         );
       } else {
+        this.manifestoservicos.length = 0;
         this._contratoclienteServicoService.getContratoClienteServico(this._tokenManager.retrieve(),
         this.manifesto.id_contrato_cliente).subscribe(data => {
           let servicos: ContratoClienteServico[];
@@ -572,22 +621,25 @@ export class ManifestoFormComponent
           if (servicos.length > 0) {
             for (let index = 0; index < servicos.length; index++) {
               const servico = servicos[index];
-              this.manifestoservicos.push(new ManifestoServico(
-                null,
-                null,
-                servico.id_servico,
-                servico.id_residuo,
-                null,
-                null,
-                servico.unidade,
-                null,
-                '',
-                '',
-                servico.servico,
-                servico.residuo,
-                '',
-                ''
-              ));
+              // Verificar se o residuo já existe na lista.
+              if (this.manifestoservicos.findIndex(p => p.id_residuo === servico.id_residuo) === -1) {
+                this.manifestoservicos.push(new ManifestoServico(
+                  null,
+                  null,
+                  servico.id_residuo,
+                  null,
+                  null,
+                  null,
+                  servico.unidade,
+                  null,
+                  '',
+                  '',
+                  servico.residuo,
+                  '',
+                  '',
+                  ''
+                ));
+              }
             }
           }
         });

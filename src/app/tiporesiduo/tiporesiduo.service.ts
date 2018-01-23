@@ -1,7 +1,7 @@
 import { environment } from './../../environments/environment';
 import { isEmpty } from 'rxjs/operators';
 import { isNullOrUndefined } from 'util';
-import { Servico, ServicoFilter } from './servico';
+import { TipoResiduo, TipoResiduoFilter } from './tiporesiduo';
 import { Injectable } from '@angular/core';
 import 'rxjs/add/observable/of';
 import 'rxjs/add/operator/map';
@@ -10,29 +10,23 @@ import { Http, Headers, Response, RequestOptions, URLSearchParams } from '@angul
 import { HttpErrorResponse, HttpParams } from '@angular/common/http';
 
 @Injectable()
-export class ServicoService {
-  private servicoUrl = environment.urlbase + '/api/servicos';
+export class TipoResiduoService {
+  private tiporesiduoUrl = environment.urlbase + '/api/tiporesiduos';
 
   constructor(private _http: Http) {}
 
-  addServico(accessToken: string, _servico: Servico): Observable<any> {
+  addTipoResiduo(accessToken: string, _descricao: string): Observable<any> {
     const headers = new Headers({
       Accept: 'application/json',
       Authorization: 'Bearer ' + accessToken.toString().replace(/"/g, '')
     });
 
     // const _params: HttpParams = new HttpParams();
-    const _body = {
-      descricao: _servico.descricao,
-      armazenador: _servico.armazenador,
-      destinador: _servico.destinador,
-      transportador: _servico.transportador,
-      outras: _servico.outras
-    };
+    const _body = { descricao: _descricao };
     // _params.set('codigo', '1');
 
     return this._http
-      .post(this.servicoUrl, _body, { headers: headers})
+      .post(this.tiporesiduoUrl, _body, { headers: headers})
       .map((res: Response) => res.json())
       .catch((error: any) =>
         Observable.throw(error.json() || 'Server error')
@@ -40,25 +34,18 @@ export class ServicoService {
 
   }
 
-  editServico(accessToken: string, _id: number, _servico: Servico): Observable<any> {
+  editTipoResiduo(accessToken: string, _id: number, _descricao: string): Observable<any> {
     const headers = new Headers({
       Accept: 'application/json',
       Authorization: 'Bearer ' + accessToken.toString().replace(/"/g, '')
     });
 
     // const _params: HttpParams = new HttpParams();
-    const _body = {
-      id: _id,
-      descricao: _servico.descricao,
-      armazenador: _servico.armazenador,
-      destinador: _servico.destinador,
-      transportador: _servico.transportador,
-      outras: _servico.outras
-    };
+    const _body = {id: _id, descricao: _descricao };
     // _params.set('id', _id.toString());
 
     return this._http
-      .put(this.servicoUrl + '/' + _id.toString(), _body, { headers: headers })
+      .put(this.tiporesiduoUrl + '/' + _id.toString(), _body, { headers: headers })
       .map((res: Response) => res.json())
       .catch((error: any) =>
         Observable.throw(error.json() || 'Server error')
@@ -66,38 +53,38 @@ export class ServicoService {
 
   }
 
-  deleteServico(accessToken: string, _id: number) {
+  deleteTipoResiduo(accessToken: string, _id: number) {
     const headers = new Headers({
       Accept: 'application/json',
       Authorization: 'Bearer ' + accessToken.toString().replace(/"/g, '')
     });
 
     return this._http
-      .delete(this.servicoUrl + '/' + _id.toString(), { headers: headers })
+      .delete(this.tiporesiduoUrl + '/' + _id.toString(), { headers: headers })
       .map((res: Response) => res.json())
       .catch((error: any) =>
         Observable.throw(error.json() || 'Server error')
       );
   }
 
-  getServico(accessToken: string, _id: number)  {
+  getTipoResiduo(accessToken: string, _id: number)  {
     const headers = new Headers({
       Accept: 'application/json',
       Authorization: 'Bearer ' + accessToken.toString().replace(/"/g, '')
     });
 
     return this._http
-      .get(this.servicoUrl + '/' + _id.toString(), { headers: headers })
+      .get(this.tiporesiduoUrl + '/' + _id.toString(), { headers: headers })
       .map((res: Response) => res)
       .catch((error: any) =>
         Observable.throw(error.json() || 'Server error')
       );
   }
 
-  /** Metodo que retorna um observable com dados da listagem de servicos
+  /** Metodo que retorna um observable com dados da listagem de tiporesiduos
    *  parametro: acessToken: string
   */
-  getServicos(accessToken: string, sort: string, order: string, page: number, pagesize: number, filter: ServicoFilter) {
+  getTipoResiduos(accessToken: string, sort: string, order: string, page: number, pagesize: number, filter: TipoResiduoFilter) {
     const headers = new Headers({
       Accept: 'application/json',
       Authorization: 'Bearer ' + accessToken.toString().replace(/"/g, '')
@@ -132,15 +119,15 @@ export class ServicoService {
     }
 
     return this._http
-      .get(this.servicoUrl, { headers: headers, search: search })
+      .get(this.tiporesiduoUrl, { headers: headers, search: search })
       .map((res: Response) => res.json())
       .catch((error: any) =>
         Observable.throw(error.json() || 'Server error')
       );
   }
 
-  getListServicos(accessToken: string)  {
-    const listUrl = environment.urlbase + '/api/listservicos';
+  getListTipoResiduo(accessToken: string)  {
+    const listUrl = environment.urlbase + '/api/listtiporesiduos';
     const headers = new Headers({
       Accept: 'application/json',
       Authorization: 'Bearer ' + accessToken.toString().replace(/"/g, '')
@@ -149,7 +136,6 @@ export class ServicoService {
     return this._http
       .get(listUrl, { headers: headers })
       .map((res: Response) => res)
-      .retry(3)
       .catch((error: any) =>
         Observable.throw(error.json() || 'Server error')
       );

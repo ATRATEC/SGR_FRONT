@@ -1,7 +1,7 @@
 import { isNullOrUndefined } from 'util';
 import { DialogService } from './../dialog/dialog.service';
 import { TokenManagerService } from './../token-manager.service';
-import { ServicoService } from './servico.service';
+import { TipoResiduoService } from './tiporesiduo.service';
 import { Component, OnInit, AfterViewInit, AfterViewChecked } from '@angular/core';
 import { Router } from '@angular/router';
 import { by } from 'protractor';
@@ -14,18 +14,18 @@ import 'rxjs/add/operator/distinctUntilChanged';
 import 'rxjs/add/operator/debounceTime';
 import { ChangeDetectorRef, ViewChildren, ViewChild, ElementRef } from '@angular/core';
 import { OnlyNumberDirective } from './../only-number.directive';
-import { Servico } from './servico';
+import { TipoResiduo } from './tiporesiduo';
 import { ActivatedRoute, Params} from '@angular/router';
 import {FormControl, Validators} from '@angular/forms';
 
 @Component({
-  selector: 'app-servico-form',
-  templateUrl: './servico-form.component.html',
-  styleUrls: ['./servico-form.component.css']
+  selector: 'app-tiporesiduo-form',
+  templateUrl: './tiporesiduo-form.component.html',
+  styleUrls: ['./tiporesiduo-form.component.css']
 })
-export class ServicoFormComponent implements OnInit, AfterViewInit, AfterViewChecked {
+export class TipoResiduoFormComponent implements OnInit, AfterViewInit, AfterViewChecked {
 
-  servico: Servico;
+  tiporesiduo: TipoResiduo;
   emProcessamento = false;
   exibeIncluir = false;
 
@@ -34,7 +34,7 @@ export class ServicoFormComponent implements OnInit, AfterViewInit, AfterViewChe
   @ViewChildren('input') vc;
   @ViewChild('focuscomp') focuscomp: ElementRef;
 
-  constructor(private _servicoService: ServicoService,
+  constructor(private _tiporesiduoService: TipoResiduoService,
     private _tokenManager: TokenManagerService,
     private _route: ActivatedRoute,
     private dialog: DialogService) {}
@@ -47,13 +47,13 @@ export class ServicoFormComponent implements OnInit, AfterViewInit, AfterViewChe
 
   ngOnInit() {
     this.emProcessamento = true;
-    this.servico = new Servico();
+    this.tiporesiduo = new TipoResiduo();
     this._route.params.forEach((params: Params) => {
       const id: number = +params['id'];
       if (id) {
-        this._servicoService.getServico(this._tokenManager.retrieve(), id)
+        this._tiporesiduoService.getTipoResiduo(this._tokenManager.retrieve(), id)
         .subscribe( data => {
-          this.servico = JSON.parse(data._body);
+          this.tiporesiduo = JSON.parse(data._body);
           this.emProcessamento = false;
         });
       } else {
@@ -68,7 +68,7 @@ export class ServicoFormComponent implements OnInit, AfterViewInit, AfterViewChe
 
   ngAfterViewInit(): void {
     // this.vc.first.nativeElement.focus();
-    // Promise.resolve(null).then(() => this.focuscomp.nativeElement.focus());
+    Promise.resolve(null).then(() => this.focuscomp.nativeElement.focus());
   }
 
   keyPress(event: any) {
@@ -82,15 +82,15 @@ export class ServicoFormComponent implements OnInit, AfterViewInit, AfterViewChe
   btnSalvar_click() {
     this.emProcessamento = true;
     if (this.validaCampos()) {
-      if (isNullOrUndefined(this.servico.id)) {
-        this._servicoService.addServico(
+      if (isNullOrUndefined(this.tiporesiduo.id)) {
+        this._tiporesiduoService.addTipoResiduo(
           this._tokenManager.retrieve(),
-          this.servico).subscribe(
+          this.tiporesiduo.descricao).subscribe(
             data => {
               this.emProcessamento = false;
-              this.servico = data;
+              this.tiporesiduo = data;
               this.exibeIncluir = true;
-              this.dialog.success('SGR', 'Servico salvo com sucesso.');
+              this.dialog.success('SGR', 'TipoResiduo salvo com sucesso.');
             },
             error => {
               this.emProcessamento = false;
@@ -98,15 +98,15 @@ export class ServicoFormComponent implements OnInit, AfterViewInit, AfterViewChe
             },
           );
       } else {
-        this._servicoService.editServico(
+        this._tiporesiduoService.editTipoResiduo(
           this._tokenManager.retrieve(),
-          this.servico.id,
-          this.servico).subscribe(
+          this.tiporesiduo.id,
+          this.tiporesiduo.descricao).subscribe(
           data => {
           this.emProcessamento = false;
-          this.servico = data;
+          this.tiporesiduo = data;
           this.exibeIncluir = true;
-          this.dialog.success('SGR', 'Servico salvo com sucesso.');
+          this.dialog.success('SGR', 'TipoResiduo salvo com sucesso.');
         },
         error => {
           this.emProcessamento = false;
@@ -121,7 +121,7 @@ export class ServicoFormComponent implements OnInit, AfterViewInit, AfterViewChe
   }
 
   btnIncluir_click() {
-    this.servico = new Servico();
+    this.tiporesiduo = new TipoResiduo();
   }
 
   getDescricaoErrorMessage() {
@@ -131,38 +131,6 @@ export class ServicoFormComponent implements OnInit, AfterViewInit, AfterViewChe
       mensagem = mensagem + 'Campo obrigatório.';
     }
     return mensagem;
-  }
-
-  chkArmazenador_change(event: any) {
-    if (event.checked) {
-      this.servico.transportador = false;
-      this.servico.destinador = false;
-      this.servico.outras = false;
-    }
-  }
-
-  chkDestinador_change(event: any) {
-    if (event.checked) {
-      this.servico.transportador = false;
-      this.servico.armazenador = false;
-      this.servico.outras = false;
-    }
-  }
-
-  chkTransportador_change(event: any) {
-    if (event.checked) {
-      this.servico.armazenador = false;
-      this.servico.destinador = false;
-      this.servico.outras = false;
-    }
-  }
-
-  chkOutras_change(event: any) {
-    if (event.checked) {
-      this.servico.transportador = false;
-      this.servico.destinador = false;
-      this.servico.armazenador = false;
-    }
   }
 
 }

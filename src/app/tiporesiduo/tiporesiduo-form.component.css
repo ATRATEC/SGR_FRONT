@@ -1,14 +1,14 @@
-.frm_servico_codigo {
+.frm_tiporesiduo_codigo {
   min-width: 120px;
   max-width: 120px;
 }
 
-.frm_servico_descricao {
+.frm_tiporesiduo_descricao {
   min-width: 450px;
   max-width: 500px;
 }
 
-.frm_servico-loading-shade {
+.frm_tiporesiduo-loading-shade {
   /* position: absolute;
   top: 0;
   left: 0;
