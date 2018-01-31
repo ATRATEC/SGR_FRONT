@@ -49,8 +49,8 @@
               </mat-form-field>
             </div>
             <div fxFlex="60px" fxFlexAlign="start">
-              <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="10px" style="width: 100%">
-                <div fxFlex="120px" fxFlexAlign="start" fxFlexFill>
+              <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="5px" style="width: 100%">
+                <div fxFlex="90px" fxFlexAlign="start" fxFlexFill>
                   <mat-form-field class="frm_contratofornecedor_codigo">
                     <input matInput autofocus #focuscomp #codigofor maxlength="9" [formControl]="valCodigo" placeholder="Fornecedor" required
                       tabindex="1" [(ngModel)]="contratofornecedor.id_fornecedor" (keyup)="validaSaida($event.target.value)"
@@ -59,12 +59,12 @@
                     <mat-error *ngIf="valCodigo.invalid">{{getCodigoErrorMessage()}}</mat-error>
                   </mat-form-field>
                 </div>
-                <div fxFlex="45px" fxFlexAlign="center" fxFlexFill>
+                <div fxFlex="30px" fxFlexAlign="center" fxFlexFill>
                   <button mat-icon-button color="primary" (click)="openPesquisa()" tabindex="2">
                     <mat-icon>search</mat-icon>
                   </button>
                 </div>
-                <div fxFlex="320px" fxFlexAlign="start" fxFlexFill>
+                <div fxFlex="520px" fxFlexAlign="start" fxFlexFill>
                   <mat-form-field class="frm_contratofornecedor_razao_social">
                     <input matInput disabled [(ngModel)]="contratofornecedor.fornecedor">
                   </mat-form-field>
@@ -75,8 +75,8 @@
               </div>
             </div>
             <div fxFlex="60px" fxFlexAlign="start" *ngIf="contratofornecedor.exclusico">
-              <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="10px" style="width: 100%">
-                <div fxFlex="120px" fxFlexAlign="start" fxFlexFill>
+              <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="5px" style="width: 100%">
+                <div fxFlex="90px" fxFlexAlign="start" fxFlexFill>
                   <mat-form-field class="frm_contratofornecedor_codigo">
                     <input matInput #codigocli maxlength="9" [formControl]="valCodigoCli" placeholder="Cliente" tabindex="1" [(ngModel)]="contratofornecedor.id_cliente"
                       (keyup)="validaSaidaCliente($event.target.value)" (keypress)="onlyNumber($event)">
@@ -84,12 +84,12 @@
                     <mat-error *ngIf="valCodigoCli.invalid">{{getCodigoClienteErrorMessage()}}</mat-error>
                   </mat-form-field>
                 </div>
-                <div fxFlex="45px" fxFlexAlign="center" fxFlexFill>
+                <div fxFlex="30px" fxFlexAlign="center" fxFlexFill>
                   <button mat-icon-button color="primary" (click)="openPesquisaCliente()">
                     <mat-icon>search</mat-icon>
                   </button>
                 </div>
-                <div fxFlex="320px" fxFlexAlign="start" fxFlexFill>
+                <div fxFlex="520px" fxFlexAlign="start" fxFlexFill>
                   <mat-form-field class="frm_contratofornecedor_razao_social">
                     <input matInput disabled [(value)]="contratofornecedor.cliente">
                   </mat-form-field>
@@ -142,7 +142,7 @@
                             <label>Unidade</label>
                           </th>
                           <th class="frm_contratofornecedor_servico_preco">
-                            <label>Preço Compra</label>
+                            <label>Preço Venda</label>
                           </th>
                           <th class="frm_contratofornecedor_servico_preco">
                             <label>Preço Serviço</label>

@@ -24,10 +24,7 @@ export class ServicoService {
     // const _params: HttpParams = new HttpParams();
     const _body = {
       descricao: _servico.descricao,
-      armazenador: _servico.armazenador,
-      destinador: _servico.destinador,
-      transportador: _servico.transportador,
-      outras: _servico.outras
+      id_tipo_atividade: _servico.id_tipo_atividade
     };
     // _params.set('codigo', '1');
 
@@ -50,10 +47,7 @@ export class ServicoService {
     const _body = {
       id: _id,
       descricao: _servico.descricao,
-      armazenador: _servico.armazenador,
-      destinador: _servico.destinador,
-      transportador: _servico.transportador,
-      outras: _servico.outras
+      id_tipo_atividade: _servico.id_tipo_atividade
     };
     // _params.set('id', _id.toString());
 
@@ -129,6 +123,10 @@ export class ServicoService {
 
     if ((!isNullOrUndefined(filter.descricao)) && (filter.descricao.length > 0)) {
       search.set('descricao', filter.descricao);
+    }
+
+    if ((!isNullOrUndefined(filter.tipo_atividade)) && (filter.tipo_atividade.toString().length > 0)) {
+      search.set('tipo_atividade', filter.tipo_atividade.toString());
     }
 
     return this._http

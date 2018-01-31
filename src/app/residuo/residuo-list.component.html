@@ -45,6 +45,30 @@
                 <input matInput #filter placeholder="Descrição" [formControl]="descricaoFilter">
               </mat-form-field>
             </td>
+            <td class="mat-column-classe_residuo">
+              <!-- style="width: 500px" -->
+              <mat-form-field class="mat-column-classe_residuo">
+                <input matInput #filter placeholder="Classe" [formControl]="classeresiduoFilter">
+              </mat-form-field>
+            </td>
+            <td class="mat-column-tipo_residuo">
+              <!-- style="width: 500px" -->
+              <mat-form-field class="mat-column-tipo_residuo">
+                <input matInput #filter placeholder="Tipo de Resíduo" [formControl]="tiporesiduoFilter">
+              </mat-form-field>
+            </td>
+            <td class="mat-column-acondicionamento">
+              <!-- style="width: 500px" -->
+              <mat-form-field class="mat-column-acondicionamento">
+                <input matInput #filter placeholder="Acondicionamento" [formControl]="acondicionamentoFilter">
+              </mat-form-field>
+            </td>
+            <td class="mat-column-tratamento">
+              <!-- style="width: 500px" -->
+              <mat-form-field class="mat-column-tratameno">
+                <input matInput #filter placeholder="Tipo de Tratameno" [formControl]="tratamentoFilter">
+              </mat-form-field>
+            </td>
           </tr>
         </table>
       </div>
@@ -67,9 +91,27 @@
           </ng-container>
 
           <!-- Name Column -->
-          <ng-container matColumnDef="descricao_classe">
+          <ng-container matColumnDef="classe_residuo">
             <mat-header-cell *matHeaderCellDef mat-sort-header> Classe </mat-header-cell>
-            <mat-cell *matCellDef="let row"> {{row.descricao_classe}} </mat-cell>
+            <mat-cell *matCellDef="let row"> {{row.classe_residuo}} </mat-cell>
+          </ng-container>
+
+          <!-- Name Column -->
+          <ng-container matColumnDef="tipo_residuo">
+            <mat-header-cell *matHeaderCellDef mat-sort-header> Tipo de Resíduo </mat-header-cell>
+            <mat-cell *matCellDef="let row"> {{row.tipo_residuo}} </mat-cell>
+          </ng-container>
+
+          <!-- Name Column -->
+          <ng-container matColumnDef="acondicionamento">
+            <mat-header-cell *matHeaderCellDef mat-sort-header> Acondicionamento </mat-header-cell>
+            <mat-cell *matCellDef="let row"> {{row.acondicionamento}} </mat-cell>
+          </ng-container>
+
+          <!-- Name Column -->
+          <ng-container matColumnDef="tratamento">
+            <mat-header-cell *matHeaderCellDef mat-sort-header> Tipo de Tratamento </mat-header-cell>
+            <mat-cell *matCellDef="let row"> {{row.tratamento}} </mat-cell>
           </ng-container>
 
           <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>

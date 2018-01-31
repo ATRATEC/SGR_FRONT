@@ -16,7 +16,14 @@ import 'rxjs/add/operator/debounceTime';
 import { Residuo, ResiduoFilter } from './residuo';
 
 export class DsResiduo extends DataSource<Residuo> {
-  _filterChange = new BehaviorSubject( {id: '', descricao: ''} );
+  _filterChange = new BehaviorSubject( {
+    id: '',
+    descricao: '',
+    classe_residuo: '',
+    tipo_residuo: '',
+    acondicionamento: '',
+    tratamento: ''
+  } );
 
   public onChange: EventEmitter<boolean> = new EventEmitter<boolean>();
 
@@ -65,10 +72,10 @@ export class DsResiduo extends DataSource<Residuo> {
       // Flip flag to show that loading has finished.
       this.onChange.emit(false);
       this.paginaInicial = 1;
-      this.paginaFinal = data.meta.last_page;
-      this.registroDe = data.meta.from;
-      this.registroAte = data.meta.to;
-      this.nrRegistros = data.meta.total;
+      this.paginaFinal = data.last_page;
+      this.registroDe = data.from;
+      this.registroAte = data.to;
+      this.nrRegistros = data.total;
       return data.data;
     })
     .catch(err => {

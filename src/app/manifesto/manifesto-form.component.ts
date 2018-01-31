@@ -100,6 +100,7 @@ export class ManifestoFormComponent
     private _manifestoservicoService: ManifestoServicoService,
     private _contratoclienteServicoService: ContratoClienteServicoService,
     private _clienteService: ClienteService,
+    private _residuoService: ResiduoService,
     private _contratoclienteService: ContratoClienteService,
     private _acondicionamentoService: AcondicionamentoService,
     private _tipotratamentoService: TipoTratamentoService,
@@ -588,22 +589,29 @@ export class ManifestoFormComponent
 
                     // Verificar se o residuo já existe na lista.
                     if (this.manifestoservicos.findIndex(p => p.id_residuo === servico.id_residuo) === -1) {
-                      this.manifestoservicos.push(new ManifestoServico(
-                        null,
-                        null,
-                        servico.id_residuo,
-                        null,
-                        null,
-                        null,
-                        servico.unidade,
-                        null,
-                        '',
-                        '',
-                        servico.residuo,
-                        '',
-                        '',
-                        ''
-                      ));
+                      let residuo: Residuo;
+                      this._residuoService.getResiduo(this._tokenManager.retrieve(), servico.id_residuo)
+                      .subscribe(res => {
+                        residuo = JSON.parse(res._body);
+                        if (!isNullOrUndefined(residuo)) {
+                          this.manifestoservicos.push(new ManifestoServico(
+                            null,
+                            null,
+                            servico.id_residuo,
+                            residuo.id_tipo_residuo,
+                            residuo.id_acondicionamento,
+                            residuo.id_tratamento,
+                            servico.unidade,
+                            null,
+                            '',
+                            '',
+                            servico.residuo,
+                            residuo.tipo_residuo,
+                            residuo.acondicionamento,
+                            residuo.tratamento
+                          ));
+                        }
+                      });
                     }
                   }
                 }
@@ -623,22 +631,29 @@ export class ManifestoFormComponent
               const servico = servicos[index];
               // Verificar se o residuo já existe na lista.
               if (this.manifestoservicos.findIndex(p => p.id_residuo === servico.id_residuo) === -1) {
-                this.manifestoservicos.push(new ManifestoServico(
-                  null,
-                  null,
-                  servico.id_residuo,
-                  null,
-                  null,
-                  null,
-                  servico.unidade,
-                  null,
-                  '',
-                  '',
-                  servico.residuo,
-                  '',
-                  '',
-                  ''
-                ));
+                let residuo: Residuo;
+                this._residuoService.getResiduo(this._tokenManager.retrieve(), servico.id_residuo)
+                .subscribe(res => {
+                  residuo = JSON.parse(res._body);
+                  if (!isNullOrUndefined(residuo)) {
+                    this.manifestoservicos.push(new ManifestoServico(
+                      null,
+                      null,
+                      servico.id_residuo,
+                      residuo.id_tipo_residuo,
+                      residuo.id_acondicionamento,
+                      residuo.id_tratamento,
+                      servico.unidade,
+                      null,
+                      '',
+                      '',
+                      servico.residuo,
+                      residuo.tipo_residuo,
+                      residuo.acondicionamento,
+                      residuo.tratamento
+                    ));
+                  }
+                });
               }
             }
           }

@@ -146,11 +146,13 @@ mat-row:nth-child(odd) {
 }
 
 .mat-column-descricao {
-  max-width: 500px;
+  min-width: 350px;
+  max-width: 350px;
 }
 
-.mat-column-unidade {
-  max-width: 80px;
+.mat-column-tipo_atividade {
+  min-width: 300px;
+  max-width: 300px;
 }
 
 .mat-column-quantidade_estoque {

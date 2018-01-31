@@ -118,18 +118,18 @@ mat-row:nth-child(odd) {
 }
 
 .mat-column-cliente {
-  min-width: 250px;
-  max-width: 250px;
+  min-width: 500px;
+  max-width: 500px;
 }
 
 .mat-column-vigencia_inicio {
-  min-width: 170px;
-  max-width: 170px;
+  min-width: 140px;
+  max-width: 140px;
 }
 
 .mat-column-vigencia_final {
-  min-width: 170px;
-  max-width: 170px;
+  min-width: 140px;
+  max-width: 140px;
 }
 
 

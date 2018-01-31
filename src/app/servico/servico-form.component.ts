@@ -1,3 +1,5 @@
+import { TipoAtividadeEnum } from './../tipoatividade/tipoatividade.enum';
+import { TipoAtividadeService } from './../tipoatividade/tipoatividade.service';
 import { isNullOrUndefined } from 'util';
 import { DialogService } from './../dialog/dialog.service';
 import { TokenManagerService } from './../token-manager.service';
@@ -17,6 +19,7 @@ import { OnlyNumberDirective } from './../only-number.directive';
 import { Servico } from './servico';
 import { ActivatedRoute, Params} from '@angular/router';
 import {FormControl, Validators} from '@angular/forms';
+import { TipoAtividade } from '../tipoatividade/tipoatividade';
 
 @Component({
   selector: 'app-servico-form',
@@ -28,6 +31,8 @@ export class ServicoFormComponent implements OnInit, AfterViewInit, AfterViewChe
   servico: Servico;
   emProcessamento = false;
   exibeIncluir = false;
+  tipoatividades: TipoAtividade[];
+  TipoAtividadeEnum: typeof TipoAtividadeEnum = TipoAtividadeEnum;
 
   valDescricao = new FormControl('', [Validators.required]);
 
@@ -35,6 +40,7 @@ export class ServicoFormComponent implements OnInit, AfterViewInit, AfterViewChe
   @ViewChild('focuscomp') focuscomp: ElementRef;
 
   constructor(private _servicoService: ServicoService,
+    private _tipoatividadeService: TipoAtividadeService,
     private _tokenManager: TokenManagerService,
     private _route: ActivatedRoute,
     private dialog: DialogService) {}
@@ -48,18 +54,34 @@ export class ServicoFormComponent implements OnInit, AfterViewInit, AfterViewChe
   ngOnInit() {
     this.emProcessamento = true;
     this.servico = new Servico();
-    this._route.params.forEach((params: Params) => {
-      const id: number = +params['id'];
-      if (id) {
-        this._servicoService.getServico(this._tokenManager.retrieve(), id)
-        .subscribe( data => {
-          this.servico = JSON.parse(data._body);
+    const ta = this._tipoatividadeService.getListTipoAtividades(this._tokenManager.retrieve())
+      .retry(3)
+      .subscribe(
+        data => {
+          this.tipoatividades = JSON.parse(data._body);
+          // console.log(2);
+          this._route.params.forEach((params: Params) => {
+            const id: number = +params['id'];
+            if (id) {
+              this._servicoService.getServico(this._tokenManager.retrieve(), id)
+              .retry(3)
+              .subscribe( dt => {
+                this.servico = JSON.parse(dt._body);
+                // console.log(1);
+                this.emProcessamento = false;
+              });
+            } else {
+              this.emProcessamento = false;
+            }
+          });
+        },
+        error => {
           this.emProcessamento = false;
-        });
-      } else {
-        this.emProcessamento = false;
-      }
-    });
+          this.dialog.error('SGR', 'Erro ao carregar o registro.', error.error + ' - Detalhe: ' + error.message);
+        }
+      );
+
+
   }
 
   ngAfterViewChecked(): void {
@@ -131,38 +153,6 @@ export class ServicoFormComponent implements OnInit, AfterViewInit, AfterViewChe
       mensagem = mensagem + 'Campo obrigatório.';
     }
     return mensagem;
-  }
-
-  chkArmazenador_change(event: any) {
-    if (event.checked) {
-      this.servico.transportador = false;
-      this.servico.destinador = false;
-      this.servico.outras = false;
-    }
-  }
-
-  chkDestinador_change(event: any) {
-    if (event.checked) {
-      this.servico.transportador = false;
-      this.servico.armazenador = false;
-      this.servico.outras = false;
-    }
-  }
-
-  chkTransportador_change(event: any) {
-    if (event.checked) {
-      this.servico.armazenador = false;
-      this.servico.destinador = false;
-      this.servico.outras = false;
-    }
-  }
-
-  chkOutras_change(event: any) {
-    if (event.checked) {
-      this.servico.transportador = false;
-      this.servico.destinador = false;
-      this.servico.armazenador = false;
-    }
   }
 
 }

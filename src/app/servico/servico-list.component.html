@@ -45,6 +45,16 @@
                 <input matInput #filter placeholder="Descrição" [formControl]="descricaoFilter">
               </mat-form-field>
             </td>
+            <td>
+              <mat-form-field>
+                <mat-select placeholder="Tipo de Atividade" [formControl]="tipoatividadeFilter">
+                  <mat-option></mat-option>
+                  <mat-option *ngFor="let tipoatididade of tipoatividades" [value]="tipoatididade.id">
+                    {{ tipoatididade.descricao }}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+            </td>
           </tr>
         </table>
       </div>
@@ -65,6 +75,11 @@
             <mat-header-cell *matHeaderCellDef mat-sort-header> Descrição </mat-header-cell>
             <mat-cell *matCellDef="let row"> {{row.descricao}} </mat-cell>
           </ng-container>
+
+          <ng-container matColumnDef="tipo_atividade">
+              <mat-header-cell *matHeaderCellDef mat-sort-header> Tipo de Atividade </mat-header-cell>
+              <mat-cell *matCellDef="let row"> {{row.tipo_atividade}} </mat-cell>
+            </ng-container>
 
           <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
           <mat-row *matRowDef="let row; columns: displayedColumns;" [ngClass]="{'highlight': selectedRowIndex == row.id}" (click)="highlight(row)" (dblclick)="dblck(row)"></mat-row>

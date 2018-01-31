@@ -15,14 +15,20 @@ export class ResiduoService {
 
   constructor(private _http: Http) {}
 
-  addResiduo(accessToken: string, _descricao: string, _id_classe: number): Observable<any> {
+  addResiduo(accessToken: string, _residuo: Residuo): Observable<any> {
     const headers = new Headers({
       Accept: 'application/json',
       Authorization: 'Bearer ' + accessToken.toString().replace(/"/g, '')
     });
 
     // const _params: HttpParams = new HttpParams();
-    const _body = { descricao: _descricao, id_classe: _id_classe };
+    const _body = {
+      descricao: _residuo.descricao,
+      id_classe: _residuo.id_classe,
+      id_tipo_residuo: _residuo.id_tipo_residuo,
+      id_acondicionamento: _residuo.id_acondicionamento,
+      id_tratamento: _residuo.id_tratamento
+    };
     // _params.set('codigo', '1');
 
     return this._http
@@ -34,14 +40,21 @@ export class ResiduoService {
 
   }
 
-  editResiduo(accessToken: string, _id: number, _descricao: string, _id_classe: number): Observable<any> {
+  editResiduo(accessToken: string, _id: number, _residuo: Residuo): Observable<any> {
     const headers = new Headers({
       Accept: 'application/json',
       Authorization: 'Bearer ' + accessToken.toString().replace(/"/g, '')
     });
 
     // const _params: HttpParams = new HttpParams();
-    const _body = {id: _id, descricao: _descricao, id_classe: _id_classe };
+    const _body = {
+      id: _id,
+      descricao: _residuo.descricao,
+      id_classe: _residuo.id_classe,
+      id_tipo_residuo: _residuo.id_tipo_residuo,
+      id_acondicionamento: _residuo.id_acondicionamento,
+      id_tratamento: _residuo.id_tratamento
+    };
     // _params.set('id', _id.toString());
 
     return this._http
@@ -116,6 +129,22 @@ export class ResiduoService {
 
     if ((!isNullOrUndefined(filter.descricao)) && (filter.descricao.length > 0)) {
       search.set('descricao', filter.descricao);
+    }
+
+    if ((!isNullOrUndefined(filter.classe_residuo)) && (filter.classe_residuo.length > 0)) {
+      search.set('classe_residuo', filter.classe_residuo);
+    }
+
+    if ((!isNullOrUndefined(filter.tipo_residuo)) && (filter.tipo_residuo.length > 0)) {
+      search.set('tipo_residuo', filter.tipo_residuo);
+    }
+
+    if ((!isNullOrUndefined(filter.acondicionamento)) && (filter.acondicionamento.length > 0)) {
+      search.set('acondicionamento', filter.acondicionamento);
+    }
+
+    if ((!isNullOrUndefined(filter.tratamento)) && (filter.tratamento.length > 0)) {
+      search.set('tratamento', filter.tratamento);
     }
 
     return this._http

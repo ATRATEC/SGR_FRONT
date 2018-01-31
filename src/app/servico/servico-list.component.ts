@@ -1,3 +1,4 @@
+import { TipoAtividadeService } from './../tipoatividade/tipoatividade.service';
 import { Router } from '@angular/router';
 import { DialogService } from './../dialog/dialog.service';
 import { by } from 'protractor';
@@ -21,6 +22,7 @@ import 'rxjs/add/operator/debounceTime';
 import { Servico } from './servico';
 import { ChangeDetectorRef, AfterViewInit } from '@angular/core';
 import { OnlyNumberDirective } from './../only-number.directive';
+import { TipoAtividade } from '../tipoatividade/tipoatividade';
 
 @Component({
   selector: 'app-servico',
@@ -28,17 +30,19 @@ import { OnlyNumberDirective } from './../only-number.directive';
   styleUrls: ['./servico-list.component.css']
 })
 export class ServicoListComponent implements OnInit, AfterViewInit {
-  displayedColumns = ['id', 'descricao'];
+  displayedColumns = ['id', 'descricao', 'tipo_atividade'];
   // displayedColumns = ['id', 'codigo', 'descricao'];
   dataSource: DsServico | null;
   selectedRowIndex = -1;
   selectedRow: any | null;
   servicos: Servico[];
+  tipoatividades: TipoAtividade[];
   isLoadingResults: boolean;
 
 
   idFilter = new FormControl();
   descricaoFilter = new FormControl();
+  tipoatividadeFilter = new FormControl();
 
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild(MatPaginator) paginator: MatPaginator;
@@ -52,6 +56,7 @@ export class ServicoListComponent implements OnInit, AfterViewInit {
   }
 
   constructor(private _servicoService: ServicoService,
+              private _tipoatividadeService: TipoAtividadeService,
               private _tokenManager: TokenManagerService,
               private dialog: DialogService,
               private _router: Router) {}
@@ -154,14 +159,20 @@ export class ServicoListComponent implements OnInit, AfterViewInit {
     this.paginator._intl.nextPageLabel = 'Próxima Página';
     this.paginator._intl.previousPageLabel = 'Voltar Página';
 
+    this._tipoatividadeService.getListTipoAtividades(this._tokenManager.retrieve())
+      .subscribe(data => {
+        this.tipoatividades = JSON.parse(data._body);
+    });
+
     this.dataSource = new DsServico(this._tokenManager, this._servicoService, this.paginator, this.sort);
 
     const idFilter$ = this.idFilter.valueChanges.debounceTime(500).distinctUntilChanged().startWith('');
     const descricaoFilter$ = this.descricaoFilter.valueChanges.debounceTime(500).distinctUntilChanged().startWith('');
+    const tipoatividadeFilter$ = this.tipoatividadeFilter.valueChanges.debounceTime(500).distinctUntilChanged().startWith('');
 
-    Observable.combineLatest(idFilter$, descricaoFilter$).debounceTime(500).distinctUntilChanged().
+    Observable.combineLatest(idFilter$, descricaoFilter$, tipoatividadeFilter$).debounceTime(500).distinctUntilChanged().
     map(
-      ([id, descricao ]) => ({id, descricao})).subscribe(filter => {
+      ([id, descricao, tipo_atividade ]) => ({id, descricao, tipo_atividade})).subscribe(filter => {
         if (!this.dataSource) { return; }
         this.dataSource.filter = filter;
       });

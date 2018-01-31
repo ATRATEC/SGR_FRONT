@@ -63,7 +63,7 @@
                     <mat-icon>search</mat-icon>
                   </button>
                 </div>
-                <div fxFlex="320px" fxFlexAlign="start" fxFlexFill>
+                <div fxFlex="520px" fxFlexAlign="start" fxFlexFill>
                   <mat-form-field class="frm_contratocliente_razao_social">
                     <input matInput disabled [(ngModel)]="contratocliente.cliente">
                   </mat-form-field>
@@ -98,7 +98,7 @@
                 </div>
                 <div fxFlex="170px" fxFlexAlign="start" fxFlexFill >
                   <div class="group" >
-                    <input currencyMask type="text" class="atrainput" [(ngModel)]="contratocliente.faturamento_minimo" style="height: 30px; width: 105px;"
+                    <input currencyMask type="text" class="atrainput" [(ngModel)]="contratocliente.faturamento_minimo" style="height: 30px; width: 105px;" tabindex="6"
                       required>
                     <span class="highlight"></span>
                     <span class="bar"></span>
@@ -108,7 +108,7 @@
               </div>
             </div>
             <div fxFlex="320px" fxFlexAlign="start" fxFlexFill style="overflow-y:auto;">
-              <mat-tab-group tabindex="9">
+              <mat-tab-group>
                 <mat-tab label="Serviços" style="overflow-y:auto;">
                   <div fxLayou="column" fxLayoutAlign="start center" fxLayoutGap="0px" style="overflow-y:auto;">
                     <div fxFlex="100%" style="overflow-y:auto;">
@@ -117,7 +117,7 @@
                           <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="5px">
                             <div fxFlex="200px" fxFlexAlign="start" fxFlexFill>
                               <mat-form-field class="frm_contratocliente_servico">
-                                <mat-select placeholder="Serviços" [(value)]="contratoclienteservico.id_servico" required [formControl]="valServico">
+                                <mat-select placeholder="Serviços" [(value)]="contratoclienteservico.id_servico" required [formControl]="valServico" tabindex="7">
                                   <mat-option *ngFor="let servico of servicos" [value]="servico.id">
                                     {{ servico.descricao }}
                                   </mat-option>
@@ -127,7 +127,7 @@
                             </div>
                             <div fxFlex="100px" fxFlexAlign="start" fxFlexFill>
                               <mat-form-field class="frm_contratocliente_unidade">
-                                <mat-select placeholder="Unidades" [(value)]="contratoclienteservico.unidade" required (change)="unidadeChange($event)" [formControl]="valUnidade">
+                                <mat-select placeholder="Unidades" [(value)]="contratoclienteservico.unidade" required (change)="unidadeChange($event)" [formControl]="valUnidade" tabindex="8">
                                   <mat-option *ngFor="let unidade of unidades" [value]="unidade.codigo">
                                     {{ unidade.codigo }}
                                   </mat-option>
@@ -137,9 +137,9 @@
                             </div>
                             <div fxFlex="600px" fxFlexAlign="start" fxFlexFill>
                               <mat-form-field class="frm_contratocliente_fornecedor">
-                                <mat-select placeholder="Fornecedor" [(value)]="contratoclienteservico.id_contrato_fornecedor">
+                                <mat-select placeholder="Fornecedor" [(value)]="contratoclienteservico.id_contrato_fornecedor" tabindex="9">
                                   <mat-option *ngFor="let contrato of contratofornecedorservicos" [value]="contrato.id_contrato">
-                                    {{ contrato.fornecedor }} | Preço Compra: {{contrato.preco_compra | currency:'BRL':true}} | Preço Servico: {{contrato.preco_servico
+                                    {{ contrato.fornecedor }} | Preço Venda: {{contrato.preco_compra | currency:'BRL':true}} | Preço Servico: {{contrato.preco_servico
                                     | currency:'BRL':true}}
                                   </mat-option>
                                 </mat-select>
@@ -153,7 +153,7 @@
                           <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="5px">
                             <div fxFlex="200px" fxFlexAlign="start" fxFlexFill>
                               <mat-form-field class="frm_contratocliente_residuo">
-                                <mat-select placeholder="Residuo" [(value)]="contratoclienteservico.id_residuo" required [formControl]="valResiduo">
+                                <mat-select placeholder="Residuo" [(value)]="contratoclienteservico.id_residuo" required [formControl]="valResiduo" tabindex="10">
                                   <mat-option *ngFor="let residuo of residuos" [value]="residuo.id">
                                     {{ residuo.descricao }}
                                   </mat-option>
@@ -163,7 +163,7 @@
                             </div>
                             <div fxFlex="120px" fxFlexAlign="start" fxFlexFill>
                               <div class="group">
-                                <input currencyMask type="text" class="atrainput" [(ngModel)]="contratoclienteservico.preco_compra" style="height: 25px; width: 105px;"
+                                <input currencyMask type="text" class="atrainput" [(ngModel)]="contratoclienteservico.preco_compra" style="height: 25px; width: 105px;" tabindex="11"
                                   required>
                                 <span class="highlight"></span>
                                 <span class="bar"></span>
@@ -172,7 +172,7 @@
                             </div>
                             <div fxFlex="120px" fxFlexAlign="start" fxFlexFill>
                               <div class="group">
-                                <input currencyMask type="text" class="atrainput" [(ngModel)]="contratoclienteservico.preco_servico" style="height: 25px; width: 105px;"
+                                <input currencyMask type="text" class="atrainput" [(ngModel)]="contratoclienteservico.preco_servico" style="height: 25px; width: 105px;" tabindex="12"
                                   required>
                                 <span class="highlight"></span>
                                 <span class="bar"></span>
@@ -181,7 +181,7 @@
                             </div>
                             <div fxFlex="120px" fxFlexAlign="start" fxFlexFill>
                               <button mat-raised-button color="primary" (click)="addlinha()"
-                              [disabled]="valServico.invalid || valUnidade.invalid || valResiduo.invalid">
+                              [disabled]="valServico.invalid || valUnidade.invalid || valResiduo.invalid" tabindex="13">
                                 <mat-icon>playlist_add</mat-icon>
                                 <span>Adicionar</span>
                               </button>

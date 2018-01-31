@@ -44,12 +44,12 @@
           <div fxLayout="column" fxLayoutAlign="start center" fxLayoutGap="0px">
             <div fxFlex="60px" fxFlexAlign="start">
               <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="5px" style="width: 100%">
-                <div fxFlex="120px" fxFlexAlign="start">
+                <div fxFlex="90px" fxFlexAlign="start">
                   <mat-form-field class="frm_manifesto_codigo">
                     <input matInput disabled #codigo maxlength="9" type="number" tabindex="-1" placeholder="Código" required [(ngModel)]="manifesto.id">
                   </mat-form-field>
                 </div>
-                <div fxFlex="120px" fxFlexAlign="start" fxFlexFill>
+                <div fxFlex="90px" fxFlexAlign="start" fxFlexFill>
                   <mat-form-field class="frm_manifesto_codigo">
                     <input matInput autofocus #focuscomp #codigofor maxlength="9" [formControl]="valCodigo" placeholder="Cliente" required tabindex="1"
                       [(ngModel)]="manifesto.id_cliente" (keyup)="validaSaida($event.target.value)" (keypress)="onlyNumber($event)">
@@ -62,19 +62,19 @@
                     <mat-icon>search</mat-icon>
                   </button>
                 </div>
-                <div fxFlex="300px" fxFlexAlign="start" fxFlexFill>
+                <div fxFlex="520px" fxFlexAlign="start" fxFlexFill>
                   <mat-form-field class="frm_manifesto_razao_social">
                     <input matInput disabled [(ngModel)]="manifesto.cliente">
                   </mat-form-field>
                 </div>
-                <div fxFlex="150px" fxFlexFill>
+                <div fxFlex="100px" fxFlexFill>
                   <mat-form-field class="frm_manifesto_numero">
-                    <input matInput #descricao maxlength="50" [formControl]="valNumero" placeholder="Numero" required tabindex="3" [(ngModel)]="manifesto.numero">
-                    <mat-hint align="end">{{descricao.value?.length || 0}}/50</mat-hint>
+                    <input matInput #descricao maxlength="20" [formControl]="valNumero" placeholder="Numero" required tabindex="3" [(ngModel)]="manifesto.numero">
+                    <mat-hint align="end">{{descricao.value?.length || 0}}/20</mat-hint>
                     <mat-error *ngIf="valNumero.invalid">{{getDescricaoErrorMessage()}}</mat-error>
                   </mat-form-field>
                 </div>
-                <div fxFlex="160px" fxFlexAlign="start" fxFlexFill>
+                <div fxFlex="140px" fxFlexAlign="start" fxFlexFill>
                   <mat-form-field class="frm_manifesto_data">
                     <input matInput type="date" #dtemissao maxlength="10" placeholder="Data" tabindex="4" [ngModel]="manifesto.data" (ngModelChange)="manifesto.data = $event"
                       [value]="manifesto.data" [formControl]="valData">
@@ -91,24 +91,24 @@
                     <div fxFlex="100%" style="overflow-y:auto;">
                       <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="0px" style="overflow-y:auto;">
                         <div fxFlex="60px" fxFlexAlign="start">
-                          <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="20px">
-                            <div fxFlex="120px" fxFlexAlign="start" fxFlexFill>
+                          <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="5px">
+                            <div fxFlex="90px" fxFlexAlign="start" fxFlexFill>
                               <mat-form-field class="frm_manifesto_codigo">
-                                <input matInput #codigoCtr maxlength="9" [formControl]="valCodigoCTR" placeholder="Contrato do Cliente" required tabindex="5"
+                                <input matInput #codigoCtr maxlength="9" [formControl]="valCodigoCTR" required tabindex="5"
                                   [(ngModel)]="manifesto.id_contrato_cliente" (keyup)="validaSaidaCTR($event.target.value)"
                                   (keypress)="onlyNumber($event)">
                                 <mat-hint align="end">{{codigoCtr.value?.length || 0}}/9</mat-hint>
                                 <mat-error *ngIf="valCodigoCTR.invalid">{{getCodigoErrorMessage()}}</mat-error>
                               </mat-form-field>
                             </div>
-                            <div fxFlex="45px" fxFlexAlign="center" fxFlexFill>
+                            <div fxFlex="30px" fxFlexAlign="center" fxFlexFill>
                               <button mat-icon-button color="primary" (click)="openPesquisaCTR()" tabindex="6">
                                 <mat-icon>search</mat-icon>
                               </button>
                             </div>
-                            <div fxFlex="320px" fxFlexAlign="start" fxFlexFill>
+                            <div fxFlex="420px" fxFlexAlign="start" fxFlexFill>
                               <mat-form-field class="frm_manifesto_descricao">
-                                <input matInput disabled [(ngModel)]="manifesto.descricao">
+                                <input matInput disabled [(ngModel)]="manifesto.descricao" placeholder="Contrato do Cliente">
                               </mat-form-field>
                             </div>
                             <div fxFlex="120px" fxFlexAlign="center" fxFlexFill>
@@ -122,14 +122,14 @@
                       </div>
                       <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="0px" style="overflow-y:auto;">
                         <div fxFlex="60px" fxFlexAlign="start">
-                          <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="20px">
+                          <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="5px">
                             <div fxFlex="120px" fxFlexAlign="start" fxFlexFill>
                               <mat-form-field class="frm_manifesto_codigo">
                                 <input matInput disabled placeholder="Transportador" tabindex="5" [(ngModel)]="manifesto.id_transportador">
                               </mat-form-field>
                             </div>
                             <div fxFlex="320px" fxFlexAlign="start" fxFlexFill>
-                              <mat-form-field class="frm_manifesto_razao_social">
+                              <mat-form-field class="frm_manifesto_transportador">
                                 <input matInput disabled [(ngModel)]="manifesto.transportador">
                               </mat-form-field>
                             </div>
@@ -139,7 +139,7 @@
                               </mat-form-field>
                             </div>
                             <div fxFlex="320px" fxFlexAlign="start" fxFlexFill>
-                              <mat-form-field class="frm_manifesto_razao_social">
+                              <mat-form-field class="frm_manifesto_destinador">
                                 <input matInput disabled [(ngModel)]="manifesto.destinador">
                               </mat-form-field>
                             </div>
@@ -256,25 +256,25 @@
                                 {{servico.residuo}}
                               </td>
                               <td class="frm_manifesto_servico_tipo_residuo">
-                                <select class="preco" [(ngModel)]="servico.id_tipo_residuo" style="max-height: 18px;">
+                                {{servico.tipo_residuo}}
+                                <!-- <select class="preco" [(ngModel)]="servico.id_tipo_residuo" style="max-height: 18px;">
                                   <option class="preco" *ngIf="servico.id_tipo_residuo" [ngValue]="servico.id_tipo_residuo">{{servico.tipo_residuo}}</option>
-                                  <!-- <option class="preco" *ngIf="!servico.id_acondicionamento" [value]=""></option> -->
                                   <option class="preco" *ngFor="let tiporesiduo of tiporesiduos" [ngValue]="tiporesiduo.id">{{ tiporesiduo.descricao }}</option>
-                                </select>
+                                </select> -->
                               </td>
                               <td class="frm_manifesto_servico_acondicionamento">
-                                <select class="preco" [(ngModel)]="servico.id_acondicionamento" style="max-height: 18px;">
+                                {{servico.acondicionamento}}
+                                <!-- <select class="preco" [(ngModel)]="servico.id_acondicionamento" style="max-height: 18px;">
                                   <option class="preco" *ngIf="servico.id_acondicionamento" [ngValue]="servico.id_acondicionamento">{{servico.acondicionamento}}</option>
-                                  <!-- <option class="preco" *ngIf="!servico.id_acondicionamento" [value]=""></option> -->
                                   <option class="preco" *ngFor="let acondicionamento of acondicionamentos" [ngValue]="acondicionamento.id">{{ acondicionamento.descricao }}</option>
-                                </select>
+                                </select> -->
                               </td>
                               <td class="frm_manifesto_servico_tratamento">
-                                <select class="preco" [(ngModel)]="servico.id_tratamento" style="max-height: 18px;">
+                                {{servico.tratamento}}
+                                <!-- <select class="preco" [(ngModel)]="servico.id_tratamento" style="max-height: 18px;">
                                   <option class="preco" *ngIf="servico.id_tratamento" [ngValue]="servico.id_tratamento">{{servico.tratamento}}</option>
-                                  <!-- <option class="preco" *ngIf="!servico.id_tratamento" [value]=""></option> -->
                                   <option class="preco" *ngFor="let tratamento of tipotratamentos" [ngValue]="tratamento.id">{{ tratamento.descricao }}</option>
-                                </select>
+                                </select> -->
                               </td>
                               <td class="frm_manifesto_servico_unidade" style="max-height: 18px;">
                                 {{servico.unidade}}

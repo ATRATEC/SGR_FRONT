@@ -29,52 +29,62 @@
         </button>
       </div>
       <div fxFlex="80%" fxFlexAlign="center">
-          <div fxLayout="column" class="frm_servico-loading-shade" fxLayoutAlign="center center" *ngIf="emProcessamento">
-              <div fxFlex="70" fxFlexAlign="center">
-                <mat-spinner></mat-spinner>
-              </div>
-              <div fxFlex="10" fxFlexAlign="center">
-                &nbsp;
-              </div>
-              <div fxFlex="20" fxFlexAlign="center">
-                <label>Aguarde...</label>
-              </div>
-            </div>
-        <mat-card *ngIf="!emProcessamento">
+        <div fxLayout="column" class="frm_servico-loading-shade" fxLayoutAlign="center center" *ngIf="emProcessamento">
+          <div fxFlex="70" fxFlexAlign="center">
+            <mat-spinner></mat-spinner>
+          </div>
+          <div fxFlex="10" fxFlexAlign="center">
+            &nbsp;
+          </div>
+          <div fxFlex="20" fxFlexAlign="center">
+            <label>Aguarde...</label>
+          </div>
+        </div>
+        <mat-card *ngIf="!emProcessamento" style="width: 600px;">
           <div fxLayout="column" fxLayoutAlign="start center" fxLayoutGap="5px">
             <div fxFlex="60px" fxFlexAlign="start">
               <mat-form-field class="frm_servico_codigo">
-                <input matInput #codigo maxlength="9" type="number" tabindex="-1" placeholder="Código" required [(ngModel)]="servico.id">
+                <input matInput #codigo maxlength="9" type="number" tabindex="-1" placeholder="Código" disabled [(ngModel)]="servico.id">
                 <!-- <mat-hint align="end">{{codigo.value?.length || 0}}/9</mat-hint>
                 <mat-error *ngIf="valCodigo.invalid">{{getCodigoErrorMessage()}}</mat-error> -->
               </mat-form-field>
             </div>
-            <div fxFlex="60px" fxFlexAlign="start" >
+            <div fxFlex="60px" fxFlexAlign="start">
               <mat-form-field class="frm_servico_descricao">
-                <input matInput autofocus #focuscomp #descricao maxlength="50"  [formControl]="valDescricao" placeholder="Descrição" required tabindex="1" [(ngModel)]="servico.descricao">
+                <input matInput autofocus #focuscomp #descricao maxlength="50" [formControl]="valDescricao" placeholder="Descrição" required
+                  tabindex="1" [(ngModel)]="servico.descricao">
                 <mat-hint align="end">{{descricao.value?.length || 0}}/50</mat-hint>
                 <mat-error *ngIf="valDescricao.invalid">{{getDescricaoErrorMessage()}}</mat-error>
               </mat-form-field>
             </div>
             <!-- <div fxFlex="1px" class="customHrFull"></div> -->
             <div fxFlex="25px" fxFlexAlign="start">
-                <label>Tipo de Atividade</label>
+              <label>Tipo de Atividade</label>
             </div>
-            <div fxFlex="60px" fxFlexAlign="start" >
+            <div fxFlex="60px" fxFlexAlign="start">
 
-              <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="5px">
-                <div fxFlex="130px" fxFlexAlign="end" fxFlexFill>
-                    <mat-checkbox [(ngModel)]="servico.armazenador" (change)="chkArmazenador_change($event)" >Armazenador</mat-checkbox>
+              <div fxLayout="row" fxLayoutAlign="space-between center" fxLayoutGap="30px">
+                <div fxFlex="100%" fxFlexAlign="start" fxFlexFill>
+                    <mat-radio-group [(ngModel)]="servico.id_tipo_atividade" [value]="servico.id_tipo_atividade" style="width: 100%">
+                        <mat-radio-button *ngFor="let tipoatividade of tipoatividades" [value]="tipoatividade.id">
+                          {{tipoatividade.descricao}} &nbsp;&nbsp;&nbsp;
+                        </mat-radio-button>
+                      </mat-radio-group>
+                </div>
+
+
+                <!-- <div fxFlex="130px" fxFlexAlign="end" fxFlexFill>
+                    <mat-checkbox [ngModel]="servico.armazenador" [checked]="servico.armazenador"  (change)="chkArmazenador_change($event)" >Armazenador</mat-checkbox>
                 </div>
                 <div fxFlex="130px" fxFlexAlign="end" fxFlexFill>
-                    <mat-checkbox [(ngModel)]="servico.destinador" (change)="chkDestinador_change($event)" >Destinador</mat-checkbox>
+                    <mat-checkbox [ngModel]="servico.destinador" [checked]="servico.destinador"  (change)="chkDestinador_change($event)" >Destinador</mat-checkbox>
                 </div>
                 <div fxFlex="130px" fxFlexAlign="end" fxFlexFill>
-                    <mat-checkbox [(ngModel)]="servico.transportador" (change)="chkTransportador_change($event)" >Transportador</mat-checkbox>
+                    <mat-checkbox [ngModel]="servico.transportador" [checked]="servico.transportador" (change)="chkTransportador_change($event)" >Transportador</mat-checkbox>
                 </div>
                 <div fxFlex="130px" fxFlexAlign="end" fxFlexFill>
-                    <mat-checkbox [(ngModel)]="servico.outras" (change)="chkOutras_change($event)" >Outras</mat-checkbox>
-                </div>
+                    <mat-checkbox [ngModel]="servico.outras" [checked]="servico.outras" (change)="chkOutras_change($event)" >Outras</mat-checkbox>
+                </div> -->
 
               </div>
             </div>

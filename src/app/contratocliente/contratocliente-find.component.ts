@@ -143,8 +143,8 @@ export class ContratoClienteFindComponent implements OnInit, AfterViewInit {
       ({id, id_cliente, descricao, cliente, vigencia_inicio, vigencia_final})).subscribe(filter => {
         if (!this.dataSource) { return; }
 
-        if (!isNullOrUndefined(this.data.id_cliente)) {
-          filter.id_cliente = this.data.id_cliente;
+        if (!isNullOrUndefined(this.data.id)) {
+          filter.id_cliente = this.data.id;
         }
 
         this.dataSource.filter = filter;

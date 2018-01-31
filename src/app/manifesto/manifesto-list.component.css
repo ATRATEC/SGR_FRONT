@@ -117,8 +117,8 @@ mat-row:nth-child(odd) {
 }
 
 .mat-column-cliente {
-  min-width: 250px;
-  max-width: 250px;
+  min-width: 350px;
+  max-width: 350px;
 }
 
 .mat-column-transportador {
@@ -132,8 +132,8 @@ mat-row:nth-child(odd) {
 }
 
 .mat-column-data {
-  min-width: 170px;
-  max-width: 170px;
+  min-width: 140px;
+  max-width: 140px;
 }
 
 .mat-row:hover, .example-selected-row {

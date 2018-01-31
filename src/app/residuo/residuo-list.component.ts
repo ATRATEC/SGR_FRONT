@@ -1,3 +1,6 @@
+import { TipoTratamentoService } from './../tipotratamento/tipotratamento.service';
+import { AcondicionamentoService } from './../acondicionamento/acondicionamento.service';
+import { TipoResiduoService } from './../tiporesiduo/tiporesiduo.service';
 import { ClasseResiduoService } from './../classeresiduo/classeresiduo.service';
 import { Router } from '@angular/router';
 import { DialogService } from './../dialog/dialog.service';
@@ -29,7 +32,7 @@ import { OnlyNumberDirective } from './../only-number.directive';
   styleUrls: ['./residuo-list.component.css']
 })
 export class ResiduoListComponent implements OnInit, AfterViewInit {
-  displayedColumns = ['id', 'descricao', 'descricao_classe'];
+  displayedColumns = ['id', 'descricao', 'classe_residuo', 'tipo_residuo', 'acondicionamento', 'tratamento'];
   // displayedColumns = ['id', 'codigo', 'descricao', ];
   dataSource: DsResiduo | null;
   selectedRowIndex = -1;
@@ -41,6 +44,10 @@ export class ResiduoListComponent implements OnInit, AfterViewInit {
   idFilter = new FormControl();
   codigoFilter = new FormControl();
   descricaoFilter = new FormControl();
+  classeresiduoFilter = new FormControl();
+  tiporesiduoFilter = new FormControl();
+  acondicionamentoFilter = new FormControl();
+  tratamentoFilter = new FormControl();
 
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild(MatPaginator) paginator: MatPaginator;
@@ -54,7 +61,6 @@ export class ResiduoListComponent implements OnInit, AfterViewInit {
   }
 
   constructor(private _residuoService: ResiduoService,
-              private _classeResiduoService: ClasseResiduoService,
               private _tokenManager: TokenManagerService,
               private dialog: DialogService,
               private _router: Router) {}
@@ -164,10 +170,21 @@ export class ResiduoListComponent implements OnInit, AfterViewInit {
 
     const idFilter$ = this.idFilter.valueChanges.debounceTime(500).distinctUntilChanged().startWith('');
     const descricaoFilter$ = this.descricaoFilter.valueChanges.debounceTime(500).distinctUntilChanged().startWith('');
+    const classeresiduoFilter$ = this.classeresiduoFilter.valueChanges.debounceTime(500).distinctUntilChanged().startWith('');
+    const tiporesiduoFilter$ = this.tiporesiduoFilter.valueChanges.debounceTime(500).distinctUntilChanged().startWith('');
+    const acondicionamentoFilter$ = this.acondicionamentoFilter.valueChanges.debounceTime(500).distinctUntilChanged().startWith('');
+    const tratamentoFilter$ = this.tratamentoFilter.valueChanges.debounceTime(500).distinctUntilChanged().startWith('');
 
-    Observable.combineLatest(idFilter$, descricaoFilter$).debounceTime(500).distinctUntilChanged().
+    Observable.combineLatest(
+      idFilter$,
+      descricaoFilter$,
+      classeresiduoFilter$,
+      tiporesiduoFilter$,
+      acondicionamentoFilter$,
+      tratamentoFilter$).debounceTime(500).distinctUntilChanged().
     map(
-      ([id, descricao ]) => ({id, descricao})).subscribe(filter => {
+      ([id, descricao, classe_residuo, tipo_residuo, acondicionamento, tratamento ]) =>
+      ({id, descricao, classe_residuo, tipo_residuo, acondicionamento, tratamento})).subscribe(filter => {
         if (!this.dataSource) { return; }
         this.dataSource.filter = filter;
       });

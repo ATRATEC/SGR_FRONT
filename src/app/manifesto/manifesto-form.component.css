@@ -12,28 +12,38 @@ mat-icon-button.size-15 {
 }
 
 .frm_manifesto_codigo {
-  min-width: 120px;
-  max-width: 120px;
+  min-width: 90px;
+  max-width: 90px;
 }
 
 .frm_manifesto_numero {
-  min-width: 150px;
-  max-width: 150px;
+  min-width: 100px;
+  max-width: 100px;
 }
 
 .frm_manifesto_descricao {
-  min-width: 300px;
-  max-width: 300px;
+  min-width: 420px;
+  max-width: 420px;
 }
 
 .frm_manifesto_razao_social {
-  min-width: 300px;
-  max-width: 300px;
+  min-width: 520px;
+  max-width: 520px;
+}
+
+.frm_manifesto_transportador {
+  min-width: 320px;
+  max-width: 320px;
+}
+
+.frm_manifesto_destinador {
+  min-width: 320px;
+  max-width: 320px;
 }
 
 .frm_manifesto_data {
-  min-width: 160px;
-  max-width: 160px;
+  min-width: 140px;
+  max-width: 140px;
 }
 
 .frm_manifesto_servico {

@@ -5,8 +5,8 @@ mat-icon-button.size-25 {
 }
 
 .frm_contratofornecedor_codigo {
-  min-width: 120px;
-  max-width: 120px;
+  min-width: 90px;
+  max-width: 90px;
 }
 
 .frm_contratofornecedor_descricao {
@@ -15,8 +15,8 @@ mat-icon-button.size-25 {
 }
 
 .frm_contratofornecedor_razao_social {
-  min-width: 320px;
-  max-width: 320px;
+  min-width: 520px;
+  max-width: 520px;
 }
 
 .frm_contratofornecedor_data {

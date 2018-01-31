@@ -29,43 +29,83 @@
         </button>
       </div>
       <div fxFlex="80%" fxFlexAlign="center">
-          <div fxLayout="column" class="frm_residuo-loading-shade" fxLayoutAlign="center center" *ngIf="emProcessamento">
-              <div fxFlex="70" fxFlexAlign="center">
-                <mat-spinner></mat-spinner>
-              </div>
-              <div fxFlex="10" fxFlexAlign="center">
-                &nbsp;
-              </div>
-              <div fxFlex="20" fxFlexAlign="center">
-                <label>Aguarde...</label>
-              </div>
-            </div>
+        <div fxLayout="column" class="frm_residuo-loading-shade" fxLayoutAlign="center center" *ngIf="emProcessamento">
+          <div fxFlex="70" fxFlexAlign="center">
+            <mat-spinner></mat-spinner>
+          </div>
+          <div fxFlex="10" fxFlexAlign="center">
+            &nbsp;
+          </div>
+          <div fxFlex="20" fxFlexAlign="center">
+            <label>Aguarde...</label>
+          </div>
+        </div>
         <mat-card *ngIf="!emProcessamento">
           <div fxLayout="column" fxLayoutAlign="start center" fxLayoutGap="5px">
             <input type="hidden" value={{residuo.id}} tabindex="3">
-            <div fxFlex="33.3%" fxFlexAlign="start">
+            <div fxFlex="60px" fxFlexAlign="start">
               <mat-form-field class="frm_residuo_codigo">
                 <input matInput disabled #codigo maxlength="9" type="number" tabindex="-1" placeholder="Código" required [(ngModel)]="residuo.id">
                 <!-- <mat-hint align="end">{{codigo.value?.length || 0}}/9</mat-hint>
                 <mat-error *ngIf="valCodigo.invalid">{{getCodigoErrorMessage()}}</mat-error> -->
               </mat-form-field>
             </div>
-            <div fxFlex="33.3%" fxFlexAlign="start" >
+            <div fxFlex="60px" fxFlexAlign="start">
               <mat-form-field class="frm_residuo_descricao">
-                <input matInput autofocus #descricao #focuscomp maxlength="50"  [formControl]="valDescricao" placeholder="Descrição" required tabindex="1" [(ngModel)]="residuo.descricao">
+                <input matInput autofocus #descricao #focuscomp maxlength="50" [formControl]="valDescricao" placeholder="Descrição" required
+                  tabindex="1" [(ngModel)]="residuo.descricao">
                 <mat-hint align="end">{{descricao.value?.length || 0}}/50</mat-hint>
                 <mat-error *ngIf="valDescricao.invalid">{{getDescricaoErrorMessage()}}</mat-error>
               </mat-form-field>
             </div>
-            <div fxFlex="33.3%" fxFlexAlign="start" >
-              <mat-form-field>
-                <mat-select placeholder="Classes de Resíduos" [(value)]="residuo.id_classe">
-                  <mat-option *ngFor="let classeresiduo of classeresiduos" [value]="classeresiduo.id">
-                    {{ classeresiduo.descricao }}
-                  </mat-option>
-                </mat-select>
-              </mat-form-field>
+            <div fxFlex="60px" fxFlexAlign="start">
+              <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="10px">
+                <div fxFlex="250px" fxFlexFill fxFlexAlign="center">
+                  <mat-form-field>
+                    <mat-select placeholder="Classe de Resíduo" [(value)]="residuo.id_classe">
+                      <mat-option [value]="residuo.id_classe">{{residuo.classe_residuo}}</mat-option>
+                      <mat-option *ngFor="let classeresiduo of classeresiduos" [value]="classeresiduo.id">
+                        {{ classeresiduo.descricao }}
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </div>
+                <div fxFlex="250px" fxFlexFill fxFlexAlign="center">
+                    <mat-form-field>
+                      <mat-select placeholder="Tipo de Resíduo" [(value)]="residuo.id_tipo_residuo">
+                        <mat-option [value]="residuo.id_tipo_residuo">{{residuo.tipo_residuo}}</mat-option>
+                        <mat-option *ngFor="let tiporesiduo of tiporesiduos" [value]="tiporesiduo.id">
+                          {{ tiporesiduo.descricao }}
+                        </mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                  </div>
+              </div>
             </div>
+            <div fxFlex="60px" fxFlexAlign="start">
+                <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="10px">
+                  <div fxFlex="250px" fxFlexFill fxFlexAlign="center">
+                    <mat-form-field>
+                      <mat-select placeholder="Acondicionamento" [(value)]="residuo.id_acondicionamento">
+                        <mat-option [value]="residuo.id_acondicionamento">{{residuo.acondicionamento}}</mat-option>
+                        <mat-option *ngFor="let acondicionamento of acondicionamentos" [value]="acondicionamento.id">
+                          {{ acondicionamento.descricao }}
+                        </mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                  </div>
+                  <div fxFlex="250px" fxFlexFill fxFlexAlign="center">
+                      <mat-form-field>
+                        <mat-select placeholder="Tipo de Tratamento" [(value)]="residuo.id_tratamento">
+                          <mat-option [value]="residuo.id_tratamento">{{residuo.tratamento}}</mat-option>
+                          <mat-option *ngFor="let tipotratamento of tipotratamentos" [value]="tipotratamento.id">
+                            {{ tipotratamento.descricao }}
+                          </mat-option>
+                        </mat-select>
+                      </mat-form-field>
+                    </div>
+                </div>
+              </div>
           </div>
         </mat-card>
       </div>

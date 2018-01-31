@@ -1,3 +1,6 @@
+import { TipoTratamentoService } from './../tipotratamento/tipotratamento.service';
+import { AcondicionamentoService } from './../acondicionamento/acondicionamento.service';
+import { TipoResiduoService } from './../tiporesiduo/tiporesiduo.service';
 import { ClasseResiduoService } from './../classeresiduo/classeresiduo.service';
 import { ClasseResiduo } from './../classeresiduo/classeresiduo';
 import { isNullOrUndefined } from 'util';
@@ -19,6 +22,9 @@ import { OnlyNumberDirective } from './../only-number.directive';
 import { Residuo } from './residuo';
 import { ActivatedRoute, Params} from '@angular/router';
 import {FormControl, Validators} from '@angular/forms';
+import { TipoResiduo } from '../tiporesiduo/tiporesiduo';
+import { Acondicionamento } from '../acondicionamento/acondicionamento';
+import { TipoTratamento } from '../tipotratamento/tipotratamento';
 
 @Component({
   selector: 'app-residuo-form',
@@ -31,6 +37,10 @@ export class ResiduoFormComponent implements OnInit, AfterViewInit, AfterViewChe
   emProcessamento = false;
   exibeIncluir = false;
   classeresiduos: ClasseResiduo[];
+  tiporesiduos: TipoResiduo[];
+  acondicionamentos: Acondicionamento[];
+  tipotratamentos: TipoTratamento[];
+
 
   valDescricao = new FormControl('', [Validators.required]);
 
@@ -39,6 +49,9 @@ export class ResiduoFormComponent implements OnInit, AfterViewInit, AfterViewChe
 
   constructor(private _residuoService: ResiduoService,
     private _classeresiduoService: ClasseResiduoService,
+    private _tipoResiduoService: TipoResiduoService,
+    private _acondiocionamentoService: AcondicionamentoService,
+    private _tipotratamentoService: TipoTratamentoService,
     private _tokenManager: TokenManagerService,
     private _route: ActivatedRoute,
     private dialog: DialogService) {}
@@ -53,9 +66,26 @@ export class ResiduoFormComponent implements OnInit, AfterViewInit, AfterViewChe
     this.emProcessamento = true;
     this.residuo = new Residuo();
     this._classeresiduoService.getListClasseResiduos(this._tokenManager.retrieve())
-                                                .subscribe(data => {
-                                                   this.classeresiduos = JSON.parse(data._body);
-                                                 });
+      .subscribe(data => {
+        this.classeresiduos = JSON.parse(data._body);
+      });
+
+    this._tipoResiduoService.getListTipoResiduo(this._tokenManager.retrieve())
+      .subscribe(data => {
+        this.tiporesiduos = JSON.parse(data._body);
+    });
+
+    this._acondiocionamentoService.getListAcondicionamentos(this._tokenManager.retrieve())
+      .subscribe(data => {
+        this.acondicionamentos = JSON.parse(data._body);
+    });
+
+    this._tipotratamentoService.getListTipoTratamento(this._tokenManager.retrieve())
+      .subscribe(data => {
+        this.tipotratamentos = JSON.parse(data._body);
+    });
+
+
     this._route.params.forEach((params: Params) => {
       const id: number = +params['id'];
       if (id) {
@@ -76,7 +106,7 @@ export class ResiduoFormComponent implements OnInit, AfterViewInit, AfterViewChe
 
   ngAfterViewInit(): void {
     // this.vc.first.nativeElement.focus();
-    Promise.resolve(null).then(() => this.focuscomp.nativeElement.focus());
+    // Promise.resolve(null).then(() => this.focuscomp.nativeElement.focus());
   }
 
   keyPress(event: any) {
@@ -93,8 +123,7 @@ export class ResiduoFormComponent implements OnInit, AfterViewInit, AfterViewChe
       if (isNullOrUndefined(this.residuo.id)) {
         this._residuoService.addResiduo(
           this._tokenManager.retrieve(),
-          this.residuo.descricao,
-          this.residuo.id_classe).subscribe(
+          this.residuo).subscribe(
             data => {
               this.emProcessamento = false;
               this.residuo = data;
@@ -110,8 +139,7 @@ export class ResiduoFormComponent implements OnInit, AfterViewInit, AfterViewChe
         this._residuoService.editResiduo(
           this._tokenManager.retrieve(),
           this.residuo.id,
-          this.residuo.descricao,
-          this.residuo.id_classe).subscribe(
+          this.residuo).subscribe(
           data => {
           this.emProcessamento = false;
           this.residuo = data;
