@@ -287,6 +287,16 @@ export class AppComponent implements OnInit {
     });
   }
 
+  downloadPDF() {
+    this.userService
+      .downloadPDF()
+      .subscribe(data => {
+        const fileUrl = URL.createObjectURL(data);
+        const tab = window.open();
+        tab.location.href = fileUrl;
+      });
+  }
+
   // emailFormControl = new FormControl('', [
   //   Validators.required,
   //   Validators.pattern(EMAIL_REGEX)]);

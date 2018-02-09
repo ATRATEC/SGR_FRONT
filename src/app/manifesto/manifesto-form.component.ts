@@ -1,10 +1,10 @@
 import { TipoResiduoService } from './../tiporesiduo/tiporesiduo.service';
 import { TipoResiduo } from './../tiporesiduo/tiporesiduo';
 import { Fornecedor } from './../fornecedor/fornecedor';
-import { ContratoClienteServicoService } from './../contratocliente/contratoclienteservico.service';
+import { ContratoClienteResiduoService } from './../contratocliente/contratoclienteresiduo.service';
 import { TipoTratamentoService } from './../tipotratamento/tipotratamento.service';
 import { AcondicionamentoService } from './../acondicionamento/acondicionamento.service';
-import { ContratoClienteServico } from './../contratocliente/contratoclienteservico';
+import { ContratoClienteResiduo } from './../contratocliente/ContratoClienteResiduo';
 import { ContratoClienteFindComponent } from './../contratocliente/contratocliente-find.component';
 import { ContratoClienteService } from './../contratocliente/contratocliente.service';
 import { ContratoCliente } from './../contratocliente/contratocliente';
@@ -68,7 +68,7 @@ export class ManifestoFormComponent
   implements OnInit, AfterViewInit, AfterViewChecked {
   manifesto: Manifesto;
   manifestoservicos: ManifestoServico[];
-  contratoclienteservicos: ContratoClienteServico[];
+  contratoclienteservicos: ContratoClienteResiduo[];
   // manifestoservico: ManifestoServico;
   acondicionamentos: Acondicionamento[];
   tipotratamentos: TipoTratamento[];
@@ -98,7 +98,7 @@ export class ManifestoFormComponent
   constructor(
     private _manifestoService: ManifestoService,
     private _manifestoservicoService: ManifestoServicoService,
-    private _contratoclienteServicoService: ContratoClienteServicoService,
+    private _contratoclienteResiduoService: ContratoClienteResiduoService,
     private _clienteService: ClienteService,
     private _residuoService: ResiduoService,
     private _contratoclienteService: ContratoClienteService,
@@ -166,7 +166,7 @@ export class ManifestoFormComponent
     this.emProcessamento = true;
     this.manifesto = new Manifesto();
     this.manifestoservicos = new Array<ManifestoServico>();
-    this.contratoclienteservicos = new Array<ContratoClienteServico>();
+    this.contratoclienteservicos = new Array<ContratoClienteResiduo>();
     // this.manifestoservicos.push(new ManifestoServico(1, 1, 1, 1, 56.87, true, '', '', 'TRANSPORTE'));
     // this.manifestoservicos.push(new ManifestoServico(1, 1, 1, 1, 123.47, true, '', '', 'RECEPÇÃO'));
     this._acondicionamentoService.getListAcondicionamentos(this._tokenManager.retrieve()).subscribe(
@@ -452,8 +452,6 @@ export class ManifestoFormComponent
             contrato = JSON.parse(data._body);
             this.manifesto.id_contrato_cliente = contrato.id;
             this.manifesto.descricao = contrato.descricao;
-            this.buscarTransportador(this.manifesto.id_contrato_cliente);
-            this.buscarDestinador(this.manifesto.id_contrato_cliente);
           },
           (err: HttpErrorResponse) => {
             this.manifesto.id_contrato_cliente = null;
@@ -492,7 +490,11 @@ export class ManifestoFormComponent
         disableClose: true,
         data: {
           id: this.manifesto.id_cliente,
-          descricao: null
+          descricao: null,
+          id_transportador: null,
+          id_destinador: null,
+          transportador: null,
+          destinador: null
         }
       });
 
@@ -500,34 +502,14 @@ export class ManifestoFormComponent
         if (result.id != null && result.id !== undefined) {
           this.manifesto.id_contrato_cliente = result.id;
           this.manifesto.descricao = result.descricao;
-          this.buscarTransportador(this.manifesto.id_contrato_cliente);
-          this.buscarDestinador(this.manifesto.id_contrato_cliente);
+          this.manifesto.id_transportador = result.id_transportador;
+          this.manifesto.id_destinador = result.id_destinador;
+          this.manifesto.transportador = result.transportador;
+          this.manifesto.destinador = result.destinador;
         }
       });
     }
 
-  }
-
-  buscarTransportador(_id_contrato_cliente: number) {
-    if (!isNullOrUndefined(_id_contrato_cliente)) {
-      this._contratoclienteService.getTransportador(this._tokenManager.retrieve(), _id_contrato_cliente)
-      .subscribe(data => {
-        const fornecedor: Fornecedor = JSON.parse(data._body);
-        this.manifesto.id_transportador = fornecedor.id;
-        this.manifesto.transportador = fornecedor.razao_social;
-      });
-    }
-  }
-
-  buscarDestinador(_id_contrato_cliente: number) {
-    if (!isNullOrUndefined(_id_contrato_cliente)) {
-      this._contratoclienteService.getDestinador(this._tokenManager.retrieve(), _id_contrato_cliente)
-      .subscribe(data => {
-        const fornecedor: Fornecedor = JSON.parse(data._body);
-        this.manifesto.id_destinador = fornecedor.id;
-        this.manifesto.destinador = fornecedor.razao_social;
-      });
-    }
   }
 
   // limpacampo(servico: ManifestoServico, event: any) {
@@ -578,9 +560,9 @@ export class ManifestoFormComponent
                 );
               }
               this.manifestoservicos.length = 0;
-              this._contratoclienteServicoService.getContratoClienteServico(this._tokenManager.retrieve(),
+              this._contratoclienteResiduoService.getContratoClienteResiduo(this._tokenManager.retrieve(),
               this.manifesto.id_contrato_cliente).subscribe(data => {
-                let servicos: ContratoClienteServico[];
+                let servicos: ContratoClienteResiduo[];
                 servicos = JSON.parse(data._body);
 
                 if (servicos.length > 0) {
@@ -621,40 +603,41 @@ export class ManifestoFormComponent
         );
       } else {
         this.manifestoservicos.length = 0;
-        this._contratoclienteServicoService.getContratoClienteServico(this._tokenManager.retrieve(),
+        this._contratoclienteResiduoService.getContratoClienteResiduo(this._tokenManager.retrieve(),
         this.manifesto.id_contrato_cliente).subscribe(data => {
-          let servicos: ContratoClienteServico[];
+          let servicos: ContratoClienteResiduo[];
           servicos = JSON.parse(data._body);
 
           if (servicos.length > 0) {
             for (let index = 0; index < servicos.length; index++) {
               const servico = servicos[index];
-              // Verificar se o residuo já existe na lista.
-              if (this.manifestoservicos.findIndex(p => p.id_residuo === servico.id_residuo) === -1) {
-                let residuo: Residuo;
-                this._residuoService.getResiduo(this._tokenManager.retrieve(), servico.id_residuo)
+
+              this._residuoService.getResiduo(this._tokenManager.retrieve(), servico.id_residuo)
                 .subscribe(res => {
+                  let residuo: Residuo;
                   residuo = JSON.parse(res._body);
                   if (!isNullOrUndefined(residuo)) {
-                    this.manifestoservicos.push(new ManifestoServico(
-                      null,
-                      null,
-                      servico.id_residuo,
-                      residuo.id_tipo_residuo,
-                      residuo.id_acondicionamento,
-                      residuo.id_tratamento,
-                      servico.unidade,
-                      null,
-                      '',
-                      '',
-                      servico.residuo,
-                      residuo.tipo_residuo,
-                      residuo.acondicionamento,
-                      residuo.tratamento
-                    ));
+                    // Verificar se o residuo já existe na lista.
+                    if (this.manifestoservicos.findIndex(p => p.id_residuo === servico.id_residuo) === -1) {
+                      this.manifestoservicos.push(new ManifestoServico(
+                        null,
+                        null,
+                        servico.id_residuo,
+                        residuo.id_tipo_residuo,
+                        residuo.id_acondicionamento,
+                        residuo.id_tratamento,
+                        servico.unidade,
+                        null,
+                        '',
+                        '',
+                        servico.residuo,
+                        residuo.tipo_residuo,
+                        residuo.acondicionamento,
+                        residuo.tratamento
+                      ));
+                    }
                   }
                 });
-              }
             }
           }
         });

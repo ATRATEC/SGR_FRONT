@@ -1,3 +1,4 @@
+import { DsContratoFornecedorFind } from './dscontratofornecedorfind';
 import { isNullOrUndefined } from 'util';
 import { isEmpty } from 'rxjs/operators';
 import { Data } from '@angular/router';
@@ -6,9 +7,9 @@ import {FormControl, Validators} from '@angular/forms';
 import { Router } from '@angular/router';
 import { DialogService } from './../dialog/dialog.service';
 import { by } from 'protractor';
-import { DsContratoCliente } from './dscontratocliente';
+import { DsContratoFornecedor } from './dscontratofornecedor';
 import { TokenManagerService } from './../token-manager.service';
-import { ContratoClienteService } from './contratocliente.service';
+import { ContratoFornecedorService } from './contratofornecedor.service';
 import { Component, OnInit, ViewChild, ElementRef, Inject } from '@angular/core';
 import { DataSource} from '@angular/cdk/collections';
 import { MatSort } from '@angular/material';
@@ -22,30 +23,32 @@ import 'rxjs/add/observable/fromEvent';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/distinctUntilChanged';
 import 'rxjs/add/operator/debounceTime';
-import { ContratoCliente } from './contratocliente';
+import { ContratoFornecedor } from './contratofornecedor';
 import { ChangeDetectorRef, AfterViewInit } from '@angular/core';
 import { OnlyNumberDirective } from './../only-number.directive';
 
 @Component({
-  selector: 'app-contratocliente-find',
-  templateUrl: './contratocliente-find.component.html',
-  styleUrls: ['./contratocliente-find.component.css']
+  selector: 'app-contratofornecedor-find',
+  templateUrl: './contratofornecedor-find.component.html',
+  styleUrls: ['./contratofornecedor-find.component.css']
 })
-export class ContratoClienteFindComponent implements OnInit, AfterViewInit {
+export class ContratoFornecedorFindComponent implements OnInit, AfterViewInit {
 
-  displayedColumns = ['id', 'descricao', 'cliente', 'vigencia_inicio', 'vigencia_final'];
+  displayedColumns = ['id', 'descricao', 'fornecedor', 'vigencia_inicio', 'vigencia_final'];
   // displayedColumns = ['id', 'codigo', 'descricao'];
-  dataSource: DsContratoCliente | null;
+  dataSource: DsContratoFornecedorFind | null;
   selectedRowIndex = -1;
   selectedRow: any | null;
-  contratoclientes: ContratoCliente[];
+  contratofornecedors: ContratoFornecedor[];
   isLoadingResults: boolean;
 
 
   idFilter = new FormControl();
-  idclienteFilter = new FormControl();
   descricaoFilter = new FormControl();
   clienteFilter = new FormControl();
+  idclienteFilter = new FormControl();
+  fornecedorFilter = new FormControl();
+  idtipoatividadeFilter = new FormControl();
   vigenciaInicioFilter = new FormControl();
   vigenciaFinalFilter = new FormControl();
 
@@ -60,11 +63,11 @@ export class ContratoClienteFindComponent implements OnInit, AfterViewInit {
     }
   }
 
-  constructor(private _contratoclienteService: ContratoClienteService,
+  constructor(private _contratofornecedorService: ContratoFornecedorService,
               private _tokenManager: TokenManagerService,
               private dialog: DialogService,
               private _router: Router,
-              public dialogLoginRef: MatDialogRef<ContratoClienteFindComponent>,
+              public dialogLoginRef: MatDialogRef<ContratoFornecedorFindComponent>,
               @Inject(MAT_DIALOG_DATA) public data: any
             ) { }
 
@@ -79,7 +82,7 @@ export class ContratoClienteFindComponent implements OnInit, AfterViewInit {
   }
 
   dblck(row) {
-    // this._router.navigate(['/contratoclientees/contratocliente', {id: row.id}]);
+    // this._router.navigate(['/contratofornecedores/contratofornecedor', {id: row.id}]);
     this.retornarPesquisa(row);
   }
 
@@ -91,21 +94,13 @@ export class ContratoClienteFindComponent implements OnInit, AfterViewInit {
 
   retornarPesquisa(row) {
     this.data.id = row.id;
-    this.data.descricao = row.descricao;
-    this.data.id_transportador = row.id_transportador;
-    this.data.id_destinador = row.id_destinador;
-    this.data.transportador = row.transportador;
-    this.data.destinador = row.destinador;
+    this.data.descricao = row.fornecedor;
     this.dialogLoginRef.close(this.data);
   }
 
   btnCancelarClick() {
     this.data.id = null;
     this.data.descricao = null;
-    this.data.id_transportador = null;
-    this.data.id_destinador = null;
-    this.data.transportador = null;
-    this.data.destinador = null;
     this.dialogLoginRef.close(this.data);
   }
 
@@ -133,26 +128,31 @@ export class ContratoClienteFindComponent implements OnInit, AfterViewInit {
     this.paginator._intl.nextPageLabel = 'Próxima Página';
     this.paginator._intl.previousPageLabel = 'Voltar Página';
 
-    this.isLoadingResults = false;
-
-    this.dataSource = new DsContratoCliente(this._tokenManager, this._contratoclienteService, this.paginator, this.sort);
+    this.dataSource = new DsContratoFornecedorFind(this._tokenManager, this._contratofornecedorService, this.paginator, this.sort);
 
     const idFilter$ = this.idFilter.valueChanges.debounceTime(500).distinctUntilChanged().startWith('');
-    const idclienteFilter$ = this.idclienteFilter.valueChanges.debounceTime(500).distinctUntilChanged().startWith('');
     const descricaoFilter$ = this.descricaoFilter.valueChanges.debounceTime(500).distinctUntilChanged().startWith('');
     const clienteFilter$ = this.clienteFilter.valueChanges.debounceTime(500).distinctUntilChanged().startWith('');
+    const idclienteFilter$ = this.idclienteFilter.valueChanges.debounceTime(500).distinctUntilChanged().startWith('');
+    const idtipoatividadeFilter$ = this.idtipoatividadeFilter.valueChanges.debounceTime(500).distinctUntilChanged().startWith('');
+    const fornecedorFilter$ = this.fornecedorFilter.valueChanges.debounceTime(500).distinctUntilChanged().startWith('');
     const vigenciaInicioFilter$ = this.vigenciaInicioFilter.valueChanges.debounceTime(500).distinctUntilChanged().startWith('');
     const vigenciaFinalFilter$ = this.vigenciaFinalFilter.valueChanges.debounceTime(500).distinctUntilChanged().startWith('');
 
-    Observable.combineLatest(idFilter$, idclienteFilter$, descricaoFilter$, clienteFilter$,
+
+    Observable.combineLatest(idFilter$, descricaoFilter$, clienteFilter$, idclienteFilter$, fornecedorFilter$, idtipoatividadeFilter$,
                             vigenciaInicioFilter$, vigenciaFinalFilter$).debounceTime(500).distinctUntilChanged().
     map(
-      ([id, id_cliente, descricao, cliente, vigencia_inicio, vigencia_final]) =>
-      ({id, id_cliente, descricao, cliente, vigencia_inicio, vigencia_final})).subscribe(filter => {
+      ([id, descricao, cliente, id_cliente, fornecedor, id_tipo_atividade, vigencia_inicio, vigencia_final]) =>
+      ({id, descricao, cliente, id_cliente, fornecedor, id_tipo_atividade, vigencia_inicio, vigencia_final})).subscribe(filter => {
         if (!this.dataSource) { return; }
 
-        if (!isNullOrUndefined(this.data.id)) {
-          filter.id_cliente = this.data.id;
+        if (!isNullOrUndefined(this.data.id_cliente)) {
+          filter.id_cliente = this.data.id_cliente;
+        }
+
+        if (!isNullOrUndefined(this.data.id_tipo_atividade)) {
+          filter.id_tipo_atividade = this.data.id_tipo_atividade;
         }
 
         this.dataSource.filter = filter;

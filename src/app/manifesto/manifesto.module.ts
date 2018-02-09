@@ -1,3 +1,4 @@
+import { ManifestoFindComponent } from './manifesto-find.component';
 import { CustomCurrencyMaskConfig } from './../customcurrencymaskconfig';
 import { CURRENCY_MASK_CONFIG } from 'ng2-currency-mask/src/currency-mask.config';
 import { CurrencyMaskModule } from 'ng2-currency-mask';
@@ -35,12 +36,14 @@ import { ManifestoRoutingModule } from './manifesto-routing.module';
   ],
   declarations: [
     ManifestoListComponent,
-    ManifestoFormComponent
+    ManifestoFormComponent,
+    ManifestoFindComponent
   ],
   providers: [
     ManifestoService,
     ManifestoServicoService,
     { provide: CURRENCY_MASK_CONFIG, useValue: CustomCurrencyMaskConfig }
-  ]
+  ],
+  entryComponents: [ManifestoFindComponent]
 })
 export class ManifestoModule { }

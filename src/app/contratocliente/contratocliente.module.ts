@@ -2,7 +2,7 @@ import { ContratoClienteFindComponent } from './contratocliente-find.component';
 import { CustomCurrencyMaskConfig } from './../customcurrencymaskconfig';
 import { CURRENCY_MASK_CONFIG } from 'ng2-currency-mask/src/currency-mask.config';
 import { CurrencyMaskModule } from 'ng2-currency-mask';
-import { ContratoClienteServicoService } from './contratoclienteservico.service';
+import { ContratoClienteResiduoService } from './contratoclienteresiduo.service';
 import { DatepipeModule } from './../datepipe.module';
 import { MatNativeDateModule } from '@angular/material';
 import { MyMaterialModule } from './../my-material/my-material.module';
@@ -41,7 +41,7 @@ import { ContratoClienteRoutingModule } from './contratocliente-routing.module';
   ],
   providers: [
     ContratoClienteService,
-    ContratoClienteServicoService,
+    ContratoClienteResiduoService,
     { provide: CURRENCY_MASK_CONFIG, useValue: CustomCurrencyMaskConfig }
   ],
   entryComponents: [ContratoClienteFindComponent]

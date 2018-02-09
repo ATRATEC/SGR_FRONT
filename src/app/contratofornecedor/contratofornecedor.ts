@@ -8,6 +8,18 @@ export interface ContratoFornecedorFilter {
   vigencia_inicio: string;
   vigencia_final: string;
 }
+
+export interface ContratoFornecedorFilterGrid {
+  id: string;
+  cliente: string;
+  id_cliente: number;
+  fornecedor: string;
+  descricao: string;
+  id_tipo_atividade: number;
+  vigencia_inicio: string;
+  vigencia_final: string;
+}
+
 export class ContratoFornecedor {
   constructor(
     public id: number = null,

@@ -1,3 +1,6 @@
+import { ContratoFornecedorFindComponent } from './contratofornecedor-find.component';
+import { ContratoFornecedorResiduoService } from './contratofornecedorresiduo.service';
+import { FocusModule } from './../focus.module';
 import { CustomCurrencyMaskConfig } from './../customcurrencymaskconfig';
 import { CURRENCY_MASK_CONFIG } from 'ng2-currency-mask/src/currency-mask.config';
 import { CurrencyMaskModule } from 'ng2-currency-mask';
@@ -31,16 +34,20 @@ import { ContratoFornecedorRoutingModule } from './contratofornecedor-routing.mo
     ReactiveFormsModule,
     DatepipeModule,
     CurrencyMaskModule,
+    FocusModule,
     ContratoFornecedorRoutingModule
   ],
   declarations: [
     ContratoFornecedorListComponent,
-    ContratoFornecedorFormComponent
+    ContratoFornecedorFormComponent,
+    ContratoFornecedorFindComponent
   ],
   providers: [
     ContratoFornecedorService,
     ContratoFornecedorServicoService,
+    ContratoFornecedorResiduoService,
     { provide: CURRENCY_MASK_CONFIG, useValue: CustomCurrencyMaskConfig }
-  ]
+  ],
+  entryComponents: [ContratoFornecedorFindComponent]
 })
 export class ContratoFornecedorModule { }

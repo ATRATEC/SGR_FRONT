@@ -1,3 +1,4 @@
+import { RelatorioModule } from './relatorio/relatorio.module';
 import { TipoResiduoModule } from './tiporesiduo/tiporesiduo.module';
 import { ManifestoModule } from './manifesto/manifesto.module';
 import { ContratoClienteModule } from './contratocliente/contratocliente.module';
@@ -43,6 +44,7 @@ import { AlertComponent } from './alert/alert.component';
 import { AlertsComponent } from './alerts/alerts.component';
 import { DialogComponent } from './dialog/dialog.component';
 import { HomeComponent } from './home/home.component';
+import { HttpClientModule } from '@angular/common/http';
 @NgModule({
   declarations: [
     AppComponent,
@@ -60,6 +62,7 @@ import { HomeComponent } from './home/home.component';
     BrowserAnimationsModule,
     FormsModule,
     HttpModule,
+    HttpClientModule,
     MyMaterialModule,
     MatNativeDateModule,
     ReactiveFormsModule,
@@ -81,6 +84,7 @@ import { HomeComponent } from './home/home.component';
     ContratoClienteModule,
     ManifestoModule,
     TipoResiduoModule,
+    RelatorioModule,
     AppRoutingModule
   ],
   providers: [

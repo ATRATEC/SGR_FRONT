@@ -1,0 +1,97 @@
+<h1 mat-dialog-title>Pesquisar ContratoFornecedor</h1>
+<div mat-dialog-content>
+  <div fxLayout="column" fxLayoutAlign="center center" fxLayoutGap="10px">
+    <div fxFlex="47px" fxFlexAlign="start" style="width: 100%">
+      <table>
+        <tr>
+          <td>
+            <mat-form-field class="mat-column-id" style="margin-left: 5px">
+              <input matInput #filter placeholder="Código" [formControl]="idFilter">
+            </mat-form-field>
+          </td>
+          <td class="mat-column-descricao">
+            <!-- style="width: 500px" -->
+            <mat-form-field class="mat-column-descricao">
+              <input matInput #filter placeholder="Descrição" [formControl]="descricaoFilter">
+            </mat-form-field>
+          </td>
+          <!-- <td class="mat-column-cliente">
+            <mat-form-field class="mat-column-cliente">
+              <input matInput #filter placeholder="Cliente" [formControl]="clienteFilter">
+            </mat-form-field>
+          </td> -->
+          <td class="mat-column-fornecedor">
+            <!-- style="width: 500px" -->
+            <mat-form-field class="mat-column-fornecedor">
+              <input matInput #filter placeholder="Fornecedor" [formControl]="fornecedorFilter">
+            </mat-form-field>
+          </td>
+          <td class="mat-column-vigencia_inicio">
+            <!-- style="width: 500px" -->
+            <mat-form-field class="mat-column-vigencia_inicio">
+              <input matInput type="date" #filter placeholder="Dt. Inicio Vigência" [formControl]="vigenciaInicioFilter">
+            </mat-form-field>
+          </td>
+          <td class="mat-column-vigencia_final">
+            <!-- style="width: 500px" -->
+            <mat-form-field class="mat-column-vigencia_final">
+              <input matInput type="date" #filter placeholder="Dt. Final Vigência" [formControl]="vigenciaFinalFilter">
+            </mat-form-field>
+          </td>
+        </tr>
+      </table>
+    </div>
+    <div fxFlex="1px" class="customHrFull"></div>
+    <div fxFlex="200px" class="example-loading-shade" fxFlexAlign="center" *ngIf="isLoadingResults" style="height: 100%">
+      <mat-spinner *ngIf="isLoadingResults"></mat-spinner>
+    </div>
+    <div fxFlex="200px" fxFlexAlign="start" style="width: 100%">
+      <mat-table #table [dataSource]="dataSource" matSort>
+        <!-- ID Column -->
+        <ng-container matColumnDef="id">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> Código </mat-header-cell>
+          <mat-cell *matCellDef="let row"> {{row.id}} </mat-cell>
+        </ng-container>
+
+        <!-- Name Column -->
+        <ng-container matColumnDef="descricao">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> Descrição </mat-header-cell>
+          <mat-cell *matCellDef="let row"> {{row.descricao}} </mat-cell>
+        </ng-container>
+
+        <!-- Name Column -->
+        <ng-container matColumnDef="cliente">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> Cliente </mat-header-cell>
+          <mat-cell *matCellDef="let row"> {{row.cliente != null ? row.cliente : ''}} </mat-cell>
+        </ng-container>
+
+        <!-- Name Column -->
+        <ng-container matColumnDef="fornecedor">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> Fornecedor </mat-header-cell>
+          <mat-cell *matCellDef="let row"> {{row.fornecedor}} </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="vigencia_inicio">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> Dt. Inicio Vigência </mat-header-cell>
+          <mat-cell *matCellDef="let row"> {{row.vigencia_inicio|formatDate}} </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="vigencia_final">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> Dt. Final Vigência </mat-header-cell>
+          <mat-cell *matCellDef="let row"> {{row.vigencia_final | date: 'dd/MM/yyyy'}} </mat-cell>
+        </ng-container>
+
+        <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+        <mat-row *matRowDef="let row; columns: displayedColumns;" [ngClass]="{'highlight': selectedRowIndex == row.id}" (click)="highlight(row)" (dblclick)="dblck(row)"></mat-row>
+      </mat-table>
+      <mat-paginator #paginator [length]="dataSource.nrRegistros" [pageIndex]="0" [pageSize]="25" [pageSizeOptions]="[5, 10, 15, 25, 100]">
+      </mat-paginator>
+    </div>
+  </div>
+</div>
+<div mat-dialog-actions>
+  <div fxLayout="row" fxLayoutAlign="end center" fxFill>
+    <button mat-raised-button color="primary" (click)="btnOkClick()" tabindex="2" style="width: 100px">OK</button>
+    <button mat-raised-button color="primary" (click)="btnCancelarClick()" tabindex="-1" style="width: 100px">Cancelar</button>
+  </div>
+</div>

@@ -1,11 +1,11 @@
-export interface ContratoClienteServicoFilter {
+export interface ContratoClienteResiduoFilter {
   id: string;
   cliente: string;
   descricao: string;
   vigencia_inicio: string;
   vigencia_final: string;
 }
-export class ContratoClienteServico {
+export class ContratoClienteResiduo {
   constructor(
     public id: number = null,
     public id_contrato_cliente: number = null,

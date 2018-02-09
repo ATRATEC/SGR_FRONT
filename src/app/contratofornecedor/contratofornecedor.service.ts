@@ -1,7 +1,7 @@
 import { environment } from './../../environments/environment';
 import { isEmpty } from 'rxjs/operators';
 import { isNullOrUndefined } from 'util';
-import { ContratoFornecedor, ContratoFornecedorFilter } from './contratofornecedor';
+import { ContratoFornecedor, ContratoFornecedorFilter, ContratoFornecedorFilterGrid } from './contratofornecedor';
 import { Injectable } from '@angular/core';
 import 'rxjs/add/observable/of';
 import 'rxjs/add/operator/map';
@@ -160,6 +160,76 @@ export class ContratoFornecedorService {
       .catch((error: any) =>
         Observable.throw(error.json() || 'Server error')
       );
+  }
+
+  /** Metodo que retorna um observable com dados da listagem de contratofornecedors
+   *  parametro: acessToken: string
+  */
+  getContratoFornecedoresGrid(accessToken: string, sort: string, order: string, page: number,
+    pagesize: number, filter: ContratoFornecedorFilterGrid) {
+    const headers = new Headers({
+    Accept: 'application/json',
+    Authorization: 'Bearer ' + accessToken.toString().replace(/"/g, '')
+    });
+
+    const params: HttpParams = new HttpParams();
+    const search: URLSearchParams =  new URLSearchParams();
+    search.set('nrcount', pagesize.toString());
+    page++;
+    search.set('page', page.toString());
+
+    if ((!isNullOrUndefined(order)) && (order.length > 0)) {
+    search.set('order', order);
+    } else {
+    order = 'asc';
+    search.set('order', order);
+    }
+
+    if ((!isNullOrUndefined(sort))) {
+    search.set('orderkey', sort);
+    } else {
+    sort = 'id';
+    search.set('orderkey', sort);
+    }
+
+    if ((!isNullOrUndefined(filter.id)) && (filter.id.toString().length > 0)) {
+    search.set('id', filter.id.toString());
+    }
+
+    if ((!isNullOrUndefined(filter.descricao)) && (filter.descricao.length > 0)) {
+    search.set('descricao', filter.descricao);
+    }
+
+    if ((!isNullOrUndefined(filter.cliente)) && (filter.cliente.length > 0)) {
+    search.set('cliente', filter.cliente);
+    }
+
+    if ((!isNullOrUndefined(filter.id_cliente)) && (filter.id_cliente.toString().length > 0)) {
+      search.set('id_cliente', filter.id_cliente.toString());
+    }
+
+    if ((!isNullOrUndefined(filter.id_tipo_atividade)) && (filter.id_tipo_atividade.toString().length > 0)) {
+      search.set('id_tipo_atividade', filter.id_tipo_atividade.toString());
+    }
+
+    if ((!isNullOrUndefined(filter.fornecedor)) && (filter.fornecedor.length > 0)) {
+    search.set('fornecedor', filter.fornecedor);
+    }
+
+    if ((!isNullOrUndefined(filter.vigencia_inicio)) && (filter.vigencia_inicio.length > 0)) {
+    search.set('vigencia_inicio', filter.vigencia_inicio);
+    }
+
+    if ((!isNullOrUndefined(filter.vigencia_final)) && (filter.vigencia_final.length > 0)) {
+    search.set('vigencia_final', filter.vigencia_final);
+    }
+
+    return this._http
+    .get(this.contratofornecedorUrl + 'grid', { headers: headers, search: search })
+    .map((res: Response) => res.json())
+    .catch((error: any) =>
+    Observable.throw(error.json() || 'Server error')
+    );
   }
 
   getListContratoFornecedors(accessToken: string)  {

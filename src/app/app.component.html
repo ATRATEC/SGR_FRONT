@@ -106,12 +106,12 @@
     </button>
     <button mat-menu-item>
       <mat-icon fontSet="fontawesome" fontIcon="fa-group"></mat-icon>
-      <span>Monitoramento de Documentos</span>
+      <span>Monitor de Documentos</span>
     </button>
-    <button mat-menu-item>
+    <!-- <button mat-menu-item>
       <mat-icon fontSet="fontawesome" fontIcon="fa-cubes"></mat-icon>
       <span>Medição e envio para Financeiro</span>
-    </button>
+    </button> -->
   </mat-menu>
   <!-- Relatórios -->
 
@@ -119,17 +119,31 @@
     <span style="color: white">Relatórios</span>
   </button>
   <mat-menu #relatorios="matMenu" [overlapTrigger]="false">
-    <button mat-menu-item>
-      <mat-icon fontSet="fontawesome" fontIcon="fa-group"></mat-icon>
+    <button mat-menu-item [matMenuTriggerFor]="relatorioscliente">
+      <mat-icon fontSet="fontawesome" fontIcon="fa-user"></mat-icon>
+      <span>Cliente</span>
+    </button>
+    <button mat-menu-item [routerLink]="['/relatorios/receita']">
+      <mat-icon fontSet="fontawesome" fontIcon="fa-dollar"></mat-icon>
       <span>Receitas</span>
     </button>
-    <button mat-menu-item>
-      <mat-icon fontSet="fontawesome" fontIcon="fa-cubes"></mat-icon>
+    <button mat-menu-item [routerLink]="['/relatorios/despesa']">
+      <mat-icon fontSet="fontawesome" fontIcon="fa-dollar"></mat-icon>
       <span>Despesas</span>
     </button>
     <button mat-menu-item>
-      <mat-icon fontSet="fontawesome" fontIcon="fa-exchange"></mat-icon>
+      <!-- <mat-icon fontSet="fontawesome" fontIcon="fa-exchange"></mat-icon> -->
       <span>Medições</span>
+    </button>
+  </mat-menu>
+  <mat-menu #relatorioscliente="matMenu" [overlapTrigger]="false">
+    <button mat-menu-item [routerLink]="['/relatorios/receitacliente']">
+      <!-- <mat-icon fontSet="fontawesome" fontIcon="fa-group"></mat-icon> -->
+      <span>Receitas</span>
+    </button>
+    <button mat-menu-item>
+      <!-- <mat-icon fontSet="fontawesome" fontIcon="fa-cubes"></mat-icon> -->
+      <span>Despesas</span>
     </button>
   </mat-menu>
   <!-- Utilitários -->
@@ -185,4 +199,5 @@
   </button>
 </mat-toolbar>
 <!-- <app-alerts [defaultSettings]="options"></app-alerts> -->
+<!-- <button mat-raised-button (click)="downloadPDF()"> open </button> -->
 <router-outlet *ngIf="Logado"></router-outlet>

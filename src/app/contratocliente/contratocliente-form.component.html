@@ -42,7 +42,7 @@
           </div>
         </div>
         <mat-card *ngIf="!emProcessamento" style="width: 1000px;">
-          <div fxLayout="column" fxLayoutAlign="start center" fxLayoutGap="0px">
+          <div fxLayout="column" fxLayoutAlign="start center" fxLayoutGap="10px">
             <div fxFlex="60px" fxFlexAlign="start">
               <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="10px" style="width: 100%">
                 <div fxFlex="120px" fxFlexAlign="start">
@@ -96,10 +96,10 @@
                     <mat-error *ngIf="valVigenciaFinal.invalid">{{getErrorMessage(valVigenciaFinal)}}</mat-error>
                   </mat-form-field>
                 </div>
-                <div fxFlex="170px" fxFlexAlign="start" fxFlexFill >
-                  <div class="group" >
-                    <input currencyMask type="text" class="atrainput" [(ngModel)]="contratocliente.faturamento_minimo" style="height: 30px; width: 105px;" tabindex="6"
-                      required>
+                <div fxFlex="170px" fxFlexAlign="start" fxFlexFill>
+                  <div class="group">
+                    <input currencyMask type="text" class="atrainput" [(ngModel)]="contratocliente.faturamento_minimo" style="height: 30px; width: 105px;"
+                      tabindex="6" required>
                     <span class="highlight"></span>
                     <span class="bar"></span>
                     <label class="atralabel">Faturamento Mínimo</label>
@@ -107,43 +107,95 @@
                 </div>
               </div>
             </div>
+            <div fxFlex="60px" fxFlexAlign="start">
+              <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="20px">
+                <div fxFlex="90px" fxFlexAlign="start" fxFlexFill>
+                  <mat-form-field class="frm_contratocliente_codigo">
+                    <input matInput #codigoCtr maxlength="9" [formControl]="valCodigoCTRTransp" required tabindex="5" [(ngModel)]="contratocliente.id_transportador"
+                      (keyup)="validaSaidaCTRTransp($event.target.value)" (keypress)="onlyNumber($event)">
+                    <mat-hint align="end">{{codigoCtr.value?.length || 0}}/9</mat-hint>
+                    <mat-error *ngIf="valCodigoCTRTransp.invalid">{{getCodigoErrorMessage()}}</mat-error>
+                  </mat-form-field>
+                </div>
+                <div fxFlex="30px" fxFlexAlign="center" fxFlexFill>
+                  <button mat-icon-button color="primary" (click)="openPesquisaCTRTransp()" tabindex="6">
+                    <mat-icon>search</mat-icon>
+                  </button>
+                </div>
+                <div fxFlex="320px" fxFlexAlign="start" fxFlexFill>
+                  <mat-form-field class="frm_contratocliente_transportador">
+                    <input matInput disabled [(ngModel)]="contratocliente.transportador" placeholder="Transportador">
+                  </mat-form-field>
+                </div>
+                <div fxFlex="90px" fxFlexAlign="start" fxFlexFill>
+                  <mat-form-field class="frm_contratocliente_codigo">
+                    <input matInput #codigoCtr maxlength="9" [formControl]="valCodigoCTRDest" required tabindex="5" [(ngModel)]="contratocliente.id_destinador"
+                      (keyup)="validaSaidaCTRDest($event.target.value)" (keypress)="onlyNumber($event)">
+                    <mat-hint align="end">{{codigoCtr.value?.length || 0}}/9</mat-hint>
+                    <mat-error *ngIf="valCodigoCTRDest.invalid">{{getCodigoErrorMessage()}}</mat-error>
+                  </mat-form-field>
+                </div>
+                <div fxFlex="30px" fxFlexAlign="center" fxFlexFill>
+                  <button mat-icon-button color="primary" (click)="openPesquisaCTRDest()" tabindex="6">
+                    <mat-icon>search</mat-icon>
+                  </button>
+                </div>
+                <div fxFlex="320px" fxFlexAlign="start" fxFlexFill>
+                  <mat-form-field class="frm_contratocliente_transportador">
+                    <input matInput disabled [(ngModel)]="contratocliente.destinador" placeholder="Destinador">
+                  </mat-form-field>
+                </div>
+              </div>
+            </div>
             <div fxFlex="320px" fxFlexAlign="start" fxFlexFill style="overflow-y:auto;">
               <mat-tab-group>
-                <mat-tab label="Serviços" style="overflow-y:auto;">
+                <mat-tab label="Resíduos" style="overflow-y:auto;">
                   <div fxLayou="column" fxLayoutAlign="start center" fxLayoutGap="0px" style="overflow-y:auto;">
                     <div fxFlex="100%" style="overflow-y:auto;">
                       <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="0px">
                         <div fxFlex="40px" fxFlexAlign="start">
                           <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="5px">
                             <div fxFlex="200px" fxFlexAlign="start" fxFlexFill>
-                              <mat-form-field class="frm_contratocliente_servico">
-                                <mat-select placeholder="Serviços" [(value)]="contratoclienteservico.id_servico" required [formControl]="valServico" tabindex="7">
-                                  <mat-option *ngFor="let servico of servicos" [value]="servico.id">
-                                    {{ servico.descricao }}
+                              <mat-form-field class="frm_contratocliente_residuo">
+                                <mat-select placeholder="Residuo" [(value)]="contratoclienteresiduo.id_residuo" tabindex="10">
+                                  <mat-option *ngFor="let residuo of residuos" [value]="residuo.id">
+                                    {{ residuo.descricao }}
                                   </mat-option>
                                 </mat-select>
-                                <mat-error *ngIf="valServico.invalid">{{getErrorMessage(valServico)}}</mat-error>
                               </mat-form-field>
                             </div>
                             <div fxFlex="100px" fxFlexAlign="start" fxFlexFill>
                               <mat-form-field class="frm_contratocliente_unidade">
-                                <mat-select placeholder="Unidades" [(value)]="contratoclienteservico.unidade" required (change)="unidadeChange($event)" [formControl]="valUnidade" tabindex="8">
+                                <mat-select placeholder="Unidades" [(value)]="contratoclienteresiduo.unidade" tabindex="8">
                                   <mat-option *ngFor="let unidade of unidades" [value]="unidade.codigo">
                                     {{ unidade.codigo }}
                                   </mat-option>
                                 </mat-select>
-                                <mat-error *ngIf="valUnidade.invalid">{{getErrorMessage(valUnidade)}}</mat-error>
                               </mat-form-field>
                             </div>
-                            <div fxFlex="600px" fxFlexAlign="start" fxFlexFill>
-                              <mat-form-field class="frm_contratocliente_fornecedor">
-                                <mat-select placeholder="Fornecedor" [(value)]="contratoclienteservico.id_contrato_fornecedor" tabindex="9">
-                                  <mat-option *ngFor="let contrato of contratofornecedorservicos" [value]="contrato.id_contrato">
-                                    {{ contrato.fornecedor }} | Preço Venda: {{contrato.preco_compra | currency:'BRL':true}} | Preço Servico: {{contrato.preco_servico
-                                    | currency:'BRL':true}}
-                                  </mat-option>
-                                </mat-select>
-                              </mat-form-field>
+                            <div fxFlex="120px" fxFlexAlign="start" fxFlexFill>
+                              <div class="group">
+                                <input currencyMask type="text" class="atrainput" [(ngModel)]="contratoclienteresiduo.preco_compra" style="height: 25px; width: 105px;"
+                                  tabindex="11" required>
+                                <span class="highlight"></span>
+                                <span class="bar"></span>
+                                <label class="atralabel">Preço Venda</label>
+                              </div>
+                            </div>
+                            <div fxFlex="120px" fxFlexAlign="start" fxFlexFill>
+                              <div class="group">
+                                <input currencyMask type="text" class="atrainput" [(ngModel)]="contratoclienteresiduo.preco_servico" style="height: 25px; width: 105px;"
+                                  tabindex="12" required>
+                                <span class="highlight"></span>
+                                <span class="bar"></span>
+                                <label class="atralabel">Preço Servico</label>
+                              </div>
+                            </div>
+                            <div fxFlex="120px" fxFlexAlign="center" fxFlexFill>
+                              <button mat-raised-button color="primary" (click)="addlinha()" tabindex="13">
+                                <mat-icon>playlist_add</mat-icon>
+                                <span>Adicionar</span>
+                              </button>
                             </div>
                           </div>
                         </div>
@@ -151,44 +203,7 @@
                       <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="0px">
                         <div fxFlex="100%" fxFlexAlign="start">
                           <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="5px">
-                            <div fxFlex="200px" fxFlexAlign="start" fxFlexFill>
-                              <mat-form-field class="frm_contratocliente_residuo">
-                                <mat-select placeholder="Residuo" [(value)]="contratoclienteservico.id_residuo" required [formControl]="valResiduo" tabindex="10">
-                                  <mat-option *ngFor="let residuo of residuos" [value]="residuo.id">
-                                    {{ residuo.descricao }}
-                                  </mat-option>
-                                </mat-select>
-                                <mat-error *ngIf="valResiduo.invalid">{{getErrorMessage(valServico)}}</mat-error>
-                              </mat-form-field>
-                            </div>
-                            <div fxFlex="120px" fxFlexAlign="start" fxFlexFill>
-                              <div class="group">
-                                <input currencyMask type="text" class="atrainput" [(ngModel)]="contratoclienteservico.preco_compra" style="height: 25px; width: 105px;" tabindex="11"
-                                  required>
-                                <span class="highlight"></span>
-                                <span class="bar"></span>
-                                <label class="atralabel">Preço Compra</label>
-                              </div>
-                            </div>
-                            <div fxFlex="120px" fxFlexAlign="start" fxFlexFill>
-                              <div class="group">
-                                <input currencyMask type="text" class="atrainput" [(ngModel)]="contratoclienteservico.preco_servico" style="height: 25px; width: 105px;" tabindex="12"
-                                  required>
-                                <span class="highlight"></span>
-                                <span class="bar"></span>
-                                <label class="atralabel">Preço Servico</label>
-                              </div>
-                            </div>
-                            <div fxFlex="120px" fxFlexAlign="start" fxFlexFill>
-                              <button mat-raised-button color="primary" (click)="addlinha()"
-                              [disabled]="valServico.invalid || valUnidade.invalid || valResiduo.invalid" tabindex="13">
-                                <mat-icon>playlist_add</mat-icon>
-                                <span>Adicionar</span>
-                              </button>
-                              <!-- <button mat-icon-button color="primary" (click)="addlinha()" tabindex="2">
-                                <mat-icon>search</mat-icon>
-                              </button> -->
-                            </div>
+
                           </div>
                         </div>
                       </div>
@@ -196,73 +211,61 @@
                         <div fxFlex="100%" fxFlexAlign="center" fxFlexFill style="overflow-y:auto;">
                           <table style="overflow: auto;">
                             <tr>
-                              <th class="frm_contratocliente_servico_fornecedor">
-                                <label>Fornecedor</label>
-                              </th>
-                              <th class="frm_contratocliente_servico_residuo">
+                              <th class="frm_contratocliente_residuo_residuo">
                                 <label>Residuo</label>
                               </th>
-                              <th class="frm_contratocliente_servico_servico">
-                                <label>Serviço</label>
-                              </th>
-                              <th class="frm_contratocliente_servico_unidade">
+                              <th class="frm_contratocliente_residuo_unidade">
                                 <label>Unidade</label>
                               </th>
-                              <th class="frm_contratocliente_servico_preco">
+                              <th class="frm_contratocliente_residuo_preco">
                                 <label>Preço Compra</label>
                               </th>
-                              <th class="frm_contratocliente_servico_preco">
+                              <th class="frm_contratocliente_residuo_preco">
                                 <label>Preço Serviço</label>
                               </th>
-                              <th class="frm_contratocliente_servico_botao">
+                              <th class="frm_contratocliente_residuo_botao">
                               </th>
-                              <th class="frm_contratocliente_servico_botao">
+                              <th class="frm_contratocliente_residuo_botao">
                               </th>
                             </tr>
-                            <tr *ngFor="let servico of contratoclienteservicos">
-                              <td class="frm_contratocliente_servico_fornecedor">
-                                {{servico.fornecedor}}
+                            <tr *ngFor="let ccresiduo of contratoclienteresiduos">
+                              <td class="frm_contratocliente_residuo_residuo">
+                                {{ccresiduo.residuo}}
                               </td>
-                              <td class="frm_contratocliente_servico_residuo">
-                                {{servico.residuo}}
+                              <td class="frm_contratocliente_residuo_unidade" style="max-height: 18px;">
+                                {{ccresiduo.unidade}}
                               </td>
-                              <td class="frm_contratocliente_servico_servico">
-                                {{servico.servico}}
+                              <td class="frm_contratocliente_residuo_preco" style="max-height: 18px;">
+                                {{ccresiduo.preco_compra | currency:'BRL':true}}
                               </td>
-                              <td class="frm_contratocliente_servico_unidade" style="max-height: 18px;">
-                                {{servico.unidade}}
+                              <td class="frm_contratocliente_residuo_preco" style="max-height: 18px;">
+                                {{ccresiduo.preco_servico | currency:'BRL':true}}
                               </td>
-                              <td class="frm_contratocliente_servico_preco" style="max-height: 18px;">
-                                {{servico.preco_compra | currency:'BRL':true}}
-                              </td>
-                              <td class="frm_contratocliente_servico_preco" style="max-height: 18px;">
-                                {{servico.preco_servico | currency:'BRL':true}}
-                              </td>
-                              <td class="frm_contratocliente_servico_botao">
-                                <a (click)="remlinha(servico)" class="tooltip">
+                              <td class="frm_contratocliente_residuo_botao">
+                                <a (click)="remlinha(ccresiduo)" class="tooltip">
                                   <i class="fa fa-trash" aria-hidden="true"></i>
                                   <span class="tooltiptext">Excluir</span>
                                 </a>
                                 <!-- <button mat-icon-button color="primary" style="width: 13; height: 13;">
-                                      <mat-icon aria-label="Example icon-button with a heart icon">favorite</mat-icon>
-                                      <i class="fa fa-truck" aria-hidden="true"></i>
-                                    </button> -->
+                                          <mat-icon aria-label="Example icon-button with a heart icon">favorite</mat-icon>
+                                          <i class="fa fa-truck" aria-hidden="true"></i>
+                                        </button> -->
                               </td>
-                              <td class="frm_contratocliente_servico_botao">
-                                <a (click)="editlinha(servico)" class="tooltip">
+                              <td class="frm_contratocliente_residuo_botao">
+                                <a (click)="editlinha(ccresiduo)" class="tooltip">
                                   <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
                                   <span class="tooltiptext">Editar</span>
                                 </a>
                                 <!-- <button mat-icon-button class="size-15" color="primary" (click)="addlinha()" tabindex="2">
-                                  <mat-icon>search</mat-icon>
-                                </button> -->
+                                      <mat-icon>search</mat-icon>
+                                    </button> -->
                               </td>
                               <!-- <td class="frm_contratocliente_servico_preco" style="max-height: 18px;">
-                                    <input currencyMask class="preco" placeholder="Preço Compra" [(ngModel)]="servico.preco_compra" [disabled]="!servico.selecionado" style="max-height: 18px;">
-                                  </td>
-                                  <td class="frm_contratocliente_servico_preco" style="max-height: 18px;">
-                                    <input currencyMask class="preco" placeholder="Preço Serviço" [(ngModel)]="servico.preco_servico" [disabled]="!servico.selecionado" style="max-height: 18px;">
-                                  </td> -->
+                                        <input currencyMask class="preco" placeholder="Preço Compra" [(ngModel)]="servico.preco_compra" [disabled]="!servico.selecionado" style="max-height: 18px;">
+                                      </td>
+                                      <td class="frm_contratocliente_servico_preco" style="max-height: 18px;">
+                                        <input currencyMask class="preco" placeholder="Preço Serviço" [(ngModel)]="servico.preco_servico" [disabled]="!servico.selecionado" style="max-height: 18px;">
+                                      </td> -->
                             </tr>
                           </table>
                         </div>

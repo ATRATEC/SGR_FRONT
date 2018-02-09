@@ -1,0 +1,140 @@
+<div fxLayout="row" fxLayoutAlign="start start" fxLayoutGap="1px">
+  <div fxFlex="140px" style="padding: 10px;" fxLayoutGap="10px">
+    <div fxLayout="column" fxLayoutAlign="space-between center" fxLayoutGap="5px" style="height: 100%">
+      <div fxFlex="80%" fxFlexFill fxFlexAlign="center">
+        <button id="btnImprimir" mat-raised-button color="primary" style="width: 100%" (click)="btnImprimir_click()">
+          <mat-icon>print</mat-icon>
+          <span>Imprimir</span>
+        </button>
+        <!-- <button id="btnIncluir" mat-raised-button color="primary" style="width: 100%" (click)="btnIncluir_click()" *ngIf="exibeIncluir">
+          <mat-icon>insert_drive_file</mat-icon>
+          <span>Incluir</span>
+        </button> -->
+      </div>
+      <div fxFlex="40px" fxFlexFill fxFlexAlign="end">
+
+        <a routerLink="/" mat-raised-button color="primary" style="width: 120px">
+          <mat-icon>close</mat-icon>
+          <span>Fechar</span>
+        </a>
+      </div>
+    </div>
+  </div>
+  <div fxFlex="90%">
+    <div fxLayout="column" fxLayoutAlign="center center" fxLayoutGap="5px">
+      <div fxFlex="50px" fxFlexAlign="start" style="padding: 10px;">
+        <button id="lblTitulo" mat-raised-button style="width: 100%" disabled>
+          <i class="fa fa-filter" aria-hidden="true"></i>
+          <span>FILTRO RELATÓRIO GERENCIAL DE DESPESA</span>
+        </button>
+      </div>
+      <div fxFlex="80%" fxFlexAlign="center">
+        <div fxLayout="column" class="frm_relatorio-loading-shade" fxLayoutAlign="center center" *ngIf="emProcessamento">
+          <div fxFlex="70" fxFlexAlign="center">
+            <mat-spinner></mat-spinner>
+          </div>
+          <div fxFlex="10" fxFlexAlign="center">
+            &nbsp;
+          </div>
+          <div fxFlex="20" fxFlexAlign="center">
+            <label>Aguarde...</label>
+          </div>
+        </div>
+        <mat-card *ngIf="!emProcessamento" style="width: 700px;">
+          <div fxLayout="column" fxLayoutAlign="start center" fxLayoutGap="5px">
+            <div fxFlex="60px" fxFlexAlign="start">
+              <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="10px" style="width: 100%">
+                <div fxFlex="120px" fxFlexAlign="start" fxFlexFill>
+                  <mat-form-field class="frm_receita_codigo">
+                    <input matInput autofocus #focuscomp #codigofor maxlength="9" [formControl]="valCodigo" placeholder="Cliente" required tabindex="1"
+                      [(ngModel)]="relatorio.id_cliente" (keyup)="validaSaida($event.target.value)" (keypress)="onlyNumber($event)">
+                    <mat-hint align="end">{{codigofor.value?.length || 0}}/9</mat-hint>
+                    <mat-error *ngIf="valCodigo.invalid">{{getCodigoErrorMessage()}}</mat-error>
+                  </mat-form-field>
+                </div>
+                <div fxFlex="45px" fxFlexAlign="center" fxFlexFill>
+                  <button mat-icon-button color="primary" (click)="openPesquisa()" tabindex="2">
+                    <mat-icon>search</mat-icon>
+                  </button>
+                </div>
+                <div fxFlex="520px" fxFlexAlign="start" fxFlexFill>
+                  <mat-form-field class="frm_receita_razao_social">
+                    <input matInput disabled [(ngModel)]="relatorio.cliente">
+                  </mat-form-field>
+                </div>
+              </div>
+            </div>
+            <div fxFlex="60px" fxFlexAlign="start">
+              <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="10px" style="width: 100%">
+                <div fxFlex="170px" fxFlexAlign="start" fxFlexFill>
+                  <mat-form-field class="frm_receita_data">
+                    <input matInput type="date" #dtemissao maxlength="10" placeholder="Data Inicio Coleta" tabindex="4" [ngModel]="relatorio.datade"
+                      (ngModelChange)="relatorio.datade = $event" [value]="relatorio.datade">
+                    <mat-hint align="end">{{dtemissao.value?.length || 0}}/10</mat-hint>
+                  </mat-form-field>
+                </div>
+                <div fxFlex="170px" fxFlexAlign="start" fxFlexFill>
+                  <mat-form-field class="frm_receita_data">
+                    <input matInput type="date" #dtvencimento maxlength="10" placeholder="Data Final Coleta" tabindex="5" [ngModel]="relatorio.dataate"
+                      (ngModelChange)="relatorio.dataate = $event" [value]="relatorio.dataate">
+                    <mat-hint align="end">{{dtvencimento.value?.length || 0}}/10</mat-hint>
+                  </mat-form-field>
+                </div>
+              </div>
+            </div>
+            <div fxFlex="60px" fxFlexAlign="start">
+              <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="10px" style="width: 100%">
+                <div fxFlex="120px" fxFlexAlign="start" fxFlexFill>
+                  <mat-form-field class="frm_receita_codigo">
+                    <input matInput autofocus #focuscomp #codigofor maxlength="9" [formControl]="valManifesto" placeholder="Manifesto" tabindex="1"
+                      [(ngModel)]="relatorio.id_manifesto" (keyup)="validaSaidaManifesto($event.target.value)" (keypress)="onlyNumber($event)">
+                    <mat-hint align="end">{{codigofor.value?.length || 0}}/9</mat-hint>
+                    <mat-error *ngIf="valManifesto.invalid">{{getCodigoErrorMessage()}}</mat-error>
+                  </mat-form-field>
+                </div>
+                <div fxFlex="45px" fxFlexAlign="center" fxFlexFill>
+                  <button mat-icon-button color="primary" (click)="openPesquisaManifesto()" tabindex="2">
+                    <mat-icon>search</mat-icon>
+                  </button>
+                </div>
+                <div fxFlex="520px" fxFlexAlign="start" fxFlexFill>
+                  <mat-form-field class="frm_receita_razao_social">
+                    <input matInput disabled [(ngModel)]="relatorio.manifesto">
+                  </mat-form-field>
+                </div>
+              </div>
+            </div>
+            <!-- <div fxFlex="60px" fxFlexAlign="start">
+              <mat-form-field class="frm_relatorio_codigo">
+                <input matInput #codigo maxlength="9" type="number" tabindex="-1" placeholder="Código" disabled [(ngModel)]="relatorio.id">
+              </mat-form-field>
+            </div>
+            <div fxFlex="60px" fxFlexAlign="start">
+              <mat-form-field class="frm_relatorio_descricao">
+                <input matInput autofocus #focuscomp #descricao maxlength="50" [formControl]="valDescricao" placeholder="Descrição" required
+                  tabindex="1" [(ngModel)]="relatorio.descricao">
+                <mat-hint align="end">{{descricao.value?.length || 0}}/50</mat-hint>
+                <mat-error *ngIf="valDescricao.invalid">{{getDescricaoErrorMessage()}}</mat-error>
+              </mat-form-field>
+            </div>
+            <div fxFlex="25px" fxFlexAlign="start">
+              <label>Tipo de Atividade</label>
+            </div>
+            <div fxFlex="60px" fxFlexAlign="start">
+              <div fxLayout="row" fxLayoutAlign="space-between center" fxLayoutGap="30px">
+                <div fxFlex="100%" fxFlexAlign="start" fxFlexFill>
+                    <mat-radio-group [(ngModel)]="relatorio.id_tipo_atividade" [value]="relatorio.id_tipo_atividade" style="width: 100%">
+                        <mat-radio-button *ngFor="let tipoatividade of tipoatividades" [value]="tipoatividade.id">
+                          {{tipoatividade.descricao}} &nbsp;&nbsp;&nbsp;
+                        </mat-radio-button>
+                      </mat-radio-group>
+                </div>
+              </div>
+            </div> -->
+          </div>
+        </mat-card>
+      </div>
+
+    </div>
+  </div>
+</div>

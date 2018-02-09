@@ -24,6 +24,8 @@ export class ContratoClienteService {
     // const _params: HttpParams = new HttpParams();
     const _body = {
       id_cliente: _contratocliente.id_cliente,
+      id_transportador: _contratocliente.id_transportador,
+      id_destinador: _contratocliente.id_destinador,
       descricao: _contratocliente.descricao,
       vigencia_inicio: _contratocliente.vigencia_inicio,
       vigencia_final: _contratocliente.vigencia_final,
@@ -52,6 +54,8 @@ export class ContratoClienteService {
     const _body = {
       id: _id,
       id_cliente: _contratocliente.id_cliente,
+      id_transportador: _contratocliente.id_transportador,
+      id_destinador: _contratocliente.id_destinador,
       descricao: _contratocliente.descricao,
       vigencia_inicio: _contratocliente.vigencia_inicio,
       vigencia_final: _contratocliente.vigencia_final,

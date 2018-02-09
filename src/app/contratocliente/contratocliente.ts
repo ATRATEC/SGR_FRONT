@@ -12,6 +12,8 @@ export class ContratoCliente {
   constructor(
     public id: number = null,
     public id_cliente: number = null,
+    public id_transportador: number = null,
+    public id_destinador: number = null,
     public descricao: string = '',
     public vigencia_inicio: Date = null,
     public vigencia_final: Date = null,
@@ -20,6 +22,8 @@ export class ContratoCliente {
     public faturamento_minimo: number = null,
     public created_at: string = '',
     public updated_at: string = '',
-    public cliente: string = ''
+    public cliente: string = '',
+    public transportador: string = '',
+    public destinador: string = ''
   ) {}
 }

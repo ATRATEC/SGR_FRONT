@@ -1,0 +1,97 @@
+<h1 mat-dialog-title>Pesquisar Manifesto</h1>
+<div mat-dialog-content>
+  <div fxLayout="column" fxLayoutAlign="center center" fxLayoutGap="10px">
+    <div fxFlex="47px" fxFlexAlign="start" style="width: 100%">
+        <table>
+            <tr>
+              <td class="mat-column-id">
+                <mat-form-field class="mat-column-id" style="margin-left: 5px">
+                  <input matInput #filter placeholder="Código" [formControl]="idFilter">
+                </mat-form-field>
+              </td>
+              <td class="mat-column-numero">
+                <!-- style="width: 500px" -->
+                <mat-form-field class="mat-column-numero">
+                  <input matInput #filter placeholder="Numero" [formControl]="numeroFilter">
+                </mat-form-field>
+              </td>
+              <td class="mat-column-cliente">
+                <!-- style="width: 500px" -->
+                <mat-form-field class="mat-column-cliente">
+                  <input matInput #filter placeholder="Cliente" [formControl]="clienteFilter">
+                </mat-form-field>
+              </td>
+              <td class="mat-column-data">
+                <!-- style="width: 500px" -->
+                <mat-form-field class="mat-column-data">
+                  <input matInput type="date" #filter placeholder="Data" [formControl]="dataFilter">
+                </mat-form-field>
+              </td>
+              <td class="mat-column-transportador">
+                <!-- style="width: 500px" -->
+                <mat-form-field class="mat-column-transportador">
+                  <input matInput #filter placeholder="Transportador" [formControl]="transportadorFilter">
+                </mat-form-field>
+              </td>
+              <td class="mat-column-destinador">
+                <!-- style="width: 500px" -->
+                <mat-form-field class="mat-column-destinador">
+                  <input matInput #filter placeholder="Destinador" [formControl]="destinadorFilter">
+                </mat-form-field>
+              </td>
+            </tr>
+          </table>
+    </div>
+    <div fxFlex="1px" class="customHrFull"></div>
+    <div fxFlex="200px" class="example-loading-shade" fxFlexAlign="center" *ngIf="isLoadingResults" style="height: 100%">
+      <mat-spinner *ngIf="isLoadingResults"></mat-spinner>
+    </div>
+    <div fxFlex="200px" fxFlexAlign="start" style="width: 100%">
+        <mat-table #table [dataSource]="dataSource" matSort>
+            <!-- ID Column -->
+            <ng-container matColumnDef="id">
+              <mat-header-cell *matHeaderCellDef mat-sort-header> Código </mat-header-cell>
+              <mat-cell *matCellDef="let row"> {{row.id}} </mat-cell>
+            </ng-container>
+
+            <!-- Name Column -->
+            <ng-container matColumnDef="numero">
+              <mat-header-cell *matHeaderCellDef mat-sort-header> Numero </mat-header-cell>
+              <mat-cell *matCellDef="let row"> {{row.numero}} </mat-cell>
+            </ng-container>
+
+            <!-- Name Column -->
+            <ng-container matColumnDef="cliente">
+              <mat-header-cell *matHeaderCellDef mat-sort-header> Cliente </mat-header-cell>
+              <mat-cell *matCellDef="let row"> {{row.cliente != null ? row.cliente : ''}} </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="data">
+              <mat-header-cell *matHeaderCellDef mat-sort-header> Data </mat-header-cell>
+              <mat-cell *matCellDef="let row"> {{row.data|formatDate}} </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="transportador">
+              <mat-header-cell *matHeaderCellDef mat-sort-header> Transportador </mat-header-cell>
+              <mat-cell *matCellDef="let row"> {{row.transportador != null ? row.transportador : ''}} </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="destinador">
+              <mat-header-cell *matHeaderCellDef mat-sort-header> Destinador </mat-header-cell>
+              <mat-cell *matCellDef="let row"> {{row.destinador != null ? row.destinador : ''}} </mat-cell>
+            </ng-container>
+
+            <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+            <mat-row *matRowDef="let row; columns: displayedColumns;" [ngClass]="{'highlight': selectedRowIndex == row.id}" (click)="highlight(row)" (dblclick)="dblck(row)"></mat-row>
+          </mat-table>
+          <mat-paginator #paginator [length]="dataSource.nrRegistros" [pageIndex]="0" [pageSize]="25" [pageSizeOptions]="[5, 10, 15, 25, 100]">
+          </mat-paginator>
+    </div>
+  </div>
+</div>
+<div mat-dialog-actions>
+  <div fxLayout="row" fxLayoutAlign="end center" fxFill>
+    <button mat-raised-button color="primary" (click)="btnOkClick()" tabindex="2" style="width: 100px">OK</button>
+    <button mat-raised-button color="primary" (click)="btnCancelarClick()" tabindex="-1" style="width: 100px">Cancelar</button>
+  </div>
+</div>

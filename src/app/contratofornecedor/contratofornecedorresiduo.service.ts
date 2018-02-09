@@ -1,7 +1,7 @@
 import { environment } from './../../environments/environment';
 import { isEmpty } from 'rxjs/operators';
 import { isNullOrUndefined } from 'util';
-import { ContratoClienteServico, ContratoClienteServicoFilter } from './contratoclienteservico';
+import { ContratoFornecedorResiduo, ContratoFornecedorResiduoFilter } from './contratofornecedorresiduo';
 import { Injectable } from '@angular/core';
 import 'rxjs/add/observable/of';
 import 'rxjs/add/operator/map';
@@ -10,12 +10,12 @@ import { Http, Headers, Response, RequestOptions, URLSearchParams } from '@angul
 import { HttpErrorResponse, HttpParams } from '@angular/common/http';
 
 @Injectable()
-export class ContratoClienteServicoService {
-  private contratoclienteservicoUrl = environment.urlbase + '/api/contratoclienteservicos';
+export class ContratoFornecedorResiduoService {
+  private contratofornecedorresiduoUrl = environment.urlbase + '/api/contratofornecedorresiduos';
 
   constructor(private _http: Http) {}
 
-  addContratoClienteServico(accessToken: string, _id: number, _contratoclienteservico: ContratoClienteServico[]): Observable<any> {
+  addContratoFornecedorResiduo(accessToken: string, _id: number, _contratofornecedorresiduo: ContratoFornecedorResiduo[]): Observable<any> {
     const headers = new Headers({
       Accept: 'application/json',
       Authorization: 'Bearer ' + accessToken.toString().replace(/"/g, '')
@@ -24,12 +24,12 @@ export class ContratoClienteServicoService {
     // const _params: HttpParams = new HttpParams();
     const _body = {
       id: _id,
-      data: _contratoclienteservico
+      data: _contratofornecedorresiduo
     };
     // _params.set('codigo', '1');
 
     return this._http
-      .post(this.contratoclienteservicoUrl, _body, { headers: headers})
+      .post(this.contratofornecedorresiduoUrl, _body, { headers: headers})
       .map((res: Response) => res.json())
       .catch((error: any) =>
         Observable.throw(error.json() || 'Server error')
@@ -37,19 +37,19 @@ export class ContratoClienteServicoService {
 
   }
 
-  editContratoClienteServico(accessToken: string, _id: number,
-    _contratoclienteservico: ContratoClienteServico[]): Observable<any> {
+  editContratoFornecedorResiduo(accessToken: string, _id: number,
+    _contratofornecedorresiduo: ContratoFornecedorResiduo[]): Observable<any> {
     const headers = new Headers({
       Accept: 'application/json',
       Authorization: 'Bearer ' + accessToken.toString().replace(/"/g, '')
     });
 
     // const _params: HttpParams = new HttpParams();
-    const _body = {data: _contratoclienteservico };
+    const _body = {data: _contratofornecedorresiduo };
     // _params.set('id', _id.toString());
 
     return this._http
-      .put(this.contratoclienteservicoUrl + '/' + _id.toString(), _body, { headers: headers })
+      .put(this.contratofornecedorresiduoUrl + '/' + _id.toString(), _body, { headers: headers })
       .map((res: Response) => res.json())
       .catch((error: any) =>
         Observable.throw(error.json() || 'Server error')
@@ -57,39 +57,38 @@ export class ContratoClienteServicoService {
 
   }
 
-  deleteContratoClienteServico(accessToken: string, _id: number) {
+  deleteContratoFornecedorResiduo(accessToken: string, _id: number) {
     const headers = new Headers({
       Accept: 'application/json',
       Authorization: 'Bearer ' + accessToken.toString().replace(/"/g, '')
     });
 
     return this._http
-      .delete(this.contratoclienteservicoUrl + '/' + _id.toString(), { headers: headers })
+      .delete(this.contratofornecedorresiduoUrl + '/' + _id.toString(), { headers: headers })
       .map((res: Response) => res.json())
       .catch((error: any) =>
         Observable.throw(error.json() || 'Server error')
       );
   }
 
-  getContratoClienteServico(accessToken: string, _id: number)  {
+  getContratoFornecedorResiduo(accessToken: string, _id: number)  {
     const headers = new Headers({
       Accept: 'application/json',
       Authorization: 'Bearer ' + accessToken.toString().replace(/"/g, '')
     });
 
     return this._http
-      .get(this.contratoclienteservicoUrl + '/' + _id.toString(), { headers: headers })
+      .get(this.contratofornecedorresiduoUrl + '/' + _id.toString(), { headers: headers })
       .map((res: Response) => res)
       .catch((error: any) =>
         Observable.throw(error.json() || 'Server error')
       );
   }
 
-  /** Metodo que retorna um observable com dados da listagem de contratoclienteservicos
+  /** Metodo que retorna um observable com dados da listagem de contratofornecedorresiduos
    *  parametro: acessToken: string
   */
-  getContratoClienteServicos(accessToken: string, sort: string, order: string, page: number,
-                         pagesize: number, filter: ContratoClienteServicoFilter) {
+  getContratoFornecedorResiduos(accessToken: string, filter: ContratoFornecedorResiduoFilter) {
     const headers = new Headers({
       Accept: 'application/json',
       Authorization: 'Bearer ' + accessToken.toString().replace(/"/g, '')
@@ -97,58 +96,33 @@ export class ContratoClienteServicoService {
 
     const params: HttpParams = new HttpParams();
     const search: URLSearchParams =  new URLSearchParams();
-    search.set('nrcount', pagesize.toString());
-    page++;
-    search.set('page', page.toString());
-
-    if ((!isNullOrUndefined(order)) && (order.length > 0)) {
-      search.set('order', order);
-    } else {
-      order = 'asc';
-      search.set('order', order);
-    }
-
-    if ((!isNullOrUndefined(sort))) {
-      search.set('orderkey', sort);
-    } else {
-      sort = 'id';
-      search.set('orderkey', sort);
-    }
 
     if ((!isNullOrUndefined(filter.id)) && (filter.id.toString().length > 0)) {
       search.set('id', filter.id.toString());
     }
 
-    // if ((!isNullOrUndefined(filter.descricao)) && (filter.descricao.length > 0)) {
-    //   search.set('descricao', filter.descricao);
-    // }
-
-    // if ((!isNullOrUndefined(filter.cliente)) && (filter.cliente.length > 0)) {
-    //   search.set('cliente', filter.cliente);
-    // }
-
-    if ((!isNullOrUndefined(filter.cliente)) && (filter.cliente.length > 0)) {
-      search.set('cliente', filter.cliente);
+    if ((!isNullOrUndefined(filter.id_contrato)) && (filter.id_contrato.toString().length > 0)) {
+      search.set('id_contrato', filter.id_contrato.toString());
     }
 
-    // if ((!isNullOrUndefined(filter.vigencia_inicio)) && (filter.vigencia_inicio.length > 0)) {
-    //   search.set('vigencia_inicio', filter.vigencia_inicio);
-    // }
+    if ((!isNullOrUndefined(filter.id_residuo)) && (filter.id_residuo.toString().length > 0)) {
+      search.set('id_residuo', filter.id_residuo.toString());
+    }
 
-    // if ((!isNullOrUndefined(filter.vigencia_final)) && (filter.vigencia_final.length > 0)) {
-    //   search.set('vigencia_final', filter.vigencia_final);
-    // }
+    if ((!isNullOrUndefined(filter.unidade)) && (filter.unidade.toString().length > 0)) {
+      search.set('unidade', filter.unidade);
+    }
 
     return this._http
-      .get(this.contratoclienteservicoUrl, { headers: headers, search: search })
-      .map((res: Response) => res.json())
+      .get(this.contratofornecedorresiduoUrl, { headers: headers, search: search })
+      .map((res: Response) => res)
       .catch((error: any) =>
         Observable.throw(error.json() || 'Server error')
       );
   }
 
-  getListContratoClienteServicos(accessToken: string)  {
-    const listUrl = environment.urlbase + '/api/listcontratoclienteservicos';
+  getListContratoFornecedorResiduos(accessToken: string)  {
+    const listUrl = environment.urlbase + '/api/listcontratofornecedorresiduos';
     const headers = new Headers({
       Accept: 'application/json',
       Authorization: 'Bearer ' + accessToken.toString().replace(/"/g, '')

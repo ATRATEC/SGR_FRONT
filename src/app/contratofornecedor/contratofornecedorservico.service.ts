@@ -1,7 +1,7 @@
 import { environment } from './../../environments/environment';
 import { isEmpty } from 'rxjs/operators';
 import { isNullOrUndefined } from 'util';
-import { ContratoFornecedorServico, ContratoFornecedorServicoFilter } from './contratofornecedorservico';
+import { ContratoFornecedorServico, ContratoFornecedorServicoFilter, ContratoFornecedorServicoGridFilter } from './contratofornecedorservico';
 import { Injectable } from '@angular/core';
 import 'rxjs/add/observable/of';
 import 'rxjs/add/operator/map';
@@ -113,12 +113,59 @@ export class ContratoFornecedorServicoService {
       search.set('id_servico', filter.id_servico.toString());
     }
 
-    if ((!isNullOrUndefined(filter.unidade)) && (filter.unidade.toString().length > 0)) {
-      search.set('unidade', filter.unidade);
+    return this._http
+      .get(this.contratofornecedorservicoUrl, { headers: headers, search: search })
+      .map((res: Response) => res)
+      .catch((error: any) =>
+        Observable.throw(error.json() || 'Server error')
+      );
+  }
+
+  getContratoFornecedorServicosGrid(accessToken: string, sort: string, order: string, page: number,
+    pagesize: number, filter: ContratoFornecedorServicoGridFilter) {
+      const gridUrl = environment.urlbase + '/api/contratofornecedorservicosgrid';
+    const headers = new Headers({
+      Accept: 'application/json',
+      Authorization: 'Bearer ' + accessToken.toString().replace(/"/g, '')
+    });
+
+    const params: HttpParams = new HttpParams();
+    const search: URLSearchParams =  new URLSearchParams();
+
+    if ((!isNullOrUndefined(filter.id)) && (filter.id.toString().length > 0)) {
+      search.set('id', filter.id.toString());
+    }
+
+    if ((!isNullOrUndefined(filter.cliente)) && (filter.cliente.toString().length > 0)) {
+      search.set('cliente', filter.cliente.toString());
+    }
+
+    if ((!isNullOrUndefined(filter.id_cliente)) && (filter.id_cliente.toString().length > 0)) {
+      search.set('id_cliente', filter.id_cliente.toString());
+    }
+
+    if ((!isNullOrUndefined(filter.fornecedor)) && (filter.fornecedor.toString().length > 0)) {
+      search.set('fornecedor', filter.fornecedor.toString());
+    }
+
+    if ((!isNullOrUndefined(filter.descricao)) && (filter.descricao.toString().length > 0)) {
+      search.set('descricao', filter.descricao.toString());
+    }
+
+    if ((!isNullOrUndefined(filter.id_tipo_atividade)) && (filter.id_tipo_atividade.toString().length > 0)) {
+      search.set('id_tipo_atividade', filter.id_tipo_atividade.toString());
+    }
+
+    if ((!isNullOrUndefined(filter.vigencia_inicio)) && (filter.vigencia_inicio.length > 0)) {
+      search.set('vigencia_inicio', filter.vigencia_inicio);
+    }
+
+    if ((!isNullOrUndefined(filter.vigencia_final)) && (filter.vigencia_final.length > 0)) {
+      search.set('vigencia_final', filter.vigencia_final);
     }
 
     return this._http
-      .get(this.contratofornecedorservicoUrl, { headers: headers, search: search })
+      .get(gridUrl, { headers: headers, search: search })
       .map((res: Response) => res)
       .catch((error: any) =>
         Observable.throw(error.json() || 'Server error')

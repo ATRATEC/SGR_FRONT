@@ -21,6 +21,11 @@ mat-icon-button.size-15 {
   max-width: 370px;
 }
 
+.frm_contratocliente_transportador {
+  min-width: 320px;
+  max-width: 320px;
+}
+
 .frm_contratocliente_razao_social {
   min-width: 520px;
   max-width: 520px;
