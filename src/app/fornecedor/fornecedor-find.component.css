@@ -104,10 +104,6 @@ mat-row:nth-child(odd) {
 }
 
 .mat-column-id {
-  max-width: 40px;
-}
-
-.mat-column-codigo_omie {
   min-width: 90px;
   max-width: 90px;
 }
@@ -118,8 +114,8 @@ mat-row:nth-child(odd) {
 }
 
 .mat-column-razao_social {
-  min-width: 280px;
-  max-width: 280px;
+  min-width: 480px;
+  max-width: 480px;
 }
 
 .mat-row:hover, .example-selected-row {

@@ -1,9 +1,9 @@
+import { UpperCaseModule } from './../uppercase/uppercase.module';
 import { ManifestoFindComponent } from './manifesto-find.component';
 import { CustomCurrencyMaskConfig } from './../customcurrencymaskconfig';
 import { CURRENCY_MASK_CONFIG } from 'ng2-currency-mask/src/currency-mask.config';
 import { CurrencyMaskModule } from 'ng2-currency-mask';
 import { ManifestoServicoService } from './manifestoservico.service';
-import { DatepipeModule } from './../datepipe.module';
 import { MatNativeDateModule } from '@angular/material';
 import { MyMaterialModule } from './../my-material/my-material.module';
 import { HttpModule } from '@angular/http';
@@ -17,6 +17,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ManifestoRoutingModule } from './manifesto-routing.module';
+import { DatepipeModule } from '../datepipe/datepipe.module';
 
 
 @NgModule({
@@ -32,6 +33,7 @@ import { ManifestoRoutingModule } from './manifesto-routing.module';
     ReactiveFormsModule,
     DatepipeModule,
     CurrencyMaskModule,
+    UpperCaseModule,
     ManifestoRoutingModule
   ],
   declarations: [

@@ -1,4 +1,5 @@
-import { DatepipeModule } from './../datepipe.module';
+import { UpperCaseModule } from './../uppercase/uppercase.module';
+import { DatepipeModule } from '../datepipe/datepipe.module';
 import { MatNativeDateModule } from '@angular/material';
 import { MyMaterialModule } from './../my-material/my-material.module';
 import { HttpModule } from '@angular/http';
@@ -26,6 +27,7 @@ import { FornecedorDocumentoRoutingModule } from './fornecedordocumento-routing.
     MatNativeDateModule,
     ReactiveFormsModule,
     DatepipeModule,
+    UpperCaseModule,
     FornecedorDocumentoRoutingModule
   ],
   declarations: [

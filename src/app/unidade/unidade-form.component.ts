@@ -72,7 +72,7 @@ export class UnidadeFormComponent implements OnInit, AfterViewInit, AfterViewChe
     Promise.resolve(null).then(() => this.focuscomp.nativeElement.focus());
   }
 
-  keyPress(event: any) {
+  onlyNumber(event: any) {
     const pattern = /[0-9\+\-\ ]/;
     const inputChar = String.fromCharCode(event.charCode);
       if (!pattern.test(inputChar)) {

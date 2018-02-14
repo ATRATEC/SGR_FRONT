@@ -1,3 +1,4 @@
+import { UpperCaseModule } from './../uppercase/uppercase.module';
 import { FornecedorFindComponent } from './fornecedor-find.component';
 import { MatNativeDateModule } from '@angular/material';
 import { MyMaterialModule } from './../my-material/my-material.module';
@@ -24,6 +25,7 @@ import { FornecedorRoutingModule } from './fornecedor-routing.module';
     MyMaterialModule,
     MatNativeDateModule,
     ReactiveFormsModule,
+    UpperCaseModule,
     FornecedorRoutingModule
   ],
   declarations: [

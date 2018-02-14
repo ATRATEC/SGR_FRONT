@@ -6,7 +6,7 @@
         <tr>
           <td class="filtro_codigo">
             <mat-form-field class="filtro_codigo">
-              <input matInput #filter placeholder="Código" [formControl]="codigoFilter">
+              <input matInput #filter placeholder="Código" [formControl]="codigoFilter" (keypress)="onlyNumber($event)">
             </mat-form-field>
           </td>
           <td class="mat-column-cnpj_cpf">
@@ -18,7 +18,7 @@
           <td class="filtro_razao_social">
             <!-- style="width: 500px" -->
             <mat-form-field class="filtro_razao_social">
-              <input matInput #filter placeholder="Razão Social (Nome Completo)" [formControl]="razaoSocialFilter">
+              <input matInput uppercase #filter placeholder="Razão Social (Nome Completo)" [formControl]="razaoSocialFilter">
             </mat-form-field>
           </td>
         </tr>
@@ -32,13 +32,8 @@
       <mat-table #table [dataSource]="dataSource" matSort>
         <!-- ID Column -->
         <ng-container matColumnDef="id">
-          <mat-header-cell *matHeaderCellDef mat-sort-header> ID </mat-header-cell>
-          <mat-cell *matCellDef="let row"> {{row.id}} </mat-cell>
-        </ng-container>
-
-        <ng-container matColumnDef="codigo_omie">
           <mat-header-cell *matHeaderCellDef mat-sort-header> Código </mat-header-cell>
-          <mat-cell *matCellDef="let row"> {{row.codigo_omie}} </mat-cell>
+          <mat-cell *matCellDef="let row"> {{row.id}} </mat-cell>
         </ng-container>
 
         <ng-container matColumnDef="cnpj_cpf">
@@ -55,12 +50,14 @@
         <mat-row *matRowDef="let row; columns: displayedColumns;" [ngClass]="{'highlight': selectedRowIndex == row.id}" (click)="highlight(row)"
           (dblclick)="dblck(row)"></mat-row>
       </mat-table>
-      <mat-paginator #paginator [length]="dataSource.nrRegistros" [pageIndex]="0" [pageSize]="25" [pageSizeOptions]="[5, 10, 15, 25, 100]">
-      </mat-paginator>
     </div>
   </div>
 </div>
 <div mat-dialog-actions>
+  <div fxLayout="row" fxLayoutAlign="end center" fxFill>
+    <mat-paginator #paginator [length]="dataSource.nrRegistros" [pageIndex]="0" [pageSize]="25" [pageSizeOptions]="[5, 10, 15, 25, 100]">
+    </mat-paginator>
+  </div>
   <div fxLayout="row" fxLayoutAlign="end center" fxFill>
     <button mat-raised-button color="primary" (click)="btnOkClick()" tabindex="2" style="width: 100px">OK</button>
     <button mat-raised-button color="primary" (click)="btnCancelarClick()" tabindex="-1" style="width: 100px">Cancelar</button>

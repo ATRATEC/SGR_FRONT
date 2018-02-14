@@ -11,6 +11,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ClasseResiduoRoutingModule } from './classeresiduo-routing.module';
+import { UpperCaseModule } from '../uppercase/uppercase.module';
 
 @NgModule({
   imports: [
@@ -23,6 +24,7 @@ import { ClasseResiduoRoutingModule } from './classeresiduo-routing.module';
     MyMaterialModule,
     MatNativeDateModule,
     ReactiveFormsModule,
+    UpperCaseModule,
     ClasseResiduoRoutingModule
   ],
   declarations: [

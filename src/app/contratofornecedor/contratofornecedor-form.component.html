@@ -56,7 +56,7 @@
                       tabindex="1" [(ngModel)]="contratofornecedor.id_fornecedor" (keyup)="validaSaida($event.target.value)"
                       (keypress)="onlyNumber($event)">
                     <mat-hint align="end">{{codigofor.value?.length || 0}}/9</mat-hint>
-                    <mat-error *ngIf="valCodigo.invalid">{{getCodigoErrorMessage()}}</mat-error>
+                    <mat-error *ngIf="valCodigo.invalid">{{getErrorMessage(valCodigo)}}</mat-error>
                   </mat-form-field>
                 </div>
                 <div fxFlex="30px" fxFlexAlign="center" fxFlexFill>
@@ -81,7 +81,7 @@
                     <input matInput #codigocli maxlength="9" [formControl]="valCodigoCli" placeholder="Cliente" tabindex="1" [(ngModel)]="contratofornecedor.id_cliente"
                       (keyup)="validaSaidaCliente($event.target.value)" (keypress)="onlyNumber($event)">
                     <mat-hint align="end">{{codigocli.value?.length || 0}}/9</mat-hint>
-                    <mat-error *ngIf="valCodigoCli.invalid">{{getCodigoClienteErrorMessage()}}</mat-error>
+                    <mat-error *ngIf="valCodigoCli.invalid">{{getErrorMessage(valCodigoCli)}}</mat-error>
                   </mat-form-field>
                 </div>
                 <div fxFlex="30px" fxFlexAlign="center" fxFlexFill>
@@ -100,33 +100,36 @@
               <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="20px">
                 <div fxFlex="370px" fxFlexFill>
                   <mat-form-field class="frm_contratofornecedor_descricao">
-                    <input matInput #descricao maxlength="50" [formControl]="valDescricao" placeholder="Descrição" required tabindex="3" [(ngModel)]="contratofornecedor.descricao">
+                    <input matInput uppercase #descricao maxlength="50" [formControl]="valDescricao" placeholder="Descrição" required tabindex="3" [(ngModel)]="contratofornecedor.descricao" >
                     <mat-hint align="end">{{descricao.value?.length || 0}}/50</mat-hint>
-                    <mat-error *ngIf="valDescricao.invalid">{{getDescricaoErrorMessage()}}</mat-error>
                   </mat-form-field>
                 </div>
                 <div fxFlex="160px" fxFlexAlign="start" fxFlexFill>
                   <mat-form-field class="frm_contratofornecedor_data">
-                    <input matInput type="date" #dtemissao maxlength="10" placeholder="Data Inicio Vigência" tabindex="4" [ngModel]="contratofornecedor.vigencia_inicio"
-                      (ngModelChange)="contratofornecedor.vigencia_inicio = $event" [value]="contratofornecedor.vigencia_inicio">
+                    <input matInput type="date" id="dtInicio" #dtemissao maxlength="10" placeholder="Data Inicio Vigência" tabindex="4" [ngModel]="contratofornecedor.vigencia_inicio"
+                      (ngModelChange)="contratofornecedor.vigencia_inicio = $event" [value]="contratofornecedor.vigencia_inicio"
+                      [formControl]="valVigenciaInicial">
                     <mat-hint align="end">{{dtemissao.value?.length || 0}}/10</mat-hint>
+                    <mat-error *ngIf="valVigenciaInicial.invalid">{{getErrorMessage(valVigenciaInicial)}}</mat-error>
                   </mat-form-field>
                 </div>
                 <div fxFlex="160px" fxFlexAlign="start" fxFlexFill>
                   <mat-form-field class="frm_contratofornecedor_data">
-                    <input matInput type="date" #dtvencimento maxlength="10" placeholder="Data Final Vigência" tabindex="5" [ngModel]="contratofornecedor.vigencia_final"
-                      (ngModelChange)="contratofornecedor.vigencia_final = $event" [value]="contratofornecedor.vigencia_final">
+                    <input matInput type="date" id="dtFinal" #dtvencimento maxlength="10" placeholder="Data Final Vigência" tabindex="5" [ngModel]="contratofornecedor.vigencia_final"
+                      (ngModelChange)="contratofornecedor.vigencia_final = $event" [value]="contratofornecedor.vigencia_final"
+                      [formControl]="valVigenciaFinal">
                     <mat-hint align="end">{{dtvencimento.value?.length || 0}}/10</mat-hint>
+                    <mat-error *ngIf="valVigenciaFinal.invalid">{{getErrorMessage(valVigenciaFinal)}}</mat-error>
                   </mat-form-field>
                 </div>
               </div>
             </div>
             <div fxFlex="300px" fxFlexAlign="start" fxFlexFill>
               <mat-tab-group tabindex="9">
-                <mat-tab label="Serviços">
+                <!-- <mat-tab label="Serviços">
                   <div fxLayou="column" fxLayoutAlign="center center" fxLayoutGap="10px">
                     <div fxFlex="180px" fxFlexAlign="center" fxFlexFill style="overflow-y:auto;">
-                      <table style="overflow: auto; height: 100px;">
+                      <table style="overflow: auto;">
                         <tr>
                           <th class="frm_contratofornecedor_servico_selecionado">
                             <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="0px">
@@ -145,7 +148,7 @@
                             <label>Preço Serviço</label>
                           </th>
                         </tr>
-                        <tr *ngFor="let servico of contratofornecedorservicos">
+                        <tr *ngFor="let servico of contratofornecedorservicos" style="height: 15px">
                           <td class="frm_contratofornecedor_servico_selecionado celula" style="max-height: 18px;">
                             <mat-checkbox class="example-margin" [(ngModel)]="servico.selecionado" (click)="limpacampo(servico,$event)"></mat-checkbox>
                           </td>
@@ -164,7 +167,7 @@
                       </table>
                     </div>
                   </div>
-                </mat-tab>
+                </mat-tab> -->
                 <mat-tab label="Resíduos">
                   <div fxLayou="column" fxLayoutAlign="start center" fxLayoutGap="0px" style="overflow-y:auto;">
                     <div fxFlex="100%" style="overflow-y:auto;">
@@ -172,10 +175,19 @@
                         <div fxFlex="40px" fxFlexAlign="start">
                           <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="5px">
                             <div fxFlex="200px" fxFlexAlign="start" fxFlexFill>
-                              <mat-form-field class="frm_contratocliente_residuo">
-                                <mat-select placeholder="Residuo" [(value)]="contratofornecedorresiduo.id_residuo" tabindex="10">
+                              <mat-form-field class="frm_contratofornecedor_residuo">
+                                <mat-select id="cbResiduo" placeholder="Residuo" [(value)]="contratofornecedorresiduo.id_residuo" tabindex="10">
                                   <mat-option *ngFor="let residuo of residuos" [value]="residuo.id">
                                     {{ residuo.descricao }}
+                                  </mat-option>
+                                </mat-select>
+                              </mat-form-field>
+                            </div>
+                            <div fxFlex="200px" fxFlexAlign="start" fxFlexFill>
+                              <mat-form-field class="frm_contratofornecedor_servico">
+                                <mat-select placeholder="Serviço" [(value)]="contratofornecedorresiduo.id_servico" tabindex="10">
+                                  <mat-option *ngFor="let servico of servicos" [value]="servico.id">
+                                    {{ servico.descricao }}
                                   </mat-option>
                                 </mat-select>
                               </mat-form-field>
@@ -189,18 +201,18 @@
                                 </mat-select>
                               </mat-form-field>
                             </div>
-                            <div fxFlex="120px" fxFlexAlign="start" fxFlexFill>
+                            <div fxFlex="100px" fxFlexAlign="start" fxFlexFill>
                               <div class="group">
-                                <input currencyMask type="text" class="atrainput" [(ngModel)]="contratofornecedorresiduo.preco_venda" style="height: 25px; width: 105px;"
+                                <input currencyMask type="text" class="atrainput" [(ngModel)]="contratofornecedorresiduo.preco_venda" style="height: 35px; width: 90px;"
                                   tabindex="11" required>
                                 <span class="highlight"></span>
                                 <span class="bar"></span>
                                 <label class="atralabel">Preço Venda</label>
                               </div>
                             </div>
-                            <div fxFlex="120px" fxFlexAlign="start" fxFlexFill>
+                            <div fxFlex="100px" fxFlexAlign="start" fxFlexFill>
                               <div class="group">
-                                <input currencyMask type="text" class="atrainput" [(ngModel)]="contratofornecedorresiduo.preco_servico" style="height: 25px; width: 105px;"
+                                <input currencyMask type="text" class="atrainput" [(ngModel)]="contratofornecedorresiduo.preco_servico" style="height: 35px; width: 90px;"
                                   tabindex="12" required>
                                 <span class="highlight"></span>
                                 <span class="bar"></span>
@@ -230,6 +242,9 @@
                               <th class="frm_contratofornecedor_residuo_residuo">
                                 <label>Residuo</label>
                               </th>
+                              <th class="frm_contratofornecedor_residuo_servico">
+                                <label>Serviço</label>
+                              </th>
                               <th class="frm_contratofornecedor_residuo_unidade">
                                 <label>Unidade</label>
                               </th>
@@ -247,6 +262,9 @@
                             <tr *ngFor="let cfresiduo of contratofornecedorresiduos">
                               <td class="frm_contratofornecedor_residuo_residuo">
                                 {{cfresiduo.residuo}}
+                              </td>
+                              <td class="frm_contratofornecedor_residuo_residuo">
+                                {{cfresiduo.servico}}
                               </td>
                               <td class="frm_contratofornecedor_residuo_unidade" style="max-height: 18px;">
                                 {{cfresiduo.unidade}}

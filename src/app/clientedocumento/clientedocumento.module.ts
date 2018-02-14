@@ -1,4 +1,4 @@
-import { DatepipeModule } from './../datepipe.module';
+import { DatepipeModule } from '../datepipe/datepipe.module';
 import { MatNativeDateModule } from '@angular/material';
 import { MyMaterialModule } from './../my-material/my-material.module';
 import { HttpModule } from '@angular/http';
@@ -12,6 +12,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ClienteDocumentoRoutingModule } from './clientedocumento-routing.module';
+import { UpperCaseModule } from '../uppercase/uppercase.module';
 
 @NgModule({
   imports: [
@@ -25,6 +26,7 @@ import { ClienteDocumentoRoutingModule } from './clientedocumento-routing.module
     MatNativeDateModule,
     ReactiveFormsModule,
     DatepipeModule,
+    UpperCaseModule,
     ClienteDocumentoRoutingModule
   ],
   declarations: [

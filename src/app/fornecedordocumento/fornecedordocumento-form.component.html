@@ -88,7 +88,7 @@
                 </div>
                 <div fxFlex="150px" fxFlexFill>
                   <mat-form-field class="frm_fornecedordocumento_nrolicenca">
-                    <input matInput #nrolicencatransp maxlength="20" placeholder="Numero" tabindex="29" [(ngModel)]="fornecedordocumento.numero">
+                    <input matInput uppercase #nrolicencatransp maxlength="20" placeholder="Numero" tabindex="29" [(ngModel)]="fornecedordocumento.numero">
                     <mat-hint align="end">{{nrolicencatransp.value?.length || 0}}/20</mat-hint>
                   </mat-form-field>
                 </div>

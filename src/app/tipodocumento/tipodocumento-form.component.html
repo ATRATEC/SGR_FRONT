@@ -52,7 +52,7 @@
             </div>
             <div fxFlex="50%" fxFlexAlign="start" >
               <mat-form-field class="frm_tipodocumento_descricao">
-                <input matInput autofocus #descricao #focuscomp maxlength="50"  [formControl]="valDescricao" placeholder="Descrição" required tabindex="1" [(ngModel)]="tipodocumento.descricao">
+                <input matInput uppercase autofocus #descricao #focuscomp maxlength="50"  [formControl]="valDescricao" placeholder="Descrição" required tabindex="1" [(ngModel)]="tipodocumento.descricao">
                 <mat-hint align="end">{{descricao.value?.length || 0}}/50</mat-hint>
                 <mat-error *ngIf="valDescricao.invalid">{{getDescricaoErrorMessage()}}</mat-error>
               </mat-form-field>

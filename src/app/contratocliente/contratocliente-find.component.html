@@ -6,19 +6,19 @@
         <tr>
           <td>
             <mat-form-field class="mat-column-id" style="margin-left: 5px">
-              <input matInput #filter placeholder="Código" [formControl]="idFilter">
+              <input matInput #filter placeholder="Código" [formControl]="idFilter" (keypress)="onlyNumber($event)">
             </mat-form-field>
           </td>
           <td class="mat-column-descricao">
             <!-- style="width: 500px" -->
             <mat-form-field class="mat-column-descricao">
-              <input matInput #filter placeholder="Descrição" [formControl]="descricaoFilter">
+              <input matInput uppercase #filter placeholder="Descrição" [formControl]="descricaoFilter">
             </mat-form-field>
           </td>
           <td class="mat-column-cliente">
             <!-- style="width: 500px" -->
             <mat-form-field class="mat-column-cliente">
-              <input matInput #filter placeholder="Cliente" [formControl]="clienteFilter">
+              <input matInput uppercase #filter placeholder="Cliente" [formControl]="clienteFilter">
             </mat-form-field>
           </td>
           <td class="mat-column-vigencia_inicio">

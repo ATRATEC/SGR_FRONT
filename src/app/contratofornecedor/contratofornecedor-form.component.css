@@ -24,6 +24,16 @@ mat-icon-button.size-25 {
   max-width: 160px;
 }
 
+.frm_contratofornecedor_servico {
+  min-width: 200px;
+  max-width: 200px;
+}
+
+.frm_contratofornecedor_residuo {
+  min-width: 200px;
+  max-width: 200px;
+}
+
 .frm_contratofornecedor_preco {
   min-width: 120px;
   max-width: 120px;
@@ -168,7 +178,7 @@ tr:nth-child(even) {
 .atrainput {
   font-size: 16px;
   font-family: roboto;
-  padding: 10px 10px 10px 0px;
+  padding: 10px 10px 0px 0px;
   display: block;
   border: none;
   border-bottom: 1px solid #757575;
@@ -193,7 +203,7 @@ tr:nth-child(even) {
 /* active state */
 .atrainput:focus ~ .atralabel,
 .atrainput:valid ~ .atralabel {
-  top: -15px;
+  top: 0px;
   font-size: 12px;
   color: #5264ae;
 }

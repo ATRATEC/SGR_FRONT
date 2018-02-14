@@ -33,10 +33,7 @@ import { OnlyNumberDirective } from './../only-number.directive';
 })
 export class FornecedorFindComponent implements OnInit, AfterViewInit {
 
-  displayedColumns = ['codigo_omie',
-                      'cnpj_cpf',
-                      'razao_social'
-                    ];
+  displayedColumns = ['id', 'cnpj_cpf', 'razao_social'];
   // displayedColumns = ['id', 'codigo', 'descricao'];
   dataSource: DsFornecedor | null;
   selectedRowIndex = -1;
@@ -56,7 +53,7 @@ export class FornecedorFindComponent implements OnInit, AfterViewInit {
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild(MatPaginator) paginator: MatPaginator;
 
-  keyPress(event: any) {
+  onlyNumber(event: any) {
     const pattern = /[0-9\+\-\ ]/;
     const inputChar = String.fromCharCode(event.charCode);
     if (!pattern.test(inputChar)) {

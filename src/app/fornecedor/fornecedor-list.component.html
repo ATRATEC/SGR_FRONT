@@ -36,7 +36,7 @@
           <tr>
             <td class="filtro_codigo">
               <mat-form-field class="filtro_codigo" style="margin-left: 5px">
-                <input matInput #filter placeholder="Código" [formControl]="codigoFilter">
+                <input matInput #filter placeholder="Código" [formControl]="codigoFilter" (keypress)="onlyNumber($event)">
               </mat-form-field>
             </td>
             <td class="mat-column-cnpj_cpf">
@@ -48,13 +48,13 @@
             <td class="mat-column-razao_socialocial">
               <!-- style="width: 500px" -->
               <mat-form-field class="mat-column-razao_social">
-                <input matInput #filter placeholder="Razão Social (Nome Completo)" [formControl]="razaoSocialFilter">
+                <input matInput uppercase #filter placeholder="Razão Social (Nome Completo)" [formControl]="razaoSocialFilter">
               </mat-form-field>
             </td>
             <td class="mat-column-contato">
               <!-- style="width: 500px" -->
               <mat-form-field class="mat-column-contato">
-                <input matInput #filter placeholder="Contato" [formControl]="contatoFilter">
+                <input matInput uppercase #filter placeholder="Contato" [formControl]="contatoFilter">
               </mat-form-field>
             </td>
             <td class="mat-column-telefone1_numero">

@@ -6,19 +6,19 @@
             <tr>
               <td class="mat-column-id">
                 <mat-form-field class="mat-column-id" style="margin-left: 5px">
-                  <input matInput #filter placeholder="Código" [formControl]="idFilter">
+                  <input matInput #filter placeholder="Código" [formControl]="idFilter" (keypress)="onlyNumber($event)">
                 </mat-form-field>
               </td>
               <td class="mat-column-numero">
                 <!-- style="width: 500px" -->
                 <mat-form-field class="mat-column-numero">
-                  <input matInput #filter placeholder="Numero" [formControl]="numeroFilter">
+                  <input matInput uppercase #filter placeholder="Numero" [formControl]="numeroFilter">
                 </mat-form-field>
               </td>
               <td class="mat-column-cliente">
                 <!-- style="width: 500px" -->
                 <mat-form-field class="mat-column-cliente">
-                  <input matInput #filter placeholder="Cliente" [formControl]="clienteFilter">
+                  <input matInput uppercase #filter placeholder="Cliente" [formControl]="clienteFilter">
                 </mat-form-field>
               </td>
               <td class="mat-column-data">
@@ -30,13 +30,13 @@
               <td class="mat-column-transportador">
                 <!-- style="width: 500px" -->
                 <mat-form-field class="mat-column-transportador">
-                  <input matInput #filter placeholder="Transportador" [formControl]="transportadorFilter">
+                  <input matInput uppercase #filter placeholder="Transportador" [formControl]="transportadorFilter">
                 </mat-form-field>
               </td>
               <td class="mat-column-destinador">
                 <!-- style="width: 500px" -->
                 <mat-form-field class="mat-column-destinador">
-                  <input matInput #filter placeholder="Destinador" [formControl]="destinadorFilter">
+                  <input matInput uppercase #filter placeholder="Destinador" [formControl]="destinadorFilter">
                 </mat-form-field>
               </td>
             </tr>

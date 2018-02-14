@@ -1,3 +1,4 @@
+import { UpperCaseModule } from './../uppercase/uppercase.module';
 import { MatNativeDateModule } from '@angular/material';
 import { MyMaterialModule } from './../my-material/my-material.module';
 import { HttpModule } from '@angular/http';
@@ -23,6 +24,7 @@ import { TipoAtividadeRoutingModule } from './tipoatividade-routing.module';
     MyMaterialModule,
     MatNativeDateModule,
     ReactiveFormsModule,
+    UpperCaseModule,
     TipoAtividadeRoutingModule
   ],
   declarations: [

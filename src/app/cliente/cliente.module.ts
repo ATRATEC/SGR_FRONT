@@ -12,6 +12,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ClienteRoutingModule } from './cliente-routing.module';
+import { UpperCaseModule } from '../uppercase/uppercase.module';
 
 @NgModule({
   imports: [
@@ -24,6 +25,7 @@ import { ClienteRoutingModule } from './cliente-routing.module';
     MyMaterialModule,
     MatNativeDateModule,
     ReactiveFormsModule,
+    UpperCaseModule,
     ClienteRoutingModule
   ],
   declarations: [

@@ -1,9 +1,10 @@
+import { UpperCaseModule } from './../uppercase/uppercase.module';
 import { ContratoClienteFindComponent } from './contratocliente-find.component';
 import { CustomCurrencyMaskConfig } from './../customcurrencymaskconfig';
 import { CURRENCY_MASK_CONFIG } from 'ng2-currency-mask/src/currency-mask.config';
 import { CurrencyMaskModule } from 'ng2-currency-mask';
 import { ContratoClienteResiduoService } from './contratoclienteresiduo.service';
-import { DatepipeModule } from './../datepipe.module';
+import { DatepipeModule } from '../datepipe/datepipe.module';
 import { MatNativeDateModule } from '@angular/material';
 import { MyMaterialModule } from './../my-material/my-material.module';
 import { HttpModule } from '@angular/http';
@@ -32,6 +33,7 @@ import { ContratoClienteRoutingModule } from './contratocliente-routing.module';
     ReactiveFormsModule,
     DatepipeModule,
     CurrencyMaskModule,
+    UpperCaseModule,
     ContratoClienteRoutingModule
   ],
   declarations: [

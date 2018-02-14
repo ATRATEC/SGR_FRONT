@@ -124,14 +124,6 @@ export class ReceitaClienteFormComponent implements OnInit, AfterViewInit, After
     // Promise.resolve(null).then(() => this.focuscomp.nativeElement.focus());
   }
 
-  keyPress(event: any) {
-    const pattern = /[0-9\+\-\ ]/;
-    const inputChar = String.fromCharCode(event.charCode);
-      if (!pattern.test(inputChar)) {
-        event.preventDefault();
-      }
-  }
-
   getCodigoErrorMessage() {
     let mensagem = '';
 

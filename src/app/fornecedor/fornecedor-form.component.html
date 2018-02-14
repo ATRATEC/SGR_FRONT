@@ -55,7 +55,7 @@
               <div fxLayout="row" fxLayoutAlign="space-between center" fxLayoutGap="20px" style="width: 100%">
                 <div fxFlex="450px" fxFlexAlign="start" fxFlexFill>
                   <mat-form-field class="frm_fornecedor_razao_social">
-                    <input matInput autofocus #razaosocial #focuscomp maxlength="60" [formControl]="valRazaoSocial" placeholder="Razão Social (Nome Completo)" required
+                    <input matInput uppercase autofocus #razaosocial #focuscomp maxlength="60" [formControl]="valRazaoSocial" placeholder="Razão Social (Nome Completo)" required
                       tabindex="1" [(ngModel)]="fornecedor.razao_social">
                     <mat-hint align="end">{{razaosocial.value?.length || 0}}/60</mat-hint>
                     <mat-error *ngIf="valRazaoSocial.invalid">{{getRazaoSocialErrorMessage()}}</mat-error>
@@ -75,7 +75,7 @@
               <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="20px" style="width: 100%">
                 <div fxFlex="250px" fxFlexAlign="start" fxFlexFill>
                   <mat-form-field class="frm_fornecedor_nome_fantasia">
-                    <input matInput #nomefantasia maxlength="50" placeholder="Nome Fantasia (Nome Abreviado)" tabindex="5" [(ngModel)]="fornecedor.nome_fantasia">
+                    <input matInput uppercase #nomefantasia maxlength="50" placeholder="Nome Fantasia (Nome Abreviado)" tabindex="5" [(ngModel)]="fornecedor.nome_fantasia">
                     <mat-hint align="end">{{nomefantasia.value?.length || 0}}/50</mat-hint>
                   </mat-form-field>
                 </div>
@@ -97,7 +97,7 @@
                 </div>
                 <div fxFlex="220px" fxFlexAlign="start" fxFlexFill>
                   <mat-form-field class="frm_fornecedor_contato">
-                    <input matInput #contato maxlength="50" placeholder="Contato" tabindex="8" [(ngModel)]="fornecedor.contato">
+                    <input matInput uppercase #contato maxlength="50" placeholder="Contato" tabindex="8" [(ngModel)]="fornecedor.contato">
                     <mat-hint align="end">{{contato.value?.length || 0}}/50</mat-hint>
                   </mat-form-field>
                 </div>
@@ -112,7 +112,7 @@
                       <div fxLayout="row" fxLayoutAlign="space-between center" fxLayoutGap="20px">
                         <div fxFlex="480px" fxFlexFill>
                           <mat-form-field class="frm_fornecedor_endereco">
-                            <input matInput #endereco maxlength="60" placeholder="Endereço" tabindex="10" [(ngModel)]="fornecedor.endereco">
+                            <input matInput uppercase #endereco maxlength="60" placeholder="Endereço" tabindex="10" [(ngModel)]="fornecedor.endereco">
                             <mat-hint align="end">{{endereco.value?.length || 0}}/60</mat-hint>
                           </mat-form-field>
                         </div>
@@ -130,13 +130,13 @@
                       <div fxLayout="row" fxLayoutAlign="space-between center" fxLayoutGap="20px">
                         <div fxFlex="350px" fxFlexFill>
                           <mat-form-field class="frm_fornecedor_bairro">
-                            <input matInput #bairro maxlength="30" placeholder="Bairro" tabindex="12" [(ngModel)]="fornecedor.bairro">
+                            <input matInput uppercase #bairro maxlength="30" placeholder="Bairro" tabindex="12" [(ngModel)]="fornecedor.bairro">
                             <mat-hint align="end">{{bairro.value?.length || 0}}/30</mat-hint>
                           </mat-form-field>
                         </div>
                         <div fxFlex="280px" fxFlexFill>
                           <mat-form-field class="frm_fornecedor_complemento">
-                            <input matInput #complemento maxlength="60" placeholder="Complemento" tabindex="13" [(ngModel)]="fornecedor.complemento">
+                            <input matInput uppercase #complemento maxlength="60" placeholder="Complemento" tabindex="13" [(ngModel)]="fornecedor.complemento">
                             <mat-hint align="end">{{complemento.value?.length || 0}}/60</mat-hint>
                           </mat-form-field>
                         </div>
@@ -158,7 +158,7 @@
                         </div>
                         <div fxFlex="300px" fxFlexFill>
                           <mat-form-field class="frm_fornecedor_cidade">
-                            <input matInput #cidade maxlength="40" placeholder="Cidade" [matAutocomplete]="auto" tabindex="11" [(ngModel)]="fornecedor.cidade"
+                            <input matInput uppercase #cidade maxlength="40" placeholder="Cidade" [matAutocomplete]="auto" tabindex="11" [(ngModel)]="fornecedor.cidade"
                               [formControl]="cidadeFilter" tabindex="16">
                             <mat-hint align="end">{{cidade.value?.length || 0}}/40</mat-hint>
                             <mat-autocomplete #auto="matAutocomplete">

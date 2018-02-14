@@ -36,19 +36,19 @@
           <tr>
             <td>
               <mat-form-field class="mat-column-id" style="margin-left: 5px">
-                <input matInput #filter placeholder="Código" [formControl]="idFilter">
+                <input matInput #filter placeholder="Código" [formControl]="idFilter"  (keypress)="onlyNumber($event)">
               </mat-form-field>
             </td>
             <td class="mat-column-descricao">
               <!-- style="width: 500px" -->
               <mat-form-field class="mat-column-descricao">
-                <input matInput #filter placeholder="Documento" [formControl]="descricaoFilter">
+                <input matInput uppercase #filter placeholder="Documento" [formControl]="descricaoFilter">
               </mat-form-field>
             </td>
             <td class="mat-column-razao_social">
               <!-- style="width: 500px" -->
               <mat-form-field class="mat-column-razao_social">
-                <input matInput #filter placeholder="Cliente" [formControl]="razaosocialFilter">
+                <input matInput uppercase #filter placeholder="Cliente" [formControl]="razaosocialFilter">
               </mat-form-field>
             </td>
             <td class="mat-column-numero">

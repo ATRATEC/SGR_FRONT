@@ -1,3 +1,4 @@
+import { DateValidator } from './../datevalidator';
 import { ContratoFornecedorResiduoService } from './contratofornecedorresiduo.service';
 import { ResiduoService } from './../residuo/residuo.service';
 import { ContratoFornecedorResiduo } from './contratofornecedorresiduo';
@@ -46,7 +47,7 @@ import {
   EventEmitter
 } from '@angular/core';
 import { OnlyNumberDirective } from './../only-number.directive';
-import { FocusDirective } from './../focus.directive';
+import { FocusDirective } from '../focus/focus.directive';
 import { ContratoFornecedor } from './contratofornecedor';
 import { ActivatedRoute, Params } from '@angular/router';
 import { FormControl, Validators } from '@angular/forms';
@@ -84,24 +85,22 @@ import { Residuo } from '../residuo/residuo';
 export class ContratoFornecedorFormComponent
   implements OnInit, AfterViewInit, AfterViewChecked {
   contratofornecedor: ContratoFornecedor;
-  contratofornecedorservicos: ContratoFornecedorServico[];
   contratofornecedorresiduo: ContratoFornecedorResiduo;
   contratofornecedorresiduos: ContratoFornecedorResiduo[];
   residuos: Residuo[];
+  servicos: Servico[];
   unidades: Unidade[];
   emProcessamento = false;
-  modelLoaded = false;
   exibeIncluir = false;
-  tipodocumentos: TipoDocumento[];
-  tipodocumentos2: TipoDocumento[];
   linkDownload = environment.urlbase + '/api/contratos/downloadanexo?arquivo=';
   opt: FloatPlaceholderType;
-
   trocacor = false;
 
   valCodigo = new FormControl('', [Validators.required]);
+  valVigenciaInicial = new FormControl('', [Validators.required]);
+  valVigenciaFinal = new FormControl('', Validators.compose([Validators.required, DateValidator.afterDate(this.valVigenciaInicial)]));
   valCodigoCli = new FormControl();
-  valDescricao = new FormControl('', [Validators.required]);
+  valDescricao = new FormControl();
 
   private inputFocused = new EventEmitter();
 
@@ -111,7 +110,6 @@ export class ContratoFornecedorFormComponent
 
   constructor(
     private _contratofornecedorService: ContratoFornecedorService,
-    private _contratofornecedorservicoService: ContratoFornecedorServicoService,
     private _contratofornecedorresiduoService: ContratoFornecedorResiduoService,
     private _fornecedorService: FornecedorService,
     private _clienteService: ClienteService,
@@ -127,51 +125,14 @@ export class ContratoFornecedorFormComponent
   }
 
   validaCampos() {
-    return this.valCodigo.valid && this.validaServicos();
-  }
-
-  /**
-   * Validação de Serviços marcados
-   */
-
-  validaServicos(): boolean {
-    let retorno: boolean;
-    const msgRetorno = '';
-    retorno = true;
-    // for (let index = 0; index < this.contratofornecedorservicos.length; index++) {
-    //   const cfs = this.contratofornecedorservicos[index];
-    //   if (cfs.selecionado) {
-    //     if (cfs.unidade === '') {
-    //       msgRetorno = 'Unidade do serviço ' + cfs.servico + ' deve ser informada.';
-    //       break;
-    //     }
-
-    //     if (msgRetorno === '') {
-    //       if (((isNullOrUndefined(cfs.preco_compra)) || (cfs.preco_compra === 0)) &&
-    //         ((isNullOrUndefined(cfs.preco_servico)) || (cfs.preco_servico === 0))) {
-    //           msgRetorno = 'Preço de compra ou preço de serviço deve ser informado em ' + cfs.servico;
-    //           break;
-    //       }
-    //     }
-    //   }
-    // }
-
-    if (msgRetorno !== '') {
-      retorno = false;
-      this.dialog.warning('SGR', 'Campos obrigatórios não preenchidos. ', msgRetorno);
-    }
-
-    return retorno;
+    return this.valCodigo.valid;
   }
 
   ngOnInit() {
     this.emProcessamento = true;
     this.contratofornecedor = new ContratoFornecedor();
-    this.contratofornecedorservicos = new Array<ContratoFornecedorServico>();
     this.contratofornecedorresiduo = new ContratoFornecedorResiduo();
     this.contratofornecedorresiduos = new Array<ContratoFornecedorResiduo>();
-    // this.contratofornecedorservicos.push(new ContratoFornecedorServico(1, 1, 1, 1, 56.87, true, '', '', 'TRANSPORTE'));
-    // this.contratofornecedorservicos.push(new ContratoFornecedorServico(1, 1, 1, 1, 123.47, true, '', '', 'RECEPÇÃO'));
     this._unidadeService.getListUnidades(this._tokenManager.retrieve()).subscribe(
       data => {
         this.unidades = JSON.parse(data._body);
@@ -181,6 +142,12 @@ export class ContratoFornecedorFormComponent
     this._residuoService.getListResiduos(this._tokenManager.retrieve()).subscribe(
       data => {
         this.residuos = JSON.parse(data._body);
+      }
+    );
+
+    this._servicoService.getListServicos(this._tokenManager.retrieve()).subscribe(
+      data => {
+        this.servicos = JSON.parse(data._body);
       }
     );
 
@@ -205,17 +172,6 @@ export class ContratoFornecedorFormComponent
             }
 
             this.emProcessamento = false;
-            // this.modelLoaded = true;
-            // const tp = new TipoDocumento(this.contratofornecedor.id_tipo_documento, this.contratofornecedor.descricao);
-
-            // this.valTipoDocumento.setValue(this.contratofornecedor.id_tipo_documento);
-            // console.log('objeto: ' + this.contratofornecedor.id_tipo_documento.toString());
-          });
-        this._contratofornecedorservicoService
-          .getContratoFornecedorServico(this._tokenManager.retrieve(), id)
-          .subscribe(data => {
-            this.contratofornecedorservicos.length = 0;
-            this.contratofornecedorservicos = JSON.parse(data._body);
           });
         this._contratofornecedorresiduoService
           .getContratoFornecedorResiduo(this._tokenManager.retrieve(), id)
@@ -227,36 +183,6 @@ export class ContratoFornecedorFormComponent
         this.emProcessamento = false;
       }
     });
-
-    // se a lista de servicos está zerada vamos fazer o setup dela.
-    if (this.contratofornecedorservicos.length <= 0) {
-      this._servicoService
-        .getListServicos(this._tokenManager.retrieve())
-        .subscribe(data => {
-          let servicos: Servico[];
-          servicos = JSON.parse(data._body);
-          if (this.contratofornecedorservicos.length === 0) {
-            for (let index = 0; index < servicos.length; index++) {
-              const servico = servicos[index];
-              this.contratofornecedorservicos.push(
-                new ContratoFornecedorServico(
-                  null,
-                  null,
-                  null,
-                  servico.id,
-                  null,
-                  null,
-                  false,
-                  '',
-                  '',
-                  servico.descricao,
-                  ''
-                )
-              );
-            }
-          }
-        });
-    }
 
     const idFilter$ = this.valCodigo.valueChanges
       .debounceTime(500)
@@ -281,30 +207,11 @@ export class ContratoFornecedorFormComponent
       .subscribe(filter => {
         this.buscaCliente(filter);
       });
-
-    // this._tipoDocumentoService.getListTipoDocumentos(this._tokenManager.retrieve())
-    //     .subscribe(dt => {
-    //       this.tipodocumentos = JSON.parse(dt._body);
-    //       // if ((this.tipodocumentos.length > 0) && (!isNullOrUndefined(this.contratofornecedor.id_tipo_documento))) {
-    //       //   const index = this.tipodocumentos.findIndex(d => d.id === this.contratofornecedor.id_tipo_documento);
-    //       //   this.tipodocumentos.splice(index, 1);
-    //       // }
-    // });
   }
 
   ngAfterViewChecked(): void {}
 
-  ngAfterViewInit(): void {
-    // this.vc.first.nativeElement.focus();
-    // Promise.resolve(null).then(() => this.focuscomp.nativeElement.focus());
-    // for (let index = 0; index < this.tipodocumentos2.length; index++) {
-    //   const element = this.tipodocumentos2[index];
-    //   this.tipodocumentos.push(element);
-    // }
-    // this.tipodocumentos2.forEach(element => {
-    //   this.tipodocumentos.push(element);
-    // });
-  }
+  ngAfterViewInit(): void {}
 
   onlyNumber(event: any) {
     const pattern = /[0-9\+\-\ ]/;
@@ -332,57 +239,29 @@ export class ContratoFornecedorFormComponent
               } else {
                 this.contratofornecedor.exclusico = false;
               }
-              // Salvando lista de serviços
-              for (let index = 0; index < this.contratofornecedorservicos.length; index++) {
-                if (this.contratofornecedorservicos[index].selecionado) {
-                  this.contratofornecedorservicos[
-                    index
-                  ].id_contrato = this.contratofornecedor.id;
-                  this.contratofornecedorservicos[
-                    index
-                  ].id_fornecedor = this.contratofornecedor.id_fornecedor;
-                }
-              }
 
               for (let index = 0; index < this.contratofornecedorresiduos.length; index++) {
                 this.contratofornecedorresiduos[index].id_contrato = this.contratofornecedor.id;
                 this.contratofornecedorresiduos[index].id_fornecedor = this.contratofornecedor.id_fornecedor;
               }
 
-              this._contratofornecedorservicoService.addContratoFornecedorServico(this._tokenManager.retrieve(),
-                this.contratofornecedor.id, this.contratofornecedorservicos)
-                .subscribe( ctrfsrv => {
-                  this.contratofornecedorservicos.length = 0;
-                  this.contratofornecedorservicos = ctrfsrv;
-                  // this.emProcessamento = false;
-                  // this.exibeIncluir = true;
-                  // this.dialog.success('SGR', 'Documento salvo com sucesso.');
-                  this._contratofornecedorresiduoService.addContratoFornecedorResiduo(this._tokenManager.retrieve(),
-                  this.contratofornecedor.id, this.contratofornecedorresiduos)
-                    .subscribe( ctrfres => {
-                      this.contratofornecedorresiduos.length = 0;
-                      this.contratofornecedorresiduos = ctrfres;
-                      this.emProcessamento = false;
-                      this.exibeIncluir = true;
-                      this.dialog.success('SGR', 'Documento salvo com sucesso.');
-                    },
-                    error => {
-                      this.emProcessamento = false;
-                      this.dialog.error('SGR', 'Erro ao salvar lista de resíduos.', error.error + ' - Detalhe: ' + error.message);
-                    }
-                  );
+              this._contratofornecedorresiduoService.addContratoFornecedorResiduo(this._tokenManager.retrieve(),
+              this.contratofornecedor.id, this.contratofornecedorresiduos)
+                .subscribe( ctrfres => {
+                  this.contratofornecedorresiduos.length = 0;
+                  this.contratofornecedorresiduos = ctrfres;
+                  this.emProcessamento = false;
+                  this.exibeIncluir = true;
+                  this.dialog.success('SGR', 'Documento salvo com sucesso.');
                 },
                 error => {
                   this.emProcessamento = false;
-                  this.dialog.error('SGR', 'Erro ao salvar lista de serviços.', error.error + ' - Detalhe: ' + error.message);
+                  this.dialog.error('SGR', 'Erro ao salvar lista de resíduos.', error.error + ' - Detalhe: ' + error.message);
                 }
               );
               if (fileBrowser.files.length > 0) {
                 this.uploadContrato(this.contratofornecedor, fileBrowser.files[0]);
               }
-              // this.exibeIncluir = true;
-              // this.dialog.success('SGR', 'Documento salvo com sucesso.');
-              // this.valTipoDocumento.setValue(this.contratofornecedor.id_tipo_documento);
             },
             error => {
               this.emProcessamento = false;
@@ -390,12 +269,8 @@ export class ContratoFornecedorFormComponent
             }
           );
       } else {
-        this._contratofornecedorService
-          .editContratoFornecedor(
-            this._tokenManager.retrieve(),
-            this.contratofornecedor.id,
-            this.contratofornecedor
-          )
+        this._contratofornecedorService.editContratoFornecedor(
+        this._tokenManager.retrieve(), this.contratofornecedor.id, this.contratofornecedor)
           .subscribe(
             data => {
               // this.emProcessamento = false;
@@ -406,44 +281,35 @@ export class ContratoFornecedorFormComponent
               } else {
                 this.contratofornecedor.exclusico = false;
               }
-              for (let index = 0; index < this.contratofornecedorservicos.length; index++) {
-                if (this.contratofornecedorservicos[index].selecionado) {
-                  this.contratofornecedorservicos[
-                    index
-                  ].id_contrato = this.contratofornecedor.id;
-                  this.contratofornecedorservicos[
-                    index
-                  ].id_fornecedor = this.contratofornecedor.id_fornecedor;
-                }
+
+              for (let index = 0; index < this.contratofornecedorresiduos.length; index++) {
+                this.contratofornecedorresiduos[index].id_contrato = this.contratofornecedor.id;
+                this.contratofornecedorresiduos[index].id_fornecedor = this.contratofornecedor.id_fornecedor;
               }
-              this._contratofornecedorservicoService.addContratoFornecedorServico(this._tokenManager.retrieve(),
-                this.contratofornecedor.id, this.contratofornecedorservicos)
-                .subscribe( ctrfsrv => {
-                  this.contratofornecedorservicos.length = 0;
-                  this.contratofornecedorservicos = ctrfsrv;
+
+              this._contratofornecedorresiduoService.addContratoFornecedorResiduo(this._tokenManager.retrieve(),
+              this.contratofornecedor.id, this.contratofornecedorresiduos)
+                .subscribe( ctrfres => {
+                  this.contratofornecedorresiduos.length = 0;
+                  this.contratofornecedorresiduos = ctrfres;
                   this.emProcessamento = false;
                   this.exibeIncluir = true;
                   this.dialog.success('SGR', 'Documento salvo com sucesso.');
                 },
                 error => {
                   this.emProcessamento = false;
-                  this.dialog.error('SGR', 'Erro ao salvar lista de serviços.', error.error + ' - Detalhe: ' + error.message);
+                  this.dialog.error('SGR', 'Erro ao salvar lista de resíduos.', error.error + ' - Detalhe: ' + error.message);
                 }
               );
+
               if (fileBrowser.files.length > 0) {
                 this.uploadContrato(this.contratofornecedor, fileBrowser.files[0]);
               }
-              // this.exibeIncluir = true;
-              // this.dialog.success('SGR', 'Documento salvo com sucesso.');
-              // this.valTipoDocumento.setValue(this.contratofornecedor.id_tipo_documento);
+
             },
             error => {
               this.emProcessamento = false;
-              this.dialog.error(
-                'SGR',
-                'Erro ao salvar o registro.',
-                error.error + ' - Detalhe: ' + error.message
-              );
+              this.dialog.error('SGR', 'Erro ao salvar o registro.', error.error + ' - Detalhe: ' + error.message);
             }
           );
       }
@@ -475,29 +341,21 @@ export class ContratoFornecedorFormComponent
     this.contratofornecedor = new ContratoFornecedor();
   }
 
-  getCodigoErrorMessage() {
+  getErrorMessage(control: FormControl) {
     let mensagem = '';
 
-    if (this.valCodigo.hasError('required')) {
+    if (control.hasError('required')) {
       mensagem = mensagem + 'Campo obrigatório.';
     }
-    return mensagem;
-  }
 
-  getCodigoClienteErrorMessage() {
-    let mensagem = '';
-
-    if (this.valCodigoCli.hasError('required')) {
-      mensagem = mensagem + 'Campo obrigatório.';
+    if (control.hasError('date')) {
+      const data = new Date(control.getError('date').value);
+      data.setDate(data.getDate() + 1);
+      mensagem = mensagem + 'Data informada inferior a ' + data.toLocaleDateString();
     }
-    return mensagem;
-  }
 
-  getDescricaoErrorMessage() {
-    let mensagem = '';
-
-    if (this.valDescricao.hasError('required')) {
-      mensagem = mensagem + 'Campo obrigatório.';
+    if (control.hasError('date.null')) {
+      mensagem = mensagem + control.getError('date.null').value;
     }
     return mensagem;
   }
@@ -530,8 +388,8 @@ export class ContratoFornecedorFormComponent
 
   openPesquisa(): void {
     const dialogLoginRef = this.pesquisa.open(FornecedorFindComponent, {
-      width: '600px',
-      height: '400px',
+      width: '900px',
+      height: '460px',
       disableClose: true,
       data: {
         id: null,
@@ -544,27 +402,8 @@ export class ContratoFornecedorFormComponent
         this.contratofornecedor.id_fornecedor = result.id;
         this.contratofornecedor.fornecedor = result.razao_social;
       }
-      // console.log('The dialog was closed');
-      // alert('sua mensagem de retorno foi' + result.retorno );
-      // console.log(result.retorno);
-      // if ((result.Usuario != null) || (result.Usuario !== undefined)) {
-      //   this.Usuario = result.Usuario;
-      //   this.Logado = result.logado;
-      //   this.tokenManager.store(result.token);
-      //   localStorage.setItem('currentUser', JSON.stringify(this.Usuario));
-      //   localStorage.setItem('Logado', JSON.stringify({Logado: this.Logado}));
-      // }
     });
   }
-
-  // setDate(event: Date) {
-  //   this.contratofornecedor.vigencia_inicio = new Date(event.toLocaleString());
-  // }
-
-  // formatadata(data: Date): Date {
-  //   const d = data.toString().substring(0, 10);
-  //   return new Date(d.toString());
-  // }
 
   validaSaidaCliente(event: string) {
     if (event === '') {
@@ -594,7 +433,7 @@ export class ContratoFornecedorFormComponent
 
   openPesquisaCliente(): void {
     const dialogLoginRef = this.pesquisa.open(ClienteFindComponent, {
-      width: '600px',
+      width: '900px',
       height: '400px',
       disableClose: true,
       data: { id: null,
@@ -619,24 +458,21 @@ export class ContratoFornecedorFormComponent
     // validar se ja foi inserido na lista
     const index = this.contratofornecedorresiduos.findIndex(
       p => p.id_contrato === this.contratofornecedorresiduo.id_contrato &&
-           p.id_residuo === this.contratofornecedorresiduo.id_residuo);
+           p.id_residuo === this.contratofornecedorresiduo.id_residuo &&
+           p.id_servico === this.contratofornecedorresiduo.id_servico &&
+           p.unidade === this.contratofornecedorresiduo.unidade);
 
     if ((!isNullOrUndefined(index)) && (index > -1)) {
       this.dialog.warning('SGR', 'Resíduo já foi relacionado');
     } else {
-      if (((isNullOrUndefined(this.contratofornecedorresiduo.preco_venda)) || (this.contratofornecedorresiduo.preco_venda === 0)) &&
-         ((isNullOrUndefined(this.contratofornecedorresiduo.preco_servico) || (this.contratofornecedorresiduo.preco_servico === 0)))) {
-        this.dialog.warning('SGR', 'Campo preço não informado.');
-      } else {
-        this.contratofornecedorresiduo.residuo = this.residuos.find(p => p.id === this.contratofornecedorresiduo.id_residuo).descricao;
-        // this.contratoclienteservico.servico = this.servicos.find(p => p.id === this.contratoclienteservico.id_servico).descricao;
-        this.contratofornecedorresiduo.fornecedor = this.contratofornecedorservicos.find(
-        p => p.id_contrato === this.contratofornecedorresiduo.id_contrato).fornecedor;
+      this.contratofornecedorresiduo.residuo = this.residuos.find(p => p.id === this.contratofornecedorresiduo.id_residuo).descricao;
+      this.contratofornecedorresiduo.servico = this.servicos.find(p => p.id === this.contratofornecedorresiduo.id_servico).descricao;
+      this.contratofornecedorresiduo.id_fornecedor = this.contratofornecedor.id_fornecedor;
+      this.contratofornecedorresiduo.fornecedor = this.contratofornecedor.fornecedor;
 
-        this.contratofornecedorresiduos.push(this.contratofornecedorresiduo);
+      this.contratofornecedorresiduos.push(this.contratofornecedorresiduo);
 
-        this.contratofornecedorresiduo = new ContratoFornecedorResiduo();
-      }
+      this.contratofornecedorresiduo = new ContratoFornecedorResiduo();
     }
     this.moveFocus();
   }
@@ -646,16 +482,16 @@ export class ContratoFornecedorFormComponent
       this.dialog.question('SGR', 'Deseja realmente excluir o resíduo: ' + res.residuo + '?').subscribe(
       result => {
         if (result.retorno) {
-          // this._contratoclienteservicoService.deleteContratoClienteServico(this._tokenManager.retrieve(), serv.id).subscribe(
-          //   data => {
-          //     this.dialog.success('SGR', 'Servico excluído do contrato com sucesso.');
-          //     const index = this.contratoclienteservicos.indexOf(serv);
-          //     this.contratoclienteservicos.splice(index, 1);
-          //   },
-          //   error => {
-          //     this.dialog.error('SGR', 'Erro ao excluir o serviço.', error.error + ' - Detalhe: ' + error.message);
-          //   },
-          // );
+          this._contratofornecedorresiduoService.deleteContratoFornecedorResiduo(this._tokenManager.retrieve(), res.id).subscribe(
+            data => {
+              this.dialog.success('SGR', 'Resíduo excluído do contrato com sucesso.');
+              const index = this.contratofornecedorresiduos.indexOf(res);
+              this.contratofornecedorresiduos.splice(index, 1);
+            },
+            error => {
+              this.dialog.error('SGR', 'Erro ao excluir o resíduo.', error.error + ' - Detalhe: ' + error.message);
+            },
+          );
         }
       });
     } else {
@@ -674,6 +510,6 @@ export class ContratoFornecedorFormComponent
   }
 
   moveFocus() {
-    this.inputFocused.emit(null);
+    document.getElementById('cbResiduo').focus();
   }
 }
