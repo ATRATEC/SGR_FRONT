@@ -33,10 +33,7 @@ import { OnlyNumberDirective } from './../only-number.directive';
 })
 export class ClienteFindComponent implements OnInit, AfterViewInit {
 
-  displayedColumns = ['codigo_omie',
-                      'cnpj_cpf',
-                      'razao_social'
-                    ];
+  displayedColumns = ['id', 'cnpj_cpf', 'razao_social'];
   // displayedColumns = ['id', 'codigo', 'descricao'];
   dataSource: DsCliente | null;
   selectedRowIndex = -1;

@@ -125,7 +125,7 @@ export class ContratoFornecedorFormComponent
   }
 
   validaCampos() {
-    return this.valCodigo.valid;
+    return this.valCodigo.valid && this.valVigenciaInicial.valid && this.valVigenciaFinal.valid;
   }
 
   ngOnInit() {
@@ -315,7 +315,29 @@ export class ContratoFornecedorFormComponent
       }
     } else {
       this.emProcessamento = false;
-      this.dialog.warning('SGR', 'Campos obrigatórios não preenchidos');
+      let msgDetalhe = '';
+      if (this.valCodigo.invalid) {
+        if (this.valCodigo.hasError('required')) {
+          msgDetalhe = msgDetalhe + 'Campo código do fornecedor não informado.';
+          document.getElementById('id_fornecedor').focus();
+        }
+      }
+
+      if ((this.valVigenciaInicial.invalid) && (msgDetalhe === '')) {
+        if (this.valVigenciaInicial.hasError('required')) {
+          msgDetalhe = msgDetalhe + 'Campo Data Inicio Vigência não informado.';
+          document.getElementById('vigencia_inicio').focus();
+        }
+      }
+
+      if ((this.valVigenciaFinal.invalid) && (msgDetalhe === '')) {
+        if (this.valVigenciaFinal.hasError('required')) {
+          msgDetalhe = msgDetalhe + 'Campo Data Final Vigência não informado.';
+          document.getElementById('vigencia_final').focus();
+        }
+      }
+
+      this.dialog.warning('SGR', 'Campos obrigatórios não preenchidos', msgDetalhe);
     }
   }
 

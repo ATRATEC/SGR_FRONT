@@ -54,7 +54,7 @@
                   <mat-form-field class="frm_contratofornecedor_codigo">
                     <input matInput autofocus #focuscomp #codigofor maxlength="9" [formControl]="valCodigo" placeholder="Fornecedor" required
                       tabindex="1" [(ngModel)]="contratofornecedor.id_fornecedor" (keyup)="validaSaida($event.target.value)"
-                      (keypress)="onlyNumber($event)">
+                      (keypress)="onlyNumber($event)" id="id_fornecedor">
                     <mat-hint align="end">{{codigofor.value?.length || 0}}/9</mat-hint>
                     <mat-error *ngIf="valCodigo.invalid">{{getErrorMessage(valCodigo)}}</mat-error>
                   </mat-form-field>
@@ -100,24 +100,24 @@
               <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="20px">
                 <div fxFlex="370px" fxFlexFill>
                   <mat-form-field class="frm_contratofornecedor_descricao">
-                    <input matInput uppercase #descricao maxlength="50" [formControl]="valDescricao" placeholder="Descrição" required tabindex="3" [(ngModel)]="contratofornecedor.descricao" >
+                    <input matInput uppercase #descricao maxlength="50" [formControl]="valDescricao" placeholder="Descrição" tabindex="3" [(ngModel)]="contratofornecedor.descricao" >
                     <mat-hint align="end">{{descricao.value?.length || 0}}/50</mat-hint>
                   </mat-form-field>
                 </div>
                 <div fxFlex="160px" fxFlexAlign="start" fxFlexFill>
                   <mat-form-field class="frm_contratofornecedor_data">
-                    <input matInput type="date" id="dtInicio" #dtemissao maxlength="10" placeholder="Data Inicio Vigência" tabindex="4" [ngModel]="contratofornecedor.vigencia_inicio"
+                    <input matInput type="date" id="dtInicio" #dtemissao maxlength="10" placeholder="Data Inicio Vigência" tabindex="4" required [ngModel]="contratofornecedor.vigencia_inicio"
                       (ngModelChange)="contratofornecedor.vigencia_inicio = $event" [value]="contratofornecedor.vigencia_inicio"
-                      [formControl]="valVigenciaInicial">
+                      [formControl]="valVigenciaInicial" id="vigencia_inicio">
                     <mat-hint align="end">{{dtemissao.value?.length || 0}}/10</mat-hint>
                     <mat-error *ngIf="valVigenciaInicial.invalid">{{getErrorMessage(valVigenciaInicial)}}</mat-error>
                   </mat-form-field>
                 </div>
                 <div fxFlex="160px" fxFlexAlign="start" fxFlexFill>
                   <mat-form-field class="frm_contratofornecedor_data">
-                    <input matInput type="date" id="dtFinal" #dtvencimento maxlength="10" placeholder="Data Final Vigência" tabindex="5" [ngModel]="contratofornecedor.vigencia_final"
+                    <input matInput type="date" id="dtFinal" #dtvencimento maxlength="10" placeholder="Data Final Vigência" tabindex="5" required [ngModel]="contratofornecedor.vigencia_final"
                       (ngModelChange)="contratofornecedor.vigencia_final = $event" [value]="contratofornecedor.vigencia_final"
-                      [formControl]="valVigenciaFinal">
+                      [formControl]="valVigenciaFinal" id="vigencia_final">
                     <mat-hint align="end">{{dtvencimento.value?.length || 0}}/10</mat-hint>
                     <mat-error *ngIf="valVigenciaFinal.invalid">{{getErrorMessage(valVigenciaFinal)}}</mat-error>
                   </mat-form-field>

@@ -1,3 +1,5 @@
+import { ContratoFornecedorResiduoService } from './../contratofornecedor/contratofornecedorresiduo.service';
+import { ContratoFornecedorResiduo, ContratoFornecedorResiduoFiltro } from './../contratofornecedor/contratofornecedorresiduo';
 import { TipoAtividadeEnum } from './../tipoatividade/tipoatividade.enum';
 import { ContratoFornecedorFindComponent } from './../contratofornecedor/contratofornecedor-find.component';
 import { ResiduoService } from './../residuo/residuo.service';
@@ -43,6 +45,7 @@ import { MatDialog, MatDialogRef, MAT_DIALOG_DATA, DateAdapter, MAT_DATE_LOCALE,
 import { Servico } from '../servico/servico';
 import { FormBuilder, FormGroup} from '@angular/forms';
 import { ContratoFornecedor } from '../contratofornecedor/contratofornecedor';
+import { DateValidator } from '../datevalidator';
 
 @Component({
   selector: 'app-contratocliente-form',
@@ -58,40 +61,38 @@ export class ContratoClienteFormComponent
   implements OnInit, AfterViewInit, AfterViewChecked {
   contratocliente: ContratoCliente;
   contratoclienteresiduos: ContratoClienteResiduo[];
-  contratofornecedorservicos: ContratoFornecedorServico[];
+  contratofornecedorresiduos: ContratoFornecedorResiduo[];
   contratoclienteresiduo: ContratoClienteResiduo;
   servicos: Servico[];
   unidades: Unidade[];
   residuos: Residuo[];
   emProcessamento = false;
-  modelLoaded = false;
+
   exibeIncluir = false;
-  tipodocumentos: TipoDocumento[];
-  tipodocumentos2: TipoDocumento[];
   linkDownload = environment.urlbase + '/api/contratos/downloadanexo?arquivo=';
   opt: FloatPlaceholderType;
 
   trocacor = false;
 
   valCodigo = new FormControl('', [Validators.required]);
-  valCodigoCTRTransp = new FormControl('', [Validators.required]);
-  valCodigoCTRDest = new FormControl('', [Validators.required]);
-  valDescricao = new FormControl('', [Validators.required]);
+  valDescricao = new FormControl();
   valServico = new FormControl('', [Validators.required]);
   valUnidade = new FormControl('', [Validators.required]);
   valFornecedor = new FormControl('', [Validators.required]);
+  valCtrFornecedor = new FormControl('', [Validators.required]);
   valResiduo = new FormControl('', [Validators.required]);
   valVigenciaInicio = new FormControl('', [Validators.required]);
-  valVigenciaFinal = new FormControl('', [Validators.required]);
+  valVigenciaFinal = new FormControl('', Validators.compose([Validators.required, DateValidator.afterDate(this.valVigenciaInicio)]));
 
   @ViewChildren('input') vc;
   @ViewChild('focuscomp') focuscomp: ElementRef;
   @ViewChild('fileInput') fileInput;
+  @ViewChildren('combo') cb;
 
   constructor(
     private _contratoclienteService: ContratoClienteService,
     private _contratoclienteresiduoService: ContratoClienteResiduoService,
-    private _contratofornecedorServicoService: ContratoFornecedorServicoService,
+    private _contratofornecedorResiduoService: ContratoFornecedorResiduoService,
     private _contratofornecedorService: ContratoFornecedorService,
     private _clienteService: ClienteService,
     private _servicoService: ServicoService,
@@ -106,8 +107,7 @@ export class ContratoClienteFormComponent
   }
 
   validaCampos() {
-    return this.valCodigo.valid && this.valDescricao.valid && this.valVigenciaInicio.valid && this.valVigenciaFinal.valid &&
-    this.valCodigoCTRTransp.valid && this.valCodigoCTRDest.valid;
+    return this.valCodigo.valid && this.valVigenciaInicio.valid && this.valVigenciaFinal.valid;
   }
 
   /**
@@ -149,7 +149,7 @@ export class ContratoClienteFormComponent
     this.contratocliente = new ContratoCliente();
     this.contratoclienteresiduo = new ContratoClienteResiduo();
     this.contratoclienteresiduos = new Array<ContratoClienteResiduo>();
-    this.contratofornecedorservicos = new Array<ContratoFornecedorServico>();
+    this.contratofornecedorresiduos = new Array<ContratoFornecedorResiduo>();
     // this.contratoclienteresiduos.push(new ContratoClienteResiduo(1, 1, 1, 1, 56.87, true, '', '', 'TRANSPORTE'));
     // this.contratoclienteresiduos.push(new ContratoClienteResiduo(1, 1, 1, 1, 123.47, true, '', '', 'RECEPÇÃO'));
     this._unidadeService.getListUnidades(this._tokenManager.retrieve()).subscribe(
@@ -216,19 +216,19 @@ export class ContratoClienteFormComponent
         this.buscaCliente(filter);
       });
 
-    const idContratoTranspFilter$ = this.valCodigoCTRTransp.valueChanges.debounceTime(500).distinctUntilChanged().startWith('');
-    Observable.combineLatest(idContratoTranspFilter$).debounceTime(500).distinctUntilChanged()
-      .map(([id]) => ({ id }))
-      .subscribe(filter => {
-        this.buscaContratoTransp(filter);
-      });
+    // const idContratoTranspFilter$ = this.valCodigoCTRTransp.valueChanges.debounceTime(500).distinctUntilChanged().startWith('');
+    // Observable.combineLatest(idContratoTranspFilter$).debounceTime(500).distinctUntilChanged()
+    //   .map(([id]) => ({ id }))
+    //   .subscribe(filter => {
+    //     this.buscaContratoTransp(filter);
+    //   });
 
-    const idContratoDestFilter$ = this.valCodigoCTRDest.valueChanges.debounceTime(500).distinctUntilChanged().startWith('');
-    Observable.combineLatest(idContratoDestFilter$).debounceTime(500).distinctUntilChanged()
-      .map(([id]) => ({ id }))
-      .subscribe(filter => {
-        this.buscaContratoDest(filter);
-      });
+    // const idContratoDestFilter$ = this.valCodigoCTRDest.valueChanges.debounceTime(500).distinctUntilChanged().startWith('');
+    // Observable.combineLatest(idContratoDestFilter$).debounceTime(500).distinctUntilChanged()
+    //   .map(([id]) => ({ id }))
+    //   .subscribe(filter => {
+    //     this.buscaContratoDest(filter);
+    //   });
 
 
 
@@ -278,7 +278,6 @@ export class ContratoClienteFormComponent
               // Salvando lista de serviços
               for (let index = 0; index < this.contratoclienteresiduos.length; index++) {
                 this.contratoclienteresiduos[index].id_contrato_cliente = this.contratocliente.id;
-                this.contratoclienteresiduos[index].id_contrato_fornecedor = this.contratocliente.id_destinador;
               }
 
               this._contratoclienteresiduoService.addContratoClienteResiduo(this._tokenManager.retrieve(),
@@ -286,6 +285,7 @@ export class ContratoClienteFormComponent
                 .subscribe( ctrfsrv => {
                   this.contratoclienteresiduos.length = 0;
                   this.contratoclienteresiduos = ctrfsrv;
+                  this.limpaValidadores();
                   this.emProcessamento = false;
                   this.exibeIncluir = true;
                   this.dialog.success('SGR', 'Contrato salvo com sucesso.');
@@ -321,13 +321,13 @@ export class ContratoClienteFormComponent
               this.contratocliente = data;
               for (let index = 0; index < this.contratoclienteresiduos.length; index++) {
                 this.contratoclienteresiduos[index].id_contrato_cliente = this.contratocliente.id;
-                this.contratoclienteresiduos[index].id_contrato_fornecedor = this.contratocliente.id_destinador;
               }
               this._contratoclienteresiduoService.addContratoClienteResiduo(this._tokenManager.retrieve(),
                 this.contratocliente.id, this.contratoclienteresiduos)
                 .subscribe( ctrfsrv => {
                   this.contratoclienteresiduos.length = 0;
                   this.contratoclienteresiduos = ctrfsrv;
+                  this.limpaValidadores();
                   this.emProcessamento = false;
                   this.exibeIncluir = true;
                   this.dialog.success('SGR', 'Contrato salvo com sucesso.');
@@ -356,7 +356,29 @@ export class ContratoClienteFormComponent
       }
     } else {
       this.emProcessamento = false;
-      this.dialog.warning('SGR', 'Campos obrigatórios não preenchidos');
+      let msgDetalhe = '';
+      if (this.valCodigo.invalid) {
+        if (this.valCodigo.hasError('required')) {
+          msgDetalhe = msgDetalhe + 'Campo código do Cliente não informado.';
+          document.getElementById('id_cliente').focus();
+        }
+      }
+
+      if ((this.valVigenciaInicio.invalid) && (msgDetalhe === '')) {
+        if (this.valVigenciaInicio.hasError('required')) {
+          msgDetalhe = msgDetalhe + 'Campo Data Inicio Vigência não informado.';
+          document.getElementById('vigencia_inicio').focus();
+        }
+      }
+
+      if ((this.valVigenciaFinal.invalid) && (msgDetalhe === '')) {
+        if (this.valVigenciaFinal.hasError('required')) {
+          msgDetalhe = msgDetalhe + 'Campo Data Final Vigência não informado.';
+          document.getElementById('vigencia_final').focus();
+        }
+      }
+
+      this.dialog.warning('SGR', 'Campos obrigatórios não preenchidos', msgDetalhe);
     }
   }
 
@@ -382,29 +404,21 @@ export class ContratoClienteFormComponent
     this.contratocliente = new ContratoCliente();
   }
 
-  getCodigoErrorMessage() {
+  getErrorMessage(control: FormControl) {
     let mensagem = '';
 
-    if (this.valCodigo.hasError('required')) {
+    if (control.hasError('required')) {
       mensagem = mensagem + 'Campo obrigatório.';
     }
-    return mensagem;
-  }
 
-  getDescricaoErrorMessage() {
-    let mensagem = '';
-
-    if (this.valDescricao.hasError('required')) {
-      mensagem = mensagem + 'Campo obrigatório.';
+    if (control.hasError('date')) {
+      const data = new Date(control.getError('date').value);
+      data.setDate(data.getDate() + 1);
+      mensagem = mensagem + 'Data informada inferior a ' + data.toLocaleDateString();
     }
-    return mensagem;
-  }
 
-  getErrorMessage(campo: FormControl) {
-    let mensagem = '';
-
-    if (campo.hasError('required')) {
-      mensagem = mensagem + 'Campo obrigatório.';
+    if (control.hasError('date.null')) {
+      mensagem = mensagem + control.getError('date.null').value;
     }
     return mensagem;
   }
@@ -479,53 +493,154 @@ export class ContratoClienteFormComponent
     servico.unidade = '';
   }
 
+  servicoChange(event: any) {
+    this.contratoclienteresiduo.id_residuo = null;
+    this.contratoclienteresiduo.unidade = '';
+    this.contratoclienteresiduo.id_contrato_fornecedor = null;
+    this.contratoclienteresiduo.residuo = '';
+    this.contratoclienteresiduo.fornecedor = '';
+    this.contratoclienteresiduo.preco_compra = 0;
+    this.contratoclienteresiduo.preco_servico = 0;
+  }
+
+  residuoChange(event: any) {
+    this.contratoclienteresiduo.unidade = '';
+    this.contratoclienteresiduo.id_contrato_fornecedor = null;
+    this.contratoclienteresiduo.fornecedor = '';
+    this.contratoclienteresiduo.preco_compra = 0;
+    this.contratoclienteresiduo.preco_servico = 0;
+  }
+
   unidadeChange(event: any) {
     // this.contratofornecedorservicos.length = 0;
-    if (!isNullOrUndefined(this.contratoclienteresiduo.id_servico)) {
-      this.loadContratos(this.contratoclienteresiduo.id_servico, event.value);
+    if (!isNullOrUndefined(this.contratocliente.id_cliente)) {
+      if (!isNullOrUndefined(this.contratoclienteresiduo.id_residuo)) {
+        if (!isNullOrUndefined(this.contratoclienteresiduo.id_servico)) {
+          this.contratoclienteresiduo.id_contrato_fornecedor = null;
+          this.contratoclienteresiduo.fornecedor = null;
+          this.contratoclienteresiduo.preco_compra = 0;
+          this.contratoclienteresiduo.preco_servico = 0;
+          this.loadContratos(this.contratoclienteresiduo.id_servico, this.contratoclienteresiduo.id_residuo, event.value).subscribe();
+        } else {
+          this.dialog.warning('SGR', 'Serviço não informado');
+          document.getElementById('id_servico').focus();
+        }
+      } else {
+        this.dialog.warning('SGR', 'Residuo não informado');
+        document.getElementById('id_residuo').focus();
+      }
     } else {
-      this.dialog.warning('SGR', 'Serviço não preenchido');
+      this.dialog.warning('SGR', 'Cliente não informado');
+      // document.getElementById('id_cliente').focus();
     }
-
     // console.log('mudou estado ' + event.value);
   }
 
-  loadContratos(cId_Servico: number, cUnidade: string) {
-    let filtro: ContratoFornecedorServicoFiltro;
-    filtro = new ContratoFornecedorServicoFiltro();
-    filtro.id_servico = cId_Servico;
-    filtro.id_cliente = this.contratocliente.id_cliente;
-    this.contratofornecedorservicos.length = 0;
-    this._contratofornecedorServicoService.getContratoFornecedorServicos(this._tokenManager.retrieve(), filtro)
-      .subscribe(data => {
-        this.contratofornecedorservicos = JSON.parse(data._body);
+  loadContratos(cId_Servico: number, cId_Residuo: number, cUnidade: string): Observable<any> {
+    const retorno = Observable.create(observer => {
+      let filtro: ContratoFornecedorResiduoFiltro;
+      filtro = new ContratoFornecedorResiduoFiltro();
+      filtro.id_servico = cId_Servico;
+      filtro.id_cliente = this.contratocliente.id_cliente;
+      filtro.id_residuo = cId_Residuo;
+      filtro.unidade = cUnidade;
+      this.contratofornecedorresiduos.length = 0;
+      this._contratofornecedorResiduoService.getContratoFornecedorResiduos(this._tokenManager.retrieve(), filtro)
+        .subscribe(data => {
+          this.contratofornecedorresiduos = JSON.parse(data._body);
+          observer.next(true);
+      });
     });
+
+    return retorno;
   }
 
   addlinha() {
     // validar se ja foi inserido na lista
-    const index = this.contratoclienteresiduos.findIndex(
-      p => p.id_contrato_fornecedor === this.contratoclienteresiduo.id_contrato_fornecedor &&
-           p.id_residuo === this.contratoclienteresiduo.id_residuo);
+    let mensagem = '';
 
-    if ((!isNullOrUndefined(index)) && (index > -1)) {
-      this.dialog.warning('SGR', 'Resíduo já foi relacionado');
-    } else {
-      if (((isNullOrUndefined(this.contratoclienteresiduo.preco_compra)) || (this.contratoclienteresiduo.preco_compra === 0)) &&
-         ((isNullOrUndefined(this.contratoclienteresiduo.preco_servico) || (this.contratoclienteresiduo.preco_servico === 0)))) {
-        this.dialog.warning('SGR', 'Campo preço não informado.');
-      } else {
-        this.contratoclienteresiduo.residuo = this.residuos.find(p => p.id === this.contratoclienteresiduo.id_residuo).descricao;
-        this.contratoclienteresiduos.push(this.contratoclienteresiduo);
+    if ((this.valServico.invalid) && (mensagem === '')) {
+      mensagem = 'Serviço não informado.';
+    }
 
-        this.contratoclienteresiduo = new ContratoClienteResiduo();
+    if ((this.valResiduo.invalid) && (mensagem === '')) {
+      mensagem = 'Resíduo não informado.';
+    }
+
+    if ((this.valUnidade.invalid) && (mensagem === '')) {
+      mensagem = 'Unidade não informada.';
+    }
+
+    if ((this.valCtrFornecedor.invalid) && (mensagem === '')) {
+      mensagem = 'Contrato do fornecedor não informado.';
+    }
+
+    if (mensagem === '') {
+      const index = this.contratoclienteresiduos.findIndex(
+        p => p.id_contrato_fornecedor === this.contratoclienteresiduo.id_contrato_fornecedor &&
+             p.id_residuo === this.contratoclienteresiduo.id_residuo &&
+             p.id_servico === this.contratoclienteresiduo.id_servico &&
+             p.unidade === this.contratoclienteresiduo.unidade);
+
+      if ((!isNullOrUndefined(index)) && (index > -1)) {
+        mensagem = 'Resíduo já foi relacionado';
       }
     }
+
+    if (mensagem === '') {
+      if (((isNullOrUndefined(this.contratoclienteresiduo.preco_compra)) || (this.contratoclienteresiduo.preco_compra === 0)) &&
+         ((isNullOrUndefined(this.contratoclienteresiduo.preco_servico) || (this.contratoclienteresiduo.preco_servico === 0)))) {
+        mensagem = 'Campo preço não informado.';
+      }
+    }
+
+
+    if (mensagem === '') {
+      this.contratoclienteresiduo.residuo = this.residuos.find(p => p.id === this.contratoclienteresiduo.id_residuo).descricao;
+      this.contratoclienteresiduo.servico = this.servicos.find(p => p.id === this.contratoclienteresiduo.id_servico).descricao;
+        this.contratoclienteresiduos.push(this.contratoclienteresiduo);
+        // this.contratoclienteresiduo = null;
+        this.contratofornecedorresiduos.length = 0;
+        this.limpaValidadores();
+        this.contratoclienteresiduo = new ContratoClienteResiduo();
+        document.getElementById('id_servico').focus();
+    } else {
+      this.dialog.warning('SGR', 'Resíduo não adicionado', 'Detalhe: ' + mensagem);
+    }
+
+    // const index = this.contratoclienteresiduos.findIndex(
+    //   p => p.id_contrato_fornecedor === this.contratoclienteresiduo.id_contrato_fornecedor &&
+    //        p.id_residuo === this.contratoclienteresiduo.id_residuo &&
+    //        p.id_servico === this.contratoclienteresiduo.id_servico &&
+    //        p.unidade === this.contratoclienteresiduo.unidade);
+
+    // if ((!isNullOrUndefined(index)) && (index > -1)) {
+    //   mensagem = 'Resíduo já foi relacionado';
+    //   this.dialog.warning('SGR', 'Resíduo já foi relacionado');
+    // } else {
+    //   if (((isNullOrUndefined(this.contratoclienteresiduo.preco_compra)) || (this.contratoclienteresiduo.preco_compra === 0)) &&
+    //      ((isNullOrUndefined(this.contratoclienteresiduo.preco_servico) || (this.contratoclienteresiduo.preco_servico === 0)))) {
+    //     mensagem = 'Campo preço não informado.';
+    //     this.dialog.warning('SGR', 'Campo preço não informado.');
+    //   } else {
+    //     this.contratoclienteresiduo.residuo = this.residuos.find(p => p.id === this.contratoclienteresiduo.id_residuo).descricao;
+    //     this.contratoclienteresiduos.push(this.contratoclienteresiduo);
+
+    //     this.contratoclienteresiduo = new ContratoClienteResiduo();
+    //   }
+    // }
+  }
+
+  limpaValidadores() {
+    this.valServico.clearValidators();
+    this.valResiduo.clearValidators();
+    this.valUnidade.clearValidators();
+    this.valCtrFornecedor.clearValidators();
   }
 
   remlinha(serv: ContratoClienteResiduo) {
     if (!isNullOrUndefined(serv.id)) {
-      this.dialog.question('SGR', 'Deseja realmente excluir o resíduo: ' + serv.servico + '?').subscribe(
+      this.dialog.question('SGR', 'Deseja realmente excluir o servico: ' + serv.servico + ' do resíduo:' + serv.residuo + ' ?').subscribe(
       result => {
         if (result.retorno) {
           this._contratoclienteresiduoService.deleteContratoClienteResiduo(this._tokenManager.retrieve(), serv.id).subscribe(
@@ -541,109 +656,138 @@ export class ContratoClienteFormComponent
         }
       });
     } else {
-      this.dialog.question('SGR', 'Deseja realmente excluir o servico: ' + serv.servico + '?').subscribe(
+      this.dialog.question('SGR', 'Deseja realmente excluir o servico: ' + serv.servico + ' do resíduo:' + serv.residuo + ' ?').subscribe(
       result => {
-        const index = this.contratoclienteresiduos.indexOf(serv);
-        this.contratoclienteresiduos.splice(index, 1);
+        if (result.retorno) {
+          const index = this.contratoclienteresiduos.indexOf(serv);
+          this.contratoclienteresiduos.splice(index, 1);
+        }
       });
     }
   }
 
   editlinha(serv: ContratoClienteResiduo) {
-    this.contratoclienteresiduo = serv;
-    const index = this.contratoclienteresiduos.indexOf(serv);
-    this.contratoclienteresiduos.splice(index, 1);
-  }
-
-  validaSaidaCTRTransp(event: string) {
-    if (event === '') {
-      this.contratocliente.id_transportador = null;
-      this.contratocliente.transportador = '';
-    }
-  }
-
-  validaSaidaCTRDest(event: string) {
-    if (event === '') {
-      this.contratocliente.id_destinador = null;
-      this.contratocliente.destinador = '';
-    }
-  }
-
-  buscaContratoTransp(event: any) {
-    let contrato: ContratoFornecedor;
-    if (event.id) {
-      this._contratofornecedorService.getContratoFornecedor(this._tokenManager.retrieve(), Number(event.id))
-        .subscribe(
-          data => {
-            contrato = JSON.parse(data._body);
-            this.contratocliente.id_transportador = contrato.id;
-            this.contratocliente.transportador = contrato.fornecedor;
-          },
-          (err: HttpErrorResponse) => {
-            this.contratocliente.id_transportador = null;
-            this.contratocliente.transportador = '';
+    if (!isNullOrUndefined(this.contratoclienteresiduo.id_contrato_fornecedor)) {
+      this.dialog.question('SGR', 'Deseja cancelar a edição?').subscribe(
+        result => {
+          if (result.retorno) {
+            this.addlinha();
+              this.loadContratos(serv.id_servico, serv.id_residuo, serv.unidade)
+            .delay(500)
+            .subscribe(data => {
+              if (data) {
+                this.contratoclienteresiduo = serv;
+                const index = this.contratoclienteresiduos.indexOf(serv);
+                this.contratoclienteresiduos.splice(index, 1);
+              }
+            });
           }
-        );
+        });
+    } else {
+      this.loadContratos(serv.id_servico, serv.id_residuo, serv.unidade)
+      .delay(500)
+      .subscribe(data => {
+        if (data) {
+          this.contratoclienteresiduo = serv;
+          const index = this.contratoclienteresiduos.indexOf(serv);
+          this.contratoclienteresiduos.splice(index, 1);
+        }
+      });
     }
   }
 
-  buscaContratoDest(event: any) {
-    let contrato: ContratoFornecedor;
-    if (event.id) {
-      this._contratofornecedorService.getContratoFornecedor(this._tokenManager.retrieve(), Number(event.id))
-        .subscribe(
-          data => {
-            contrato = JSON.parse(data._body);
-            this.contratocliente.id_destinador = contrato.id;
-            this.contratocliente.destinador = contrato.fornecedor;
-          },
-          (err: HttpErrorResponse) => {
-            this.contratocliente.id_destinador = null;
-            this.contratocliente.destinador = '';
-          }
-        );
-    }
-  }
+  // #region codigo comentado
 
-  openPesquisaCTRTransp(): void {
-    const dialogLoginRef = this.pesquisa.open(ContratoFornecedorFindComponent, {
-      width: '1000px',
-      height: '430px',
-      disableClose: true,
-      data: {
-        id: null,
-        id_cliente: this.contratocliente.id_cliente,
-        id_tipo_atividade: TipoAtividadeEnum.TRANSPORTADOR,
-        descricao: null
-      }
-    });
+  // validaSaidaCTRTransp(event: string) {
+  //   if (event === '') {
+  //     this.contratocliente.id_transportador = null;
+  //     this.contratocliente.transportador = '';
+  //   }
+  // }
 
-    dialogLoginRef.afterClosed().subscribe(result => {
-      if (result.id != null && result.id !== undefined) {
-        this.contratocliente.id_transportador = result.id;
-        this.contratocliente.transportador = result.descricao;
-      }
-    });
-  }
+  // validaSaidaCTRDest(event: string) {
+  //   if (event === '') {
+  //     this.contratocliente.id_destinador = null;
+  //     this.contratocliente.destinador = '';
+  //   }
+  // }
 
-  openPesquisaCTRDest(): void {
-    const dialogLoginRef = this.pesquisa.open(ContratoFornecedorFindComponent, {
-      width: '1000px',
-      height: '430px',
-      disableClose: true,
-      data: {
-        id: null,
-        id_cliente: this.contratocliente.id_cliente,
-        id_tipo_atividade: TipoAtividadeEnum.DESTINADOR,
-        descricao: null
-      }
-    });
+  // buscaContratoTransp(event: any) {
+  //   let contrato: ContratoFornecedor;
+  //   if (event.id) {
+  //     this._contratofornecedorService.getContratoFornecedor(this._tokenManager.retrieve(), Number(event.id))
+  //       .subscribe(
+  //         data => {
+  //           contrato = JSON.parse(data._body);
+  //           this.contratocliente.id_transportador = contrato.id;
+  //           this.contratocliente.transportador = contrato.fornecedor;
+  //         },
+  //         (err: HttpErrorResponse) => {
+  //           this.contratocliente.id_transportador = null;
+  //           this.contratocliente.transportador = '';
+  //         }
+  //       );
+  //   }
+  // }
 
-    dialogLoginRef.afterClosed().subscribe(result => {
-      if (result.id != null && result.id !== undefined) {
-        this.contratocliente.id_destinador = result.id;
-        this.contratocliente.destinador = result.descricao;
-      }
-    });
-  }
+  // buscaContratoDest(event: any) {
+  //   let contrato: ContratoFornecedor;
+  //   if (event.id) {
+  //     this._contratofornecedorService.getContratoFornecedor(this._tokenManager.retrieve(), Number(event.id))
+  //       .subscribe(
+  //         data => {
+  //           contrato = JSON.parse(data._body);
+  //           this.contratocliente.id_destinador = contrato.id;
+  //           this.contratocliente.destinador = contrato.fornecedor;
+  //         },
+  //         (err: HttpErrorResponse) => {
+  //           this.contratocliente.id_destinador = null;
+  //           this.contratocliente.destinador = '';
+  //         }
+  //       );
+  //   }
+  // }
+
+  // openPesquisaCTRTransp(): void {
+  //   const dialogLoginRef = this.pesquisa.open(ContratoFornecedorFindComponent, {
+  //     width: '1000px',
+  //     height: '430px',
+  //     disableClose: true,
+  //     data: {
+  //       id: null,
+  //       id_cliente: this.contratocliente.id_cliente,
+  //       id_tipo_atividade: TipoAtividadeEnum.TRANSPORTADOR,
+  //       descricao: null
+  //     }
+  //   });
+
+  //   dialogLoginRef.afterClosed().subscribe(result => {
+  //     if (result.id != null && result.id !== undefined) {
+  //       this.contratocliente.id_transportador = result.id;
+  //       this.contratocliente.transportador = result.descricao;
+  //     }
+  //   });
+  // }
+
+  // openPesquisaCTRDest(): void {
+  //   const dialogLoginRef = this.pesquisa.open(ContratoFornecedorFindComponent, {
+  //     width: '1000px',
+  //     height: '430px',
+  //     disableClose: true,
+  //     data: {
+  //       id: null,
+  //       id_cliente: this.contratocliente.id_cliente,
+  //       id_tipo_atividade: TipoAtividadeEnum.DESTINADOR,
+  //       descricao: null
+  //     }
+  //   });
+
+  //   dialogLoginRef.afterClosed().subscribe(result => {
+  //     if (result.id != null && result.id !== undefined) {
+  //       this.contratocliente.id_destinador = result.id;
+  //       this.contratocliente.destinador = result.descricao;
+  //     }
+  //   });
+  // }
+  //#endregion
 }

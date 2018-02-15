@@ -109,8 +109,24 @@ export class ContratoFornecedorResiduoService {
       search.set('id_residuo', filter.id_residuo.toString());
     }
 
+    if ((!isNullOrUndefined(filter.id_servico)) && (filter.id_servico.toString().length > 0)) {
+      search.set('id_servico', filter.id_servico.toString());
+    }
+
+    if ((!isNullOrUndefined(filter.id_cliente)) && (filter.id_cliente.toString().length > 0)) {
+      search.set('id_cliente', filter.id_cliente.toString());
+    }
+
     if ((!isNullOrUndefined(filter.unidade)) && (filter.unidade.toString().length > 0)) {
       search.set('unidade', filter.unidade);
+    }
+
+    if ((!isNullOrUndefined(filter.vigencia_inicio)) && (filter.vigencia_inicio.toString().length > 0)) {
+      search.set('vigencia_inicio', filter.vigencia_inicio.toLocaleDateString());
+    }
+
+    if ((!isNullOrUndefined(filter.vigencia_final)) && (filter.vigencia_final.toString().length > 0)) {
+      search.set('vigencia_final', filter.vigencia_final.toLocaleDateString());
     }
 
     return this._http

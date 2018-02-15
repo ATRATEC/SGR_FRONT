@@ -1,7 +1,8 @@
 import { environment } from './../../environments/environment';
 import { isEmpty } from 'rxjs/operators';
 import { isNullOrUndefined } from 'util';
-import { ContratoFornecedorServico, ContratoFornecedorServicoFilter, ContratoFornecedorServicoGridFilter } from './contratofornecedorservico';
+import { ContratoFornecedorServico, ContratoFornecedorServicoFilter,
+  ContratoFornecedorServicoGridFilter } from './contratofornecedorservico';
 import { Injectable } from '@angular/core';
 import 'rxjs/add/observable/of';
 import 'rxjs/add/operator/map';

@@ -47,8 +47,8 @@ mat-icon-button.size-15 {
 }
 
 .frm_contratocliente_fornecedor {
-  min-width: 600px;
-  max-width: 600px;
+  min-width: 480px;
+  max-width: 480px;
 }
 
 .frm_contratocliente_preco {
@@ -127,23 +127,23 @@ tr:nth-child(even) {
   width: 280px;
 }
 
-.frm_contratocliente_servico_residuo {
+.frm_contratocliente_residuo_residuo {
   width: 200px;
 }
 
-.frm_contratocliente_servico_servico {
+.frm_contratocliente_residuo_servico {
   width: 200px;
 }
 
-.frm_contratocliente_servico_unidade {
+.frm_contratocliente_residuo_unidade {
   width: 60px;
 }
 
-.frm_contratocliente_servico_preco {
+.frm_contratocliente_residuo_preco {
   width: 130px;
 }
 
-.frm_contratocliente_servico_botao {
+.frm_contratocliente_residuo_botao {
   width: 15px;
 }
 
@@ -172,7 +172,7 @@ tr:nth-child(even) {
 .atrainput {
   font-size: 16px;
   font-family: roboto;
-  padding: 10px 10px 10px 0px;
+  padding: 10px 10px 0px 0px;
   display: block;
   border: none;
   border-bottom: 1px solid #757575;
@@ -197,7 +197,7 @@ tr:nth-child(even) {
 /* active state */
 .atrainput:focus ~ .atralabel,
 .atrainput:valid ~ .atralabel {
-  top: -15px;
+  top: -5px;
   font-size: 12px;
   color: #5264ae;
 }
