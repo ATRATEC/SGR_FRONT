@@ -161,4 +161,34 @@ export class ManifestoServicoService {
         Observable.throw(error.json() || 'Server error')
       );
   }
+
+  getListResiduoManifesto(accessToken: string, id_contrato_cliente: number, id_destinador: number, id_transportador: number)  {
+    const listUrl = environment.urlbase + '/api/listresiduomanifestos';
+    const headers = new Headers({
+      Accept: 'application/json',
+      Authorization: 'Bearer ' + accessToken.toString().replace(/"/g, '')
+    });
+
+    const params: HttpParams = new HttpParams();
+    const search: URLSearchParams =  new URLSearchParams();
+
+    if ((!isNullOrUndefined(id_contrato_cliente)) && (id_contrato_cliente.toString().length > 0)) {
+      search.set('id_contrato_cliente', id_contrato_cliente.toString());
+    }
+
+    if ((!isNullOrUndefined(id_destinador)) && (id_destinador.toString().length > 0)) {
+      search.set('id_destinador', id_destinador.toString());
+    }
+
+    if ((!isNullOrUndefined(id_transportador)) && (id_transportador.toString().length > 0)) {
+      search.set('id_transportador', id_transportador.toString());
+    }
+
+    return this._http
+      .get(listUrl, { headers: headers, search: search })
+      .map((res: Response) => res)
+      .catch((error: any) =>
+        Observable.throw(error.json() || 'Server error')
+      );
+  }
 }

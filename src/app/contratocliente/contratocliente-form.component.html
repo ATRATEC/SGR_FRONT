@@ -41,9 +41,9 @@
             <label>Aguarde...</label>
           </div>
         </div>
-        <mat-card *ngIf="!emProcessamento" style="width: 1000px;">
+        <mat-card *ngIf="!emProcessamento" style="width: 1000px; overflow: hidden;">
           <div fxLayout="column" fxLayoutAlign="start center" fxLayoutGap="10px">
-            <div fxFlex="60px" fxFlexAlign="start">
+            <div fxFlex="50px" fxFlexAlign="start">
               <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="10px" style="width: 100%">
                 <div fxFlex="120px" fxFlexAlign="start">
                   <mat-form-field class="frm_contratocliente_codigo">
@@ -109,11 +109,11 @@
                 </div>
               </div>
             </div>
-            <div fxFlex="320px" fxFlexAlign="start" fxFlexFill style="overflow-y:auto;">
+            <div fxFlex="310px" fxFlexAlign="start" fxFlexFill>
               <mat-tab-group>
-                <mat-tab label="Resíduos" style="overflow-y:auto;">
-                  <div fxLayou="column" fxLayoutAlign="start center" fxLayoutGap="0px" style="overflow-y:auto;">
-                    <div fxFlex="100%" style="overflow-y:auto;">
+                <mat-tab label="Resíduos">
+                  <div fxLayou="column" fxLayoutAlign="start center" fxLayoutGap="0px">
+                    <div fxFlex="300px" fxFlexAlign="start" fxFlexFill style="overflow: hidden">
                       <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="0px">
                         <div fxFlex="40px" fxFlexAlign="start">
                           <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="5px">
@@ -199,9 +199,9 @@
                           </div>
                         </div>
                       </div>
-                      <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="0px" style="overflow-y:auto;">
-                        <div fxFlex="100%" fxFlexAlign="center" fxFlexFill style="overflow-y:auto;">
-                          <table style="overflow: auto;">
+                      <div fxLayout="column" fxLayoutAlign="start center" fxLayoutGap="0px">
+                        <div fxFlex="40px" fxFlexAlign="start" fxFlexFill>
+                          <table>
                             <tr>
                               <th class="frm_contratocliente_residuo_servico">
                                 <label>Serviço</label>
@@ -223,6 +223,10 @@
                               <th class="frm_contratocliente_residuo_botao">
                               </th>
                             </tr>
+                          </table>
+                        </div>
+                        <div fxFlex="130px" fxFlexAlign="start" fxFlexFill style="overflow-x: hidden; overflow-y: auto;">
+                          <table>
                             <tr *ngFor="let ccresiduo of contratoclienteresiduos">
                               <td class="frm_contratocliente_residuo_servico">
                                 {{ccresiduo.servico}}

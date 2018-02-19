@@ -76,7 +76,7 @@ export class ClasseResiduoListComponent implements OnInit, AfterViewInit {
   }
 
   dblck(row) {
-    this._router.navigate(['/acondicionamentos/acondicionamento', {id: row.id}]);
+    this._router.navigate(['/classeresiduos/classeresiduo', {id: row.id}]);
   }
 
 

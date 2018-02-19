@@ -60,7 +60,7 @@
               <tr>
                 <td>
                     <mat-form-field class="mat-column-id" style="margin-left: 5px">
-                        <input matInput type="number" #filter placeholder="ID" [formControl]="idFilter" (keypress)="keyPress($event)">
+                        <input matInput type="number" #filter placeholder="ID" [formControl]="idFilter" (keypress)="onlyNumber($event)">
                       </mat-form-field>
                 </td>
                 <td>

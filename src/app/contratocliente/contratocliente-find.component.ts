@@ -92,20 +92,12 @@ export class ContratoClienteFindComponent implements OnInit, AfterViewInit {
   retornarPesquisa(row) {
     this.data.id = row.id;
     this.data.descricao = row.descricao;
-    this.data.id_transportador = row.id_transportador;
-    this.data.id_destinador = row.id_destinador;
-    this.data.transportador = row.transportador;
-    this.data.destinador = row.destinador;
     this.dialogLoginRef.close(this.data);
   }
 
   btnCancelarClick() {
     this.data.id = null;
     this.data.descricao = null;
-    this.data.id_transportador = null;
-    this.data.id_destinador = null;
-    this.data.transportador = null;
-    this.data.destinador = null;
     this.dialogLoginRef.close(this.data);
   }
 

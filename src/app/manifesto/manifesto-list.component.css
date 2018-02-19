@@ -30,8 +30,8 @@
 
 .mat-table {
   overflow: auto;
-  min-height: 300px;
-  max-height: 440px;
+  min-height: 400px;
+  max-height: 400px;
 }
 
 .mat-header-cell .mat-sort-header-sorted {

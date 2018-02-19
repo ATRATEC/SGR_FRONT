@@ -41,7 +41,7 @@
             <label>Aguarde...</label>
           </div>
         </div>
-        <mat-card *ngIf="!emProcessamento" style="width: 850px;">
+        <mat-card *ngIf="!emProcessamento" style="width: 850px; overflow: hidden;">
           <div fxLayout="column" fxLayoutAlign="start center" fxLayoutGap="0px">
             <div fxFlex="60px" fxFlexAlign="start">
               <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="5px" style="width: 100%">
@@ -100,92 +100,50 @@
               <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="20px">
                 <div fxFlex="370px" fxFlexFill>
                   <mat-form-field class="frm_contratofornecedor_descricao">
-                    <input matInput uppercase #descricao maxlength="50" [formControl]="valDescricao" placeholder="Descrição" tabindex="3" [(ngModel)]="contratofornecedor.descricao" >
+                    <input matInput uppercase #descricao maxlength="50" [formControl]="valDescricao" placeholder="Descrição" tabindex="3" [(ngModel)]="contratofornecedor.descricao">
                     <mat-hint align="end">{{descricao.value?.length || 0}}/50</mat-hint>
                   </mat-form-field>
                 </div>
                 <div fxFlex="160px" fxFlexAlign="start" fxFlexFill>
                   <mat-form-field class="frm_contratofornecedor_data">
-                    <input matInput type="date" id="dtInicio" #dtemissao maxlength="10" placeholder="Data Inicio Vigência" tabindex="4" required [ngModel]="contratofornecedor.vigencia_inicio"
-                      (ngModelChange)="contratofornecedor.vigencia_inicio = $event" [value]="contratofornecedor.vigencia_inicio"
-                      [formControl]="valVigenciaInicial" id="vigencia_inicio">
+                    <input matInput type="date" id="dtInicio" #dtemissao maxlength="10" placeholder="Data Inicio Vigência" tabindex="4" required
+                      [ngModel]="contratofornecedor.vigencia_inicio" (ngModelChange)="contratofornecedor.vigencia_inicio = $event"
+                      [value]="contratofornecedor.vigencia_inicio" [formControl]="valVigenciaInicial" id="vigencia_inicio">
                     <mat-hint align="end">{{dtemissao.value?.length || 0}}/10</mat-hint>
                     <mat-error *ngIf="valVigenciaInicial.invalid">{{getErrorMessage(valVigenciaInicial)}}</mat-error>
                   </mat-form-field>
                 </div>
                 <div fxFlex="160px" fxFlexAlign="start" fxFlexFill>
                   <mat-form-field class="frm_contratofornecedor_data">
-                    <input matInput type="date" id="dtFinal" #dtvencimento maxlength="10" placeholder="Data Final Vigência" tabindex="5" required [ngModel]="contratofornecedor.vigencia_final"
-                      (ngModelChange)="contratofornecedor.vigencia_final = $event" [value]="contratofornecedor.vigencia_final"
-                      [formControl]="valVigenciaFinal" id="vigencia_final">
+                    <input matInput type="date" id="dtFinal" #dtvencimento maxlength="10" placeholder="Data Final Vigência" tabindex="5" required
+                      [ngModel]="contratofornecedor.vigencia_final" (ngModelChange)="contratofornecedor.vigencia_final = $event"
+                      [value]="contratofornecedor.vigencia_final" [formControl]="valVigenciaFinal" id="vigencia_final">
                     <mat-hint align="end">{{dtvencimento.value?.length || 0}}/10</mat-hint>
                     <mat-error *ngIf="valVigenciaFinal.invalid">{{getErrorMessage(valVigenciaFinal)}}</mat-error>
                   </mat-form-field>
                 </div>
               </div>
             </div>
-            <div fxFlex="300px" fxFlexAlign="start" fxFlexFill>
-              <mat-tab-group tabindex="9">
-                <!-- <mat-tab label="Serviços">
-                  <div fxLayou="column" fxLayoutAlign="center center" fxLayoutGap="10px">
-                    <div fxFlex="180px" fxFlexAlign="center" fxFlexFill style="overflow-y:auto;">
-                      <table style="overflow: auto;">
-                        <tr>
-                          <th class="frm_contratofornecedor_servico_selecionado">
-                            <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="0px">
-                              <div fxFlex="100%" fxFlexAlign="center" fxFlexFill style="width: 100%">
-                                <label>Selecionado</label>
-                              </div>
-                            </div>
-                          </th>
-                          <th class="frm_contratofornecedor_servico_descricao">
-                            <label>Serviço</label>
-                          </th>
-                          <th class="frm_contratofornecedor_servico_preco">
-                            <label>Preço Venda</label>
-                          </th>
-                          <th class="frm_contratofornecedor_servico_preco">
-                            <label>Preço Serviço</label>
-                          </th>
-                        </tr>
-                        <tr *ngFor="let servico of contratofornecedorservicos" style="height: 15px">
-                          <td class="frm_contratofornecedor_servico_selecionado celula" style="max-height: 18px;">
-                            <mat-checkbox class="example-margin" [(ngModel)]="servico.selecionado" (click)="limpacampo(servico,$event)"></mat-checkbox>
-                          </td>
-                          <td class="frm_contratofornecedor_servico_descricao">
-                            {{servico.servico}}
-                          </td>
-                          <td class="frm_contratofornecedor_servico_preco" style="max-height: 18px;">
-                            <input currencyMask class="preco" placeholder="Preço Compra" [(ngModel)]="servico.preco_compra" [disabled]="!servico.selecionado"
-                              style="max-height: 18px;">
-                          </td>
-                          <td class="frm_contratofornecedor_servico_preco" style="max-height: 18px;">
-                            <input currencyMask class="preco" placeholder="Preço Serviço" [(ngModel)]="servico.preco_servico" [disabled]="!servico.selecionado"
-                              style="max-height: 18px;">
-                          </td>
-                        </tr>
-                      </table>
-                    </div>
-                  </div>
-                </mat-tab> -->
+            <div fxFlex="350px" fxFlexAlign="start" fxFlexFill>
+              <mat-tab-group tabindex="6">
                 <mat-tab label="Resíduos">
-                  <div fxLayou="column" fxLayoutAlign="start center" fxLayoutGap="0px" style="overflow-y:auto;">
-                    <div fxFlex="100%" style="overflow-y:auto;">
+                  <div fxLayou="column" fxLayoutAlign="start center" fxLayoutGap="0px">
+                    <div fxFlex="330px" fxFlexAlign="start" fxFlexFill style="overflow: hidden">
                       <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="0px">
                         <div fxFlex="40px" fxFlexAlign="start">
                           <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="5px">
-                            <div fxFlex="200px" fxFlexAlign="start" fxFlexFill>
+                            <div fxFlex="230px" fxFlexAlign="start" fxFlexFill>
                               <mat-form-field class="frm_contratofornecedor_residuo">
-                                <mat-select id="cbResiduo" placeholder="Residuo" [(value)]="contratofornecedorresiduo.id_residuo" tabindex="10">
+                                <mat-select id="cbResiduo" placeholder="Residuo" [(value)]="contratofornecedorresiduo.id_residuo" tabindex="7">
                                   <mat-option *ngFor="let residuo of residuos" [value]="residuo.id">
                                     {{ residuo.descricao }}
                                   </mat-option>
                                 </mat-select>
                               </mat-form-field>
                             </div>
-                            <div fxFlex="200px" fxFlexAlign="start" fxFlexFill>
+                            <div fxFlex="170px" fxFlexAlign="start" fxFlexFill>
                               <mat-form-field class="frm_contratofornecedor_servico">
-                                <mat-select placeholder="Serviço" [(value)]="contratofornecedorresiduo.id_servico" tabindex="10">
+                                <mat-select placeholder="Serviço" [(value)]="contratofornecedorresiduo.id_servico" tabindex="8">
                                   <mat-option *ngFor="let servico of servicos" [value]="servico.id">
                                     {{ servico.descricao }}
                                   </mat-option>
@@ -194,7 +152,7 @@
                             </div>
                             <div fxFlex="100px" fxFlexAlign="start" fxFlexFill>
                               <mat-form-field class="frm_contratofornecedor_unidade">
-                                <mat-select placeholder="Unidades" [(value)]="contratofornecedorresiduo.unidade" tabindex="8">
+                                <mat-select placeholder="Unidades" [(value)]="contratofornecedorresiduo.unidade" tabindex="9">
                                   <mat-option *ngFor="let unidade of unidades" [value]="unidade.codigo">
                                     {{ unidade.codigo }}
                                   </mat-option>
@@ -204,7 +162,7 @@
                             <div fxFlex="100px" fxFlexAlign="start" fxFlexFill>
                               <div class="group">
                                 <input currencyMask type="text" class="atrainput" [(ngModel)]="contratofornecedorresiduo.preco_venda" style="height: 35px; width: 90px;"
-                                  tabindex="11" required>
+                                  tabindex="10" required>
                                 <span class="highlight"></span>
                                 <span class="bar"></span>
                                 <label class="atralabel">Preço Venda</label>
@@ -213,14 +171,14 @@
                             <div fxFlex="100px" fxFlexAlign="start" fxFlexFill>
                               <div class="group">
                                 <input currencyMask type="text" class="atrainput" [(ngModel)]="contratofornecedorresiduo.preco_servico" style="height: 35px; width: 90px;"
-                                  tabindex="12" required>
+                                  tabindex="11" required>
                                 <span class="highlight"></span>
                                 <span class="bar"></span>
                                 <label class="atralabel">Preço Servico</label>
                               </div>
                             </div>
                             <div fxFlex="120px" fxFlexAlign="center" fxFlexFill>
-                              <button mat-raised-button color="primary" (click)="addLinha()" tabindex="13">
+                              <button mat-raised-button color="primary" (click)="addLinha()" tabindex="12">
                                 <mat-icon>playlist_add</mat-icon>
                                 <span>Adicionar</span>
                               </button>
@@ -228,16 +186,9 @@
                           </div>
                         </div>
                       </div>
-                      <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="0px">
-                        <div fxFlex="100%" fxFlexAlign="start">
-                          <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="5px">
-
-                          </div>
-                        </div>
-                      </div>
-                      <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="0px" style="overflow-y:auto;">
-                        <div fxFlex="100%" fxFlexAlign="center" fxFlexFill style="overflow-y:auto;">
-                          <table style="overflow: auto;">
+                      <div fxLayout="column" fxLayoutAlign="start center" fxLayoutGap="0px">
+                        <div fxFlex="40px" fxFlexAlign="start" fxFlexFill>
+                          <table>
                             <tr>
                               <th class="frm_contratofornecedor_residuo_residuo">
                                 <label>Residuo</label>
@@ -259,6 +210,11 @@
                               <th class="frm_contratofornecedor_residuo_botao">
                               </th>
                             </tr>
+                          </table>
+                        </div>
+                        <div fxFlex="200px" fxFlexAlign="start" fxFlexFill style="overflow-x: hidden; overflow-y: auto;">
+                          <table>
+
                             <tr *ngFor="let cfresiduo of contratofornecedorresiduos">
                               <td class="frm_contratofornecedor_residuo_residuo">
                                 {{cfresiduo.residuo}}

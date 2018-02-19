@@ -40,7 +40,7 @@
             <label>Aguarde...</label>
           </div>
         </div>
-        <mat-card *ngIf="!emProcessamento" style="width: 1000px;">
+        <mat-card *ngIf="!emProcessamento" style="width: 1000px;  overflow:hidden;">
           <div fxLayout="column" fxLayoutAlign="start center" fxLayoutGap="10px">
             <div fxFlex="60px" fxFlexAlign="start">
               <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="5px" style="width: 100%">
@@ -69,7 +69,8 @@
                 </div>
                 <div fxFlex="100px" fxFlexFill>
                   <mat-form-field class="frm_manifesto_numero">
-                    <input matInput uppercase #descricao maxlength="20" [formControl]="valNumero" placeholder="Numero" required tabindex="3" [(ngModel)]="manifesto.numero">
+                    <input matInput uppercase #descricao maxlength="20" [formControl]="valNumero" placeholder="Numero" required tabindex="3"
+                      [(ngModel)]="manifesto.numero">
                     <mat-hint align="end">{{descricao.value?.length || 0}}/20</mat-hint>
                     <mat-error *ngIf="valNumero.invalid">{{getDescricaoErrorMessage()}}</mat-error>
                   </mat-form-field>
@@ -84,46 +85,51 @@
                 </div>
               </div>
             </div>
-            <div fxFlex="400px" fxFlexAlign="start" fxFlexFill style="overflow-y:auto;">
-              <mat-tab-group tabindex="9">
-                <mat-tab label="Itens" style="overflow-y:auto;">
-                  <div fxLayou="column" fxLayoutAlign="start center" fxLayoutGap="0px" style="overflow-y:auto;">
-                    <div fxFlex="100%" style="overflow-y:auto;">
-                      <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="0px" style="overflow-y:auto;">
+            <div fxFlex="380px" fxFlexAlign="start" fxFlexFill style="overflow: hidden">
+              <mat-tab-group tabindex="5">
+                <mat-tab label="Resíduos">
+                  <div fxLayou="column" fxLayoutAlign="start center" fxLayoutGap="0px">
+                    <div fxFlex="380px" fxFlexAlign="start" fxFlexFill>
+                      <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="0px">
                         <div fxFlex="60px" fxFlexAlign="start">
                           <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="5px">
                             <div fxFlex="90px" fxFlexAlign="start" fxFlexFill>
                               <mat-form-field class="frm_manifesto_codigo">
-                                <input matInput #codigoCtr maxlength="9" [formControl]="valCodigoCTR" required tabindex="5"
-                                  [(ngModel)]="manifesto.id_contrato_cliente" (keyup)="validaSaidaCTR($event.target.value)"
-                                  (keypress)="onlyNumber($event)">
-                                <mat-hint align="end">{{codigoCtr.value?.length || 0}}/9</mat-hint>
-                                <mat-error *ngIf="valCodigoCTR.invalid">{{getCodigoErrorMessage()}}</mat-error>
+                                <input matInput autofocus #focuscomp #codigofor maxlength="9" [formControl]="valTransportador" required tabindex="6" [(ngModel)]="manifesto.id_transportador"
+                                  (keyup)="validaSaidaTransportador($event.target.value)" (keypress)="onlyNumber($event)">
+                                <mat-hint align="end">{{codigofor.value?.length || 0}}/9</mat-hint>
+                                <mat-error *ngIf="valTransportador.invalid">{{getErrorMessage(valTransportador)}}</mat-error>
                               </mat-form-field>
                             </div>
-                            <div fxFlex="30px" fxFlexAlign="center" fxFlexFill>
-                              <button mat-icon-button color="primary" (click)="openPesquisaCTR()" tabindex="6">
+                            <div fxFlex="25px" fxFlexAlign="center" fxFlexFill>
+                              <button mat-icon-button color="primary" (click)="openPesquisaFornecedor(TipoAtividadeEnum.TRANSPORTADOR)" tabindex="7">
                                 <mat-icon>search</mat-icon>
                               </button>
                             </div>
-                            <div fxFlex="420px" fxFlexAlign="start" fxFlexFill>
-                              <mat-form-field class="frm_manifesto_descricao">
-                                <input matInput disabled [(ngModel)]="manifesto.descricao" placeholder="Contrato do Cliente">
+                            <div fxFlex="320px" fxFlexAlign="start" fxFlexFill>
+                              <mat-form-field class="frm_manifesto_transportador">
+                                <input matInput disabled [(ngModel)]="manifesto.transportador" placeholder="Transportador">
                               </mat-form-field>
                             </div>
-                            <div fxFlex="120px" fxFlexAlign="center" fxFlexFill>
-                              <button mat-raised-button color="primary" (click)="setupItens()">
-                                <mat-icon>playlist_add</mat-icon>
-                                <span>Adicionar Itens</span>
+                            <div fxFlex="90px" fxFlexAlign="start" fxFlexFill>
+                              <mat-form-field class="frm_manifesto_codigo">
+                                <input matInput autofocus #focuscomp #codigofor maxlength="9" [formControl]="valDestinador" required tabindex="8" [(ngModel)]="manifesto.id_destinador"
+                                  (keyup)="validaSaidaDestinador($event.target.value)" (keypress)="onlyNumber($event)">
+                                <mat-hint align="end">{{codigofor.value?.length || 0}}/9</mat-hint>
+                                <mat-error *ngIf="valDestinador.invalid">{{getErrorMessage(valDestinador)}}</mat-error>
+                              </mat-form-field>
+                            </div>
+                            <div fxFlex="25px" fxFlexAlign="center" fxFlexFill>
+                              <button mat-icon-button color="primary" (click)="openPesquisaFornecedor(TipoAtividadeEnum.DESTINADOR)" tabindex="9">
+                                <mat-icon>search</mat-icon>
                               </button>
                             </div>
-                          </div>
-                        </div>
-                      </div>
-                      <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="0px" style="overflow-y:auto;">
-                        <div fxFlex="60px" fxFlexAlign="start">
-                          <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="5px">
-                            <div fxFlex="120px" fxFlexAlign="start" fxFlexFill>
+                            <div fxFlex="320px" fxFlexAlign="start" fxFlexFill>
+                              <mat-form-field class="frm_manifesto_destinador">
+                                <input matInput disabled [(ngModel)]="manifesto.destinador" placeholder="Destinador">
+                              </mat-form-field>
+                            </div>
+                            <!-- <div fxFlex="120px" fxFlexAlign="start" fxFlexFill>
                               <mat-form-field class="frm_manifesto_codigo">
                                 <input matInput disabled placeholder="Transportador" tabindex="5" [(ngModel)]="manifesto.id_transportador">
                               </mat-form-field>
@@ -142,91 +148,52 @@
                               <mat-form-field class="frm_manifesto_destinador">
                                 <input matInput disabled [(ngModel)]="manifesto.destinador">
                               </mat-form-field>
-                            </div>
+                            </div> -->
                           </div>
                         </div>
                       </div>
-
-                      <!-- <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="0px">
-                        <div fxFlex="40px" fxFlexAlign="start">
+                      <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="0px">
+                        <div fxFlex="65px" fxFlexAlign="start">
                           <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="5px">
+                            <div fxFlex="90px" fxFlexAlign="start" fxFlexFill>
+                              <mat-form-field class="frm_manifesto_codigo">
+                                <input matInput #codigoCtr maxlength="9" [formControl]="valCodigoCTR" required tabindex="10" [(ngModel)]="manifesto.id_contrato_cliente"
+                                  (keyup)="validaSaidaCTR($event.target.value)" (keypress)="onlyNumber($event)">
+                                <mat-hint align="end">{{codigoCtr.value?.length || 0}}/9</mat-hint>
+                                <mat-error *ngIf="valCodigoCTR.invalid">{{getCodigoErrorMessage()}}</mat-error>
+                              </mat-form-field>
+                            </div>
+                            <div fxFlex="30px" fxFlexAlign="center" fxFlexFill>
+                              <button mat-icon-button color="primary" (click)="openPesquisaCTR()" tabindex="11">
+                                <mat-icon>search</mat-icon>
+                              </button>
+                            </div>
+                            <div fxFlex="420px" fxFlexAlign="start" fxFlexFill>
+                              <mat-form-field class="frm_manifesto_descricao">
+                                <input matInput disabled [(ngModel)]="manifesto.descricao" placeholder="Contrato do Cliente">
+                              </mat-form-field>
+                            </div>
                             <div fxFlex="200px" fxFlexAlign="start" fxFlexFill>
-                              <mat-form-field class="frm_manifesto_servico">
-                                <mat-select placeholder="Serviços" [(value)]="manifestoservico.id_servico" required [formControl]="valServico">
-                                  <mat-option *ngFor="let servico of servicos" [value]="servico.id">
-                                    {{ servico.descricao }}
-                                  </mat-option>
-                                </mat-select>
-                                <mat-error *ngIf="valServico.invalid">{{getErrorMessage(valServico)}}</mat-error>
-                              </mat-form-field>
-                            </div>
-                            <div fxFlex="100px" fxFlexAlign="start" fxFlexFill>
-                              <mat-form-field class="frm_manifesto_unidade">
-                                <mat-select placeholder="Unidades" [(value)]="manifestoservico.unidade" required (change)="unidadeChange($event)" [formControl]="valUnidade">
-                                  <mat-option *ngFor="let unidade of unidades" [value]="unidade.codigo">
-                                    {{ unidade.codigo }}
-                                  </mat-option>
-                                </mat-select>
-                                <mat-error *ngIf="valUnidade.invalid">{{getErrorMessage(valUnidade)}}</mat-error>
-                              </mat-form-field>
-                            </div>
-                            <div fxFlex="600px" fxFlexAlign="start" fxFlexFill>
-                              <mat-form-field class="frm_manifesto_fornecedor">
-                                <mat-select placeholder="Fornecedor" [(value)]="manifestoservico.id_contrato_fornecedor">
-                                  <mat-option *ngFor="let contrato of contratofornecedorservicos" [value]="contrato.id_contrato">
-                                    {{ contrato.fornecedor }} | Preço Compra: {{contrato.preco_compra | currency:'BRL':true}} | Preço Servico: {{contrato.preco_servico
-                                    | currency:'BRL':true}}
+                              <mat-form-field class="frm_contratofornecedor_residuo">
+                                <mat-select id="cbResiduo" placeholder="Residuo" [(value)]="manifestoservico.id_residuo" tabindex="12">
+                                  <mat-option *ngFor="let residuo of manifestoservicosCombo" [value]="residuo.id_residuo">
+                                    {{ residuo.residuo }}
                                   </mat-option>
                                 </mat-select>
                               </mat-form-field>
                             </div>
-                          </div>
-                        </div>
-                      </div> -->
-                      <!-- <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="0px">
-                        <div fxFlex="100%" fxFlexAlign="start">
-                          <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="5px">
-                            <div fxFlex="200px" fxFlexAlign="start" fxFlexFill>
-                              <mat-form-field class="frm_manifesto_residuo">
-                                <mat-select placeholder="Residuo" [(value)]="manifestoservico.id_residuo" required [formControl]="valResiduo">
-                                  <mat-option *ngFor="let residuo of residuos" [value]="residuo.id">
-                                    {{ residuo.descricao }}
-                                  </mat-option>
-                                </mat-select>
-                                <mat-error *ngIf="valResiduo.invalid">{{getErrorMessage(valServico)}}</mat-error>
-                              </mat-form-field>
-                            </div>
-                            <div fxFlex="120px" fxFlexAlign="start" fxFlexFill>
-                              <div class="group">
-                                <input currencyMask type="text" class="atrainput" [(ngModel)]="manifestoservico.preco_compra" style="height: 25px; width: 105px;"
-                                  required>
-                                <span class="highlight"></span>
-                                <span class="bar"></span>
-                                <label class="atralabel">Preço Compra</label>
-                              </div>
-                            </div>
-                            <div fxFlex="120px" fxFlexAlign="start" fxFlexFill>
-                              <div class="group">
-                                <input currencyMask type="text" class="atrainput" [(ngModel)]="manifestoservico.preco_servico" style="height: 25px; width: 105px;"
-                                  required>
-                                <span class="highlight"></span>
-                                <span class="bar"></span>
-                                <label class="atralabel">Preço Servico</label>
-                              </div>
-                            </div>
-                            <div fxFlex="120px" fxFlexAlign="start" fxFlexFill>
-                              <button mat-raised-button color="primary" (click)="addlinha()"
-                              [disabled]="valServico.invalid || valUnidade.invalid || valResiduo.invalid">
+                            <div fxFlex="120px" fxFlexAlign="center" fxFlexFill>
+                              <button mat-raised-button color="primary" (click)="addlinha()" tabindex="13">
                                 <mat-icon>playlist_add</mat-icon>
-                                <span>Adicionar</span>
+                                <span>Adicionar Itens</span>
                               </button>
                             </div>
                           </div>
                         </div>
-                      </div> -->
-                      <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="0px" style="overflow-y:auto;">
-                        <div fxFlex="100%" fxFlexAlign="center" fxFlexFill style="overflow-y:auto;">
-                          <table style="overflow: auto;">
+                      </div>
+                      <div fxLayout="column" fxLayoutAlign="start center" fxLayoutGap="0px">
+                        <div fxFlex="40px" fxFlexAlign="start" fxFlexFill>
+                          <table>
                             <tr>
                               <th class="frm_manifesto_servico_residuo">
                                 <label>Residuo</label>
@@ -246,11 +213,18 @@
                               <th class="frm_manifesto_servico_preco">
                                 <label>Quantidade</label>
                               </th>
-                              <!-- <th class="frm_manifesto_servico_botao">
+                              <th class="frm_manifesto_servico_preco">
+                                <label>Qtd.Final</label>
                               </th>
                               <th class="frm_manifesto_servico_botao">
-                              </th> -->
+                              </th>
+                              <!-- <th class="frm_manifesto_servico_botao">
+                                  </th> -->
                             </tr>
+                          </table>
+                        </div>
+                        <div fxFlex="160px" fxFlexAlign="start" fxFlexFill style="overflow-y:auto; overflow-x: hidden">
+                          <table>
                             <tr *ngFor="let servico of manifestoservicos">
                               <td class="frm_manifesto_servico_residuo">
                                 {{servico.residuo}}
@@ -280,16 +254,19 @@
                                 {{servico.unidade}}
                               </td>
                               <td class="frm_manifesto_servico_quantidade" style="max-height: 18px;">
-                                <input class="preco" type="number" [(ngModel)]="servico.quantidade">
+                                <input class="preco" type="number" [(ngModel)]="servico.quantidade" style="text-align: right">
+                              </td>
+                              <td class="frm_manifesto_servico_quantidade" style="max-height: 18px;">
+                                <input class="preco" type="number" [(ngModel)]="servico.quantidade_final" style="text-align: right">
                               </td>
 
-                              <!-- <td class="frm_manifesto_servico_botao">
+                              <td class="frm_manifesto_servico_botao">
                                 <a (click)="remlinha(servico)" class="tooltip">
                                   <i class="fa fa-trash" aria-hidden="true"></i>
                                   <span class="tooltiptext">Excluir</span>
                                 </a>
                               </td>
-                              <td class="frm_manifesto_servico_botao">
+                              <!-- <td class="frm_manifesto_servico_botao">
                                 <a (click)="editlinha(servico)" class="tooltip">
                                   <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
                                   <span class="tooltiptext">Editar</span>

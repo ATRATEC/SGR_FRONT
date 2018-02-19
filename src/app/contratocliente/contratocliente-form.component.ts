@@ -451,8 +451,8 @@ export class ContratoClienteFormComponent
 
   openPesquisa(): void {
     const dialogLoginRef = this.pesquisa.open(ClienteFindComponent, {
-      width: '600px',
-      height: '400px',
+      width: '900px',
+      height: '460px',
       disableClose: true,
       data: {
         id: null,
@@ -587,12 +587,12 @@ export class ContratoClienteFormComponent
       }
     }
 
-    if (mensagem === '') {
-      if (((isNullOrUndefined(this.contratoclienteresiduo.preco_compra)) || (this.contratoclienteresiduo.preco_compra === 0)) &&
-         ((isNullOrUndefined(this.contratoclienteresiduo.preco_servico) || (this.contratoclienteresiduo.preco_servico === 0)))) {
-        mensagem = 'Campo preço não informado.';
-      }
-    }
+    // if (mensagem === '') {
+    //   if (((isNullOrUndefined(this.contratoclienteresiduo.preco_compra)) || (this.contratoclienteresiduo.preco_compra === 0)) &&
+    //      ((isNullOrUndefined(this.contratoclienteresiduo.preco_servico) || (this.contratoclienteresiduo.preco_servico === 0)))) {
+    //     mensagem = 'Campo preço não informado.';
+    //   }
+    // }
 
 
     if (mensagem === '') {

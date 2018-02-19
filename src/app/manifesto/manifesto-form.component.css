@@ -62,8 +62,8 @@ mat-icon-button.size-15 {
 }
 
 .frm_manifesto_preco {
-  min-width: 120px;
-  max-width: 120px;
+  min-width: 80px;
+  max-width: 80px;
 }
 
 .frm_manifesto-loading-shade {
@@ -154,7 +154,7 @@ tr:nth-child(even) {
 }
 
 .frm_manifesto_servico_quantidade {
-  width: 130px;
+  width: 90px;
 }
 
 .frm_manifesto_servico_botao {

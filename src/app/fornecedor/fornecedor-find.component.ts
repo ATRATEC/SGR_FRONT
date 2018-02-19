@@ -93,12 +93,14 @@ export class FornecedorFindComponent implements OnInit, AfterViewInit {
   retornarPesquisa(row) {
     this.data.id = row.id;
     this.data.razao_social = row.razao_social;
+    this.data.nome_fantasia = row.nome_fantasia;
     this.dialogLoginRef.close(this.data);
   }
 
   btnCancelarClick() {
     this.data.id = null;
     this.data.razao_social = null;
+    this.data.nome_fantasia = null;
     this.dialogLoginRef.close(this.data);
   }
 

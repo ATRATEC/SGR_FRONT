@@ -361,6 +361,8 @@ export class ContratoFornecedorFormComponent
 
   btnIncluir_click() {
     this.contratofornecedor = new ContratoFornecedor();
+    this.contratofornecedorresiduo = new ContratoFornecedorResiduo();
+    this.contratofornecedorresiduos.length = 0;
   }
 
   getErrorMessage(control: FormControl) {
@@ -456,7 +458,7 @@ export class ContratoFornecedorFormComponent
   openPesquisaCliente(): void {
     const dialogLoginRef = this.pesquisa.open(ClienteFindComponent, {
       width: '900px',
-      height: '400px',
+      height: '460px',
       disableClose: true,
       data: { id: null,
               razao_social: null
@@ -479,8 +481,7 @@ export class ContratoFornecedorFormComponent
   addLinha() {
     // validar se ja foi inserido na lista
     const index = this.contratofornecedorresiduos.findIndex(
-      p => p.id_contrato === this.contratofornecedorresiduo.id_contrato &&
-           p.id_residuo === this.contratofornecedorresiduo.id_residuo &&
+      p => p.id_residuo === this.contratofornecedorresiduo.id_residuo &&
            p.id_servico === this.contratofornecedorresiduo.id_servico &&
            p.unidade === this.contratofornecedorresiduo.unidade);
 

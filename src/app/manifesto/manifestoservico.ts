@@ -17,6 +17,7 @@ export class ManifestoServico {
     public id_tratamento: number = null,
     public unidade: string = '',
     public quantidade: number = null,
+    public quantidade_final: number = null,
     public created_at: string = '',
     public updated_at: string = '',
     public residuo: string = '',
