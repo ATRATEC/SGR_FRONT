@@ -230,13 +230,13 @@ export class FornecedorFormComponent implements OnInit, AfterViewInit, AfterView
   estadoChange(event: any) {
     this.loadCidades(event.value);
     this.fornecedor.cidade = '';
+    this.cidadeFilter.reset();
     // console.log('mudou estado ' + event.value);
   }
 
   loadCidades(cUF: string) {
     this._enderecoService.getListCidades(this._tokenManager.retrieve(), cUF).subscribe(data => {
       this.cidades = JSON.parse(data._body);
-      this.cidadeFilter.reset();
     });
   }
 

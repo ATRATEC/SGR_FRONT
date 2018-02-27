@@ -275,8 +275,12 @@ export class ClienteFormComponent
   }
 
   estadoChange(event: any) {
-    this.loadCidades(event.value);
-    this.cliente.cidade = '';
+    if (!this.emProcessamento) {
+      this.loadCidades(event.value);
+      this.cliente.cidade = '';
+      this.cidadeFilter.reset();
+    }
+
     // console.log('mudou estado ' + event.value);
   }
 
@@ -285,7 +289,6 @@ export class ClienteFormComponent
       .getListCidades(this._tokenManager.retrieve(), cUF)
       .subscribe(data => {
         this.cidades = JSON.parse(data._body);
-        this.cidadeFilter.reset();
       });
   }
 
@@ -301,7 +304,7 @@ export class ClienteFormComponent
 
   ngAfterViewInit(): void {
     // this.vc.first.nativeElement.focus();
-    Promise.resolve(null).then(() => this.focuscomp.nativeElement.focus());
+    // Promise.resolve(null).then(() => this.focuscomp.nativeElement.focus());
   }
 
   onlyNumber(event: any) {

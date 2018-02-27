@@ -92,6 +92,10 @@ export class ClienteDocumentoListComponent implements OnInit, AfterViewInit {
     this.incluirRegistro();
   }
 
+  btnIncluirLote_click() {
+    this.incluirLoteRegistro();
+  }
+
   btnExcluir_click() {
     this.excluirRegistro();
   }
@@ -111,6 +115,10 @@ export class ClienteDocumentoListComponent implements OnInit, AfterViewInit {
 
   incluirRegistro() {
     this._router.navigate(['/clientedocumentos/clientedocumento']);
+  }
+
+  incluirLoteRegistro() {
+    this._router.navigate(['/clientedocumentos/clientedocumentolote']);
   }
 
 

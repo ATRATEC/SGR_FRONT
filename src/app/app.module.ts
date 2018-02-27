@@ -1,3 +1,4 @@
+import { MonitorDocumentoModule } from './monitordocumento/monitordocumento.module';
 import { RelatorioModule } from './relatorio/relatorio.module';
 import { TipoResiduoModule } from './tiporesiduo/tiporesiduo.module';
 import { ManifestoModule } from './manifesto/manifesto.module';
@@ -85,6 +86,7 @@ import { HttpClientModule } from '@angular/common/http';
     ManifestoModule,
     TipoResiduoModule,
     RelatorioModule,
+    MonitorDocumentoModule,
     AppRoutingModule
   ],
   providers: [

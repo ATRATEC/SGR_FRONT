@@ -11,7 +11,7 @@ import { HttpErrorResponse, HttpParams } from '@angular/common/http';
 
 @Injectable()
 export class FornecedorDocumentoService {
-  private fornecedordocumentoUrl = environment.urlbase + '/api/documentos/fornecedores';
+  private fornecedordocumentoUrl = environment.urlbase + '/api/fornecedordocumentos';
 
   constructor(private _http: Http) {}
 
@@ -43,7 +43,7 @@ export class FornecedorDocumentoService {
   }
 
   uploadDocumento(accessToken: string, _fornecedorDocumento: FornecedorDocumento, _file: File): Observable<any> {
-    const UrlUpload = environment.urlbase + '/api/documentos/uploadfor';
+    const UrlUpload = environment.urlbase + '/api/fornecedordocumentos/upload';
     const headers = new Headers({
       Accept: 'application/json',
       Authorization: 'Bearer ' + accessToken.toString().replace(/"/g, '')

@@ -1,19 +1,16 @@
-import { ClienteDocumentoLoteComponent } from './clientedocumento-lote.component';
-import { DatepipeModule } from '../datepipe/datepipe.module';
+import { DatepipeModule } from './../datepipe/datepipe.module';
 import { MatNativeDateModule } from '@angular/material';
 import { MyMaterialModule } from './../my-material/my-material.module';
 import { HttpModule } from '@angular/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { BrowserModule } from '@angular/platform-browser';
 import { FlexLayoutModule } from '@angular/flex-layout';
-import { ClienteDocumentoListComponent } from './clientedocumento-list.component';
-import { ClienteDocumentoFormComponent } from './clientedocumento-form.component';
-import { ClienteDocumentoService } from './clientedocumento.service';
+import { MonitorDocumentoFormComponent } from './monitordocumento-form.component';
+import { MonitorDocumentoService } from './monitordocumento.service';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { ClienteDocumentoRoutingModule } from './clientedocumento-routing.module';
-import { UpperCaseModule } from '../uppercase/uppercase.module';
+import { MonitorDocumentoRoutingModule } from './monitordocumento-routing.module';
 
 @NgModule({
   imports: [
@@ -27,14 +24,11 @@ import { UpperCaseModule } from '../uppercase/uppercase.module';
     MatNativeDateModule,
     ReactiveFormsModule,
     DatepipeModule,
-    UpperCaseModule,
-    ClienteDocumentoRoutingModule
+    MonitorDocumentoRoutingModule
   ],
   declarations: [
-    ClienteDocumentoListComponent,
-    ClienteDocumentoFormComponent,
-    ClienteDocumentoLoteComponent
+    MonitorDocumentoFormComponent
   ],
-  providers: [ClienteDocumentoService]
+  providers: [MonitorDocumentoService]
 })
-export class ClienteDocumentoModule { }
+export class MonitorDocumentoModule { }

@@ -1,0 +1,542 @@
+<div fxLayout="row" fxLayoutAlign="start start" fxLayoutGap="1px">
+  <div fxFlex="140px" style="padding: 10px;" fxLayoutGap="10px">
+    <div fxLayout="column" fxLayoutAlign="space-between center" fxLayoutGap="5px" style="height: 100%">
+      <div fxFlex="80%" fxFlexFill fxFlexAlign="center">
+        <button id="btnImprimir" mat-raised-button color="primary" style="width: 100%" (click)="btnImprimir_click()">
+          <mat-icon>print</mat-icon>
+          <span>Imprimir</span>
+        </button>
+        <!-- <button id="btnIncluir" mat-raised-button color="primary" style="width: 100%" (click)="btnIncluir_click()" *ngIf="exibeIncluir">
+          <mat-icon>insert_drive_file</mat-icon>
+          <span>Incluir</span>
+        </button> -->
+      </div>
+      <div fxFlex="40px" fxFlexFill fxFlexAlign="end">
+
+        <a routerLink="/" mat-raised-button color="primary" style="width: 120px">
+          <mat-icon>close</mat-icon>
+          <span>Fechar</span>
+        </a>
+      </div>
+    </div>
+  </div>
+  <div fxFlex="90%">
+    <div fxLayout="column" fxLayoutAlign="center center" fxLayoutGap="5px">
+      <div fxFlex="50px" fxFlexAlign="start" style="padding: 10px;">
+        <button id="lblTitulo" mat-raised-button style="width: 100%" disabled>
+          <i class="fa fa-eye" aria-hidden="true"></i>
+          <span>MONITOR DE DOCUMENTOS</span>
+        </button>
+      </div>
+      <div fxFlex="80%" fxFlexAlign="center">
+        <div fxLayout="column" class="frm_relatorio-loading-shade" fxLayoutAlign="center center" *ngIf="emProcessamento">
+          <div fxFlex="70" fxFlexAlign="center">
+            <mat-spinner></mat-spinner>
+          </div>
+          <div fxFlex="10" fxFlexAlign="center">
+            &nbsp;
+          </div>
+          <div fxFlex="20" fxFlexAlign="center">
+            <label>Aguarde...</label>
+          </div>
+        </div>
+        <mat-card *ngIf="!emProcessamento" style="width: 1000px;">
+          <div fxLayout="column" fxLayoutAlign="start center" fxLayoutGap="5px">
+            <mat-accordion style="width: 100%">
+              <mat-expansion-panel>
+                <mat-expansion-panel-header>
+                  <mat-panel-title>
+                    <h3>Clientes</h3>
+                  </mat-panel-title>
+                  <mat-panel-description>
+                  </mat-panel-description>
+                </mat-expansion-panel-header>
+                <mat-accordion style="width: 100%">
+                  <mat-expansion-panel [expanded]="clientedocumentos7.length > 0">
+                    <mat-expansion-panel-header>
+                      <mat-panel-title style="font-weight: bold">
+                        7 dias
+                      </mat-panel-title>
+                      <mat-panel-description>
+                          {{clientedocumentos7.length}} - Documentos a vencer nos próximos 7 dias.
+                      </mat-panel-description>
+                    </mat-expansion-panel-header>
+                    <table>
+                      <tr>
+                        <th class="frm_monitordocumento_codigo">Código</th>
+                        <th class="frm_monitordocumento_razao_social">Cliente</th>
+                        <th class="frm_monitordocumento_tipodocumento">Documento</th>
+                        <th class="frm_monitordocumento_nrolicenca">Numero</th>
+                        <th class="frm_monitordocumento_dtemissao">Emissão</th>
+                        <th class="frm_monitordocumento_dtvencimento">Vencimento</th>
+                      </tr>
+                      <tr *ngFor="let item of clientedocumentos7">
+                        <td class="frm_monitordocumento_codigo">{{item.id}}</td>
+                        <td class="frm_monitordocumento_razao_social">
+                          <div id="div2">
+                            {{item.razao_social}}
+                          </div>
+                        </td>
+                        <td class="frm_monitordocumento_tipodocumento">
+                          <div id="div2">
+                            {{item.descricao}}
+                          </div>
+                        </td>
+                        <td class="frm_monitordocumento_nrolicenca">{{item.numero}}</td>
+                        <td class="frm_monitordocumento_dtemissao">{{item.emissao | formatDate}}</td>
+                        <td class="frm_monitordocumento_dtvencimento" style="color: red; font-weight: bold">{{item.vencimento | formatDate}}</td>
+                      </tr>
+                    </table>
+                  </mat-expansion-panel>
+
+                  <mat-expansion-panel>
+                    <mat-expansion-panel-header>
+                      <mat-panel-title style="font-weight: bold">
+                        15 dias
+                      </mat-panel-title>
+                      <mat-panel-description>
+                          {{clientedocumentos15.length}} - Documentos a vencer nos próximos 15 dias.
+                      </mat-panel-description>
+                    </mat-expansion-panel-header>
+
+                    <table>
+                      <tr>
+                        <th class="frm_monitordocumento_codigo">Código</th>
+                        <th class="frm_monitordocumento_razao_social">Cliente</th>
+                        <th class="frm_monitordocumento_tipodocumento">Documento</th>
+                        <th class="frm_monitordocumento_nrolicenca">Numero</th>
+                        <th class="frm_monitordocumento_dtemissao">Emissão</th>
+                        <th class="frm_monitordocumento_dtvencimento">Vencimento</th>
+                      </tr>
+                      <tr *ngFor="let item of clientedocumentos15">
+                        <td class="frm_monitordocumento_codigo">{{item.id}}</td>
+                        <td class="frm_monitordocumento_razao_social">
+                          <div id="div2">
+                            {{item.razao_social}}
+                          </div>
+                        </td>
+                        <td class="frm_monitordocumento_tipodocumento">
+                          <div id="div2">
+                            {{item.descricao}}
+                          </div>
+                        </td>
+                        <td class="frm_monitordocumento_nrolicenca">{{item.numero}}</td>
+                        <td class="frm_monitordocumento_dtemissao">{{item.emissao | formatDate}}</td>
+                        <td class="frm_monitordocumento_dtvencimento" style="color: red; font-weight: bold">{{item.vencimento | formatDate}}</td>
+                      </tr>
+                    </table>
+                  </mat-expansion-panel>
+
+                  <mat-expansion-panel>
+                    <mat-expansion-panel-header>
+                      <mat-panel-title style="font-weight: bold">
+                        30 dias
+                      </mat-panel-title>
+                      <mat-panel-description>
+                          {{clientedocumentos30.length}} - Documentos a vencer nos próximos 30 dias.
+                      </mat-panel-description>
+                    </mat-expansion-panel-header>
+
+                    <table>
+                      <tr>
+                        <th class="frm_monitordocumento_codigo">Código</th>
+                        <th class="frm_monitordocumento_razao_social">Cliente</th>
+                        <th class="frm_monitordocumento_tipodocumento">Documento</th>
+                        <th class="frm_monitordocumento_nrolicenca">Numero</th>
+                        <th class="frm_monitordocumento_dtemissao">Emissão</th>
+                        <th class="frm_monitordocumento_dtvencimento">Vencimento</th>
+                      </tr>
+                      <tr *ngFor="let item of clientedocumentos30">
+                        <td class="frm_monitordocumento_codigo">{{item.id}}</td>
+                        <td class="frm_monitordocumento_razao_social">
+                          <div id="div2">
+                            {{item.razao_social}}
+                          </div>
+                        </td>
+                        <td class="frm_monitordocumento_tipodocumento">
+                          <div id="div2">
+                            {{item.descricao}}
+                          </div>
+                        </td>
+                        <td class="frm_monitordocumento_nrolicenca">{{item.numero}}</td>
+                        <td class="frm_monitordocumento_dtemissao">{{item.emissao | formatDate}}</td>
+                        <td class="frm_monitordocumento_dtvencimento" style="color: red; font-weight: bold">{{item.vencimento | formatDate}}</td>
+                      </tr>
+                    </table>
+                  </mat-expansion-panel>
+
+                  <mat-expansion-panel>
+                    <mat-expansion-panel-header>
+                      <mat-panel-title style="font-weight: bold">
+                        60 dias
+                      </mat-panel-title>
+                      <mat-panel-description>
+                          {{clientedocumentos60.length}} - Documentos a vencer nos próximos 60 dias.
+                      </mat-panel-description>
+                    </mat-expansion-panel-header>
+
+                    <table>
+                      <tr>
+                        <th class="frm_monitordocumento_codigo">Código</th>
+                        <th class="frm_monitordocumento_razao_social">Cliente</th>
+                        <th class="frm_monitordocumento_tipodocumento">Documento</th>
+                        <th class="frm_monitordocumento_nrolicenca">Numero</th>
+                        <th class="frm_monitordocumento_dtemissao">Emissão</th>
+                        <th class="frm_monitordocumento_dtvencimento">Vencimento</th>
+                      </tr>
+                      <tr *ngFor="let item of clientedocumentos60">
+                        <td class="frm_monitordocumento_codigo">{{item.id}}</td>
+                        <td class="frm_monitordocumento_razao_social">
+                          <div id="div2">
+                            {{item.razao_social}}
+                          </div>
+                        </td>
+                        <td class="frm_monitordocumento_tipodocumento">
+                          <div id="div2">
+                            {{item.descricao}}
+                          </div>
+                        </td>
+                        <td class="frm_monitordocumento_nrolicenca">{{item.numero}}</td>
+                        <td class="frm_monitordocumento_dtemissao">{{item.emissao | formatDate}}</td>
+                        <td class="frm_monitordocumento_dtvencimento" style="color: red; font-weight: bold">{{item.vencimento | formatDate}}</td>
+                      </tr>
+                    </table>
+                  </mat-expansion-panel>
+
+                  <mat-expansion-panel>
+                    <mat-expansion-panel-header>
+                      <mat-panel-title style="font-weight: bold">
+                        90 dias
+                      </mat-panel-title>
+                      <mat-panel-description>
+                          {{clientedocumentos90.length}} - Documentos a vencer nos próximos 90 dias.
+                      </mat-panel-description>
+                    </mat-expansion-panel-header>
+
+                    <table>
+                      <tr>
+                        <th class="frm_monitordocumento_codigo">Código</th>
+                        <th class="frm_monitordocumento_razao_social">Cliente</th>
+                        <th class="frm_monitordocumento_tipodocumento">Documento</th>
+                        <th class="frm_monitordocumento_nrolicenca">Numero</th>
+                        <th class="frm_monitordocumento_dtemissao">Emissão</th>
+                        <th class="frm_monitordocumento_dtvencimento">Vencimento</th>
+                      </tr>
+                      <tr *ngFor="let item of clientedocumentos90">
+                        <td class="frm_monitordocumento_codigo">{{item.id}}</td>
+                        <td class="frm_monitordocumento_razao_social">
+                          <div id="div2">
+                            {{item.razao_social}}
+                          </div>
+                        </td>
+                        <td class="frm_monitordocumento_tipodocumento">
+                          <div id="div2">
+                            {{item.descricao}}
+                          </div>
+                        </td>
+                        <td class="frm_monitordocumento_nrolicenca">{{item.numero}}</td>
+                        <td class="frm_monitordocumento_dtemissao">{{item.emissao | formatDate}}</td>
+                        <td class="frm_monitordocumento_dtvencimento" style="color: red; font-weight: bold">{{item.vencimento | formatDate}}</td>
+                      </tr>
+                    </table>
+                  </mat-expansion-panel>
+                </mat-accordion>
+              </mat-expansion-panel>
+
+              <mat-expansion-panel [expanded]="true">
+                <mat-expansion-panel-header>
+                  <mat-panel-title>
+                    <h3>Fornecedores</h3>
+                  </mat-panel-title>
+                  <mat-panel-description>
+                  </mat-panel-description>
+                </mat-expansion-panel-header>
+                <mat-accordion style="width: 100%">
+                    <mat-expansion-panel [expanded]="clientedocumentos7.length > 0">
+                      <mat-expansion-panel-header>
+                        <mat-panel-title style="font-weight: bold">
+                          7 dias
+                        </mat-panel-title>
+                        <mat-panel-description>
+                            {{fornecedordocumentos7.length}} - Documentos a vencer nos próximos 7 dias.
+                        </mat-panel-description>
+                      </mat-expansion-panel-header>
+                      <table>
+                        <tr>
+                          <th class="frm_monitordocumento_codigo">Código</th>
+                          <th class="frm_monitordocumento_razao_social">Cliente</th>
+                          <th class="frm_monitordocumento_tipodocumento">Documento</th>
+                          <th class="frm_monitordocumento_nrolicenca">Numero</th>
+                          <th class="frm_monitordocumento_dtemissao">Emissão</th>
+                          <th class="frm_monitordocumento_dtvencimento">Vencimento</th>
+                        </tr>
+                        <tr *ngFor="let item of fornecedordocumentos7">
+                          <td class="frm_monitordocumento_codigo">{{item.id}}</td>
+                          <td class="frm_monitordocumento_razao_social">
+                            <div id="div2">
+                              {{item.razao_social}}
+                            </div>
+                          </td>
+                          <td class="frm_monitordocumento_tipodocumento">
+                            <div id="div2">
+                              {{item.descricao}}
+                            </div>
+                          </td>
+                          <td class="frm_monitordocumento_nrolicenca">{{item.numero}}</td>
+                          <td class="frm_monitordocumento_dtemissao">{{item.emissao | formatDate}}</td>
+                          <td class="frm_monitordocumento_dtvencimento" style="color: red; font-weight: bold">{{item.vencimento | formatDate}}</td>
+                        </tr>
+                      </table>
+                    </mat-expansion-panel>
+
+                    <mat-expansion-panel>
+                      <mat-expansion-panel-header>
+                        <mat-panel-title style="font-weight: bold">
+                          15 dias
+                        </mat-panel-title>
+                        <mat-panel-description>
+                            {{fornecedordocumentos15.length}} - Documentos a vencer nos próximos 15 dias.
+                        </mat-panel-description>
+                      </mat-expansion-panel-header>
+
+                      <table>
+                        <tr>
+                          <th class="frm_monitordocumento_codigo">Código</th>
+                          <th class="frm_monitordocumento_razao_social">Cliente</th>
+                          <th class="frm_monitordocumento_tipodocumento">Documento</th>
+                          <th class="frm_monitordocumento_nrolicenca">Numero</th>
+                          <th class="frm_monitordocumento_dtemissao">Emissão</th>
+                          <th class="frm_monitordocumento_dtvencimento">Vencimento</th>
+                        </tr>
+                        <tr *ngFor="let item of fornecedordocumentos15">
+                          <td class="frm_monitordocumento_codigo">{{item.id}}</td>
+                          <td class="frm_monitordocumento_razao_social">
+                            <div id="div2">
+                              {{item.razao_social}}
+                            </div>
+                          </td>
+                          <td class="frm_monitordocumento_tipodocumento">
+                            <div id="div2">
+                              {{item.descricao}}
+                            </div>
+                          </td>
+                          <td class="frm_monitordocumento_nrolicenca">{{item.numero}}</td>
+                          <td class="frm_monitordocumento_dtemissao">{{item.emissao | formatDate}}</td>
+                          <td class="frm_monitordocumento_dtvencimento" style="color: red; font-weight: bold">{{item.vencimento | formatDate}}</td>
+                        </tr>
+                      </table>
+                    </mat-expansion-panel>
+
+                    <mat-expansion-panel>
+                      <mat-expansion-panel-header>
+                        <mat-panel-title style="font-weight: bold">
+                          30 dias
+                        </mat-panel-title>
+                        <mat-panel-description>
+                            {{fornecedordocumentos30.length}} - Documentos a vencer nos próximos 30 dias.
+                        </mat-panel-description>
+                      </mat-expansion-panel-header>
+
+                      <table>
+                        <tr>
+                          <th class="frm_monitordocumento_codigo">Código</th>
+                          <th class="frm_monitordocumento_razao_social">Cliente</th>
+                          <th class="frm_monitordocumento_tipodocumento">Documento</th>
+                          <th class="frm_monitordocumento_nrolicenca">Numero</th>
+                          <th class="frm_monitordocumento_dtemissao">Emissão</th>
+                          <th class="frm_monitordocumento_dtvencimento">Vencimento</th>
+                        </tr>
+                        <tr *ngFor="let item of fornecedordocumentos30">
+                          <td class="frm_monitordocumento_codigo">{{item.id}}</td>
+                          <td class="frm_monitordocumento_razao_social">
+                            <div id="div2">
+                              {{item.razao_social}}
+                            </div>
+                          </td>
+                          <td class="frm_monitordocumento_tipodocumento">
+                            <div id="div2">
+                              {{item.descricao}}
+                            </div>
+                          </td>
+                          <td class="frm_monitordocumento_nrolicenca">{{item.numero}}</td>
+                          <td class="frm_monitordocumento_dtemissao">{{item.emissao | formatDate}}</td>
+                          <td class="frm_monitordocumento_dtvencimento" style="color: red; font-weight: bold">{{item.vencimento | formatDate}}</td>
+                        </tr>
+                      </table>
+                    </mat-expansion-panel>
+
+                    <mat-expansion-panel>
+                      <mat-expansion-panel-header>
+                        <mat-panel-title style="font-weight: bold">
+                          60 dias
+                        </mat-panel-title>
+                        <mat-panel-description>
+                            {{fornecedordocumentos60.length}} - Documentos a vencer nos próximos 60 dias.
+                        </mat-panel-description>
+                      </mat-expansion-panel-header>
+
+                      <table>
+                        <tr>
+                          <th class="frm_monitordocumento_codigo">Código</th>
+                          <th class="frm_monitordocumento_razao_social">Cliente</th>
+                          <th class="frm_monitordocumento_tipodocumento">Documento</th>
+                          <th class="frm_monitordocumento_nrolicenca">Numero</th>
+                          <th class="frm_monitordocumento_dtemissao">Emissão</th>
+                          <th class="frm_monitordocumento_dtvencimento">Vencimento</th>
+                        </tr>
+                        <tr *ngFor="let item of fornecedordocumentos60">
+                          <td class="frm_monitordocumento_codigo">{{item.id}}</td>
+                          <td class="frm_monitordocumento_razao_social">
+                            <div id="div2">
+                              {{item.razao_social}}
+                            </div>
+                          </td>
+                          <td class="frm_monitordocumento_tipodocumento">
+                            <div id="div2">
+                              {{item.descricao}}
+                            </div>
+                          </td>
+                          <td class="frm_monitordocumento_nrolicenca">{{item.numero}}</td>
+                          <td class="frm_monitordocumento_dtemissao">{{item.emissao | formatDate}}</td>
+                          <td class="frm_monitordocumento_dtvencimento" style="color: red; font-weight: bold">{{item.vencimento | formatDate}}</td>
+                        </tr>
+                      </table>
+                    </mat-expansion-panel>
+
+                    <mat-expansion-panel>
+                      <mat-expansion-panel-header>
+                        <mat-panel-title style="font-weight: bold">
+                          90 dias
+                        </mat-panel-title>
+                        <mat-panel-description>
+                            {{fornecedordocumentos90.length}} - Documentos a vencer nos próximos 90 dias.
+                        </mat-panel-description>
+                      </mat-expansion-panel-header>
+
+                      <table>
+                        <tr>
+                          <th class="frm_monitordocumento_codigo">Código</th>
+                          <th class="frm_monitordocumento_razao_social">Cliente</th>
+                          <th class="frm_monitordocumento_tipodocumento">Documento</th>
+                          <th class="frm_monitordocumento_nrolicenca">Numero</th>
+                          <th class="frm_monitordocumento_dtemissao">Emissão</th>
+                          <th class="frm_monitordocumento_dtvencimento">Vencimento</th>
+                        </tr>
+                        <tr *ngFor="let item of fornecedordocumentos90">
+                          <td class="frm_monitordocumento_codigo">{{item.id}}</td>
+                          <td class="frm_monitordocumento_razao_social">
+                            <div id="div2">
+                              {{item.razao_social}}
+                            </div>
+                          </td>
+                          <td class="frm_monitordocumento_tipodocumento">
+                            <div id="div2">
+                              {{item.descricao}}
+                            </div>
+                          </td>
+                          <td class="frm_monitordocumento_nrolicenca">{{item.numero}}</td>
+                          <td class="frm_monitordocumento_dtemissao">{{item.emissao | formatDate}}</td>
+                          <td class="frm_monitordocumento_dtvencimento" style="color: red; font-weight: bold">{{item.vencimento | formatDate}}</td>
+                        </tr>
+                      </table>
+                    </mat-expansion-panel>
+                  </mat-accordion>
+              </mat-expansion-panel>
+
+            </mat-accordion>
+            <!-- <div fxFlex="60px" fxFlexAlign="start">
+              <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="10px" style="width: 100%">
+                <div fxFlex="120px" fxFlexAlign="start" fxFlexFill>
+                  <mat-form-field class="frm_receita_codigo">
+                    <input matInput autofocus #focuscomp #codigofor maxlength="9" [formControl]="valCodigo" placeholder="Cliente" required tabindex="1"
+                      [(ngModel)]="relatorio.id_cliente" (keyup)="validaSaida($event.target.value)" (keypress)="onlyNumber($event)">
+                    <mat-hint align="end">{{codigofor.value?.length || 0}}/9</mat-hint>
+                    <mat-error *ngIf="valCodigo.invalid">{{getCodigoErrorMessage()}}</mat-error>
+                  </mat-form-field>
+                </div>
+                <div fxFlex="45px" fxFlexAlign="center" fxFlexFill>
+                  <button mat-icon-button color="primary" (click)="openPesquisa()" tabindex="2">
+                    <mat-icon>search</mat-icon>
+                  </button>
+                </div>
+                <div fxFlex="520px" fxFlexAlign="start" fxFlexFill>
+                  <mat-form-field class="frm_receita_razao_social">
+                    <input matInput disabled [(ngModel)]="relatorio.cliente">
+                  </mat-form-field>
+                </div>
+              </div>
+            </div>
+            <div fxFlex="60px" fxFlexAlign="start">
+              <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="10px" style="width: 100%">
+                <div fxFlex="170px" fxFlexAlign="start" fxFlexFill>
+                  <mat-form-field class="frm_receita_data">
+                    <input matInput type="date" #dtemissao maxlength="10" placeholder="Data Inicio Coleta" tabindex="4" [ngModel]="relatorio.datade"
+                      (ngModelChange)="relatorio.datade = $event" [value]="relatorio.datade">
+                    <mat-hint align="end">{{dtemissao.value?.length || 0}}/10</mat-hint>
+                  </mat-form-field>
+                </div>
+                <div fxFlex="170px" fxFlexAlign="start" fxFlexFill>
+                  <mat-form-field class="frm_receita_data">
+                    <input matInput type="date" #dtvencimento maxlength="10" placeholder="Data Final Coleta" tabindex="5" [ngModel]="relatorio.dataate"
+                      (ngModelChange)="relatorio.dataate = $event" [value]="relatorio.dataate">
+                    <mat-hint align="end">{{dtvencimento.value?.length || 0}}/10</mat-hint>
+                  </mat-form-field>
+                </div>
+              </div>
+            </div>
+            <div fxFlex="60px" fxFlexAlign="start">
+              <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="10px" style="width: 100%">
+                <div fxFlex="120px" fxFlexAlign="start" fxFlexFill>
+                  <mat-form-field class="frm_receita_codigo">
+                    <input matInput autofocus #focuscomp #codigofor maxlength="9" [formControl]="valManifesto" placeholder="Manifesto" tabindex="1"
+                      [(ngModel)]="relatorio.id_manifesto" (keyup)="validaSaidaManifesto($event.target.value)" (keypress)="onlyNumber($event)">
+                    <mat-hint align="end">{{codigofor.value?.length || 0}}/9</mat-hint>
+                    <mat-error *ngIf="valManifesto.invalid">{{getCodigoErrorMessage()}}</mat-error>
+                  </mat-form-field>
+                </div>
+                <div fxFlex="45px" fxFlexAlign="center" fxFlexFill>
+                  <button mat-icon-button color="primary" (click)="openPesquisaManifesto()" tabindex="2">
+                    <mat-icon>search</mat-icon>
+                  </button>
+                </div>
+                <div fxFlex="520px" fxFlexAlign="start" fxFlexFill>
+                  <mat-form-field class="frm_receita_razao_social">
+                    <input matInput disabled [(ngModel)]="relatorio.manifesto">
+                  </mat-form-field>
+                </div>
+              </div>
+            </div> -->
+            <!-- <div fxFlex="60px" fxFlexAlign="start">
+              <mat-form-field class="frm_relatorio_codigo">
+                <input matInput #codigo maxlength="9" type="number" tabindex="-1" placeholder="Código" disabled [(ngModel)]="relatorio.id">
+              </mat-form-field>
+            </div>
+            <div fxFlex="60px" fxFlexAlign="start">
+              <mat-form-field class="frm_relatorio_descricao">
+                <input matInput autofocus #focuscomp #descricao maxlength="50" [formControl]="valDescricao" placeholder="Descrição" required
+                  tabindex="1" [(ngModel)]="relatorio.descricao">
+                <mat-hint align="end">{{descricao.value?.length || 0}}/50</mat-hint>
+                <mat-error *ngIf="valDescricao.invalid">{{getDescricaoErrorMessage()}}</mat-error>
+              </mat-form-field>
+            </div>
+            <div fxFlex="25px" fxFlexAlign="start">
+              <label>Tipo de Atividade</label>
+            </div>
+            <div fxFlex="60px" fxFlexAlign="start">
+              <div fxLayout="row" fxLayoutAlign="space-between center" fxLayoutGap="30px">
+                <div fxFlex="100%" fxFlexAlign="start" fxFlexFill>
+                    <mat-radio-group [(ngModel)]="relatorio.id_tipo_atividade" [value]="relatorio.id_tipo_atividade" style="width: 100%">
+                        <mat-radio-button *ngFor="let tipoatividade of tipoatividades" [value]="tipoatividade.id">
+                          {{tipoatividade.descricao}} &nbsp;&nbsp;&nbsp;
+                        </mat-radio-button>
+                      </mat-radio-group>
+                </div>
+              </div>
+            </div> -->
+          </div>
+        </mat-card>
+      </div>
+
+    </div>
+  </div>
+</div>

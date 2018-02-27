@@ -158,7 +158,7 @@
                         </div>
                         <div fxFlex="300px" fxFlexFill>
                           <mat-form-field class="frm_cliente_cidade">
-                            <input matInput uppercase #cidade maxlength="40" placeholder="Cidade" [matAutocomplete]="auto" tabindex="11" [(ngModel)]="cliente.cidade"
+                            <input matInput #cidade maxlength="40" placeholder="Cidade" [matAutocomplete]="auto" tabindex="11" [(ngModel)]="cliente.cidade"
                               [formControl]="cidadeFilter" tabindex="16">
                             <mat-hint align="end">{{cidade.value?.length || 0}}/40</mat-hint>
                             <mat-autocomplete #auto="matAutocomplete">

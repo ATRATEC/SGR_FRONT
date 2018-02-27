@@ -27,7 +27,8 @@ export class ResiduoService {
       id_classe: _residuo.id_classe,
       id_tipo_residuo: _residuo.id_tipo_residuo,
       id_acondicionamento: _residuo.id_acondicionamento,
-      id_tratamento: _residuo.id_tratamento
+      id_tratamento: _residuo.id_tratamento,
+      tipo_receita: _residuo.tipo_receita
     };
     // _params.set('codigo', '1');
 
@@ -53,7 +54,8 @@ export class ResiduoService {
       id_classe: _residuo.id_classe,
       id_tipo_residuo: _residuo.id_tipo_residuo,
       id_acondicionamento: _residuo.id_acondicionamento,
-      id_tratamento: _residuo.id_tratamento
+      id_tratamento: _residuo.id_tratamento,
+      tipo_receita: _residuo.tipo_receita
     };
     // _params.set('id', _id.toString());
 

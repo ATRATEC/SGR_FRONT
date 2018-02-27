@@ -1,3 +1,4 @@
+import { ClienteDocumentoLoteComponent } from './clientedocumento-lote.component';
 import { AuthGuard } from './../auth-guard';
 import { NgModule } from '@angular/core';
 import { ClienteDocumentoListComponent } from './clientedocumento-list.component';
@@ -8,6 +9,7 @@ const routes: Routes = [
   { path: 'clientedocumentos', component: ClienteDocumentoListComponent, canActivate: [AuthGuard] },
   { path: 'clientedocumentos/clientedocumento', component: ClienteDocumentoFormComponent, canActivate: [AuthGuard] },
   { path: 'clientedocumentos/clientedocumento/:id', component: ClienteDocumentoFormComponent, canActivate: [AuthGuard] },
+  { path: 'clientedocumentos/clientedocumentolote', component: ClienteDocumentoLoteComponent, canActivate: [AuthGuard] },
 ];
 
 @NgModule({
