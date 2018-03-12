@@ -281,3 +281,9 @@ tr:nth-child(even) {
   text-overflow: ellipsis;
   /* border: 1px solid #000000; */
 }
+
+@media print {
+  mat-card {
+    margin: 1cm;
+  }
+}

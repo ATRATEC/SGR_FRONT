@@ -3,8 +3,7 @@ export interface ResiduoFilter {
   descricao: string;
   classe_residuo: string;
   tipo_residuo: string;
-  acondicionamento: string;
-  tratamento: string;
+  codigo_ibama: string;
 }
 export class Residuo {
   constructor(
@@ -12,16 +11,12 @@ export class Residuo {
     public descricao: string = '',
     public id_classe: number = null,
     public id_tipo_residuo: number = null,
-    public id_acondicionamento: number = null,
-    public id_tratamento: number = null,
     public codigo_nbr: string = '',
     public codigo_onu: string = '',
-    public tipo_receita: number = 0,
+    public codigo_ibama: string = '',
     public created_at: string = '',
     public updated_at: string = '',
     public classe_residuo: string = '',
-    public tipo_residuo: string = '',
-    public acondicionamento: string = '',
-    public tratamento: string = ''
+    public tipo_residuo: string = ''
   ) {}
 }

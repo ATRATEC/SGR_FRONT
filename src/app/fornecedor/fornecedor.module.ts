@@ -1,3 +1,5 @@
+import { DatepipeModule } from './../datepipe/datepipe.module';
+import { FornecedorDocumentoService } from './fornecedordocumento.service';
 import { UpperCaseModule } from './../uppercase/uppercase.module';
 import { FornecedorFindComponent } from './fornecedor-find.component';
 import { MatNativeDateModule } from '@angular/material';
@@ -26,6 +28,7 @@ import { FornecedorRoutingModule } from './fornecedor-routing.module';
     MatNativeDateModule,
     ReactiveFormsModule,
     UpperCaseModule,
+    DatepipeModule,
     FornecedorRoutingModule
   ],
   declarations: [
@@ -33,7 +36,10 @@ import { FornecedorRoutingModule } from './fornecedor-routing.module';
     FornecedorFormComponent,
     FornecedorFindComponent
   ],
-  providers: [FornecedorService],
+  providers: [
+    FornecedorService,
+    FornecedorDocumentoService
+  ],
   entryComponents: [FornecedorFindComponent]
 })
 export class FornecedorModule { }

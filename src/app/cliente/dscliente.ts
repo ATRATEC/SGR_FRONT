@@ -16,7 +16,7 @@ import 'rxjs/add/operator/debounceTime';
 import { Cliente, ClienteFilter } from './cliente';
 
 export class DsCliente extends DataSource<Cliente> {
-  _filterChange = new BehaviorSubject( {id: '', cnpj_cpf: '', razao_social: '', contato: '', telefone: '', email: ''} );
+  _filterChange = new BehaviorSubject( {id: '', cnpj_cpf: '', razao_social: '', contato: '', telefone: '', email: '', inativo: false} );
 
   public onChange: EventEmitter<boolean> = new EventEmitter<boolean>();
 
@@ -27,6 +27,8 @@ export class DsCliente extends DataSource<Cliente> {
   set filter(filter: ClienteFilter) {
     this._filterChange.next(filter);
   }
+
+  public filtraAtivos = false;
 
   resultsLength = 0;
   // isLoadingResults: boolean;
@@ -59,7 +61,7 @@ export class DsCliente extends DataSource<Cliente> {
       // this.isLoadingResults = true;
       this.onChange.emit(true);
       return this._clienteService.getClientes(this._tokenManager.retrieve(),
-        this._sort.active, this._sort.direction, this._paginator.pageIndex, this._paginator.pageSize, this.filter);
+        this._sort.active, this._sort.direction, this._paginator.pageIndex, this._paginator.pageSize, this.filter, this.filtraAtivos);
     })
     .retry(3)
     .map(data => {

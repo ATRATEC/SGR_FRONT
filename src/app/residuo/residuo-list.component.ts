@@ -32,7 +32,7 @@ import { OnlyNumberDirective } from './../only-number.directive';
   styleUrls: ['./residuo-list.component.css']
 })
 export class ResiduoListComponent implements OnInit, AfterViewInit {
-  displayedColumns = ['id', 'descricao', 'classe_residuo', 'tipo_residuo', 'acondicionamento', 'tratamento'];
+  displayedColumns = ['id', 'descricao', 'codigo_ibama', 'classe_residuo', 'tipo_residuo'];
   // displayedColumns = ['id', 'codigo', 'descricao', ];
   dataSource: DsResiduo | null;
   selectedRowIndex = -1;
@@ -46,8 +46,7 @@ export class ResiduoListComponent implements OnInit, AfterViewInit {
   descricaoFilter = new FormControl();
   classeresiduoFilter = new FormControl();
   tiporesiduoFilter = new FormControl();
-  acondicionamentoFilter = new FormControl();
-  tratamentoFilter = new FormControl();
+  codigoIbamaFilter = new FormControl();
 
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild(MatPaginator) paginator: MatPaginator;
@@ -172,19 +171,17 @@ export class ResiduoListComponent implements OnInit, AfterViewInit {
     const descricaoFilter$ = this.descricaoFilter.valueChanges.debounceTime(500).distinctUntilChanged().startWith('');
     const classeresiduoFilter$ = this.classeresiduoFilter.valueChanges.debounceTime(500).distinctUntilChanged().startWith('');
     const tiporesiduoFilter$ = this.tiporesiduoFilter.valueChanges.debounceTime(500).distinctUntilChanged().startWith('');
-    const acondicionamentoFilter$ = this.acondicionamentoFilter.valueChanges.debounceTime(500).distinctUntilChanged().startWith('');
-    const tratamentoFilter$ = this.tratamentoFilter.valueChanges.debounceTime(500).distinctUntilChanged().startWith('');
+    const codigoIbamaFilter$ = this.codigoIbamaFilter.valueChanges.debounceTime(500).distinctUntilChanged().startWith('');
 
     Observable.combineLatest(
       idFilter$,
       descricaoFilter$,
       classeresiduoFilter$,
       tiporesiduoFilter$,
-      acondicionamentoFilter$,
-      tratamentoFilter$).debounceTime(500).distinctUntilChanged().
+      codigoIbamaFilter$).debounceTime(500).distinctUntilChanged().
     map(
-      ([id, descricao, classe_residuo, tipo_residuo, acondicionamento, tratamento ]) =>
-      ({id, descricao, classe_residuo, tipo_residuo, acondicionamento, tratamento})).subscribe(filter => {
+      ([id, descricao, codigo_ibama, classe_residuo, tipo_residuo ]) =>
+      ({id, descricao, codigo_ibama, classe_residuo, tipo_residuo})).subscribe(filter => {
         if (!this.dataSource) { return; }
         this.dataSource.filter = filter;
       });

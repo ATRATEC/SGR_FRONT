@@ -57,7 +57,8 @@ export class ClienteService {
       importado_api: _cliente.importado_api,
       cnae: _cliente.cnae,
       obsEndereco: _cliente.obsEndereco,
-      obsTelefonesEmail: _cliente.obsTelefonesEmail
+      obsTelefonesEmail: _cliente.obsTelefonesEmail,
+      inativo: _cliente.inativo
     };
     // _params.set('codigo', '1');
 
@@ -112,7 +113,8 @@ export class ClienteService {
       importado_api: _cliente.importado_api,
       cnae: _cliente.cnae,
       obsEndereco: _cliente.obsEndereco,
-      obsTelefonesEmail: _cliente.obsTelefonesEmail
+      obsTelefonesEmail: _cliente.obsTelefonesEmail,
+      inativo: _cliente.inativo
     };
     // _params.set('id', _id.toString());
 
@@ -156,7 +158,8 @@ export class ClienteService {
   /** Metodo que retorna um observable com dados da listagem de clientes
    *  parametro: acessToken: string
   */
-  getClientes(accessToken: string, sort: string, order: string, page: number, pagesize: number, filter: ClienteFilter) {
+  getClientes(accessToken: string, sort: string, order: string, page: number, pagesize: number, filter: ClienteFilter,
+    Ativos: boolean = false) {
     const headers = new Headers({
       Accept: 'application/json',
       Authorization: 'Bearer ' + accessToken.toString().replace(/"/g, '')
@@ -204,6 +207,16 @@ export class ClienteService {
 
     if ((!isNullOrUndefined(filter.email)) && (filter.email.length > 0)) {
       search.set('email', filter.email);
+    }
+
+    if (Ativos) {
+      if ((!isNullOrUndefined(filter.inativo))) {
+        if (filter.inativo) {
+          search.set('inativo', '1');
+        } else {
+          search.set('inativo', '0');
+        }
+      }
     }
 
     return this._http

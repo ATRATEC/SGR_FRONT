@@ -12,7 +12,6 @@
         </button>
       </div>
       <div fxFlex="40px" fxFlexFill fxFlexAlign="end">
-
         <a routerLink="/contratofornecedores" mat-raised-button color="primary" style="width: 120px">
           <mat-icon>close</mat-icon>
           <span>Fechar</span>
@@ -70,11 +69,11 @@
                   </mat-form-field>
                 </div>
                 <div fxFlex="150px" fxFlexFill>
-                  <mat-checkbox class="example-margin" [(ngModel)]="contratofornecedor.exclusico">Exclusivo</mat-checkbox>
+                  <mat-checkbox class="example-margin" [(ngModel)]="contratofornecedor.exclusivo">Exclusivo</mat-checkbox>
                 </div>
               </div>
             </div>
-            <div fxFlex="60px" fxFlexAlign="start" *ngIf="contratofornecedor.exclusico">
+            <div fxFlex="60px" fxFlexAlign="start" *ngIf="contratofornecedor.exclusivo">
               <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="5px" style="width: 100%">
                 <div fxFlex="90px" fxFlexAlign="start" fxFlexFill>
                   <mat-form-field class="frm_contratofornecedor_codigo">

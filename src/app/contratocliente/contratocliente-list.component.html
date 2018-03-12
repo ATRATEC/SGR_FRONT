@@ -80,15 +80,15 @@
           </ng-container>
 
           <!-- Name Column -->
-          <ng-container matColumnDef="descricao">
-            <mat-header-cell *matHeaderCellDef mat-sort-header> Descrição </mat-header-cell>
-            <mat-cell *matCellDef="let row"> {{row.descricao}} </mat-cell>
-          </ng-container>
-
-          <!-- Name Column -->
           <ng-container matColumnDef="cliente">
             <mat-header-cell *matHeaderCellDef mat-sort-header> Cliente </mat-header-cell>
             <mat-cell *matCellDef="let row"> {{row.cliente != null ? row.cliente : ''}} </mat-cell>
+          </ng-container>
+
+          <!-- Name Column -->
+          <ng-container matColumnDef="descricao">
+            <mat-header-cell *matHeaderCellDef mat-sort-header> Descrição </mat-header-cell>
+            <mat-cell *matCellDef="let row"> {{row.descricao}} </mat-cell>
           </ng-container>
 
           <ng-container matColumnDef="vigencia_inicio">

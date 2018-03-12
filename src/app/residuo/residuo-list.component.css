@@ -62,7 +62,7 @@
 .mat-table {
   overflow: auto;
   min-height: 300px;
-  max-height: 440px;
+  max-height: 380px;
 }
 
 .mat-header-cell .mat-sort-header-sorted {
@@ -137,31 +137,33 @@ mat-row:nth-child(odd) {
 }
 
 .mat-column-id {
-  max-width: 80px;
+  min-width: 100px;
+  max-width: 100px;
 }
 
 .mat-column-codigo {
+  min-width: 100px;
   max-width: 100px;
 }
 
 .mat-column-descricao {
-  max-width: 250px;
+  min-width: 350px;
+  max-width: 350px;
 }
 
 .mat-column-classe_residuo {
+  min-width: 250px;
   max-width: 250px;
 }
 
 .mat-column-tipo_residuo {
+  min-width: 250px;
   max-width: 250px;
 }
 
-.mat-column-acondicionamento {
-  max-width: 250px;
-}
-
-.mat-column-tratamento {
-  max-width: 250px;
+.mat-column-codigo_ibama {
+  min-width: 120px;
+  max-width: 120px;
 }
 
 .mat-row:hover, .example-selected-row {

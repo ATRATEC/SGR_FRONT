@@ -1,15 +1,11 @@
 .frm_fornecedor_codigo {
-  min-width: 120px;
-  max-width: 120px;
-}
-
-.frm_fornecedor_tipo_atividade {
-  width: 150;
+  min-width: 90px;
+  max-width: 90px;
 }
 
 .frm_fornecedor_razao_social {
   min-width: 450px;
-  max-width: 500px;
+  max-width: 450px;
 }
 
 .frm_fornecedor_cnpj_cpf {
@@ -17,8 +13,8 @@
 }
 
 .frm_fornecedor_nome_fantasia {
-  min-width: 250px;
-  max-width: 500px;
+  min-width: 400px;
+  max-width: 400px;
 }
 
 .frm_fornecedor_telefone1_ddd {
@@ -51,7 +47,7 @@
 }
 
 .frm_fornecedor_endereco {
-  width: 480px;
+  width: 600px;
 }
 
 .frm_fornecedor_endereco_numero {
@@ -63,7 +59,8 @@
 }
 
 .frm_fornecedor_complemento {
-  width: 280px;
+  min-width: 400px;
+  max-width: 400px;
 }
 
 .frm_fornecedor_estado {
@@ -118,15 +115,149 @@
   width: 550px;
 }
 
+.frm_fornecedor_tipodocumento {
+  width: 230px;
+}
+
+.frm_fornecedor_nrolicenca {
+  width: 150px;
+}
+
+.frm_fornecedor_dtemissao {
+  width: 150px;
+}
+
+.frm_fornecedor_dtvencimento {
+  width: 150px;
+}
+
+.frm_fornecedor_grid_tipodocumento {
+  min-width: 230px;
+  max-width: 230px;
+
+}
+
+.frm_fornecedor_documento {
+  width: 330px;
+}
+
+.frm_fornecedor_grid_nrolicenca {
+  min-width: 150px;
+  max-width: 150px;
+
+}
+
+.frm_fornecedor_grid_anexo {
+  min-width: 250px;
+  max-width: 250px;
+
+}
+
+.frm_fornecedor_grid_extensao {
+  width: 150px;
+}
+
+.frm_fornecedor_grid_dtemissao {
+  width: 150px;
+}
+
+.frm_fornecedor_grid_dtvencimento {
+  width: 150px;
+}
+
 .frm_fornecedor-loading-shade {
   /* position: absolute;
   top: 0;
   left: 0;
   bottom: 56px;
   right: 0; */
+  position: relative;
   background: rgba(255, 255, 255, 0.15);
   z-index: 1;
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+table {
+  font-family: Roboto, Arial, sans-serif;
+  font-size: 15px;
+  border: none;
+  border-collapse: collapse;
+  width: 100%;
+  max-height: 100px;
+  overflow: none;
+}
+
+td,
+th {
+  border: 1px solid #dddddd;
+  text-align: left;
+  padding: 8px;
+}
+
+th {
+  color: rgb(139, 138, 138);
+  background-color: #dddddd;
+  border-bottom-width: 1px;
+  border-bottom-color: rgb(182, 179, 179);
+  align-items: center;
+}
+
+td {
+  min-height: 18px;
+  max-height: 18px;
+}
+
+.celula {
+  text-align: center;
+}
+
+.cell {
+  color: rgb(139, 138, 138);
+  min-height: 18px;
+  max-height: 18px;
+  display: flex;
+  align-items: center;
+  padding-left: 0px;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+tr:nth-child(odd) {
+  background-color: #ffffff;
+}
+
+tr:nth-child(even) {
+  background-color: #dddddd;
+}
+
+.frm_fornecedor_botao {
+  width: 15px;
+}
+
+.tooltip {
+  position: relative;
+  display: inline-block;
+  /* border-bottom: 1px dotted black; */
+}
+
+.tooltip .tooltiptext {
+  visibility: hidden;
+  width: 80px;
+  background-color: rgb(76, 79, 247);
+  color: #fff;
+  text-align: center;
+  border-radius: 6px;
+  padding: 5px 0;
+
+  /* Position the tooltip */
+  position: absolute;
+  z-index: 1;
+  top: -5px;
+  right: 105%;
+}
+
+.tooltip:hover .tooltiptext {
+  visibility: visible;
 }

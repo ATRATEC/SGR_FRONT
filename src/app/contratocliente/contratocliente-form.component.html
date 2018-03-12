@@ -178,7 +178,7 @@
                                   tabindex="11" required>
                                 <span class="highlight"></span>
                                 <span class="bar"></span>
-                                <label class="atralabel">Preço Venda</label>
+                                <label class="atralabel">Preço Compra</label>
                               </div>
                             </div>
                             <div fxFlex="120px" fxFlexAlign="start" fxFlexFill>
@@ -281,7 +281,7 @@
                       <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="20px">
                         <div fxFlex="350px" fxFlexFill>
                           <label style="font-size: 12px; font-weight: bold; color: gray">Anexar pdf / imagem documento</label>
-                          <input type="file" placeholder="Upload file" #fileInput accept=".pdf,.doc,.docx" style="width: 400px">
+                          <input type="file" placeholder="Upload file" #fileInput accept=".pdf,.doc,.docx" style="width: 400px" tabindex="13">
                         </div>
                       </div>
                     </div>
@@ -298,6 +298,104 @@
                           <a mat-button href={{linkDownload}}>
                             Download
                           </a>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </mat-tab>
+                <mat-tab label="Locação de Equipamentos">
+                  <div fxLayou="column" fxLayoutAlign="start center" fxLayoutGap="0px">
+                    <div fxFlex="300px" fxFlexAlign="start" fxFlexFill style="overflow: hidden">
+                      <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="0px">
+                        <div fxFlex="65px" fxFlexAlign="start">
+                          <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="5px">
+                            <div fxFlex="200px" fxFlexAlign="start" fxFlexFill>
+                              <mat-form-field class="frm_contratocliente_equipamento">
+                                <mat-select placeholder="Equipamento" [(ngModel)]="contratoclienteequipamento.id_equipamento" required [formControl]="valEquipamento" tabindex="14"
+                                  id="id_equipamento" (change)="equipamentoChange($event)">
+                                  <!-- <mat-option></mat-option> -->
+                                  <mat-option *ngFor="let equipamento of equipamentos" [value]="equipamento.id">
+                                    {{ equipamento.descricao }}
+                                  </mat-option>
+                                </mat-select>
+                                <mat-error *ngIf="valEquipamento.invalid">{{getErrorMessage(valEquipamento)}}</mat-error>
+                              </mat-form-field>
+                            </div>
+                            <div fxFlex="100px" fxFlexAlign="start" fxFlexFill>
+                              <mat-form-field class="frm_contratocliente_unidade">
+                                <mat-select placeholder="Unidades" [(ngModel)]="contratoclienteequipamento.unidade" tabindex="15" required (change)="unidadeEquipamentoChange($event)"
+                                  [formControl]="valUnidadeEquip" id="unidade">
+                                  <mat-option *ngFor="let unidade of unidades" [value]="unidade.codigo">
+                                    {{ unidade.codigo }}
+                                  </mat-option>
+                                </mat-select>
+                                <mat-error *ngIf="valUnidadeEquip.invalid">{{getErrorMessage(valUnidadeEquip)}}</mat-error>
+                              </mat-form-field>
+                            </div>
+                            <div fxFlex="120px" fxFlexAlign="start" fxFlexFill>
+                              <div class="group_Preco">
+                                <input currencyMask type="text" class="atrainput_Preco" [(ngModel)]="contratoclienteequipamento.preco" style="height: 35px; width: 105px;"
+                                  tabindex="16" required [formControl]="valPrecoEquipamento">
+                                <span class="highlight_Preco"></span>
+                                <span class="bar_Preco"></span>
+                                <label class="atralabel_Preco">Preço</label>
+                              </div>
+                            </div>
+                            <div fxFlex="120px" fxFlexAlign="center" fxFlexFill>
+                              <button mat-raised-button color="primary" (click)="addGridEquipamentos()" tabindex="17" style="margin-bottom: 10px">
+                                <mat-icon>playlist_add</mat-icon>
+                                <span>Adicionar</span>
+                              </button>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div fxLayout="column" fxLayoutAlign="start center" fxLayoutGap="0px">
+                        <div fxFlex="40px" fxFlexAlign="start" fxFlexFill>
+                          <table>
+                            <tr>
+                              <th class="frm_contratocliente_residuo_servico">
+                                <label>Equipamento</label>
+                              </th>
+                              <th class="frm_contratocliente_residuo_unidade">
+                                <label>Unidade</label>
+                              </th>
+                              <th class="frm_contratocliente_residuo_preco">
+                                <label>Preço</label>
+                              </th>
+                              <th class="frm_contratocliente_residuo_botao">
+                              </th>
+                              <th class="frm_contratocliente_residuo_botao">
+                              </th>
+                            </tr>
+                          </table>
+                        </div>
+                        <div fxFlex="130px" fxFlexAlign="start" fxFlexFill style="overflow-x: hidden; overflow-y: auto;">
+                          <table>
+                            <tr *ngFor="let item of contratoclienteequipamentos">
+                              <td class="frm_contratocliente_residuo_servico">
+                                {{item.equipamento}}
+                              </td>
+                              <td class="frm_contratocliente_residuo_unidade" style="max-height: 18px;">
+                                {{item.unidade}}
+                              </td>
+                              <td class="frm_contratocliente_residuo_preco" style="max-height: 18px;">
+                                {{item.preco | currency:'BRL':true}}
+                              </td>
+                              <td class="frm_contratocliente_residuo_botao">
+                                <a (click)="deleteGridEquipamentos(item)" class="tooltip">
+                                  <i class="fa fa-trash" aria-hidden="true"></i>
+                                  <span class="tooltiptext">Excluir</span>
+                                </a>
+                              </td>
+                              <td class="frm_contratocliente_residuo_botao">
+                                <a (click)="editGridEquipamentos(item)" class="tooltip">
+                                  <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+                                  <span class="tooltiptext">Editar</span>
+                                </a>
+                              </td>
+                            </tr>
+                          </table>
                         </div>
                       </div>
                     </div>

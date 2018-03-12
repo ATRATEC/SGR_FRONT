@@ -28,7 +28,7 @@ export class ContratoFornecedorService {
       descricao: _contratofornecedor.descricao,
       vigencia_inicio: _contratofornecedor.vigencia_inicio,
       vigencia_final: _contratofornecedor.vigencia_final,
-      exclusivo: _contratofornecedor.exclusico,
+      exclusivo: _contratofornecedor.exclusivo,
       observacao: _contratofornecedor.observacao,
       caminho: _contratofornecedor.caminho
     };
@@ -57,7 +57,7 @@ export class ContratoFornecedorService {
       descricao: _contratofornecedor.descricao,
       vigencia_inicio: _contratofornecedor.vigencia_inicio,
       vigencia_final: _contratofornecedor.vigencia_final,
-      exclusivo: _contratofornecedor.exclusico,
+      exclusivo: _contratofornecedor.exclusivo,
       observacao: _contratofornecedor.observacao,
       caminho: _contratofornecedor.caminho
     };
@@ -126,7 +126,7 @@ export class ContratoFornecedorService {
     if ((!isNullOrUndefined(sort))) {
       search.set('orderkey', sort);
     } else {
-      sort = 'id';
+      sort = 'fornecedor.razao_social';
       search.set('orderkey', sort);
     }
 

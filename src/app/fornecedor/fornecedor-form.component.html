@@ -40,48 +40,52 @@
             <label>Aguarde...</label>
           </div>
         </div>
-        <mat-card *ngIf="!emProcessamento" style="width: 660px;">
+        <mat-card *ngIf="!emProcessamento" style="width: 850px;">
           <div fxLayout="column" fxLayoutAlign="start center" fxLayoutGap="5px">
+            <!-- <div fxFlex="60px" fxFlexAlign="start">
+              <div fxLayout="row" fxLayoutAlign="space-between center" fxLayoutGap="20px" style="width: 100%">
+
+              </div>
+            </div> -->
             <div fxFlex="60px" fxFlexAlign="start">
               <div fxLayout="row" fxLayoutAlign="space-between center" fxLayoutGap="20px" style="width: 100%">
-                <div fxFlex="120px" fxFlexAlign="start" fxFlexFill>
+                <div fxFlex="90px" fxFlexAlign="start" fxFlexFill>
                   <mat-form-field class="frm_fornecedor_codigo">
-                    <input matInput disabled #codigo maxlength="9" type="number" tabindex="50" placeholder="Código" [(ngModel)]="fornecedor.id">
+                    <input matInput disabled #codigo maxlength="9" type="number" tabindex="50" placeholder="Código" required [(ngModel)]="fornecedor.id">
                   </mat-form-field>
                 </div>
-              </div>
-            </div>
-            <div fxFlex="60px" fxFlexAlign="start">
-              <div fxLayout="row" fxLayoutAlign="space-between center" fxLayoutGap="20px" style="width: 100%">
                 <div fxFlex="450px" fxFlexAlign="start" fxFlexFill>
                   <mat-form-field class="frm_fornecedor_razao_social">
-                    <input matInput uppercase autofocus #razaosocial #focuscomp maxlength="60" [formControl]="valRazaoSocial" placeholder="Razão Social (Nome Completo)" required
-                      tabindex="1" [(ngModel)]="fornecedor.razao_social">
+                    <input matInput uppercase autofocus #razaosocial #focuscomp maxlength="60" [formControl]="valRazaoSocial" placeholder="Razão Social (Nome Completo)"
+                      required tabindex="1" [(ngModel)]="fornecedor.razao_social">
                     <mat-hint align="end">{{razaosocial.value?.length || 0}}/60</mat-hint>
                     <mat-error *ngIf="valRazaoSocial.invalid">{{getRazaoSocialErrorMessage()}}</mat-error>
                   </mat-form-field>
                 </div>
-                <div fxFlex="100px" fxFlexAlign="start" fxFlexFill>
+                <div fxFlex="170px" fxFlexAlign="start" fxFlexFill>
                   <mat-form-field class="frm_fornecedor_cnpj_cpf">
-                    <input matInput #cnpjcpf maxlength="18" [formControl]="valCnpjCpf" placeholder="CNPJ / CPF" required tabindex="4" [(ngModel)]="fornecedor.cnpj_cpf"
+                    <input matInput #cnpjcpf maxlength="18" [formControl]="valCnpjCpf" placeholder="CNPJ / CPF" required tabindex="3" [(ngModel)]="fornecedor.cnpj_cpf"
                       (blur)="formataCnpjCpf($event)">
                     <mat-hint align="end">{{cnpjcpf.value?.length || 0}}/18</mat-hint>
                     <mat-error *ngIf="valCnpjCpf.invalid">{{getCnpjCpfErrorMessage()}}</mat-error>
                   </mat-form-field>
                 </div>
+                <div fxFlex="100px" fxFlexFill>
+                  <mat-checkbox [(ngModel)]="fornecedor.inativo">Inativo</mat-checkbox>
+                </div>
               </div>
             </div>
             <div fxFlex="60px" fxFlexAlign="start">
               <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="20px" style="width: 100%">
-                <div fxFlex="250px" fxFlexAlign="start" fxFlexFill>
+                <div fxFlex="400px" fxFlexAlign="start" fxFlexFill>
                   <mat-form-field class="frm_fornecedor_nome_fantasia">
-                    <input matInput uppercase #nomefantasia maxlength="50" placeholder="Nome Fantasia (Nome Abreviado)" tabindex="5" [(ngModel)]="fornecedor.nome_fantasia">
+                    <input matInput uppercase #nomefantasia maxlength="50" placeholder="Nome Fantasia (Nome Abreviado)" tabindex="4" [(ngModel)]="fornecedor.nome_fantasia">
                     <mat-hint align="end">{{nomefantasia.value?.length || 0}}/50</mat-hint>
                   </mat-form-field>
                 </div>
                 <div fxFlex="30px" fxFlexAlign="start" fxFlexFill>
                   <mat-form-field class="frm_fornecedor_telefone1_ddd">
-                    <input matInput #telefone1DDD maxlength="2" [formControl]="valDDD" placeholder="DDD" tabindex="6" [(ngModel)]="fornecedor.telefone1_ddd"
+                    <input matInput #telefone1DDD maxlength="2" [formControl]="valDDD" placeholder="DDD" tabindex="5" [(ngModel)]="fornecedor.telefone1_ddd"
                       (keypress)="onlyNumber($event)">
                     <mat-hint align="end">{{telefone1DDD.value?.length || 0}}/2</mat-hint>
                     <mat-error *ngIf="valDDD.invalid">{{getDDDErrorMessage()}}</mat-error>
@@ -89,7 +93,7 @@
                 </div>
                 <div fxFlex="90px" fxFlexAlign="start" fxFlexFill>
                   <mat-form-field class="frm_fornecedor_telefone1_numero">
-                    <input matInput #telefone1numero maxlength="10" [formControl]="valTelefone" placeholder="Telefone" tabindex="7" [(ngModel)]="fornecedor.telefone1_numero"
+                    <input matInput #telefone1numero maxlength="10" [formControl]="valTelefone" placeholder="Telefone" tabindex="6" [(ngModel)]="fornecedor.telefone1_numero"
                       (keypress)="onlyNumber($event)" (blur)="formataTelefone($event)">
                     <mat-hint align="end">{{telefone1numero.value?.length || 0}}/10</mat-hint>
                     <mat-error *ngIf="valTelefone.invalid">{{getTelefoneErrorMessage()}}</mat-error>
@@ -97,20 +101,19 @@
                 </div>
                 <div fxFlex="220px" fxFlexAlign="start" fxFlexFill>
                   <mat-form-field class="frm_fornecedor_contato">
-                    <input matInput uppercase #contato maxlength="50" placeholder="Contato" tabindex="8" [(ngModel)]="fornecedor.contato">
+                    <input matInput uppercase #contato maxlength="50" placeholder="Contato" tabindex="7" [(ngModel)]="fornecedor.contato">
                     <mat-hint align="end">{{contato.value?.length || 0}}/50</mat-hint>
                   </mat-form-field>
                 </div>
               </div>
             </div>
-            <div fxFlex="250px" fxFlexAlign="start" fxFlexFill>
-              <mat-tab-group tabindex="9">
-                <mat-tab label="Tab 1" >
-                  <ng-template mat-tab-label>Endereço</ng-template>
+            <div fxFlex="320px" fxFlexAlign="start" fxFlexFill>
+              <mat-tab-group>
+                <mat-tab label="Endereço" tabindex="8">
                   <div fxLayou="column" fxLayoutAlign="start center" fxLayoutGap="10px">
                     <div fxFlex="70px" fxFlexAlign="start" fxFlexFill>
                       <div fxLayout="row" fxLayoutAlign="space-between center" fxLayoutGap="20px">
-                        <div fxFlex="480px" fxFlexFill>
+                        <div fxFlex="600px" fxFlexFill>
                           <mat-form-field class="frm_fornecedor_endereco">
                             <input matInput uppercase #endereco maxlength="60" placeholder="Endereço" tabindex="10" [(ngModel)]="fornecedor.endereco">
                             <mat-hint align="end">{{endereco.value?.length || 0}}/60</mat-hint>
@@ -134,7 +137,7 @@
                             <mat-hint align="end">{{bairro.value?.length || 0}}/30</mat-hint>
                           </mat-form-field>
                         </div>
-                        <div fxFlex="280px" fxFlexFill>
+                        <div fxFlex="400px" fxFlexFill>
                           <mat-form-field class="frm_fornecedor_complemento">
                             <input matInput uppercase #complemento maxlength="60" placeholder="Complemento" tabindex="13" [(ngModel)]="fornecedor.complemento">
                             <mat-hint align="end">{{complemento.value?.length || 0}}/60</mat-hint>
@@ -178,8 +181,7 @@
                     </div>
                   </div>
                 </mat-tab>
-                <mat-tab label="Tab 2" tabindex="18">
-                  <ng-template mat-tab-label>Telefones e E-mail</ng-template>
+                <mat-tab label="Telefones e E-mail" tabindex="18">
                   <div fxLayou="column" fxLayoutAlign="start center" fxLayoutGap="10px">
                     <div fxFlex="70px" fxFlexAlign="start" fxFlexFill>
                       <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="30px">
@@ -201,7 +203,7 @@
                         </div>
                         <div fxFlex="70px" fxFlexFill>
                           <mat-form-field class="frm_fornecedor_telefone2_ddd">
-                            <input matInput #telefoneDDDFax maxlength="2" [formControl]="valDDDFax" placeholder="DDD Fax" tabindex="21" [(ngModel)]="fornecedor.fax_ddd"
+                            <input matInput #telefoneDDDFax maxlength="2" [formControl]="valDDDFax" placeholder="DDD Cel" tabindex="21" [(ngModel)]="fornecedor.fax_ddd"
                               (keypress)="onlyNumber($event)">
                             <mat-hint align="end">{{telefoneDDDFax.value?.length || 0}}/2</mat-hint>
                             <mat-error *ngIf="valDDDFax.invalid">{{getDDDFaxErrorMessage()}}</mat-error>
@@ -209,7 +211,7 @@
                         </div>
                         <div fxFlex="90px" fxFlexFill>
                           <mat-form-field class="frm_fornecedor_telefone2_numero">
-                            <input matInput #telefoneFaxnumero maxlength="10" [formControl]="valTelefoneFax" placeholder="Fax" tabindex="22" [(ngModel)]="fornecedor.fax_numero"
+                            <input matInput #telefoneFaxnumero maxlength="10" [formControl]="valTelefoneFax" placeholder="Celular" tabindex="22" [(ngModel)]="fornecedor.fax_numero"
                               (keypress)="onlyNumber($event)" (blur)="formataTelefoneFax($event)">
                             <mat-hint align="end">{{telefoneFaxnumero.value?.length || 0}}/10</mat-hint>
                             <mat-error *ngIf="valTelefoneFax.invalid">{{getTelefoneFaxErrorMessage()}}</mat-error>
@@ -243,8 +245,7 @@
                     </div>
                   </div>
                 </mat-tab>
-                <mat-tab label="Tab 2" tabindex="25">
-                  <ng-template mat-tab-label>Inscrições e outros</ng-template>
+                <mat-tab label="Inscrições" tabindex="25">
                   <div fxLayou="column" fxLayoutAlign="start center" fxLayoutGap="10px">
                     <div fxFlex="70px" fxFlexAlign="start" fxFlexFill>
                       <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="20px">
@@ -260,26 +261,201 @@
                             <mat-hint align="end">{{inscrMunicipal.value?.length || 0}}/20</mat-hint>
                           </mat-form-field>
                         </div>
-                        <div fxFlex="180px" fxFlexFill>
-                          <mat-form-field class="frm_fornecedor_inscrsuframa">
-                            <input matInput #inscrSuframa maxlength="20" placeholder="Inscrição Suframa" tabindex="28" [(ngModel)]="fornecedor.inscricao_suframa">
-                            <mat-hint align="end">{{inscrSuframa.value?.length || 0}}/20</mat-hint>
+                      </div>
+                    </div>
+                  </div>
+                  <div fxLayou="column" fxLayoutAlign="start center" fxLayoutGap="10px">
+                    <div fxFlex="70px" fxFlexAlign="start" fxFlexFill>
+                      <div fxLayout="row" fxLayoutAlign="space-between center" fxLayoutGap="20px">
+                        <div fxFlex="550px" fxFlexFill>
+                          <mat-form-field class="frm_fornecedor_observacao">
+                            <input matInput #observacao maxlength="500" placeholder="Observações" tabindex="28" [(ngModel)]="fornecedor.observacao">
+                            <mat-hint align="end">{{observacao.value?.length || 0}}/500</mat-hint>
                           </mat-form-field>
                         </div>
                       </div>
                     </div>
                   </div>
                 </mat-tab>
-                <mat-tab label="Tab 3" tabindex="25">
-                  <ng-template mat-tab-label>Observação</ng-template>
-                  <div fxLayou="column" fxLayoutAlign="start center" fxLayoutGap="10px">
-                    <div fxFlex="70px" fxFlexAlign="start" fxFlexFill>
-                      <div fxLayout="row" fxLayoutAlign="space-between center" fxLayoutGap="20px">
-                        <div fxFlex="550px" fxFlexFill>
-                          <mat-form-field class="frm_fornecedor_observacao">
-                            <input matInput #observacao maxlength="500" placeholder="Observações" tabindex="33" [(ngModel)]="fornecedor.observacao">
-                            <mat-hint align="end">{{observacao.value?.length || 0}}/500</mat-hint>
-                          </mat-form-field>
+                <mat-tab label="Documentos" tabindex="29">
+                  <div fxLayou="column" fxLayoutAlign="start center" fxLayoutGap="0px">
+                    <div fxFlex="380px" fxFlexAlign="start" fxFlexFill>
+                      <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="0px">
+                        <div fxFlex="65px" fxFlexAlign="start">
+                          <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="5px">
+                            <div fxFlex="230px" fxFlexFill>
+                              <mat-form-field class="frm_fornecedor_tipodocumento">
+                                <mat-select [formControl]="valTipoDocumento" placeholder="Tipo de Documento" [(value)]="fornecedordocumento.id_tipo_documento"
+                                  required tabindex="30" id="id_tipodocumento">
+                                  <mat-option *ngFor="let tipodocumento of tipodocumentos" [value]="tipodocumento.id">
+                                    {{ tipodocumento.descricao }}
+                                  </mat-option>
+                                </mat-select>
+                              </mat-form-field>
+                            </div>
+                            <div fxFlex="150px" fxFlexFill>
+                              <mat-form-field class="frm_fornecedor_nrolicenca">
+                                <input matInput [formControl]="valNroLicenca" uppercase #nrolicencatransp maxlength="20" placeholder="Numero" tabindex="31"
+                                  required [(ngModel)]="fornecedordocumento.numero">
+                                <mat-hint align="end">{{nrolicencatransp.value?.length || 0}}/20</mat-hint>
+                              </mat-form-field>
+                            </div>
+                            <div fxFlex="150px" fxFlexFill>
+                              <mat-form-field class="frm_fornecedor_dtemissao">
+                                <input matInput [formControl]="valDtEmissao" type="date" #dtemissao maxlength="10" placeholder="Data Emissão" tabindex="32"
+                                  required [ngModel]="fornecedordocumento.emissao" (ngModelChange)="fornecedordocumento.emissao = $event"
+                                  [value]="fornecedordocumento.emissao">
+                                <mat-hint align="end">{{dtemissao.value?.length || 0}}/10</mat-hint>
+                              </mat-form-field>
+                            </div>
+                            <div fxFlex="150px" fxFlexFill>
+                              <mat-form-field class="frm_fornecedor_dtvencimento">
+                                <input matInput [formControl]="valDtVencimento" type="date" #dtvencimento maxlength="10" placeholder="Data Vencimento" tabindex="33"
+                                  [ngModel]="fornecedordocumento.vencimento" (ngModelChange)="fornecedordocumento.vencimento = $event"
+                                  [value]="fornecedordocumento.vencimento">
+                                <mat-hint align="end">{{dtvencimento.value?.length || 0}}/10</mat-hint>
+                              </mat-form-field>
+                            </div>
+                            <div fxFlex="120px" fxFlexAlign="center" fxFlexFill>
+                              <button mat-raised-button color="primary" (click)="addlinha()" tabindex="34" style="margin-bottom: 10px">
+                                <mat-icon>playlist_add</mat-icon>
+                                <span>Adicionar</span>
+                              </button>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div fxLayout="column" fxLayoutAlign="start center" fxLayoutGap="0px">
+                        <div fxFlex="40px" fxFlexAlign="start" fxFlexFill>
+                          <table>
+                            <tr>
+                              <th class="frm_fornecedor_grid_tipodocumento">
+                                <label>Tipo de Documento</label>
+                              </th>
+                              <th class="frm_fornecedor_grid_nrolicenca">
+                                <label>Numero</label>
+                              </th>
+                              <th class="frm_fornecedor_grid_dtemissao">
+                                <label>Dt. Emissão</label>
+                              </th>
+                              <th class="frm_fornecedor_grid_dtvencimento">
+                                <label>Dt. Vencimento</label>
+                              </th>
+                              <th class="frm_fornecedor_grid_extensao">
+                                <label>Extensão</label>
+                              </th>
+                              <th class="frm_contratofornecedor_residuo_botao">
+                              </th>
+                              <th class="frm_contratofornecedor_residuo_botao">
+                              </th>
+                            </tr>
+                          </table>
+                        </div>
+                        <div fxFlex="160px" fxFlexAlign="start" fxFlexFill style="overflow-y:auto; overflow-x: hidden">
+                          <table>
+                            <tr *ngFor="let fordoc of fornecedordocumentos">
+                              <td class="frm_fornecedor_grid_tipodocumento">
+                                {{fordoc.descricao}}
+                              </td>
+                              <td class="frm_fornecedor_grid_nrolicenca">
+                                {{fordoc.numero}}
+                              </td>
+                              <td class="frm_fornecedor_grid_dtemissao">
+                                {{fordoc.emissao|formatDate}}
+                              </td>
+                              <td class="frm_fornecedor_grid_dtvencimento">
+                                {{fordoc.vencimento|formatDate}}
+                              </td>
+                              <td class="frm_fornecedor_grid_extensao" style="text-align: center">
+                                <mat-checkbox [(ngModel)]="fordoc.extensao"></mat-checkbox>
+                              </td>
+                              <td class="frm_fornecedor_botao">
+                                <a (click)="remlinha(fordoc)" class="tooltip">
+                                  <i class="fa fa-trash" aria-hidden="true"></i>
+                                  <span class="tooltiptext">Excluir</span>
+                                </a>
+                              </td>
+                              <td class="frm_fornecedor_botao">
+                                <a (click)="editlinha(fordoc)" class="tooltip">
+                                  <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+                                  <span class="tooltiptext">Editar</span>
+                                </a>
+                              </td>
+                            </tr>
+                          </table>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </mat-tab>
+                <mat-tab label="Anexos" tabindex="25">
+                  <div fxLayou="column" fxLayoutAlign="start center" fxLayoutGap="0px">
+                    <div fxFlex="380px" fxFlexAlign="start" fxFlexFill>
+                      <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="0px">
+                        <div fxFlex="75px" fxFlexAlign="start">
+                          <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="5px">
+                            <div fxFlex="330px" fxFlexFill>
+                              <mat-form-field class="frm_fornecedor_documento">
+                                <mat-select placeholder="Documentos" [(value)]="id_documento" tabindex="30">
+                                  <mat-option *ngFor="let fordocanexo of fornecedordocumentosList" [value]="fordocanexo.id">
+                                    {{ fordocanexo.descricao }} - {{fordocanexo.numero}}
+                                  </mat-option>
+                                </mat-select>
+                              </mat-form-field>
+                            </div>
+                            <div fxFlex="350px" fxFlexFill>
+                              <label style="font-size: 12px; font-weight: bold; color: gray">Anexar pdf / imagem documento</label>
+                              <input type="file" placeholder="Upload file" #fileInput accept=".pdf,.doc,.docx" style="min-width: 500px; max-width: 500px;">
+                            </div>
+                            <div fxFlex="120px" fxFlexAlign="start" fxFlexFill>
+                              <button mat-raised-button color="primary" (click)="uploadAnexo()" tabindex="34" style="margin-bottom: 10px; margin-top: 10px;">
+                                <mat-icon>file_upload</mat-icon>
+                                <span>Enviar Anexo</span>
+                              </button>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div fxLayout="column" fxLayoutAlign="start center" fxLayoutGap="0px">
+                        <div fxFlex="40px" fxFlexAlign="start" fxFlexFill>
+                          <table>
+                            <tr>
+                              <th class="frm_fornecedor_grid_tipodocumento">
+                                <label>Tipo de Documento</label>
+                              </th>
+                              <th class="frm_fornecedor_grid_nrolicenca">
+                                <label>Numero</label>
+                              </th>
+                              <th class="frm_fornecedor_grid_anexo">
+                                <label>Anexo</label>
+                              </th>
+                              <th class="frm_contratofornecedor_residuo_botao">
+                              </th>
+                            </tr>
+                          </table>
+                        </div>
+                        <div fxFlex="160px" fxFlexAlign="start" fxFlexFill style="overflow-y:auto; overflow-x: hidden">
+                          <table>
+                            <tr *ngFor="let fordoc of fornecedordocumentoAnexos">
+                              <td class="frm_fornecedor_grid_tipodocumento">
+                                {{fordoc.descricao}}
+                              </td>
+                              <td class="frm_fornecedor_grid_nrolicenca">
+                                {{fordoc.numero}}
+                              </td>
+                              <td class="frm_fornecedor_grid_anexo">
+                                <a mat-button href="{{ linkDownload + 'FOR_' + fordoc.id_fornecedor + '_DOC_'+ fordoc.id + '_' + fordoc.caminho }}">
+                                  {{fordoc.caminho}}
+                                </a>
+                              </td>
+                              <td class="frm_fornecedor_botao">
+                                <a (click)="deleteAnexo(fordoc)" class="tooltip">
+                                  <i class="fa fa-trash" aria-hidden="true"></i>
+                                  <span class="tooltiptext">Excluir</span>
+                                </a>
+                              </td>
+                            </tr>
+                          </table>
                         </div>
                       </div>
                     </div>
@@ -290,6 +466,7 @@
           </div>
         </mat-card>
       </div>
+
     </div>
   </div>
 </div>

@@ -1,7 +1,7 @@
 import { environment } from './../../environments/environment';
 import { isEmpty } from 'rxjs/operators';
 import { isNullOrUndefined } from 'util';
-import { Relatorio, RelatorioFilter } from './relatorio';
+import { FiltroRelatorio, FiltroRelatorioFilter } from './filtrorelatorio';
 import { Injectable } from '@angular/core';
 import 'rxjs/add/observable/of';
 import 'rxjs/add/operator/map';
@@ -9,6 +9,7 @@ import { Observable } from 'rxjs/Rx';
 import { Http, Headers, Response, RequestOptions, URLSearchParams } from '@angular/http';
 import { HttpErrorResponse, HttpParams, HttpClient } from '@angular/common/http';
 import { HttpHeaders } from '@angular/common/http';
+import * as moment from 'moment';
 
 @Injectable()
 export class RelatorioService {
@@ -16,7 +17,7 @@ export class RelatorioService {
 
   constructor(private _http: Http, private _httpClient: HttpClient) {}
 
-  addRelatorio(accessToken: string, _relatorio: Relatorio): Observable<any> {
+  addRelatorio(accessToken: string, _relatorio: FiltroRelatorio): Observable<any> {
     const headers = new Headers({
       Accept: 'application/json',
       Authorization: 'Bearer ' + accessToken.toString().replace(/"/g, '')
@@ -24,8 +25,7 @@ export class RelatorioService {
 
     // const _params: HttpParams = new HttpParams();
     const _body = {
-      descricao: _relatorio.descricao,
-      id_tipo_atividade: _relatorio.id_tipo_atividade
+      descricao: _relatorio.descricao
     };
     // _params.set('codigo', '1');
 
@@ -38,7 +38,7 @@ export class RelatorioService {
 
   }
 
-  editRelatorio(accessToken: string, _id: number, _relatorio: Relatorio): Observable<any> {
+  editRelatorio(accessToken: string, _id: number, _relatorio: FiltroRelatorio): Observable<any> {
     const headers = new Headers({
       Accept: 'application/json',
       Authorization: 'Bearer ' + accessToken.toString().replace(/"/g, '')
@@ -47,8 +47,7 @@ export class RelatorioService {
     // const _params: HttpParams = new HttpParams();
     const _body = {
       id: _id,
-      descricao: _relatorio.descricao,
-      id_tipo_atividade: _relatorio.id_tipo_atividade
+      descricao: _relatorio.descricao
     };
     // _params.set('id', _id.toString());
 
@@ -92,7 +91,7 @@ export class RelatorioService {
   /** Metodo que retorna um observable com dados da listagem de relatorios
    *  parametro: acessToken: string
   */
-  getRelatorios(accessToken: string, sort: string, order: string, page: number, pagesize: number, filter: RelatorioFilter) {
+  getRelatorios(accessToken: string, sort: string, order: string, page: number, pagesize: number, filter: FiltroRelatorioFilter) {
     const headers = new Headers({
       Accept: 'application/json',
       Authorization: 'Bearer ' + accessToken.toString().replace(/"/g, '')
@@ -154,7 +153,7 @@ export class RelatorioService {
       );
   }
 
-  getRelatorioReceita(accessToken: string, _relatorio: Relatorio): any {
+  getRelatorioReceita(accessToken: string, _relatorio: FiltroRelatorio): any {
     const url = environment.urlbase + '/api/relatorios/receitas';
     const headers = new HttpHeaders({
       Accept: 'application/json',
@@ -187,40 +186,206 @@ export class RelatorioService {
           );
   }
 
-  getRelatorioReceitaCliente(accessToken: string, _relatorio: Relatorio): any {
+  getRelatorioReceitaCliente(accessToken: string, _relatorio: FiltroRelatorio) {
     const url = environment.urlbase + '/api/relatorios/receitaclientes';
-    const headers = new HttpHeaders({
+
+    const headers = new Headers({
       Accept: 'application/json',
       Authorization: 'Bearer ' + accessToken.toString().replace(/"/g, '')
     });
 
-    let params: HttpParams = new HttpParams();
+    // const params: HttpParams = new HttpParams();
     const search: URLSearchParams =  new URLSearchParams();
 
+    if ((!isNullOrUndefined(_relatorio.id)) && (_relatorio.id.toString().length > 0)) {
+      search.set('id', _relatorio.id.toString());
+    }
 
-    if ((!isNullOrUndefined(_relatorio.id_cliente)) && (_relatorio.id_cliente.toString().length > 0)) {
-      params = params.append('id_cliente', _relatorio.id_cliente.toString());
+    if ((!isNullOrUndefined(_relatorio.id_cliente)) && (_relatorio.id_cliente.toString().length > 0) &&
+       (!isNaN(_relatorio.id_cliente))) {
+      search.set('id_cliente', _relatorio.id_cliente.toString());
+    }
+
+    if ((!isNullOrUndefined(_relatorio.id_manifesto)) && (_relatorio.id_manifesto.toString().length > 0) &&
+       (!isNaN(_relatorio.id_manifesto))) {
+      search.set('id_manifesto', _relatorio.id_manifesto.toString());
+    }
+
+    if ((!isNullOrUndefined(_relatorio.id_residuo)) && (_relatorio.id_residuo.toString().length > 0) &&
+       (!isNaN(_relatorio.id_residuo))) {
+      search.set('id_residuo', _relatorio.id_residuo.toString());
     }
 
     if ((!isNullOrUndefined(_relatorio.datade)) && (_relatorio.datade.toString().length > 0)) {
-      params = params.append('datade', _relatorio.datade.toString());
+      const dt = new Date(_relatorio.datade);
+      dt.setDate(dt.getDate() + 1);
+      search.set('datade', '\'' + moment(dt).format('YYYY-MM-DD').toString() + '\'');
     }
 
     if ((!isNullOrUndefined(_relatorio.dataate)) && (_relatorio.dataate.toString().length > 0)) {
-      params = params.append('dataate', _relatorio.dataate.toString());
+      const dt = new Date(_relatorio.dataate);
+      dt.setDate(dt.getDate() + 1);
+      search.set('dataate', '\'' + moment(dt).format('YYYY-MM-DD').toString() + '\'');
     }
 
+    return this._http
+      .get(url, { headers: headers, search: search })
+      .map((res: Response) => res.json())
+      .catch((error: any) =>
+        Observable.throw(error.json() || 'Server error')
+      );
+    // const headers = new HttpHeaders({
+    //   Accept: 'application/json',
+    //   Authorization: 'Bearer ' + accessToken.toString().replace(/"/g, '')
+    // });
 
-    return this._httpClient.get(url, {headers: headers, params: params, responseType: 'blob'})
-            .map(res => {
-              return new Blob([res], { type: 'application/pdf', });
-            })
-            .catch((error: any) =>
-            Observable.throw(error || 'Server error')
-          );
+    // let params: HttpParams = new HttpParams();
+    // const search: URLSearchParams =  new URLSearchParams();
+
+
+    // if ((!isNullOrUndefined(_relatorio.id_cliente)) && (_relatorio.id_cliente.toString().length > 0)) {
+    //   params = params.append('id_cliente', _relatorio.id_cliente.toString());
+    // }
+
+    // if ((!isNullOrUndefined(_relatorio.datade)) && (_relatorio.datade.toString().length > 0)) {
+    //   params = params.append('datade', _relatorio.datade.toString());
+    // }
+
+    // if ((!isNullOrUndefined(_relatorio.dataate)) && (_relatorio.dataate.toString().length > 0)) {
+    //   params = params.append('dataate', _relatorio.dataate.toString());
+    // }
+
+
+    // return this._httpClient.get(url, {headers: headers, params: params, responseType: 'blob'})
+    //         .map(res => {
+    //           return new Blob([res], { type: 'application/pdf', });
+    //         })
+    //         .catch((error: any) =>
+    //         Observable.throw(error || 'Server error')
+    //       );
   }
 
-  getRelatorioDespesa(accessToken: string, _relatorio: Relatorio): any {
+  getRelatorioDespesaCliente(accessToken: string, _relatorio: FiltroRelatorio) {
+    const url = environment.urlbase + '/api/relatorios/despesaclientes';
+
+    const headers = new Headers({
+      Accept: 'application/json',
+      Authorization: 'Bearer ' + accessToken.toString().replace(/"/g, '')
+    });
+
+    // const params: HttpParams = new HttpParams();
+    const search: URLSearchParams =  new URLSearchParams();
+
+    if ((!isNullOrUndefined(_relatorio.id)) && (_relatorio.id.toString().length > 0)) {
+      search.set('id', _relatorio.id.toString());
+    }
+
+    if ((!isNullOrUndefined(_relatorio.id_cliente)) && (_relatorio.id_cliente.toString().length > 0) &&
+       (!isNaN(_relatorio.id_cliente))) {
+      search.set('id_cliente', _relatorio.id_cliente.toString());
+    }
+
+    if ((!isNullOrUndefined(_relatorio.id_manifesto)) && (_relatorio.id_manifesto.toString().length > 0) &&
+       (!isNaN(_relatorio.id_manifesto))) {
+      search.set('id_manifesto', _relatorio.id_manifesto.toString());
+    }
+
+    if ((!isNullOrUndefined(_relatorio.id_residuo)) && (_relatorio.id_residuo.toString().length > 0) &&
+       (!isNaN(_relatorio.id_residuo))) {
+      search.set('id_residuo', _relatorio.id_residuo.toString());
+    }
+
+    if ((!isNullOrUndefined(_relatorio.datade)) && (_relatorio.datade.toString().length > 0)) {
+      const dt = new Date(_relatorio.datade);
+      dt.setDate(dt.getDate() + 1);
+      search.set('datade', '\'' + moment(dt).format('YYYY-MM-DD').toString() + '\'');
+    }
+
+    if ((!isNullOrUndefined(_relatorio.dataate)) && (_relatorio.dataate.toString().length > 0)) {
+      const dt = new Date(_relatorio.dataate);
+      dt.setDate(dt.getDate() + 1);
+      search.set('dataate', '\'' + moment(dt).format('YYYY-MM-DD').toString() + '\'');
+    }
+
+    return this._http
+      .get(url, { headers: headers, search: search })
+      .map((res: Response) => res.json())
+      .catch((error: any) =>
+        Observable.throw(error.json() || 'Server error')
+      );
+    // const headers = new HttpHeaders({
+    //   Accept: 'application/json',
+    //   Authorization: 'Bearer ' + accessToken.toString().replace(/"/g, '')
+    // });
+
+    // let params: HttpParams = new HttpParams();
+    // const search: URLSearchParams =  new URLSearchParams();
+
+
+    // if ((!isNullOrUndefined(_relatorio.id_cliente)) && (_relatorio.id_cliente.toString().length > 0)) {
+    //   params = params.append('id_cliente', _relatorio.id_cliente.toString());
+    // }
+
+    // if ((!isNullOrUndefined(_relatorio.datade)) && (_relatorio.datade.toString().length > 0)) {
+    //   params = params.append('datade', _relatorio.datade.toString());
+    // }
+
+    // if ((!isNullOrUndefined(_relatorio.dataate)) && (_relatorio.dataate.toString().length > 0)) {
+    //   params = params.append('dataate', _relatorio.dataate.toString());
+    // }
+
+
+    // return this._httpClient.get(url, {headers: headers, params: params, responseType: 'blob'})
+    //         .map(res => {
+    //           return new Blob([res], { type: 'application/pdf', });
+    //         })
+    //         .catch((error: any) =>
+    //         Observable.throw(error || 'Server error')
+    //       );
+  }
+
+  getRelatorioLocacaoCliente(accessToken: string, _relatorio: FiltroRelatorio) {
+    const url = environment.urlbase + '/api/relatorios/locacaoclientes';
+
+    const headers = new Headers({
+      Accept: 'application/json',
+      Authorization: 'Bearer ' + accessToken.toString().replace(/"/g, '')
+    });
+
+    // const params: HttpParams = new HttpParams();
+    const search: URLSearchParams =  new URLSearchParams();
+
+    if ((!isNullOrUndefined(_relatorio.id)) && (_relatorio.id.toString().length > 0)) {
+      search.set('id', _relatorio.id.toString());
+    }
+
+    if ((!isNullOrUndefined(_relatorio.id_cliente)) && (_relatorio.id_cliente.toString().length > 0) &&
+       (!isNaN(_relatorio.id_cliente))) {
+      search.set('id_cliente', _relatorio.id_cliente.toString());
+    }
+
+    if ((!isNullOrUndefined(_relatorio.datade)) && (_relatorio.datade.toString().length > 0)) {
+      const dt = new Date(_relatorio.datade);
+      dt.setDate(dt.getDate() + 1);
+      search.set('datade', '\'' + moment(dt).format('YYYY-MM-DD').toString() + '\'');
+    }
+
+    if ((!isNullOrUndefined(_relatorio.dataate)) && (_relatorio.dataate.toString().length > 0)) {
+      const dt = new Date(_relatorio.dataate);
+      dt.setDate(dt.getDate() + 1);
+      search.set('dataate', '\'' + moment(dt).format('YYYY-MM-DD').toString() + '\'');
+    }
+
+    return this._http
+      .get(url, { headers: headers, search: search })
+      .map((res: Response) => res.json())
+      .catch((error: any) =>
+        Observable.throw(error.json() || 'Server error')
+      );
+
+  }
+
+  getRelatorioDespesa(accessToken: string, _relatorio: FiltroRelatorio): any {
     const url = environment.urlbase + '/api/relatorios/despesas';
     const headers = new HttpHeaders({
       Accept: 'application/json',
@@ -236,13 +401,103 @@ export class RelatorioService {
     }
 
     if ((!isNullOrUndefined(_relatorio.datade)) && (_relatorio.datade.toString().length > 0)) {
-      params = params.append('datade', _relatorio.datade.toString());
+      params = params.append('datade', moment(_relatorio.datade).format('DD/MM/YYYY'));
+      console.log(moment(_relatorio.datade).format('DD/MM/YYYY'));
     }
 
     if ((!isNullOrUndefined(_relatorio.dataate)) && (_relatorio.dataate.toString().length > 0)) {
-      params = params.append('dataate', _relatorio.dataate.toString());
+      params = params.append('dataate', moment(_relatorio.dataate).format('DD/MM/YYYY'));
     }
 
+
+    return this._httpClient.get(url, {headers: headers, params: params, responseType: 'blob'})
+            .map(res => {
+              return new Blob([res], { type: 'application/pdf', });
+            })
+            .catch((error: any) =>
+            Observable.throw(error || 'Server error')
+          );
+  }
+
+  getPrintPdf(accessToken: string, _elemento: any): any {
+    const url = environment.urlbase + '/api/relatorios/printpdf';
+    const headers = new HttpHeaders({
+      Accept: 'application/json',
+      Authorization: 'Bearer ' + accessToken.toString().replace(/"/g, '')
+    });
+
+    const params: HttpParams = new HttpParams();
+    const search: URLSearchParams =  new URLSearchParams();
+
+    // params = params.append('conteudo', _elemento);
+
+    const _body = {
+      conteudo: _elemento
+    };
+
+    return this._httpClient.post(url, _body, {headers: headers, params: params, responseType: 'blob'})
+            .map(res => {
+              return new Blob([res], { type: 'application/pdf', });
+            })
+            .catch((error: any) =>
+            Observable.throw(error || 'Server error')
+          );
+  }
+
+  getPrintPdf2(accessToken: string, _relatorio: FiltroRelatorio): any {
+    const url = environment.urlbase + '/api/relatorios/printpdf2';
+    const headers = new HttpHeaders({
+      Accept: 'application/json',
+      Authorization: 'Bearer ' + accessToken.toString().replace(/"/g, '')
+    });
+
+    let params: HttpParams = new HttpParams();
+    const search: URLSearchParams =  new URLSearchParams();
+
+
+    // if ((!isNullOrUndefined(_relatorio.id_cliente)) && (_relatorio.id_cliente.toString().length > 0)) {
+    //   params = params.append('id_cliente', _relatorio.id_cliente.toString());
+    // }
+
+    // if ((!isNullOrUndefined(_relatorio.datade)) && (_relatorio.datade.toString().length > 0)) {
+    //   params = params.append('datade', moment(_relatorio.datade).format('DD/MM/YYYY'));
+    //   console.log(moment(_relatorio.datade).format('DD/MM/YYYY'));
+    // }
+
+    // if ((!isNullOrUndefined(_relatorio.dataate)) && (_relatorio.dataate.toString().length > 0)) {
+    //   params = params.append('dataate', moment(_relatorio.dataate).format('DD/MM/YYYY'));
+    // }
+
+    if ((!isNullOrUndefined(_relatorio.id)) && (_relatorio.id.toString().length > 0)) {
+      params = params.append('id', _relatorio.id.toString());
+    }
+
+    if ((!isNullOrUndefined(_relatorio.id_cliente)) && (_relatorio.id_cliente.toString().length > 0) &&
+       (!isNaN(_relatorio.id_cliente))) {
+        params = params.append('id_cliente', _relatorio.id_cliente.toString());
+    }
+
+    if ((!isNullOrUndefined(_relatorio.id_manifesto)) && (_relatorio.id_manifesto.toString().length > 0) &&
+       (!isNaN(_relatorio.id_manifesto))) {
+        params = params.append('id_manifesto', _relatorio.id_manifesto.toString());
+    }
+
+    if ((!isNullOrUndefined(_relatorio.id_residuo)) && (_relatorio.id_residuo.toString().length > 0) &&
+       (!isNaN(_relatorio.id_residuo))) {
+        params = params.append('id_residuo', _relatorio.id_residuo.toString());
+    }
+
+    if ((!isNullOrUndefined(_relatorio.datade)) && (_relatorio.datade.toString().length > 0)) {
+      const dt = new Date(_relatorio.datade);
+      dt.setDate(dt.getDate() + 1);
+      params = params.append('datade', '\'' + moment(dt).format('YYYY-MM-DD').toString() + '\'');
+    }
+
+    if ((!isNullOrUndefined(_relatorio.dataate)) && (_relatorio.dataate.toString().length > 0)) {
+      const dt = new Date(_relatorio.dataate);
+      dt.setDate(dt.getDate() + 1);
+      params = params.append('dataate', '\'' + moment(dt).format('YYYY-MM-DD').toString() + '\'');
+    }
 
     return this._httpClient.get(url, {headers: headers, params: params, responseType: 'blob'})
             .map(res => {

@@ -49,6 +49,7 @@ export class FornecedorFindComponent implements OnInit, AfterViewInit {
   contatoFilter = new FormControl();
   telefoneFilter = new FormControl();
   emailFilter = new FormControl();
+  inativoFilter = new FormControl();
 
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild(MatPaginator) paginator: MatPaginator;
@@ -139,6 +140,7 @@ export class FornecedorFindComponent implements OnInit, AfterViewInit {
     const contatoFilter$ = this.contatoFilter.valueChanges.debounceTime(500).distinctUntilChanged().startWith('');
     const telefoneFilter$ = this.telefoneFilter.valueChanges.debounceTime(500).distinctUntilChanged().startWith('');
     const emailFilter$ = this.emailFilter.valueChanges.debounceTime(500).distinctUntilChanged().startWith('');
+    const inativoFilter$ = this.inativoFilter.valueChanges.debounceTime(500).distinctUntilChanged().startWith('');
 
     Observable.combineLatest(idFilter$,
                              codigoFilter$,
@@ -148,9 +150,11 @@ export class FornecedorFindComponent implements OnInit, AfterViewInit {
                              telefoneFilter$,
                              emailFilter$
                             ).debounceTime(500).distinctUntilChanged().map(
-      ([id, codigo_omie, cnpj_cpf, razao_social, contato, telefone, email ]) =>
-      ({id, codigo_omie, cnpj_cpf, razao_social, contato, telefone, email})).subscribe(filter => {
+      ([id, codigo_omie, cnpj_cpf, razao_social, contato, telefone, email, inativo ]) =>
+      ({id, codigo_omie, cnpj_cpf, razao_social, contato, telefone, email, inativo})).subscribe(filter => {
         if (!this.dataSource) { return; }
+        filter.inativo = false;
+        this.dataSource.filtraAtivos = true;
         this.dataSource.filter = filter;
       });
   }

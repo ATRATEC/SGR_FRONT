@@ -34,7 +34,7 @@
       <div fxFlex="47px" fxFlexAlign="start" style="width: 100%">
         <table>
           <tr>
-            <td>
+            <td class="mat-column-id">
               <mat-form-field class="mat-column-id" style="margin-left: 5px">
                 <input matInput #filter placeholder="Código" [formControl]="idFilter" (keypress)="onlyNumber($event)">
               </mat-form-field>
@@ -45,6 +45,14 @@
                 <input matInput uppercase #filter placeholder="Descrição" [formControl]="descricaoFilter">
               </mat-form-field>
             </td>
+
+            <td class="mat-column-codigo_ibama">
+              <!-- style="width: 500px" -->
+              <mat-form-field class="mat-column-codigo_ibama">
+                <input matInput #filter placeholder="Código IBAMA" [formControl]="codigoIbamaFilter">
+              </mat-form-field>
+            </td>
+
             <td class="mat-column-classe_residuo">
               <!-- style="width: 500px" -->
               <mat-form-field class="mat-column-classe_residuo">
@@ -57,26 +65,15 @@
                 <input matInput #filter placeholder="Tipo de Resíduo" [formControl]="tiporesiduoFilter">
               </mat-form-field>
             </td>
-            <td class="mat-column-acondicionamento">
-              <!-- style="width: 500px" -->
-              <mat-form-field class="mat-column-acondicionamento">
-                <input matInput #filter placeholder="Acondicionamento" [formControl]="acondicionamentoFilter">
-              </mat-form-field>
-            </td>
-            <td class="mat-column-tratamento">
-              <!-- style="width: 500px" -->
-              <mat-form-field class="mat-column-tratameno">
-                <input matInput #filter placeholder="Tipo de Tratameno" [formControl]="tratamentoFilter">
-              </mat-form-field>
-            </td>
+
           </tr>
         </table>
       </div>
       <div fxFlex="1px" class="customHrFull"></div>
-      <div fxFlex="400px" class="example-loading-shade" fxFlexAlign="start" *ngIf="isLoadingResults" style="height: 100%">
+      <div fxFlex="380px" class="example-loading-shade" fxFlexAlign="start" *ngIf="isLoadingResults" style="height: 100%">
         <mat-spinner *ngIf="isLoadingResults"></mat-spinner>
       </div>
-      <div fxFlex="400px" fxFlexAlign="start" style="width: 100%">
+      <div fxFlex="380px" fxFlexAlign="start" style="width: 100%">
         <mat-table #table [dataSource]="dataSource" matSort>
           <!-- ID Column -->
           <ng-container matColumnDef="id">
@@ -91,6 +88,12 @@
           </ng-container>
 
           <!-- Name Column -->
+          <ng-container matColumnDef="codigo_ibama">
+            <mat-header-cell *matHeaderCellDef mat-sort-header> Código IBAMA </mat-header-cell>
+            <mat-cell *matCellDef="let row"> {{row.codigo_ibama}} </mat-cell>
+          </ng-container>
+
+          <!-- Name Column -->
           <ng-container matColumnDef="classe_residuo">
             <mat-header-cell *matHeaderCellDef mat-sort-header> Classe </mat-header-cell>
             <mat-cell *matCellDef="let row"> {{row.classe_residuo}} </mat-cell>
@@ -100,18 +103,6 @@
           <ng-container matColumnDef="tipo_residuo">
             <mat-header-cell *matHeaderCellDef mat-sort-header> Tipo de Resíduo </mat-header-cell>
             <mat-cell *matCellDef="let row"> {{row.tipo_residuo}} </mat-cell>
-          </ng-container>
-
-          <!-- Name Column -->
-          <ng-container matColumnDef="acondicionamento">
-            <mat-header-cell *matHeaderCellDef mat-sort-header> Acondicionamento </mat-header-cell>
-            <mat-cell *matCellDef="let row"> {{row.acondicionamento}} </mat-cell>
-          </ng-container>
-
-          <!-- Name Column -->
-          <ng-container matColumnDef="tratamento">
-            <mat-header-cell *matHeaderCellDef mat-sort-header> Tipo de Tratamento </mat-header-cell>
-            <mat-cell *matCellDef="let row"> {{row.tratamento}} </mat-cell>
           </ng-container>
 
           <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>

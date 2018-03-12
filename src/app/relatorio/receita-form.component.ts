@@ -30,7 +30,7 @@ import { Servico } from '../servico/servico';
 import { FormBuilder, FormGroup} from '@angular/forms';
 import { ContratoFornecedor } from '../contratofornecedor/contratofornecedor';
 import { RelatorioService } from './relatorio.service';
-import { Relatorio } from './relatorio';
+import { FiltroRelatorio } from './filtrorelatorio';
 
 
 @Component({
@@ -40,7 +40,7 @@ import { Relatorio } from './relatorio';
 })
 export class ReceitaFormComponent implements OnInit, AfterViewInit, AfterViewChecked {
 
-  relatorio: Relatorio;
+  relatorio: FiltroRelatorio;
   emProcessamento = false;
   exibeIncluir = false;
 
@@ -76,7 +76,7 @@ export class ReceitaFormComponent implements OnInit, AfterViewInit, AfterViewChe
 
   ngOnInit() {
     // this.emProcessamento = true;
-    this.relatorio = new Relatorio();
+    this.relatorio = new FiltroRelatorio();
     // const ta = this._tipoatividadeService.getListTipoAtividades(this._tokenManager.retrieve())
     //   .retry(3)
     //   .subscribe(
@@ -194,7 +194,7 @@ export class ReceitaFormComponent implements OnInit, AfterViewInit, AfterViewChe
   }
 
   btnIncluir_click() {
-    this.relatorio = new Relatorio();
+    this.relatorio = new FiltroRelatorio();
   }
 
   getDescricaoErrorMessage() {

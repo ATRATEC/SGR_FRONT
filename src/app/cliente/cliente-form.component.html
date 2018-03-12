@@ -40,28 +40,29 @@
             <label>Aguarde...</label>
           </div>
         </div>
-        <mat-card *ngIf="!emProcessamento" style="width: 660px;">
+        <mat-card *ngIf="!emProcessamento" style="width: 850px;">
           <div fxLayout="column" fxLayoutAlign="start center" fxLayoutGap="5px">
+            <!-- <div fxFlex="60px" fxFlexAlign="start">
+              <div fxLayout="row" fxLayoutAlign="space-between center" fxLayoutGap="20px" style="width: 100%">
+
+              </div>
+            </div> -->
             <div fxFlex="60px" fxFlexAlign="start">
               <div fxLayout="row" fxLayoutAlign="space-between center" fxLayoutGap="20px" style="width: 100%">
-                <div fxFlex="120px" fxFlexAlign="start" fxFlexFill>
+                <div fxFlex="90px" fxFlexAlign="start" fxFlexFill>
                   <mat-form-field class="frm_cliente_codigo">
                     <input matInput disabled #codigo maxlength="9" type="number" tabindex="50" placeholder="Código" required [(ngModel)]="cliente.id">
                   </mat-form-field>
                 </div>
-              </div>
-            </div>
-            <div fxFlex="60px" fxFlexAlign="start">
-              <div fxLayout="row" fxLayoutAlign="space-between center" fxLayoutGap="20px" style="width: 100%">
                 <div fxFlex="450px" fxFlexAlign="start" fxFlexFill>
                   <mat-form-field class="frm_cliente_razao_social">
-                    <input matInput uppercase autofocus #razaosocial #focuscomp maxlength="60" [formControl]="valRazaoSocial" placeholder="Razão Social (Nome Completo)" required
-                      tabindex="1" [(ngModel)]="cliente.razao_social">
+                    <input matInput uppercase autofocus #razaosocial #focuscomp maxlength="60" [formControl]="valRazaoSocial" placeholder="Razão Social (Nome Completo)"
+                      required tabindex="1" [(ngModel)]="cliente.razao_social">
                     <mat-hint align="end">{{razaosocial.value?.length || 0}}/60</mat-hint>
                     <mat-error *ngIf="valRazaoSocial.invalid">{{getRazaoSocialErrorMessage()}}</mat-error>
                   </mat-form-field>
                 </div>
-                <div fxFlex="100px" fxFlexAlign="start" fxFlexFill>
+                <div fxFlex="170px" fxFlexAlign="start" fxFlexFill>
                   <mat-form-field class="frm_cliente_cnpj_cpf">
                     <input matInput #cnpjcpf maxlength="18" [formControl]="valCnpjCpf" placeholder="CNPJ / CPF" required tabindex="3" [(ngModel)]="cliente.cnpj_cpf"
                       (blur)="formataCnpjCpf($event)">
@@ -69,11 +70,14 @@
                     <mat-error *ngIf="valCnpjCpf.invalid">{{getCnpjCpfErrorMessage()}}</mat-error>
                   </mat-form-field>
                 </div>
+                <div fxFlex="100px" fxFlexFill>
+                  <mat-checkbox [(ngModel)]="cliente.inativo">Inativo</mat-checkbox>
+                </div>
               </div>
             </div>
             <div fxFlex="60px" fxFlexAlign="start">
               <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="20px" style="width: 100%">
-                <div fxFlex="250px" fxFlexAlign="start" fxFlexFill>
+                <div fxFlex="400px" fxFlexAlign="start" fxFlexFill>
                   <mat-form-field class="frm_cliente_nome_fantasia">
                     <input matInput uppercase #nomefantasia maxlength="50" placeholder="Nome Fantasia (Nome Abreviado)" tabindex="4" [(ngModel)]="cliente.nome_fantasia">
                     <mat-hint align="end">{{nomefantasia.value?.length || 0}}/50</mat-hint>
@@ -103,14 +107,13 @@
                 </div>
               </div>
             </div>
-            <div fxFlex="250px" fxFlexAlign="start" fxFlexFill>
+            <div fxFlex="320px" fxFlexAlign="start" fxFlexFill>
               <mat-tab-group>
-                <mat-tab label="Tab 6" tabindex="8" >
-                  <ng-template mat-tab-label>Endereço</ng-template>
+                <mat-tab label="Endereço" tabindex="8">
                   <div fxLayou="column" fxLayoutAlign="start center" fxLayoutGap="10px">
                     <div fxFlex="70px" fxFlexAlign="start" fxFlexFill>
                       <div fxLayout="row" fxLayoutAlign="space-between center" fxLayoutGap="20px">
-                        <div fxFlex="480px" fxFlexFill>
+                        <div fxFlex="600px" fxFlexFill>
                           <mat-form-field class="frm_cliente_endereco">
                             <input matInput uppercase #endereco maxlength="60" placeholder="Endereço" tabindex="10" [(ngModel)]="cliente.endereco">
                             <mat-hint align="end">{{endereco.value?.length || 0}}/60</mat-hint>
@@ -134,7 +137,7 @@
                             <mat-hint align="end">{{bairro.value?.length || 0}}/30</mat-hint>
                           </mat-form-field>
                         </div>
-                        <div fxFlex="280px" fxFlexFill>
+                        <div fxFlex="400px" fxFlexFill>
                           <mat-form-field class="frm_cliente_complemento">
                             <input matInput uppercase #complemento maxlength="60" placeholder="Complemento" tabindex="13" [(ngModel)]="cliente.complemento">
                             <mat-hint align="end">{{complemento.value?.length || 0}}/60</mat-hint>
@@ -178,8 +181,7 @@
                     </div>
                   </div>
                 </mat-tab>
-                <mat-tab label="Tab 7" tabindex="18">
-                  <ng-template mat-tab-label>Telefones e E-mail</ng-template>
+                <mat-tab label="Telefones e E-mail" tabindex="18">
                   <div fxLayou="column" fxLayoutAlign="start center" fxLayoutGap="10px">
                     <div fxFlex="70px" fxFlexAlign="start" fxFlexFill>
                       <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="30px">
@@ -201,7 +203,7 @@
                         </div>
                         <div fxFlex="70px" fxFlexFill>
                           <mat-form-field class="frm_cliente_telefone2_ddd">
-                            <input matInput #telefoneDDDFax maxlength="2" [formControl]="valDDDFax" placeholder="DDD Fax" tabindex="21" [(ngModel)]="cliente.fax_ddd"
+                            <input matInput #telefoneDDDFax maxlength="2" [formControl]="valDDDFax" placeholder="DDD Cel" tabindex="21" [(ngModel)]="cliente.fax_ddd"
                               (keypress)="onlyNumber($event)">
                             <mat-hint align="end">{{telefoneDDDFax.value?.length || 0}}/2</mat-hint>
                             <mat-error *ngIf="valDDDFax.invalid">{{getDDDFaxErrorMessage()}}</mat-error>
@@ -209,7 +211,7 @@
                         </div>
                         <div fxFlex="90px" fxFlexFill>
                           <mat-form-field class="frm_cliente_telefone2_numero">
-                            <input matInput #telefoneFaxnumero maxlength="10" [formControl]="valTelefoneFax" placeholder="Fax" tabindex="22" [(ngModel)]="cliente.fax_numero"
+                            <input matInput #telefoneFaxnumero maxlength="10" [formControl]="valTelefoneFax" placeholder="Celular" tabindex="22" [(ngModel)]="cliente.fax_numero"
                               (keypress)="onlyNumber($event)" (blur)="formataTelefoneFax($event)">
                             <mat-hint align="end">{{telefoneFaxnumero.value?.length || 0}}/10</mat-hint>
                             <mat-error *ngIf="valTelefoneFax.invalid">{{getTelefoneFaxErrorMessage()}}</mat-error>
@@ -243,8 +245,7 @@
                     </div>
                   </div>
                 </mat-tab>
-                <mat-tab label="Tab 8" tabindex="25">
-                  <ng-template mat-tab-label>Inscrições e outros</ng-template>
+                <mat-tab label="Inscrições" tabindex="25">
                   <div fxLayou="column" fxLayoutAlign="start center" fxLayoutGap="10px">
                     <div fxFlex="70px" fxFlexAlign="start" fxFlexFill>
                       <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="20px">
@@ -260,12 +261,6 @@
                             <mat-hint align="end">{{inscrMunicipal.value?.length || 0}}/20</mat-hint>
                           </mat-form-field>
                         </div>
-                        <div fxFlex="180px" fxFlexFill>
-                          <mat-form-field class="frm_cliente_inscrsuframa">
-                            <input matInput #inscrSuframa maxlength="20" placeholder="Inscrição Suframa" tabindex="28" [(ngModel)]="cliente.inscricao_suframa">
-                            <mat-hint align="end">{{inscrSuframa.value?.length || 0}}/20</mat-hint>
-                          </mat-form-field>
-                        </div>
                       </div>
                     </div>
                   </div>
@@ -274,9 +269,193 @@
                       <div fxLayout="row" fxLayoutAlign="space-between center" fxLayoutGap="20px">
                         <div fxFlex="550px" fxFlexFill>
                           <mat-form-field class="frm_cliente_observacao">
-                            <input matInput #observacao maxlength="500" placeholder="Observações" tabindex="33" [(ngModel)]="cliente.observacao">
+                            <input matInput #observacao maxlength="500" placeholder="Observações" tabindex="28" [(ngModel)]="cliente.observacao">
                             <mat-hint align="end">{{observacao.value?.length || 0}}/500</mat-hint>
                           </mat-form-field>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </mat-tab>
+                <mat-tab label="Documentos" tabindex="29">
+                  <div fxLayou="column" fxLayoutAlign="start center" fxLayoutGap="0px">
+                    <div fxFlex="380px" fxFlexAlign="start" fxFlexFill>
+                      <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="0px">
+                        <div fxFlex="65px" fxFlexAlign="start">
+                          <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="5px">
+                            <div fxFlex="230px" fxFlexFill>
+                              <mat-form-field class="frm_cliente_tipodocumento">
+                                <mat-select [formControl]="valTipoDocumento" placeholder="Tipo de Documento" [(value)]="clientedocumento.id_tipo_documento"
+                                  required tabindex="30" id="id_tipodocumento">
+                                  <mat-option *ngFor="let tipodocumento of tipodocumentos" [value]="tipodocumento.id">
+                                    {{ tipodocumento.descricao }}
+                                  </mat-option>
+                                </mat-select>
+                              </mat-form-field>
+                            </div>
+                            <div fxFlex="150px" fxFlexFill>
+                              <mat-form-field class="frm_cliente_nrolicenca">
+                                <input matInput [formControl]="valNroLicenca" uppercase #nrolicencatransp maxlength="20" placeholder="Numero" tabindex="31"
+                                  required [(ngModel)]="clientedocumento.numero">
+                                <mat-hint align="end">{{nrolicencatransp.value?.length || 0}}/20</mat-hint>
+                              </mat-form-field>
+                            </div>
+                            <div fxFlex="150px" fxFlexFill>
+                              <mat-form-field class="frm_cliente_dtemissao">
+                                <input matInput [formControl]="valDtEmissao" type="date" #dtemissao maxlength="10" placeholder="Data Emissão" tabindex="32"
+                                  required [ngModel]="clientedocumento.emissao" (ngModelChange)="clientedocumento.emissao = $event"
+                                  [value]="clientedocumento.emissao">
+                                <mat-hint align="end">{{dtemissao.value?.length || 0}}/10</mat-hint>
+                              </mat-form-field>
+                            </div>
+                            <div fxFlex="150px" fxFlexFill>
+                              <mat-form-field class="frm_cliente_dtvencimento">
+                                <input matInput [formControl]="valDtVencimento" type="date" #dtvencimento maxlength="10" placeholder="Data Vencimento" tabindex="33"
+                                  [ngModel]="clientedocumento.vencimento" (ngModelChange)="clientedocumento.vencimento = $event"
+                                  [value]="clientedocumento.vencimento">
+                                <mat-hint align="end">{{dtvencimento.value?.length || 0}}/10</mat-hint>
+                              </mat-form-field>
+                            </div>
+                            <div fxFlex="120px" fxFlexAlign="center" fxFlexFill>
+                              <button mat-raised-button color="primary" (click)="addlinha()" tabindex="34" style="margin-bottom: 10px">
+                                <mat-icon>playlist_add</mat-icon>
+                                <span>Adicionar</span>
+                              </button>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div fxLayout="column" fxLayoutAlign="start center" fxLayoutGap="0px">
+                        <div fxFlex="40px" fxFlexAlign="start" fxFlexFill>
+                          <table>
+                            <tr>
+                              <th class="frm_cliente_grid_tipodocumento">
+                                <label>Tipo de Documento</label>
+                              </th>
+                              <th class="frm_cliente_grid_nrolicenca">
+                                <label>Numero</label>
+                              </th>
+                              <th class="frm_cliente_grid_dtemissao">
+                                <label>Dt. Emissão</label>
+                              </th>
+                              <th class="frm_cliente_grid_dtvencimento">
+                                <label>Dt. Vencimento</label>
+                              </th>
+                              <th class="frm_cliente_grid_extensao">
+                                <label>Extensão</label>
+                              </th>
+                              <th class="frm_contratocliente_residuo_botao">
+                              </th>
+                              <th class="frm_contratocliente_residuo_botao">
+                              </th>
+                            </tr>
+                          </table>
+                        </div>
+                        <div fxFlex="160px" fxFlexAlign="start" fxFlexFill style="overflow-y:auto; overflow-x: hidden">
+                          <table>
+                            <tr *ngFor="let clidoc of clientedocumentos">
+                              <td class="frm_cliente_grid_tipodocumento">
+                                {{clidoc.descricao}}
+                              </td>
+                              <td class="frm_cliente_grid_nrolicenca">
+                                {{clidoc.numero}}
+                              </td>
+                              <td class="frm_cliente_grid_dtemissao">
+                                {{clidoc.emissao|formatDate}}
+                              </td>
+                              <td class="frm_cliente_grid_dtvencimento">
+                                {{clidoc.vencimento|formatDate}}
+                              </td>
+                              <td class="frm_cliente_grid_extensao" style="text-align: center">
+                                <mat-checkbox [(ngModel)]="clidoc.extensao"></mat-checkbox>
+                              </td>
+                              <td class="frm_cliente_botao">
+                                <a (click)="remlinha(clidoc)" class="tooltip">
+                                  <i class="fa fa-trash" aria-hidden="true"></i>
+                                  <span class="tooltiptext">Excluir</span>
+                                </a>
+                              </td>
+                              <td class="frm_cliente_botao">
+                                <a (click)="editlinha(clidoc)" class="tooltip">
+                                  <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+                                  <span class="tooltiptext">Editar</span>
+                                </a>
+                              </td>
+                            </tr>
+                          </table>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </mat-tab>
+                <mat-tab label="Anexos" tabindex="25">
+                  <div fxLayou="column" fxLayoutAlign="start center" fxLayoutGap="0px">
+                    <div fxFlex="380px" fxFlexAlign="start" fxFlexFill>
+                      <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="0px">
+                        <div fxFlex="75px" fxFlexAlign="start">
+                          <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="5px">
+                            <div fxFlex="330px" fxFlexFill>
+                              <mat-form-field class="frm_cliente_documento">
+                                <mat-select placeholder="Documentos" [(value)]="id_documento" tabindex="30">
+                                  <mat-option *ngFor="let clidocanexo of clientedocumentosList" [value]="clidocanexo.id">
+                                    {{ clidocanexo.descricao }} - {{clidocanexo.numero}}
+                                  </mat-option>
+                                </mat-select>
+                              </mat-form-field>
+                            </div>
+                            <div fxFlex="350px" fxFlexFill>
+                              <label style="font-size: 12px; font-weight: bold; color: gray">Anexar pdf / imagem documento</label>
+                              <input type="file" placeholder="Upload file" #fileInput accept=".pdf,.doc,.docx" style="min-width: 500px; max-width: 500px;">
+                            </div>
+                            <div fxFlex="120px" fxFlexAlign="start" fxFlexFill>
+                              <button mat-raised-button color="primary" (click)="uploadAnexo()" tabindex="34" style="margin-bottom: 10px; margin-top: 10px;">
+                                <mat-icon>file_upload</mat-icon>
+                                <span>Enviar Anexo</span>
+                              </button>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div fxLayout="column" fxLayoutAlign="start center" fxLayoutGap="0px">
+                        <div fxFlex="40px" fxFlexAlign="start" fxFlexFill>
+                          <table>
+                            <tr>
+                              <th class="frm_cliente_grid_tipodocumento">
+                                <label>Tipo de Documento</label>
+                              </th>
+                              <th class="frm_cliente_grid_nrolicenca">
+                                <label>Numero</label>
+                              </th>
+                              <th class="frm_cliente_grid_anexo">
+                                <label>Anexo</label>
+                              </th>
+                              <th class="frm_contratocliente_residuo_botao">
+                              </th>
+                            </tr>
+                          </table>
+                        </div>
+                        <div fxFlex="160px" fxFlexAlign="start" fxFlexFill style="overflow-y:auto; overflow-x: hidden">
+                          <table>
+                            <tr *ngFor="let clidoc of clientedocumentoAnexos">
+                              <td class="frm_cliente_grid_tipodocumento">
+                                {{clidoc.descricao}}
+                              </td>
+                              <td class="frm_cliente_grid_nrolicenca">
+                                {{clidoc.numero}}
+                              </td>
+                              <td class="frm_cliente_grid_anexo">
+                                <a mat-button href="{{ linkDownload + 'CLI_' + clidoc.id_cliente + '_DOC_'+ clidoc.id + '_' + clidoc.caminho }}">
+                                  {{clidoc.caminho}}
+                                </a>
+                              </td>
+                              <td class="frm_cliente_botao">
+                                <a (click)="deleteAnexo(clidoc)" class="tooltip">
+                                  <i class="fa fa-trash" aria-hidden="true"></i>
+                                  <span class="tooltiptext">Excluir</span>
+                                </a>
+                              </td>
+                            </tr>
+                          </table>
                         </div>
                       </div>
                     </div>

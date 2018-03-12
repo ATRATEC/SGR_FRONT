@@ -1,15 +1,16 @@
-<mat-toolbar color="primary" style="background-color: green">
-  <a class="navbar-brand" href="#">
-    <span>SGR </span>
+<div class="no_print">
+<mat-toolbar color="primary" style="background-color: green" class="no_print">
+  <a class="no_print navbar-brand" href="#">
+    <span class="no_print">SGR </span>
   </a>
   <!-- Cadastros -->
-  <button mat-button [matMenuTriggerFor]="cadastros" *ngIf="Logado">
-    <span style="color: white">Cadastros</span>
+  <button mat-button [matMenuTriggerFor]="cadastros" *ngIf="Logado" class="no_print">
+    <span style="color: white" class="no_print">Cadastros</span>
   </button>
-  <mat-menu #cadastros="matMenu" [overlapTrigger]="false">
+  <mat-menu #cadastros="matMenu" [overlapTrigger]="false" class="no_print">
     <button mat-menu-item [routerLink]="['/servicos']">
       <mat-icon fontSet="fontawesome" fontIcon="fa-handshake-o"></mat-icon>
-      <span>Serviços</span>
+      <span >Serviços</span>
     </button>
     <button mat-menu-item [routerLink]="['/clientes']">
       <mat-icon fontSet="fontawesome" fontIcon="fa-group"></mat-icon>
@@ -19,10 +20,10 @@
       <mat-icon fontSet="fontawesome" fontIcon="fa-book"></mat-icon>
       <span>Contrato</span>
     </button>
-    <button mat-menu-item [matMenuTriggerFor]="documento">
+    <!-- <button mat-menu-item [matMenuTriggerFor]="documento">
       <mat-icon fontSet="fontawesome" fontIcon="fa-id-card"></mat-icon>
       <span>Documento</span>
-    </button>
+    </button> -->
     <button mat-menu-item [routerLink]="['/fornecedores']">
       <mat-icon fontSet="fontawesome" fontIcon="fa-truck"></mat-icon>
       <span>Fornecedor</span>
@@ -31,13 +32,17 @@
       <mat-icon fontSet="fontawesome" fontIcon="fa-recycle"></mat-icon>
       <span>Resíduo</span>
     </button>
+    <button mat-menu-item [routerLink]="['/equipamentos']">
+      <mat-icon fontSet="fontawesome" fontIcon="fa-wrench"></mat-icon>
+      <span>Equipamento</span>
+    </button>
     <button mat-menu-item [routerLink]="['/']">
       <mat-icon fontSet="fontawesome" fontIcon="fa-usd"></mat-icon>
       <span>Preço</span>
     </button>
   </mat-menu>
   <!-- Contrato -->
-  <mat-menu #contrato="matMenu">
+  <mat-menu #contrato="matMenu" class="no_print">
     <button mat-menu-item [routerLink]="['/contratoclientes']">
       <!-- <mat-icon fontSet="fontawesome" fontIcon="fa-truck"></mat-icon> -->
       <span>Cliente</span>
@@ -48,22 +53,19 @@
     </button>
   </mat-menu>
   <!-- Documento -->
-  <mat-menu #documento="matMenu">
+  <!-- <mat-menu #documento="matMenu" class="no_print">
     <button mat-menu-item [routerLink]="['/clientedocumentos']">
-      <!-- <mat-icon fontSet="fontawesome" fontIcon="fa-truck"></mat-icon> -->
       <span>Cliente</span>
     </button>
     <button mat-menu-item [routerLink]="['/fornecedordocumentos']">
-      <!-- <mat-icon fontSet="fontawesome" fontIcon="fa-truck"></mat-icon> -->
       <span>Fornecedor</span>
     </button>
     <button mat-menu-item [routerLink]="['/tipodocumentos']">
-      <!-- <mat-icon fontSet="fontawesome" fontIcon="fa-truck"></mat-icon> -->
       <span>Tipo de Documento</span>
     </button>
-  </mat-menu>
+  </mat-menu> -->
   <!-- Residuo -->
-  <mat-menu #residuo="matMenu">
+  <mat-menu #residuo="matMenu" class="no_print">
     <button mat-menu-item [routerLink]="['/acondicionamentos']">
       <!-- <mat-icon fontSet="fontawesome" fontIcon="fa-truck"></mat-icon> -->
       <span>Acondicionamento</span>
@@ -71,10 +73,6 @@
     <button mat-menu-item [routerLink]="['/classeresiduos']">
       <!-- <mat-icon fontSet="fontawesome" fontIcon="fa-truck"></mat-icon> -->
       <span>Classe de Resíduos</span>
-    </button>
-    <button mat-menu-item [routerLink]="['/']">
-      <!-- <mat-icon fontSet="fontawesome" fontIcon="fa-truck"></mat-icon> -->
-      <span>Pesagem</span>
     </button>
     <!-- <button mat-menu-item [routerLink]="['/tipoatividades']">
       <span>Tipo de Atividades</span>
@@ -97,9 +95,9 @@
   </mat-menu>
   <!-- Processos -->
   <button mat-button [matMenuTriggerFor]="processos" *ngIf="Logado">
-    <span style="color: white">Processos</span>
+    <span style="color: white" class="no_print">Processos</span>
   </button>
-  <mat-menu #processos="matMenu" [overlapTrigger]="false">
+  <mat-menu #processos="matMenu" [overlapTrigger]="false" class="no_print">
     <button mat-menu-item [routerLink]="['/manifestos']">
       <mat-icon fontSet="fontawesome" fontIcon="fa-recycle"></mat-icon>
       <span>Manifesto</span>
@@ -107,6 +105,14 @@
     <button mat-menu-item [routerLink]="['/monitordocumento']">
       <mat-icon fontSet="fontawesome" fontIcon="fa-group"></mat-icon>
       <span>Monitor de Documentos</span>
+    </button>
+    <button mat-menu-item [routerLink]="['/locacoes']">
+      <mat-icon fontSet="fontawesome" fontIcon="fa-calculator"></mat-icon>
+      <span>Apuração de Locações</span>
+    </button>
+    <button mat-menu-item [routerLink]="['/pesagens']">
+      <mat-icon fontSet="fontawesome" fontIcon="fa-balance-scale"></mat-icon>
+      <span>Pesagem</span>
     </button>
     <!-- <button mat-menu-item>
       <mat-icon fontSet="fontawesome" fontIcon="fa-cubes"></mat-icon>
@@ -116,34 +122,34 @@
   <!-- Relatórios -->
 
   <button mat-button [matMenuTriggerFor]="relatorios" *ngIf="Logado">
-    <span style="color: white">Relatórios</span>
+    <span style="color: white" class="no_print">Relatórios</span>
   </button>
   <mat-menu #relatorios="matMenu" [overlapTrigger]="false">
-    <button mat-menu-item [matMenuTriggerFor]="relatorioscliente">
+    <button mat-menu-item [matMenuTriggerFor]="relatoriosgerenciais">
       <mat-icon fontSet="fontawesome" fontIcon="fa-user"></mat-icon>
-      <span>Cliente</span>
+      <span>Gerencial</span>
     </button>
-    <button mat-menu-item [routerLink]="['/relatorios/receita']">
+    <!-- <button mat-menu-item [routerLink]="['/relatorios/receita']">
       <mat-icon fontSet="fontawesome" fontIcon="fa-dollar"></mat-icon>
       <span>Receitas</span>
-    </button>
-    <button mat-menu-item [routerLink]="['/relatorios/despesa']">
+    </button> -->
+    <!-- <button mat-menu-item [routerLink]="['/relatorios/despesa']">
       <mat-icon fontSet="fontawesome" fontIcon="fa-dollar"></mat-icon>
       <span>Despesas</span>
-    </button>
+    </button> -->
     <button mat-menu-item>
-      <!-- <mat-icon fontSet="fontawesome" fontIcon="fa-exchange"></mat-icon> -->
       <span>Medições</span>
     </button>
   </mat-menu>
-  <mat-menu #relatorioscliente="matMenu" [overlapTrigger]="false">
-    <button mat-menu-item [routerLink]="['/relatorios/receitacliente']">
+  <mat-menu #relatoriosgerenciais="matMenu" [overlapTrigger]="false">
+    <button mat-menu-item [routerLink]="['/relatorios/cliente']">
+      <!-- <button mat-menu-item [routerLink]="['/relatorios/receitacliente',{mensagem:'mensagem de teste'}]"></button> -->
       <!-- <mat-icon fontSet="fontawesome" fontIcon="fa-group"></mat-icon> -->
-      <span>Receitas</span>
+      <span>Cliente</span>
     </button>
     <button mat-menu-item>
       <!-- <mat-icon fontSet="fontawesome" fontIcon="fa-cubes"></mat-icon> -->
-      <span>Despesas</span>
+      <span>Ambiente Verde</span>
     </button>
   </mat-menu>
   <!-- Utilitários -->
@@ -180,8 +186,8 @@
   </mat-menu> -->
   <span class="espaco"></span>
   <button mat-button [matMenuTriggerFor]="loginsistema" *ngIf="Logado">
-    <i class="fa fa-user-o" aria-hidden="true"></i>
-    <span style="color: white"> {{Usuario.name}}</span>
+    <i class="fa fa-user-o no_print" aria-hidden="true"></i>
+    <span style="color: white" class="no_print"> {{Usuario.name}}</span>
   </button>
   <mat-menu #loginsistema="matMenu" [overlapTrigger]="false">
     <button mat-menu-item>
@@ -198,6 +204,7 @@
     <span style="color: white">Login</span>
   </button>
 </mat-toolbar>
+</div>
 <!-- <app-alerts [defaultSettings]="options"></app-alerts> -->
 <!-- <button mat-raised-button (click)="downloadPDF()"> open </button> -->
 <router-outlet *ngIf="Logado"></router-outlet>

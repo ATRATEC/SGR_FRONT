@@ -95,6 +95,10 @@
   font-weight: normal;
 }
 
+.mat-row, .mat-header-row {
+  min-width: 1350px;
+}
+
 mat-row:nth-child(even) {
   background-color: white;
 }
@@ -169,6 +173,11 @@ mat-row:nth-child(odd) {
 .mat-column-email {
   min-width: 300px;
   max-width: 300px;
+}
+
+.mat-column-inativo {
+  min-width: 80px;
+  max-width: 80px;
 }
 
 .mat-row:hover, .example-selected-row {

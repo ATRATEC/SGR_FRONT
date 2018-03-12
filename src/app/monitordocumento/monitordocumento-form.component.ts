@@ -1,5 +1,5 @@
-import { FornecedorDocumento } from './../fornecedordocumento/fornecedordocumento';
-import { ClienteDocumento } from './../clientedocumento/clientedocumento';
+import { FornecedorDocumento } from './../fornecedor/fornecedordocumento';
+import { ClienteDocumento } from './../cliente/clientedocumento';
 import { environment } from './../../environments/environment';
 import { HttpErrorResponse } from '@angular/common/http';
 import { isNullOrUndefined } from 'util';
@@ -216,6 +216,7 @@ export class MonitorDocumentoFormComponent implements OnInit, AfterViewInit, Aft
   }
 
   btnImprimir_click() {
+    window.print();
     // this.emProcessamento = true;
     // this._relatorioService
       // .getRelatorioReceita(this._tokenManager.retrieve(), this.relatorio)

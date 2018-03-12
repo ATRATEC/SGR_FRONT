@@ -85,22 +85,19 @@
             <mat-cell *matCellDef="let row"> {{row.id}} </mat-cell>
           </ng-container>
 
-          <!-- Name Column -->
-          <ng-container matColumnDef="descricao">
-            <mat-header-cell *matHeaderCellDef mat-sort-header> Descrição </mat-header-cell>
-            <mat-cell *matCellDef="let row"> {{row.descricao}} </mat-cell>
+          <ng-container matColumnDef="fornecedor">
+            <mat-header-cell *matHeaderCellDef mat-sort-header> Fornecedor </mat-header-cell>
+            <mat-cell *matCellDef="let row"> {{row.fornecedor}} </mat-cell>
           </ng-container>
 
-          <!-- Name Column -->
           <ng-container matColumnDef="cliente">
             <mat-header-cell *matHeaderCellDef mat-sort-header> Cliente </mat-header-cell>
             <mat-cell *matCellDef="let row"> {{row.cliente != null ? row.cliente : ''}} </mat-cell>
           </ng-container>
 
-          <!-- Name Column -->
-          <ng-container matColumnDef="fornecedor">
-            <mat-header-cell *matHeaderCellDef mat-sort-header> Fornecedor </mat-header-cell>
-            <mat-cell *matCellDef="let row"> {{row.fornecedor}} </mat-cell>
+          <ng-container matColumnDef="descricao">
+            <mat-header-cell *matHeaderCellDef mat-sort-header> Descrição </mat-header-cell>
+            <mat-cell *matCellDef="let row"> {{row.descricao}} </mat-cell>
           </ng-container>
 
           <ng-container matColumnDef="vigencia_inicio">
@@ -113,8 +110,32 @@
             <mat-cell *matCellDef="let row"> {{row.vigencia_final | date: 'dd/MM/yyyy'}} </mat-cell>
           </ng-container>
 
+          <ng-container matColumnDef="exclusivo">
+            <mat-header-cell *matHeaderCellDef mat-sort-header></mat-header-cell>
+            <mat-cell *matCellDef="let row">
+              <button mat-icon-button [matMenuTriggerFor]="menu">
+                <mat-icon>more_vert</mat-icon>
+              </button>
+              <mat-menu #menu="matMenu">
+                <button mat-menu-item>
+                  <mat-icon>dialpad</mat-icon>
+                  <span>Redial</span>
+                </button>
+                <button mat-menu-item disabled>
+                  <mat-icon>voicemail</mat-icon>
+                  <span>Check voicemail</span>
+                </button>
+                <button mat-menu-item>
+                  <mat-icon>notifications_off</mat-icon>
+                  <span>Disable alerts</span>
+                </button>
+              </mat-menu>
+            </mat-cell>
+          </ng-container>
+
           <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-          <mat-row *matRowDef="let row; columns: displayedColumns;" [ngClass]="{'highlight': selectedRowIndex == row.id}" (click)="highlight(row)" (dblclick)="dblck(row)"></mat-row>
+          <mat-row *matRowDef="let row; columns: displayedColumns;" [ngClass]="{'highlight': selectedRowIndex == row.id}" (click)="highlight(row)"
+            (dblclick)="dblck(row)"></mat-row>
         </mat-table>
         <mat-paginator #paginator [length]="dataSource.nrRegistros" [pageIndex]="0" [pageSize]="25" [pageSizeOptions]="[5, 10, 15, 25, 100]">
         </mat-paginator>

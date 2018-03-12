@@ -19,10 +19,9 @@ export class DsResiduo extends DataSource<Residuo> {
   _filterChange = new BehaviorSubject( {
     id: '',
     descricao: '',
+    codigo_ibama: '',
     classe_residuo: '',
-    tipo_residuo: '',
-    acondicionamento: '',
-    tratamento: ''
+    tipo_residuo: ''
   } );
 
   public onChange: EventEmitter<boolean> = new EventEmitter<boolean>();

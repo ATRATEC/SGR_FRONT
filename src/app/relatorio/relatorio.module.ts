@@ -1,3 +1,5 @@
+import { DatepipeModule } from './../datepipe/datepipe.module';
+import { FiltroClienteFormComponent } from './filtrocliente-form.component';
 import { DespesaFormComponent } from './despesa-form.component';
 import { MatNativeDateModule } from '@angular/material';
 import { MyMaterialModule } from './../my-material/my-material.module';
@@ -6,7 +8,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { BrowserModule } from '@angular/platform-browser';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { ReceitaFormComponent } from './receita-form.component';
-import { ReceitaClienteFormComponent } from './receitacliente-form.component';
+import { RelatorioClienteFormComponent } from './relatoriocliente-form.component';
 import { RelatorioService } from './relatorio.service';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
@@ -24,11 +26,13 @@ import { RelatorioRoutingModule } from './relatorio-routing.module';
     MyMaterialModule,
     MatNativeDateModule,
     ReactiveFormsModule,
+    DatepipeModule,
     RelatorioRoutingModule
   ],
   declarations: [
     ReceitaFormComponent,
-    ReceitaClienteFormComponent,
+    FiltroClienteFormComponent,
+    RelatorioClienteFormComponent,
     DespesaFormComponent
   ],
   providers: [RelatorioService]

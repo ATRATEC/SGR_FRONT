@@ -1,0 +1,304 @@
+<div fxLayout="row" fxLayoutAlign="start start" fxLayoutGap="1px">
+  <div fxFlex="140px" style="padding: 10px;" fxLayoutGap="10px" class="no_print">
+    <div fxLayout="column" fxLayoutAlign="space-between center" fxLayoutGap="5px" style="height: 100%" class="no_print">
+      <div fxFlex="80%" fxFlexFill fxFlexAlign="center" class="no_print">
+        <button id="btnImprimir" mat-raised-button color="primary" style="width: 100%" (click)="btnImprimir_click()">
+          <mat-icon>print</mat-icon>
+          <span>Imprimir</span>
+        </button>
+        <!-- <button id="btnIncluir" mat-raised-button color="primary" style="width: 100%" (click)="exportarPDF()">
+          <mat-icon>insert_drive_file</mat-icon>
+          <span>Incluir</span>
+        </button> -->
+      </div>
+      <div fxFlex="40px" fxFlexFill fxFlexAlign="end">
+
+        <a routerLink="/" mat-raised-button color="primary" style="width: 120px">
+          <mat-icon>close</mat-icon>
+          <span>Fechar</span>
+        </a>
+      </div>
+    </div>
+  </div>
+  <div fxFlex="90%">
+    <div fxLayout="column" fxLayoutAlign="start center" fxLayoutGap="5px">
+      <div fxFlex="80%" fxFlexAlign="start">
+        <div fxLayout="column" class="frm_relatorio-loading-shade" fxLayoutAlign="center center" *ngIf="emProcessamento">
+          <div fxFlex="70" fxFlexAlign="center" style="width: 29cm">
+            <mat-spinner></mat-spinner>
+          </div>
+          <div fxFlex="10" fxFlexAlign="center" style="width: 29cm">
+            &nbsp;
+          </div>
+          <div fxFlex="20" fxFlexAlign="center" style="width: 29cm">
+            <label>Aguarde...</label>
+          </div>
+        </div>
+        <div fxLayout="column" fxLayoutAlign="start start" fxLayoutGap="5px" *ngIf="!emProcessamento" #relatorio>
+          <div fxFlex="100%" fxFlexAlign="start" style="width: 29cm">
+            <div *ngIf="filtroRelatorio.receita">
+              <table class="a4" style="padding: 0px 0px 0px 0px; margin: 0px 0px 0px 0px; width: 100%; border: 0px solid white;" border="0">
+                <tr>
+                  <th style="background-color: #FFFFFF; width: 200px">
+                    <img src="assets/imagens/logo_av.png" alt="profile Pic" height="60px" width="200px" style="width: 200px; height: 60px;">
+                  </th>
+                  <th style="background-color: #FFFFFF">
+                    <div style="background-color: #FFFFFF; text-align: center">
+                      <h2>Relatório gerencial de Receitas</h2>
+                    </div>
+                    <div style="background-color: #FFFFFF; text-align: center">
+                      <span *ngIf="filtroRelatorio.datade && filtroRelatorio.dataate">Período {{filtroRelatorio.datade | formatDate}} até {{filtroRelatorio.dataate | formatDate}}</span>
+                    </div>
+                  </th>
+                  <th style="background-color: #FFFFFF; width: 200px">
+                    <div style="text-align: right; font-size: 10px">Data / Hora: {{hoje | formatDate}} {{hoje | date:'HH:mm'}}</div>
+                    <!-- <div style="text-align: right">info</div> -->
+                  </th>
+                </tr>
+              </table>
+              <div>
+                <label>Cliente: {{filtroRelatorio.cliente}} </label>
+              </div>
+              <!-- <hr> -->
+              <!-- <span *ngIf="filtroRelatorio.cliente">Cliente: {{filtroRelatorio.cliente}} </span> -->
+              <!-- <hr *ngIf="filtroRelatorio.cliente"> -->
+              <table class="a4">
+                <tr style="background-color: #FFFFFF; font-size: 12px; border-bottom: 1px solid black ">
+                  <th>Dt Coleta</th>
+                  <th>Nº Manifesto</th>
+                  <th>Resíduo</th>
+                  <th>Transportador</th>
+                  <th>Destinador</th>
+                  <th>Tratamento</th>
+                  <th style="text-align: right">Qtd</th>
+                  <th style="text-align: center">Und</th>
+                  <th style="text-align: right">Val Unit.</th>
+                  <th style="text-align: right">Val Total</th>
+                </tr>
+                <tr *ngFor="let item of receitas" style="background-color: #FFFFFF; font-size: 10px; ">
+                  <td>{{item.coleta | formatDate}}</td>
+                  <td>{{item.manifesto}}</td>
+                  <td>{{item.residuo}}</td>
+                  <td>{{item.transportador}}</td>
+                  <td>{{item.destinador}}</td>
+                  <td>{{item.tratamento}}</td>
+                  <td style="text-align: right">{{item.quantidade}}</td>
+                  <td style="text-align: center">{{item.unidade}}</td>
+                  <td style="text-align: right">{{item.valor_unitario | currency:'BRL':true}}</td>
+                  <td style="text-align: right">{{item.valor_total | currency:'BRL':true}}</td>
+                </tr>
+              </table>
+              <hr>
+              <table style="width: 100%">
+                <tr style="font-size: 10px">
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td style="text-align: right"></td>
+                  <td style="text-align: center"></td>
+                  <td colspan="2" style="text-align: right">
+                    <b>Total Geral:</b> {{sumTotalReceitas | currency:'BRL':true}}</td>
+                </tr>
+              </table>
+            </div>
+            <div class="page-break" *ngIf="filtroRelatorio.despesa && filtroRelatorio.receita"></div>
+            <div *ngIf="filtroRelatorio.despesa">
+              <table class="a4" style="padding: 0px 0px 0px 0px; margin: 0px 0px 0px 0px; width: 100%; border: 0px solid white;" border="0">
+                <tr>
+                  <th style="background-color: #FFFFFF; width: 200px">
+                    <img src="assets/imagens/logo_av.png" alt="profile Pic" height="60px" width="200px" style="width: 200px; height: 60px;">
+                  </th>
+                  <th style="background-color: #FFFFFF">
+                    <div style="background-color: #FFFFFF; text-align: center">
+                      <h2>Relatório gerencial de Despesa</h2>
+                    </div>
+                    <div style="background-color: #FFFFFF; text-align: center">
+                      <span *ngIf="filtroRelatorio.datade && filtroRelatorio.dataate">Período {{filtroRelatorio.datade | formatDate}} até {{filtroRelatorio.dataate | formatDate}}</span>
+                    </div>
+                  </th>
+                  <th style="background-color: #FFFFFF; width: 200px">
+                    <div style="text-align: right; font-size: 10px">Data / Hora: {{hoje | formatDate}} {{hoje | date:'HH:mm'}}</div>
+                    <!--<div style="text-align: right">{{date('')}}</div>-->
+                    <!-- <div style="text-align: right">info</div> -->
+                  </th>
+                </tr>
+              </table>
+              <hr>
+              <span *ngIf="filtroRelatorio.cliente">Cliente: {{filtroRelatorio.cliente}} </span>
+              <hr *ngIf="filtroRelatorio.cliente">
+              <table class="a4">
+                <tr style="background-color: #FFFFFF; font-size: 12px; border-bottom: 1px solid black ">
+                  <th>Dt Coleta</th>
+                  <th>Nº Manifesto</th>
+                  <th>Resíduo</th>
+                  <th>Transportador</th>
+                  <th>Destinador</th>
+                  <th>Tratamento</th>
+                  <th style="text-align: right">Qtd</th>
+                  <th style="text-align: center">Und</th>
+                  <th style="text-align: right">Val Transp.</th>
+                  <th style="text-align: right">Val Dest.</th>
+                  <th style="text-align: right">Val Total</th>
+                </tr>
+                <tr *ngFor="let item of despesas" style="background-color: #FFFFFF; font-size: 10px; ">
+                  <td>{{item.coleta | formatDate}}</td>
+                  <td>{{item.manifesto}}</td>
+                  <td>{{item.residuo}}</td>
+                  <td>{{item.transportador}}</td>
+                  <td>{{item.destinador}}</td>
+                  <td>{{item.tratamento}}</td>
+                  <td style="text-align: right">{{item.quantidade}}</td>
+                  <td style="text-align: center">{{item.unidade}}</td>
+                  <td style="text-align: right">{{item.valor_transporte | currency:'BRL':true}}</td>
+                  <td style="text-align: right">{{item.valor_destinacao | currency:'BRL':true}}</td>
+                  <td style="text-align: right">{{item.valor_total | currency:'BRL':true}}</td>
+                </tr>
+              </table>
+              <hr>
+              <table style="width: 100%">
+                <tr style="font-size: 10px">
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td style="text-align: right"></td>
+                  <td style="text-align: center"></td>
+                  <td colspan="2" style="text-align: right">
+                    <b>Total Geral:</b> {{sumTotalDespesas | currency:'BRL':true}}</td>
+                </tr>
+              </table>
+            </div>
+            <div class="page-break" *ngIf="filtroRelatorio.despesa && filtroRelatorio.receita && filtroRelatorio.locacao"></div>
+            <div *ngIf="filtroRelatorio.locacao">
+                <table class="a4" style="padding: 0px 0px 0px 0px; margin: 0px 0px 0px 0px; width: 100%; border: 0px solid white;" border="0">
+                  <tr>
+                    <th style="background-color: #FFFFFF; width: 200px">
+                      <img src="assets/imagens/logo_av.png" alt="profile Pic" height="60px" width="200px" style="width: 200px; height: 60px;">
+                    </th>
+                    <th style="background-color: #FFFFFF">
+                      <div style="background-color: #FFFFFF; text-align: center">
+                        <h2>Relatório gerencial - Locação de Equipamentos</h2>
+                      </div>
+                      <div style="background-color: #FFFFFF; text-align: center">
+                        <span *ngIf="filtroRelatorio.datade && filtroRelatorio.dataate">Período {{filtroRelatorio.datade | formatDate}} até {{filtroRelatorio.dataate | formatDate}}</span>
+                      </div>
+                    </th>
+                    <th style="background-color: #FFFFFF; width: 200px">
+                      <div style="text-align: right; font-size: 10px">Data / Hora: {{hoje | formatDate}} {{hoje | date:'HH:mm'}}</div>
+                      <!--<div style="text-align: right">{{date('')}}</div>-->
+                      <!-- <div style="text-align: right">info</div> -->
+                    </th>
+                  </tr>
+                </table>
+                <hr>
+                <span *ngIf="filtroRelatorio.cliente">Cliente: {{filtroRelatorio.cliente}} </span>
+                <hr *ngIf="filtroRelatorio.cliente">
+                <table class="a4">
+                  <tr style="background-color: #FFFFFF; font-size: 12px; border-bottom: 1px solid black ">
+                    <th>Dt Coleta</th>
+                    <th>Equipamento</th>
+                    <th style="text-align: right">Qtd</th>
+                    <th style="text-align: center">Und</th>
+                    <th style="text-align: right">Val Unit.</th>
+                    <th style="text-align: right">Val Total</th>
+                  </tr>
+                  <tr *ngFor="let item of locacoes" style="background-color: #FFFFFF; font-size: 10px; ">
+                    <td>{{item.coleta | formatDate}}</td>
+                    <td>{{item.equipamento}}</td>
+                    <td style="text-align: right">{{item.quantidade}}</td>
+                    <td style="text-align: center">{{item.unidade}}</td>
+                    <td style="text-align: right">{{item.valor_unitario | currency:'BRL':true}}</td>
+                    <td style="text-align: right">{{item.valor_total | currency:'BRL':true}}</td>
+                  </tr>
+                </table>
+                <hr>
+                <table style="width: 100%">
+                  <tr style="font-size: 10px">
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td style="text-align: right"></td>
+                    <td style="text-align: center"></td>
+                    <td colspan="2" style="text-align: right">
+                      <b>Total Geral:</b> {{sumTotalDespesas | currency:'BRL':true}}</td>
+                  </tr>
+                </table>
+              </div>
+          </div>
+        </div>
+        <!-- <mat-card *ngIf="!emProcessamento" style="width: 700px;">
+          <div fxLayout="column" fxLayoutAlign="start center" fxLayoutGap="5px">
+            <div fxFlex="60px" fxFlexAlign="start">
+              <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="10px" style="width: 100%">
+                <div fxFlex="120px" fxFlexAlign="start" fxFlexFill>
+                  <mat-form-field class="frm_receita_codigo">
+                    <input matInput autofocus #focuscomp #codigofor maxlength="9" [formControl]="valCodigo" placeholder="Cliente" required tabindex="1"
+                      [(ngModel)]="relatorio.id_cliente" (keyup)="validaSaida($event.target.value)" (keypress)="onlyNumber($event)">
+                    <mat-hint align="end">{{codigofor.value?.length || 0}}/9</mat-hint>
+                    <mat-error *ngIf="valCodigo.invalid">{{getCodigoErrorMessage()}}</mat-error>
+                  </mat-form-field>
+                </div>
+                <div fxFlex="45px" fxFlexAlign="center" fxFlexFill>
+                  <button mat-icon-button color="primary" (click)="openPesquisa()" tabindex="2">
+                    <mat-icon>search</mat-icon>
+                  </button>
+                </div>
+                <div fxFlex="520px" fxFlexAlign="start" fxFlexFill>
+                  <mat-form-field class="frm_receita_razao_social">
+                    <input matInput disabled [(ngModel)]="relatorio.cliente">
+                  </mat-form-field>
+                </div>
+              </div>
+            </div>
+            <div fxFlex="60px" fxFlexAlign="start">
+              <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="10px" style="width: 100%">
+                <div fxFlex="170px" fxFlexAlign="start" fxFlexFill>
+                  <mat-form-field class="frm_receita_data">
+                    <input matInput type="date" #dtemissao maxlength="10" placeholder="Data Inicio Coleta" tabindex="4" [ngModel]="relatorio.datade"
+                      (ngModelChange)="relatorio.datade = $event" [value]="relatorio.datade">
+                    <mat-hint align="end">{{dtemissao.value?.length || 0}}/10</mat-hint>
+                  </mat-form-field>
+                </div>
+                <div fxFlex="170px" fxFlexAlign="start" fxFlexFill>
+                  <mat-form-field class="frm_receita_data">
+                    <input matInput type="date" #dtvencimento maxlength="10" placeholder="Data Final Coleta" tabindex="5" [ngModel]="relatorio.dataate"
+                      (ngModelChange)="relatorio.dataate = $event" [value]="relatorio.dataate">
+                    <mat-hint align="end">{{dtvencimento.value?.length || 0}}/10</mat-hint>
+                  </mat-form-field>
+                </div>
+              </div>
+            </div>
+            <div fxFlex="60px" fxFlexAlign="start">
+              <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="10px" style="width: 100%">
+                <div fxFlex="120px" fxFlexAlign="start" fxFlexFill>
+                  <mat-form-field class="frm_receita_codigo">
+                    <input matInput autofocus #focuscomp #codigofor maxlength="9" [formControl]="valManifesto" placeholder="Manifesto" tabindex="1"
+                      [(ngModel)]="relatorio.id_manifesto" (keyup)="validaSaidaManifesto($event.target.value)" (keypress)="onlyNumber($event)">
+                    <mat-hint align="end">{{codigofor.value?.length || 0}}/9</mat-hint>
+                    <mat-error *ngIf="valManifesto.invalid">{{getCodigoErrorMessage()}}</mat-error>
+                  </mat-form-field>
+                </div>
+                <div fxFlex="45px" fxFlexAlign="center" fxFlexFill>
+                  <button mat-icon-button color="primary" (click)="openPesquisaManifesto()" tabindex="2">
+                    <mat-icon>search</mat-icon>
+                  </button>
+                </div>
+                <div fxFlex="520px" fxFlexAlign="start" fxFlexFill>
+                  <mat-form-field class="frm_receita_razao_social">
+                    <input matInput disabled [(ngModel)]="relatorio.manifesto">
+                  </mat-form-field>
+                </div>
+              </div>
+            </div>
+          </div>
+        </mat-card> -->
+      </div>
+
+    </div>
+  </div>
+</div>

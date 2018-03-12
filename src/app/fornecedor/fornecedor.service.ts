@@ -156,7 +156,8 @@ export class FornecedorService {
   /** Metodo que retorna um observable com dados da listagem de fornecedors
    *  parametro: acessToken: string
   */
-  getFornecedors(accessToken: string, sort: string, order: string, page: number, pagesize: number, filter: FornecedorFilter) {
+  getFornecedors(accessToken: string, sort: string, order: string, page: number, pagesize: number, filter: FornecedorFilter,
+    Ativos: boolean = false) {
     const headers = new Headers({
       Accept: 'application/json',
       Authorization: 'Bearer ' + accessToken.toString().replace(/"/g, '')
@@ -208,6 +209,16 @@ export class FornecedorService {
 
     if ((!isNullOrUndefined(filter.email)) && (filter.email.length > 0)) {
       search.set('email', filter.email);
+    }
+
+    if (Ativos) {
+      if ((!isNullOrUndefined(filter.inativo))) {
+        if (filter.inativo) {
+          search.set('inativo', '1');
+        } else {
+          search.set('inativo', '0');
+        }
+      }
     }
 
     return this._http

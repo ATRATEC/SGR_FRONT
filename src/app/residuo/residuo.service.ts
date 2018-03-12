@@ -26,9 +26,9 @@ export class ResiduoService {
       descricao: _residuo.descricao,
       id_classe: _residuo.id_classe,
       id_tipo_residuo: _residuo.id_tipo_residuo,
-      id_acondicionamento: _residuo.id_acondicionamento,
-      id_tratamento: _residuo.id_tratamento,
-      tipo_receita: _residuo.tipo_receita
+      codigo_nbr: _residuo.codigo_nbr,
+      codigo_onu: _residuo.codigo_onu,
+      codigo_ibama: _residuo.codigo_ibama
     };
     // _params.set('codigo', '1');
 
@@ -53,9 +53,9 @@ export class ResiduoService {
       descricao: _residuo.descricao,
       id_classe: _residuo.id_classe,
       id_tipo_residuo: _residuo.id_tipo_residuo,
-      id_acondicionamento: _residuo.id_acondicionamento,
-      id_tratamento: _residuo.id_tratamento,
-      tipo_receita: _residuo.tipo_receita
+      codigo_nbr: _residuo.codigo_nbr,
+      codigo_onu: _residuo.codigo_onu,
+      codigo_ibama: _residuo.codigo_ibama
     };
     // _params.set('id', _id.toString());
 
@@ -121,7 +121,7 @@ export class ResiduoService {
     if ((!isNullOrUndefined(sort))) {
       search.set('orderkey', sort);
     } else {
-      sort = 'id';
+      sort = 'descricao';
       search.set('orderkey', sort);
     }
 
@@ -141,12 +141,8 @@ export class ResiduoService {
       search.set('tipo_residuo', filter.tipo_residuo);
     }
 
-    if ((!isNullOrUndefined(filter.acondicionamento)) && (filter.acondicionamento.length > 0)) {
-      search.set('acondicionamento', filter.acondicionamento);
-    }
-
-    if ((!isNullOrUndefined(filter.tratamento)) && (filter.tratamento.length > 0)) {
-      search.set('tratamento', filter.tratamento);
+    if ((!isNullOrUndefined(filter.codigo_ibama)) && (filter.codigo_ibama.length > 0)) {
+      search.set('codigo_ibama', filter.codigo_ibama);
     }
 
     return this._http

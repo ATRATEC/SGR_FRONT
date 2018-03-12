@@ -159,9 +159,9 @@ export class ContratoFornecedorFormComponent
           .subscribe(data => {
             this.contratofornecedor = JSON.parse(data._body);
             if (JSON.parse(data._body).exclusivo === 1) {
-              this.contratofornecedor.exclusico = true;
+              this.contratofornecedor.exclusivo = true;
             } else {
-              this.contratofornecedor.exclusico = false;
+              this.contratofornecedor.exclusivo = false;
             }
 
             if (this.contratofornecedor.caminho) {
@@ -225,19 +225,19 @@ export class ContratoFornecedorFormComponent
     this.emProcessamento = true;
     const fileBrowser = this.fileInput.nativeElement;
     if (this.validaCampos()) {
-      if (!this.contratofornecedor.exclusico) {
+      if (!this.contratofornecedor.exclusivo) {
         this.contratofornecedor.id_cliente = null;
         this.contratofornecedor.cliente = '';
-        this.contratofornecedor.exclusico = false;
+        this.contratofornecedor.exclusivo = false;
       }
       if (isNullOrUndefined(this.contratofornecedor.id)) {
         this._contratofornecedorService.addContratoFornecedor(this._tokenManager.retrieve(), this.contratofornecedor)
           .subscribe( data => {
               this.contratofornecedor = data;
               if (data.exclusivo === 1) {
-                this.contratofornecedor.exclusico = true;
+                this.contratofornecedor.exclusivo = true;
               } else {
-                this.contratofornecedor.exclusico = false;
+                this.contratofornecedor.exclusivo = false;
               }
 
               for (let index = 0; index < this.contratofornecedorresiduos.length; index++) {
@@ -277,9 +277,9 @@ export class ContratoFornecedorFormComponent
               // fileBrowser.files[0]
               this.contratofornecedor = data;
               if (data.exclusivo === 1) {
-                this.contratofornecedor.exclusico = true;
+                this.contratofornecedor.exclusivo = true;
               } else {
-                this.contratofornecedor.exclusico = false;
+                this.contratofornecedor.exclusivo = false;
               }
 
               for (let index = 0; index < this.contratofornecedorresiduos.length; index++) {

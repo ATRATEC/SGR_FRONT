@@ -1,5 +1,3 @@
-import { TipoTratamentoService } from './../tipotratamento/tipotratamento.service';
-import { AcondicionamentoService } from './../acondicionamento/acondicionamento.service';
 import { TipoResiduoService } from './../tiporesiduo/tiporesiduo.service';
 import { ClasseResiduoService } from './../classeresiduo/classeresiduo.service';
 import { ClasseResiduo } from './../classeresiduo/classeresiduo';
@@ -34,12 +32,11 @@ import { TipoTratamento } from '../tipotratamento/tipotratamento';
 export class ResiduoFormComponent implements OnInit, AfterViewInit, AfterViewChecked {
 
   residuo: Residuo;
+  residuo_ant: Residuo;
   emProcessamento = false;
   exibeIncluir = false;
   classeresiduos: ClasseResiduo[];
   tiporesiduos: TipoResiduo[];
-  acondicionamentos: Acondicionamento[];
-  tipotratamentos: TipoTratamento[];
 
 
   valDescricao = new FormControl('', [Validators.required]);
@@ -50,8 +47,6 @@ export class ResiduoFormComponent implements OnInit, AfterViewInit, AfterViewChe
   constructor(private _residuoService: ResiduoService,
     private _classeresiduoService: ClasseResiduoService,
     private _tipoResiduoService: TipoResiduoService,
-    private _acondiocionamentoService: AcondicionamentoService,
-    private _tipotratamentoService: TipoTratamentoService,
     private _tokenManager: TokenManagerService,
     private _route: ActivatedRoute,
     private dialog: DialogService) {}
@@ -65,26 +60,18 @@ export class ResiduoFormComponent implements OnInit, AfterViewInit, AfterViewChe
   ngOnInit() {
     this.emProcessamento = true;
     this.residuo = new Residuo();
+    this.residuo_ant = new Residuo();
     this._classeresiduoService.getListClasseResiduos(this._tokenManager.retrieve())
+      .retry(3)
       .subscribe(data => {
         this.classeresiduos = JSON.parse(data._body);
       });
 
     this._tipoResiduoService.getListTipoResiduo(this._tokenManager.retrieve())
+      .retry(3)
       .subscribe(data => {
         this.tiporesiduos = JSON.parse(data._body);
     });
-
-    this._acondiocionamentoService.getListAcondicionamentos(this._tokenManager.retrieve())
-      .subscribe(data => {
-        this.acondicionamentos = JSON.parse(data._body);
-    });
-
-    this._tipotratamentoService.getListTipoTratamento(this._tokenManager.retrieve())
-      .subscribe(data => {
-        this.tipotratamentos = JSON.parse(data._body);
-    });
-
 
     this._route.params.forEach((params: Params) => {
       const id: number = +params['id'];
@@ -92,6 +79,7 @@ export class ResiduoFormComponent implements OnInit, AfterViewInit, AfterViewChe
         this._residuoService.getResiduo(this._tokenManager.retrieve(), id)
         .subscribe( data => {
           this.residuo = JSON.parse(data._body);
+          this.residuo_ant = JSON.parse(data._body);
           this.emProcessamento = false;
         });
       } else {
@@ -127,6 +115,7 @@ export class ResiduoFormComponent implements OnInit, AfterViewInit, AfterViewChe
             data => {
               this.emProcessamento = false;
               this.residuo = data;
+              this.residuo_ant = data;
               this.exibeIncluir = true;
               this.dialog.success('SGR', 'Tipo de Resíduo salvo com sucesso.');
             },
@@ -143,6 +132,7 @@ export class ResiduoFormComponent implements OnInit, AfterViewInit, AfterViewChe
           data => {
           this.emProcessamento = false;
           this.residuo = data;
+          this.residuo_ant = data;
           this.exibeIncluir = true;
           this.dialog.success('SGR', 'Tipo de Resíduo salvo com sucesso.');
         },
@@ -160,6 +150,7 @@ export class ResiduoFormComponent implements OnInit, AfterViewInit, AfterViewChe
 
   btnIncluir_click() {
     this.residuo = new Residuo();
+    this.residuo_ant = new Residuo();
   }
 
   getDescricaoErrorMessage() {
@@ -169,6 +160,20 @@ export class ResiduoFormComponent implements OnInit, AfterViewInit, AfterViewChe
       mensagem = mensagem + 'Campo obrigatório.';
     }
     return mensagem;
+  }
+
+  canDeactivate(): Observable<boolean> | boolean {
+
+    if (JSON.stringify(this.residuo) === JSON.stringify(this.residuo_ant)) {
+      return true;
+    }
+    // Allow synchronous navigation (`true`) if no crisis or the crisis is unchanged
+    // if (!this.crisis || this.crisis.name === this.editName) {
+    //   return true;
+    // }
+    // Otherwise ask the user with the dialog service and return its
+    // observable which resolves to true or false when the user decides
+    return this.dialog.confirm('Existem dados não salvos. Deseja descarta-los?');
   }
 
 }

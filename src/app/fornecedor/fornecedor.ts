@@ -8,6 +8,7 @@ export interface FornecedorFilter {
   contato: string;
   telefone: string;
   email: string;
+  inativo: boolean;
 }
 export class FornecedorFiltro implements FornecedorFilter {
   constructor(
@@ -18,6 +19,7 @@ export class FornecedorFiltro implements FornecedorFilter {
     public contato: string = '',
     public telefone: string = '',
     public email: string = '',
+    public inativo: boolean = false
   ) {}
 }
 export class Fornecedor {
@@ -58,6 +60,7 @@ export class Fornecedor {
     public cnae: string = '',
     public obsEndereco: string = '',
     public obsTelefonesEmail: string = '',
+    public inativo: boolean = false,
     public inclusao: Date = null,
     public usuario_inclusao: string = '',
     public alteracao: Date = null,

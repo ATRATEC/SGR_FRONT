@@ -28,7 +28,7 @@ import { OnlyNumberDirective } from './../only-number.directive';
   styleUrls: ['./contratocliente-list.component.css']
 })
 export class ContratoClienteListComponent implements OnInit, AfterViewInit {
-  displayedColumns = ['id', 'descricao', 'cliente', 'vigencia_inicio', 'vigencia_final'];
+  displayedColumns = ['id', 'cliente', 'descricao', 'vigencia_inicio', 'vigencia_final'];
   // displayedColumns = ['id', 'codigo', 'descricao'];
   dataSource: DsContratoCliente | null;
   selectedRowIndex = -1;

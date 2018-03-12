@@ -1,0 +1,202 @@
+<div fxLayout="row" fxLayoutAlign="start start" fxLayoutGap="1px">
+  <div fxFlex="140px" style="padding: 10px;" fxLayoutGap="10px">
+    <div fxLayout="column" fxLayoutAlign="space-between center" fxLayoutGap="5px" style="height: 100%">
+      <div fxFlex="80%" fxFlexFill fxFlexAlign="center">
+        <button id="btnSalvar" mat-raised-button color="primary" style="width: 100%" (click)="btnSalvar_click()">
+          <mat-icon>save</mat-icon>
+          <span>Salvar</span>
+        </button>
+        <button id="btnIncluir" mat-raised-button color="primary" style="width: 100%" (click)="btnIncluir_click()" *ngIf="exibeIncluir">
+          <mat-icon>insert_drive_file</mat-icon>
+          <span>Incluir</span>
+        </button>
+      </div>
+      <div fxFlex="40px" fxFlexFill fxFlexAlign="end">
+
+        <a routerLink="/pesagens" mat-raised-button color="primary" style="width: 120px">
+          <mat-icon>close</mat-icon>
+          <span>Fechar</span>
+        </a>
+      </div>
+    </div>
+  </div>
+  <div fxFlex="90%">
+    <div fxLayout="column" fxLayoutAlign="center center" fxLayoutGap="5px">
+      <div fxFlex="50px" fxFlexAlign="start" style="padding: 10px;">
+        <button id="lblTitulo" mat-raised-button style="width: 100%" disabled>
+          <i class="fa fa-balance-scale" aria-hidden="true"></i>
+          <span>PESAGEM</span>
+        </button>
+      </div>
+      <div fxFlex="80%" fxFlexAlign="center">
+        <div fxLayout="column" class="frm_pesagem-loading-shade" fxLayoutAlign="center center" *ngIf="emProcessamento">
+          <div fxFlex="70" fxFlexAlign="center">
+            <mat-spinner></mat-spinner>
+          </div>
+          <div fxFlex="10" fxFlexAlign="center">
+            &nbsp;
+          </div>
+          <div fxFlex="20" fxFlexAlign="center">
+            <label>Aguarde...</label>
+          </div>
+        </div>
+        <mat-card *ngIf="!emProcessamento" style="width: 900px;  overflow:hidden;">
+          <div fxLayout="column" fxLayoutAlign="start center" fxLayoutGap="10px">
+            <div fxFlex="60px" fxFlexAlign="start">
+              <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="5px" style="width: 100%">
+                <div fxFlex="90px" fxFlexAlign="start">
+                  <mat-form-field class="frm_pesagem_codigo">
+                    <input matInput disabled #codigo maxlength="9" type="number" tabindex="-1" placeholder="Código" required [(ngModel)]="pesagem.id">
+                  </mat-form-field>
+                </div>
+                <div fxFlex="90px" fxFlexAlign="start" fxFlexFill>
+                  <mat-form-field class="frm_pesagem_codigo">
+                    <input matInput autofocus #focuscomp #codigofor maxlength="9" [formControl]="valCodigo" placeholder="Cliente" required tabindex="1"
+                      [(ngModel)]="pesagem.id_cliente" (keyup)="validaSaida($event.target.value)" (keypress)="onlyNumber($event)">
+                    <mat-hint align="end">{{codigofor.value?.length || 0}}/9</mat-hint>
+                    <mat-error *ngIf="valCodigo.invalid">{{getErrorMessage(valCodigo)}}</mat-error>
+                  </mat-form-field>
+                </div>
+                <div fxFlex="25px" fxFlexAlign="center" fxFlexFill>
+                  <button mat-icon-button color="primary" (click)="openPesquisa()" tabindex="2">
+                    <mat-icon>search</mat-icon>
+                  </button>
+                </div>
+                <div fxFlex="520px" fxFlexAlign="start" fxFlexFill>
+                  <mat-form-field class="frm_pesagem_razao_social">
+                    <input matInput disabled [(ngModel)]="pesagem.cliente">
+                  </mat-form-field>
+                </div>
+                <div fxFlex="140px" fxFlexAlign="start" fxFlexFill>
+                  <mat-form-field class="frm_pesagem_data">
+                    <input matInput type="date" #dtemissao maxlength="10" placeholder="Data" tabindex="4" [ngModel]="pesagem.data" (ngModelChange)="pesagem.data = $event"
+                      [value]="pesagem.data" [formControl]="valData">
+                    <mat-hint align="end">{{dtemissao.value?.length || 0}}/10</mat-hint>
+                    <mat-error *ngIf="valData.invalid">{{getErrorMessage(valData)}}</mat-error>
+                  </mat-form-field>
+                </div>
+              </div>
+            </div>
+            <div fxFlex="380px" fxFlexAlign="start" fxFlexFill style="overflow: hidden">
+              <mat-tab-group tabindex="5">
+                <mat-tab label="Resíduos">
+                  <div fxLayou="column" fxLayoutAlign="start center" fxLayoutGap="0px">
+                    <div fxFlex="380px" fxFlexAlign="start" fxFlexFill>
+                      <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="0px">
+                        <div fxFlex="65px" fxFlexAlign="start">
+                          <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="5px">
+                            <div fxFlex="90px" fxFlexAlign="start" fxFlexFill>
+                              <mat-form-field class="frm_pesagem_codigo">
+                                <input matInput #codigoCtr maxlength="9" [formControl]="valCodigoCTR" required tabindex="10" [(ngModel)]="pesagem.id_contrato_cliente"
+                                  (keyup)="validaSaidaCTR($event.target.value)" (keypress)="onlyNumber($event)">
+                                <mat-hint align="end">{{codigoCtr.value?.length || 0}}/9</mat-hint>
+                                <mat-error *ngIf="valCodigoCTR.invalid">{{getErrorMessage(valCodigoCTR)}}</mat-error>
+                              </mat-form-field>
+                            </div>
+                            <div fxFlex="30px" fxFlexAlign="center" fxFlexFill>
+                              <button mat-icon-button color="primary" (click)="openPesquisaCTR()" tabindex="11">
+                                <mat-icon>search</mat-icon>
+                              </button>
+                            </div>
+                            <div fxFlex="320px" fxFlexAlign="start" fxFlexFill>
+                              <mat-form-field class="frm_pesagem_descricao">
+                                <input matInput disabled [(ngModel)]="pesagem.descricao" placeholder="Contrato do Cliente">
+                              </mat-form-field>
+                            </div>
+                            <div fxFlex="200px" fxFlexAlign="start" fxFlexFill>
+                              <mat-form-field class="frm_contratofornecedor_residuo">
+                                <mat-select id="cbResiduo" placeholder="Residuo" [(value)]="itempesagem.id_residuo" tabindex="12">
+                                  <mat-option *ngFor="let residuo of itempesagemsCombo" [value]="residuo.id_residuo">
+                                    {{ residuo.residuo }}
+                                  </mat-option>
+                                </mat-select>
+                              </mat-form-field>
+                            </div>
+                            <div fxFlex="120px" fxFlexAlign="center" fxFlexFill>
+                              <button mat-raised-button color="primary" (click)="addlinha()" tabindex="13">
+                                <mat-icon>playlist_add</mat-icon>
+                                <span>Adicionar Itens</span>
+                              </button>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div fxLayout="column" fxLayoutAlign="start center" fxLayoutGap="0px">
+                        <div fxFlex="40px" fxFlexAlign="start" fxFlexFill>
+                          <table>
+                            <tr>
+                              <th class="frm_pesagem_item_residuo">
+                                <label>Residuo</label>
+                              </th>
+                              <th class="frm_pesagem_item_unidade">
+                                <label>Unidade</label>
+                              </th>
+                              <th class="frm_pesagem_item_preco">
+                                <label>Peso</label>
+                              </th>
+                              <th class="frm_pesagem_item_botao">
+                                &nbsp;&nbsp;&nbsp;
+                              </th>
+                              <th class="frm_pesagem_item_botao">
+                                  &nbsp;&nbsp;&nbsp;
+                              </th>
+                            </tr>
+                          </table>
+                        </div>
+                        <div fxFlex="160px" fxFlexAlign="start" fxFlexFill style="overflow-y:auto; overflow-x: hidden">
+                          <table>
+                            <tr *ngFor="let item of itempesagems">
+                              <td class="frm_pesagem_item_residuo">
+                                {{item.residuo}}
+                              </td>
+                              <td class="frm_pesagem_item_unidade" style="max-height: 18px;">
+                                {{item.unidade}}
+                              </td>
+                              <td class="frm_pesagem_item_quantidade" style="max-height: 18px;">
+                                <input class="preco" type="number" [(ngModel)]="item.peso" style="text-align: right">
+                              </td>
+                              <td class="frm_pesagem_item_botao">
+                                <a (click)="remlinha(item)" class="tooltip">
+                                  <i class="fa fa-trash" aria-hidden="true"></i>
+                                  <span class="tooltiptext">Excluir</span>
+                                </a>
+                              </td>
+                              <td class="frm_pesagem_item_botao">
+                                <a (click)="editlinha(item)" class="tooltip">
+                                  <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+                                  <span class="tooltiptext">Editar</span>
+                                </a>
+                              </td>
+                              <!-- <td class="frm_pesagem_item_preco" style="max-height: 18px;">
+                                    <input currencyMask class="preco" placeholder="Preço Compra" [(ngModel)]="item.preco_compra" [disabled]="!item.selecionado" style="max-height: 18px;">
+                                  </td>
+                                  <td class="frm_pesagem_item_preco" style="max-height: 18px;">
+                                    <input currencyMask class="preco" placeholder="Preço Serviço" [(ngModel)]="item.preco_item" [disabled]="!item.selecionado" style="max-height: 18px;">
+                                  </td> -->
+                            </tr>
+                          </table>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </mat-tab>
+                <mat-tab label="Observações">
+                  <div fxLayou="column" fxLayoutAlign="center center" fxLayoutGap="10px" style="width: 100%; height: 180px">
+                    <div fxFlex="100%" fxFlexFill fxFlexAlign="start" style="height: 100%">
+                      <mat-form-field style="width: 100%; height: 100%">
+                        <textarea matInput #observacao placeholder="Observações" maxlength="1024" matTextareaAutosize matAutosizeMinRows="1" matAutosizeMaxRows="6"
+                          [(ngModel)]="pesagem.observacao"></textarea>
+                        <mat-hint align="end">{{observacao.value?.length || 0}}/1024</mat-hint>
+                      </mat-form-field>
+                    </div>
+                  </div>
+                </mat-tab>
+              </mat-tab-group>
+            </div>
+          </div>
+        </mat-card>
+      </div>
+
+    </div>
+  </div>
+</div>

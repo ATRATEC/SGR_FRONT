@@ -33,7 +33,8 @@ export class ClienteListComponent implements OnInit, AfterViewInit {
                       'razao_social',
                       'contato',
                       'telefone1_numero',
-                      'email'
+                      'email',
+                      'inativo'
                     ];
   // displayedColumns = ['id', 'codigo', 'descricao'];
   dataSource: DsCliente | null;
@@ -49,6 +50,7 @@ export class ClienteListComponent implements OnInit, AfterViewInit {
   contatoFilter = new FormControl();
   telefoneFilter = new FormControl();
   emailFilter = new FormControl();
+  inativoFilter = new FormControl();
 
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild(MatPaginator) paginator: MatPaginator;
@@ -175,17 +177,20 @@ export class ClienteListComponent implements OnInit, AfterViewInit {
     const contatoFilter$ = this.contatoFilter.valueChanges.debounceTime(500).distinctUntilChanged().startWith('');
     const telefoneFilter$ = this.telefoneFilter.valueChanges.debounceTime(500).distinctUntilChanged().startWith('');
     const emailFilter$ = this.emailFilter.valueChanges.debounceTime(500).distinctUntilChanged().startWith('');
+    const inativoFilter$ = this.inativoFilter.valueChanges.debounceTime(500).distinctUntilChanged().startWith('');
 
     Observable.combineLatest(idFilter$,
                              cnpjCpfFilter$,
                              razaoSocialFilter$,
                              contatoFilter$,
                              telefoneFilter$,
-                             emailFilter$
+                             emailFilter$,
+                             inativoFilter$
                             ).debounceTime(500).distinctUntilChanged().map(
-      ([id, cnpj_cpf, razao_social, contato, telefone, email ]) =>
-      ({id, cnpj_cpf, razao_social, contato, telefone, email})).subscribe(filter => {
+      ([id, cnpj_cpf, razao_social, contato, telefone, email, inativo ]) =>
+      ({id, cnpj_cpf, razao_social, contato, telefone, email, inativo})).subscribe(filter => {
         if (!this.dataSource) { return; }
+        this.dataSource.filtraAtivos = false;
         this.dataSource.filter = filter;
       });
   }

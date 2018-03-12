@@ -106,7 +106,7 @@
 
           <ng-container matColumnDef="telefone1_numero">
             <mat-header-cell *matHeaderCellDef mat-sort-header> Telefone </mat-header-cell>
-            <mat-cell *matCellDef="let row">  {{row.telefone1_ddd === ''?'':'('+row.telefone1_ddd+')'}} {{row.telefone1_numero}} </mat-cell>
+            <mat-cell *matCellDef="let row"> {{row.telefone1_ddd === ''?'':'('+row.telefone1_ddd+')'}} {{row.telefone1_numero}} </mat-cell>
           </ng-container>
 
           <ng-container matColumnDef="email">
@@ -114,8 +114,16 @@
             <mat-cell *matCellDef="let row"> {{row.email}} </mat-cell>
           </ng-container>
 
+          <ng-container matColumnDef="inativo">
+            <mat-header-cell *matHeaderCellDef mat-sort-header> Inativo </mat-header-cell>
+            <mat-cell *matCellDef="let row">
+              <mat-checkbox disabled [checked]="row.inativo"></mat-checkbox>
+            </mat-cell>
+          </ng-container>
+
           <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-          <mat-row *matRowDef="let row; columns: displayedColumns;" [ngClass]="{'highlight': selectedRowIndex == row.id}" (click)="highlight(row)" (dblclick)="dblck(row)"></mat-row>
+          <mat-row *matRowDef="let row; columns: displayedColumns;" [ngClass]="{'highlight': selectedRowIndex == row.id}" (click)="highlight(row)"
+            (dblclick)="dblck(row)"></mat-row>
         </mat-table>
         <mat-paginator #paginator [length]="dataSource.nrRegistros" [pageIndex]="0" [pageSize]="25" [pageSizeOptions]="[5, 10, 15, 25, 100]">
         </mat-paginator>

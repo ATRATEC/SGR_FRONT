@@ -1,4 +1,6 @@
-import { ClienteDocumento } from './../clientedocumento/clientedocumento';
+import { ClienteDocumentoService } from './clientedocumento.service';
+import { TipoDocumentoService } from './../tipodocumento/tipodocumento.service';
+import { TipoDocumento } from './../tipodocumento/tipodocumento';
 import { EnderecoService } from './../endereco.service';
 import { isNullOrUndefined } from 'util';
 import { DialogService } from './../dialog/dialog.service';
@@ -27,6 +29,8 @@ import { FormControl, Validators } from '@angular/forms';
 import { Estado, Cidade } from './../endereco';
 import { startWith } from 'rxjs/operators/startWith';
 import { map } from 'rxjs/operators/map';
+import { ClienteDocumento } from './clientedocumento';
+import { environment } from '../../environments/environment';
 
 @Component({
   selector: 'app-cliente-form',
@@ -36,8 +40,15 @@ import { map } from 'rxjs/operators/map';
 export class ClienteFormComponent
   implements OnInit, AfterViewInit, AfterViewChecked {
   cliente: Cliente;
+  clientedocumento: ClienteDocumento;
+  clientedocumentos: ClienteDocumento[];
+  clientedocumentosList: ClienteDocumento[];
+  clientedocumentoAnexos: ClienteDocumento[];
+  tipodocumentos: TipoDocumento[];
+  linkDownload = environment.urlbase + '/api/documentos/cliente/downloadanexo?arquivo=';
   emProcessamento = false;
   exibeIncluir = false;
+  id_documento: number;
   estados: Estado[];
   cidades: Cidade[];
   ptn = '[0-9]{3}.[0-9]{3}.[0-9]{3}-[0-9]{2}|[0-9]{2}.[0-9]{3}.[0-9]{3}/[0-9]{4}-[0-9]{2}';
@@ -61,16 +72,26 @@ export class ClienteFormComponent
   ]);
   cidadeFilter = new FormControl();
 
+  valTipoDocumento = new FormControl('', [Validators.required]);
+  valNroLicenca = new FormControl('', [Validators.required]);
+  valDtEmissao = new FormControl('', [Validators.required]);
+  valDtVencimento = new FormControl('', [Validators.required]);
+
   filteredOptions: Observable<Cidade[]>;
+
+
 
   @ViewChildren('input') vc;
   @ViewChild('focuscomp') focuscomp: ElementRef;
+  @ViewChild('fileInput') fileInput;
 
   constructor(
     private _clienteService: ClienteService,
     private _tokenManager: TokenManagerService,
     private _route: ActivatedRoute,
     private _enderecoService: EnderecoService,
+    private _clientedocumentoService: ClienteDocumentoService,
+    private _tipodocumentoService: TipoDocumentoService,
     private dialog: DialogService
   ) {}
 
@@ -83,6 +104,15 @@ export class ClienteFormComponent
   ngOnInit() {
     this.emProcessamento = true;
     this.cliente = new Cliente();
+    this.clientedocumento = new ClienteDocumento();
+    this.clientedocumentos = new Array<ClienteDocumento>();
+    this.clientedocumentosList = new Array<ClienteDocumento>();
+    this.clientedocumentoAnexos = new Array<ClienteDocumento>();
+    this.tipodocumentos = new Array<TipoDocumento>();
+
+    this._tipodocumentoService.getListTipoDocumentos(this._tokenManager.retrieve()).subscribe( data => {
+      this.tipodocumentos = JSON.parse(data._body);
+    });
 
     this._enderecoService
       .getListEstados(this._tokenManager.retrieve())
@@ -100,6 +130,18 @@ export class ClienteFormComponent
             if (!isNullOrUndefined(this.cliente.estado)) {
               this.loadCidades(this.cliente.estado);
             }
+            this._clientedocumentoService.getClienteDocumento(this._tokenManager.retrieve(), this.cliente.id).subscribe(
+              clidoc => {
+                this.clientedocumentos.length = 0;
+                this.clientedocumentosList.length = 0;
+                this.clientedocumentos = JSON.parse(clidoc._body);
+                this.clientedocumentosList = JSON.parse(clidoc._body);
+              });
+              this._clientedocumentoService.getClienteDocumentoAnexo(this._tokenManager.retrieve(), this.cliente.id).subscribe(
+                clidocAnexo => {
+                  this.clientedocumentoAnexos.length = 0;
+                  this.clientedocumentoAnexos = JSON.parse(clidocAnexo._body);
+                });
             this.emProcessamento = false;
           });
       } else {
@@ -324,9 +366,30 @@ export class ClienteFormComponent
           .subscribe(
             data => {
               this.cliente = data;
-              this.emProcessamento = false;
-              this.exibeIncluir = true;
-              this.dialog.success('SGR', 'Cliente salvo com sucesso.');
+              // this.emProcessamento = false;
+              // this.exibeIncluir = true;
+              // this.dialog.success('SGR', 'Cliente salvo com sucesso.');
+              for (let index = 0; index < this.clientedocumentos.length; index++) {
+                this.clientedocumentos[index].id_cliente = this.cliente.id;
+              }
+
+              this._clientedocumentoService.addClienteDocumento(this._tokenManager.retrieve(),
+                this.cliente.id, this.clientedocumentos)
+                .subscribe( clidoc => {
+                  this.clientedocumentos.length = 0;
+                  this.clientedocumentosList.length = 0;
+                  this.clientedocumentos = clidoc;
+                  this.clientedocumentosList = clidoc;
+                  this.limpaValidadores();
+                  this.emProcessamento = false;
+                  this.exibeIncluir = true;
+                  this.dialog.success('SGR', 'Cliente salvo com sucesso.');
+                },
+                error => {
+                  this.emProcessamento = false;
+                  this.dialog.error('SGR', 'Erro ao salvar lista de documentos.', error.error + ' - Detalhe: ' + error.message);
+                }
+              );
             },
             error => {
               this.emProcessamento = false;
@@ -343,9 +406,30 @@ export class ClienteFormComponent
           .subscribe(
             data => {
               this.cliente = data;
-              this.emProcessamento = false;
-              this.exibeIncluir = true;
-              this.dialog.success('SGR', 'Cliente salvo com sucesso.');
+              // this.emProcessamento = false;
+              // this.exibeIncluir = true;
+              // this.dialog.success('SGR', 'Cliente salvo com sucesso.');
+              for (let index = 0; index < this.clientedocumentos.length; index++) {
+                this.clientedocumentos[index].id_cliente = this.cliente.id;
+              }
+
+              this._clientedocumentoService.addClienteDocumento(this._tokenManager.retrieve(),
+                this.cliente.id, this.clientedocumentos)
+                .subscribe( clidoc => {
+                  this.clientedocumentos.length = 0;
+                  this.clientedocumentosList.length = 0;
+                  this.clientedocumentos = clidoc;
+                  this.clientedocumentosList = clidoc;
+                  this.limpaValidadores();
+                  this.emProcessamento = false;
+                  this.exibeIncluir = true;
+                  this.dialog.success('SGR', 'Cliente salvo com sucesso.');
+                },
+                error => {
+                  this.emProcessamento = false;
+                  this.dialog.error('SGR', 'Erro ao salvar lista de documentos.', error.error + ' - Detalhe: ' + error.message);
+                }
+              );
             },
             error => {
               this.emProcessamento = false;
@@ -447,16 +531,127 @@ export class ClienteFormComponent
     }
   }
 
-  // validadeanoChange(event: any) {
-  //   const dtemiss = new Date(this.cliente.dtemissaolicenca);
-  //   let ano = dtemiss.getFullYear();
-  //   const mes = dtemiss.getMonth();
-  //   const dia = dtemiss.getDate();
-  //   ano = ano + parseInt(event.target.value, 10);
-  //   const dt = new Date(ano, mes, dia);
-  //   this.cliente.dtvalidadelicenca = dt;
-  //   console.log('data ' + dt.toLocaleDateString());
-  // }
+  addlinha() {
+    // validar se ja foi inserido na lista
+    let mensagem = '';
+
+    if ((this.valTipoDocumento.invalid) && (mensagem === '')) {
+      mensagem = 'Tipo de documento não informado.';
+    }
+
+    if ((this.valNroLicenca.invalid) && (mensagem === '')) {
+      mensagem = 'Número da liçenca não informado.';
+    }
+
+    if ((this.valDtEmissao.invalid) && (mensagem === '')) {
+      mensagem = 'Data de emissão não informada.';
+    }
+
+    if ((this.valDtVencimento.invalid) && (mensagem === '')) {
+      mensagem = 'Data de Vencimento não informada.';
+    }
+
+    if (mensagem === '') {
+      const index = this.clientedocumentos.findIndex(
+        p => p.id_cliente === this.clientedocumento.id_cliente &&
+             p.id_tipo_documento === this.clientedocumento.id_tipo_documento);
+
+      if ((!isNullOrUndefined(index)) && (index > -1)) {
+        mensagem = 'Documento já foi relacionado';
+      }
+    }
+
+    if (mensagem === '') {
+      this.clientedocumento.descricao = this.tipodocumentos.find(p => p.id === this.clientedocumento.id_tipo_documento).descricao;
+      this.clientedocumentos.push(this.clientedocumento);
+      this.limpaValidadores();
+      this.clientedocumento = new ClienteDocumento();
+      document.getElementById('id_tipodocumento').focus();
+    } else {
+      this.dialog.warning('SGR', 'Documento não adicionado', 'Detalhe: ' + mensagem);
+    }
+  }
+
+  limpaValidadores() {
+    this.valTipoDocumento.clearValidators();
+    this.valNroLicenca.clearValidators();
+    this.valDtEmissao.clearValidators();
+    this.valDtVencimento.clearValidators();
+  }
+
+  remlinha(doc: ClienteDocumento) {
+    if (!isNullOrUndefined(doc.id)) {
+      this.dialog.question('SGR', 'Deseja realmente excluir o documento: ' + doc.descricao  + ' ?').subscribe(
+      result => {
+        if (result.retorno) {
+          this._clientedocumentoService.deleteClienteDocumento(this._tokenManager.retrieve(), doc.id).subscribe(
+            data => {
+              this.dialog.success('SGR', 'Documento excluído do contrato com sucesso.');
+              const index = this.clientedocumentos.indexOf(doc);
+              this.clientedocumentos.splice(index, 1);
+              const index2 = this.clientedocumentoAnexos.indexOf(doc);
+              this.clientedocumentoAnexos.splice(index2, 1);
+            },
+            error => {
+              this.dialog.error('SGR', 'Erro ao excluir o documento.', error.error + ' - Detalhe: ' + error.message);
+            },
+          );
+        }
+      });
+    } else {
+      this.dialog.question('SGR', 'Deseja realmente excluir o documento: ' + doc.descricao  + ' ?').subscribe(
+      result => {
+        if (result.retorno) {
+          const index = this.clientedocumentos.indexOf(doc);
+          this.clientedocumentos.splice(index, 1);
+        }
+      });
+    }
+  }
+
+  editlinha(doc: ClienteDocumento) {
+    this.clientedocumento = doc;
+    const index = this.clientedocumentos.indexOf(doc);
+    this.clientedocumentos.splice(index, 1);
+  }
+
+  uploadAnexo() {
+    const fileBrowser = this.fileInput.nativeElement;
+    if ((fileBrowser.files.length > 0) && (!isNullOrUndefined(this.id_documento))) {
+      const clidoc = this.clientedocumentosList.find(p => p.id === this.id_documento);
+      this.uploadDocumento(clidoc, fileBrowser.files[0]);
+    }
+  }
+
+  uploadDocumento(_clienteDocumento: ClienteDocumento, _file: File) {
+    this._clientedocumentoService.uploadDocumento(this._tokenManager.retrieve(), _clienteDocumento, _file).subscribe(
+      data => {
+        this._clientedocumentoService.getClienteDocumentoAnexo(this._tokenManager.retrieve(), this.cliente.id)
+        .subscribe( clidoc => {
+          this.clientedocumentoAnexos.length = 0;
+          this.clientedocumentoAnexos = JSON.parse(clidoc._body);
+        });
+        // console.log('upload ok ' + data.anexo);
+      },
+      error => {
+        console.log('falha no upload ' + error);
+      },
+    );
+  }
+
+  deleteAnexo(doc: ClienteDocumento) {
+    this._clientedocumentoService.deleteAnexoDocumento(this._tokenManager.retrieve(), doc.id).subscribe(
+      data => {
+        this._clientedocumentoService.getClienteDocumentoAnexo(this._tokenManager.retrieve(), this.cliente.id)
+        .subscribe( clidoc => {
+          this.clientedocumentoAnexos.length = 0;
+          this.clientedocumentoAnexos = JSON.parse(clidoc._body);
+        });
+      }
+    );
+  }
+
+
 }
 
 

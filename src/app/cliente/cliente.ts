@@ -7,6 +7,7 @@ export interface ClienteFilter {
   contato: string;
   telefone: string;
   email: string;
+  inativo: boolean;
 }
 export class ClienteFiltro implements ClienteFilter {
   constructor(
@@ -16,6 +17,7 @@ export class ClienteFiltro implements ClienteFilter {
     public contato: string = '',
     public telefone: string = '',
     public email: string = '',
+    public inativo: boolean = false
   ) {}
 }
 export class Cliente {
@@ -56,6 +58,7 @@ export class Cliente {
     public cnae: string = '',
     public obsEndereco: string = '',
     public obsTelefonesEmail: string = '',
+    public inativo: boolean = false,
     public inclusao: Date = null,
     public usuario_inclusao: string = '',
     public alteracao: Date = null,

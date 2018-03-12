@@ -1,11 +1,11 @@
 .frm_cliente_codigo {
-  min-width: 120px;
-  max-width: 120px;
+  min-width: 90px;
+  max-width: 90px;
 }
 
 .frm_cliente_razao_social {
   min-width: 450px;
-  max-width: 500px;
+  max-width: 450px;
 }
 
 .frm_cliente_cnpj_cpf {
@@ -13,8 +13,8 @@
 }
 
 .frm_cliente_nome_fantasia {
-  min-width: 250px;
-  max-width: 500px;
+  min-width: 400px;
+  max-width: 400px;
 }
 
 .frm_cliente_telefone1_ddd {
@@ -47,7 +47,7 @@
 }
 
 .frm_cliente_endereco {
-  width: 480px;
+  width: 600px;
 }
 
 .frm_cliente_endereco_numero {
@@ -59,7 +59,8 @@
 }
 
 .frm_cliente_complemento {
-  width: 280px;
+  min-width: 400px;
+  max-width: 400px;
 }
 
 .frm_cliente_estado {
@@ -114,6 +115,56 @@
   width: 550px;
 }
 
+.frm_cliente_tipodocumento {
+  width: 230px;
+}
+
+.frm_cliente_nrolicenca {
+  width: 150px;
+}
+
+.frm_cliente_dtemissao {
+  width: 150px;
+}
+
+.frm_cliente_dtvencimento {
+  width: 150px;
+}
+
+.frm_cliente_grid_tipodocumento {
+  min-width: 230px;
+  max-width: 230px;
+
+}
+
+.frm_cliente_documento {
+  width: 330px;
+}
+
+.frm_cliente_grid_nrolicenca {
+  min-width: 150px;
+  max-width: 150px;
+
+}
+
+.frm_cliente_grid_anexo {
+  min-width: 250px;
+  max-width: 250px;
+
+}
+
+.frm_cliente_grid_extensao {
+  width: 150px;
+}
+
+.frm_cliente_grid_dtemissao {
+  width: 150px;
+}
+
+.frm_cliente_grid_dtvencimento {
+  width: 150px;
+}
+
 .frm_cliente-loading-shade {
   /* position: absolute;
   top: 0;
@@ -126,4 +177,87 @@
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+table {
+  font-family: Roboto, Arial, sans-serif;
+  font-size: 15px;
+  border: none;
+  border-collapse: collapse;
+  width: 100%;
+  max-height: 100px;
+  overflow: none;
+}
+
+td,
+th {
+  border: 1px solid #dddddd;
+  text-align: left;
+  padding: 8px;
+}
+
+th {
+  color: rgb(139, 138, 138);
+  background-color: #dddddd;
+  border-bottom-width: 1px;
+  border-bottom-color: rgb(182, 179, 179);
+  align-items: center;
+}
+
+td {
+  min-height: 18px;
+  max-height: 18px;
+}
+
+.celula {
+  text-align: center;
+}
+
+.cell {
+  color: rgb(139, 138, 138);
+  min-height: 18px;
+  max-height: 18px;
+  display: flex;
+  align-items: center;
+  padding-left: 0px;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+tr:nth-child(odd) {
+  background-color: #ffffff;
+}
+
+tr:nth-child(even) {
+  background-color: #dddddd;
+}
+
+.frm_cliente_botao {
+  width: 15px;
+}
+
+.tooltip {
+  position: relative;
+  display: inline-block;
+  /* border-bottom: 1px dotted black; */
+}
+
+.tooltip .tooltiptext {
+  visibility: hidden;
+  width: 80px;
+  background-color: rgb(76, 79, 247);
+  color: #fff;
+  text-align: center;
+  border-radius: 6px;
+  padding: 5px 0;
+
+  /* Position the tooltip */
+  position: absolute;
+  z-index: 1;
+  top: -5px;
+  right: 105%;
+}
+
+.tooltip:hover .tooltiptext {
+  visibility: visible;
 }

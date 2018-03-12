@@ -1,3 +1,5 @@
+import { DatepipeModule } from './../datepipe/datepipe.module';
+import { ClienteDocumentoService } from './clientedocumento.service';
 import { ClienteFindComponent } from './cliente-find.component';
 import { MatNativeDateModule } from '@angular/material';
 import { MyMaterialModule } from './../my-material/my-material.module';
@@ -26,6 +28,7 @@ import { UpperCaseModule } from '../uppercase/uppercase.module';
     MatNativeDateModule,
     ReactiveFormsModule,
     UpperCaseModule,
+    DatepipeModule,
     ClienteRoutingModule
   ],
   declarations: [
@@ -33,7 +36,10 @@ import { UpperCaseModule } from '../uppercase/uppercase.module';
     ClienteFormComponent,
     ClienteFindComponent
   ],
-  providers: [ClienteService],
+  providers: [
+    ClienteService,
+    ClienteDocumentoService
+  ],
   entryComponents: [ClienteFindComponent]
 })
 export class ClienteModule { }

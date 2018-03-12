@@ -1,3 +1,4 @@
+import { ContratoClienteEquipamentoService } from './contratoclienteequipamento.service';
 import { UpperCaseModule } from './../uppercase/uppercase.module';
 import { ContratoClienteFindComponent } from './contratocliente-find.component';
 import { CustomCurrencyMaskConfig } from './../customcurrencymaskconfig';
@@ -44,6 +45,7 @@ import { ContratoClienteRoutingModule } from './contratocliente-routing.module';
   providers: [
     ContratoClienteService,
     ContratoClienteResiduoService,
+    ContratoClienteEquipamentoService,
     { provide: CURRENCY_MASK_CONFIG, useValue: CustomCurrencyMaskConfig }
   ],
   entryComponents: [ContratoClienteFindComponent]

@@ -53,6 +53,7 @@ export class LoginComponent implements OnInit {
           // this.getUsuarios(data.token);
           this.data.token = data.token;
           this.data.logado = data.logado;
+          // this.emProcessamento = false;
           this.dialogLoginRef.close(this.data);
         },
           error => {

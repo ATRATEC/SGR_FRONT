@@ -1,3 +1,7 @@
+import { EquipamentoService } from './../equipamento/equipamento.service';
+import { ContratoClienteEquipamentoService } from './contratoclienteequipamento.service';
+import { Equipamento } from './../equipamento/equipamento';
+import { ContratoClienteEquipamento } from './contratoclienteequipamento';
 import { ContratoFornecedorResiduoService } from './../contratofornecedor/contratofornecedorresiduo.service';
 import { ContratoFornecedorResiduo, ContratoFornecedorResiduoFiltro } from './../contratofornecedor/contratofornecedorresiduo';
 import { TipoAtividadeEnum } from './../tipoatividade/tipoatividade.enum';
@@ -63,6 +67,9 @@ export class ContratoClienteFormComponent
   contratoclienteresiduos: ContratoClienteResiduo[];
   contratofornecedorresiduos: ContratoFornecedorResiduo[];
   contratoclienteresiduo: ContratoClienteResiduo;
+  contratoclienteequipamento: ContratoClienteEquipamento;
+  contratoclienteequipamentos: ContratoClienteEquipamento[];
+  equipamentos: Equipamento[];
   servicos: Servico[];
   unidades: Unidade[];
   residuos: Residuo[];
@@ -83,6 +90,9 @@ export class ContratoClienteFormComponent
   valResiduo = new FormControl('', [Validators.required]);
   valVigenciaInicio = new FormControl('', [Validators.required]);
   valVigenciaFinal = new FormControl('', Validators.compose([Validators.required, DateValidator.afterDate(this.valVigenciaInicio)]));
+  valEquipamento = new FormControl('', [Validators.required]);
+  valUnidadeEquip = new FormControl('', [Validators.required]);
+  valPrecoEquipamento = new FormControl('', [Validators.required]);
 
   @ViewChildren('input') vc;
   @ViewChild('focuscomp') focuscomp: ElementRef;
@@ -94,9 +104,11 @@ export class ContratoClienteFormComponent
     private _contratoclienteresiduoService: ContratoClienteResiduoService,
     private _contratofornecedorResiduoService: ContratoFornecedorResiduoService,
     private _contratofornecedorService: ContratoFornecedorService,
+    private _contratoclienteequipamentoService: ContratoClienteEquipamentoService,
     private _clienteService: ClienteService,
     private _servicoService: ServicoService,
     private _residuoService: ResiduoService,
+    private _equipamentoService: EquipamentoService,
     private _unidadeService: UnidadeService,
     private _tokenManager: TokenManagerService,
     private _route: ActivatedRoute,
@@ -150,6 +162,8 @@ export class ContratoClienteFormComponent
     this.contratoclienteresiduo = new ContratoClienteResiduo();
     this.contratoclienteresiduos = new Array<ContratoClienteResiduo>();
     this.contratofornecedorresiduos = new Array<ContratoFornecedorResiduo>();
+    this.contratoclienteequipamento = new ContratoClienteEquipamento();
+    this.contratoclienteequipamentos = new Array<ContratoClienteEquipamento>();
     // this.contratoclienteresiduos.push(new ContratoClienteResiduo(1, 1, 1, 1, 56.87, true, '', '', 'TRANSPORTE'));
     // this.contratoclienteresiduos.push(new ContratoClienteResiduo(1, 1, 1, 1, 123.47, true, '', '', 'RECEPÇÃO'));
     this._unidadeService.getListUnidades(this._tokenManager.retrieve()).subscribe(
@@ -169,6 +183,11 @@ export class ContratoClienteFormComponent
         this.residuos = JSON.parse(data._body);
       }
     );
+
+    this._equipamentoService.getListEquipamento(this._tokenManager.retrieve()).subscribe(
+      data => {
+        this.equipamentos = JSON.parse(data._body);
+    });
 
 
     this._route.params.forEach((params: Params) => {
@@ -198,6 +217,11 @@ export class ContratoClienteFormComponent
           .subscribe(data => {
             this.contratoclienteresiduos.length = 0;
             this.contratoclienteresiduos = JSON.parse(data._body);
+          });
+        this._contratoclienteequipamentoService.getContratoClienteEquipamento(this._tokenManager.retrieve(), id)
+          .subscribe(data => {
+            this.contratoclienteequipamentos.length = 0;
+            this.contratoclienteequipamentos = JSON.parse(data._body);
           });
       } else {
         this.emProcessamento = false;
@@ -286,9 +310,26 @@ export class ContratoClienteFormComponent
                   this.contratoclienteresiduos.length = 0;
                   this.contratoclienteresiduos = ctrfsrv;
                   this.limpaValidadores();
-                  this.emProcessamento = false;
-                  this.exibeIncluir = true;
-                  this.dialog.success('SGR', 'Contrato salvo com sucesso.');
+
+                  for (let index = 0; index < this.contratoclienteequipamentos.length; index++) {
+                    this.contratoclienteequipamentos[index].id_contrato_cliente = this.contratocliente.id;
+                  }
+
+                  this._contratoclienteequipamentoService.addContratoClienteEquipamento(this._tokenManager.retrieve(),
+                  this.contratocliente.id, this.contratoclienteequipamentos)
+                  .subscribe( ctrequip => {
+                    this.contratoclienteequipamentos.length = 0;
+                    this.contratoclienteequipamentos = ctrequip;
+                    this.limpaValidadoresEquipamento();
+                    this.contratoclienteequipamento = new ContratoClienteEquipamento();
+                    this.emProcessamento = false;
+                    this.exibeIncluir = true;
+                    this.dialog.success('SGR', 'Contrato salvo com sucesso.');
+                  },
+                  error => {
+                    this.emProcessamento = false;
+                    this.dialog.error('SGR', 'Erro ao salvar lista de equipamentos.', error.error + ' - Detalhe: ' + error.message);
+                  });
                 },
                 error => {
                   this.emProcessamento = false;
@@ -328,9 +369,25 @@ export class ContratoClienteFormComponent
                   this.contratoclienteresiduos.length = 0;
                   this.contratoclienteresiduos = ctrfsrv;
                   this.limpaValidadores();
-                  this.emProcessamento = false;
-                  this.exibeIncluir = true;
-                  this.dialog.success('SGR', 'Contrato salvo com sucesso.');
+                  for (let index = 0; index < this.contratoclienteequipamentos.length; index++) {
+                    this.contratoclienteequipamentos[index].id_contrato_cliente = this.contratocliente.id;
+                  }
+
+                  this._contratoclienteequipamentoService.addContratoClienteEquipamento(this._tokenManager.retrieve(),
+                  this.contratocliente.id, this.contratoclienteequipamentos)
+                  .subscribe( ctrequip => {
+                    this.contratoclienteequipamentos.length = 0;
+                    this.contratoclienteequipamentos = ctrequip;
+                    this.limpaValidadoresEquipamento();
+                    this.contratoclienteequipamento = new ContratoClienteEquipamento();
+                    this.emProcessamento = false;
+                    this.exibeIncluir = true;
+                    this.dialog.success('SGR', 'Contrato salvo com sucesso.');
+                  },
+                  error => {
+                    this.emProcessamento = false;
+                    this.dialog.error('SGR', 'Erro ao salvar lista de equipamentos.', error.error + ' - Detalhe: ' + error.message);
+                  });
                 },
                 error => {
                   this.emProcessamento = false;
@@ -694,6 +751,93 @@ export class ContratoClienteFormComponent
         }
       });
     }
+  }
+
+  addGridEquipamentos() {
+    // validar se ja foi inserido na lista
+    let mensagem = '';
+
+    if ((this.valEquipamento.invalid) && (mensagem === '')) {
+      mensagem = 'Equipamento não informado.';
+    }
+
+    if ((this.valUnidadeEquip.invalid) && (mensagem === '')) {
+      mensagem = 'Unidade não informada.';
+    }
+
+    if ((this.valPrecoEquipamento.invalid) && (mensagem === '')) {
+      mensagem = 'Preço da locação não informado.';
+    }
+
+    if (mensagem === '') {
+      const index = this.contratoclienteequipamentos.findIndex(
+        p => p.id_equipamento === this.contratoclienteequipamento.id_equipamento);
+
+      if ((!isNullOrUndefined(index)) && (index > -1)) {
+        mensagem = 'Equipamento já foi relacionado';
+      }
+    }
+
+    if (mensagem === '') {
+      this.contratoclienteequipamento.equipamento = this.equipamentos.find(p => p.id === this.contratoclienteequipamento.id_equipamento)
+      .descricao;
+
+      this.contratoclienteequipamentos.push(this.contratoclienteequipamento);
+      this.limpaValidadoresEquipamento();
+      this.contratoclienteequipamento = new ContratoClienteEquipamento();
+      document.getElementById('id_equipamento').focus();
+    } else {
+      this.dialog.warning('SGR', 'Equipamento não adicionado', 'Detalhe: ' + mensagem);
+    }
+  }
+
+  editGridEquipamentos(item: ContratoClienteEquipamento) {
+    this.contratoclienteequipamento = item;
+    const index = this.contratoclienteequipamentos.indexOf(item);
+    this.contratoclienteequipamentos.splice(index, 1);
+  }
+
+  deleteGridEquipamentos(item: ContratoClienteEquipamento) {
+    if (!isNullOrUndefined(item.id)) {
+      this.dialog.question('SGR', 'Deseja realmente excluir o Equipamento: ' + item.equipamento + ' ?').subscribe(
+      result => {
+        if (result.retorno) {
+          this._contratoclienteequipamentoService.deleteContratoClienteEquipamento(this._tokenManager.retrieve(), item.id).subscribe(
+            data => {
+              this.dialog.success('SGR', 'Equipamento excluído do contrato com sucesso.');
+              const index = this.contratoclienteequipamentos.indexOf(item);
+              this.contratoclienteequipamentos.splice(index, 1);
+            },
+            error => {
+              this.dialog.error('SGR', 'Erro ao excluir o Equipamento.', error.error + ' - Detalhe: ' + error.message);
+            },
+          );
+        }
+      });
+    } else {
+      this.dialog.question('SGR', 'Deseja realmente excluir o Equipamento: ' + item.equipamento + ' ?').subscribe(
+      result => {
+        if (result.retorno) {
+          const index = this.contratoclienteequipamentos.indexOf(item);
+          this.contratoclienteequipamentos.splice(index, 1);
+        }
+      });
+    }
+  }
+
+  limpaValidadoresEquipamento() {
+    this.valEquipamento.clearValidators();
+    this.valUnidadeEquip.clearValidators();
+    this.valPrecoEquipamento.clearValidators();
+  }
+
+  equipamentoChange(event: any) {
+    this.contratoclienteequipamento.unidade = '';
+    this.contratoclienteequipamento.preco = 0;
+  }
+
+  unidadeEquipamentoChange(event: any) {
+    this.contratoclienteequipamento.preco = 0;
   }
 
   // #region codigo comentado

@@ -181,17 +181,17 @@ export class ManifestoFormComponent
     this.contratoclienteservicos = new Array<ContratoClienteResiduo>();
     // this.manifestoservicos.push(new ManifestoServico(1, 1, 1, 1, 56.87, true, '', '', 'TRANSPORTE'));
     // this.manifestoservicos.push(new ManifestoServico(1, 1, 1, 1, 123.47, true, '', '', 'RECEPÇÃO'));
-    // this._acondicionamentoService.getListAcondicionamentos(this._tokenManager.retrieve()).subscribe(
-    //   data => {
-    //     this.acondicionamentos = JSON.parse(data._body);
-    //   }
-    // );
+    this._acondicionamentoService.getListAcondicionamentos(this._tokenManager.retrieve()).subscribe(
+      data => {
+        this.acondicionamentos = JSON.parse(data._body);
+      }
+    );
 
-    // this._tipotratamentoService.getListTipoTratamento(this._tokenManager.retrieve()).subscribe(
-    //   data => {
-    //     this.tipotratamentos = JSON.parse(data._body);
-    //   }
-    // );
+    this._tipotratamentoService.getListTipoTratamento(this._tokenManager.retrieve()).subscribe(
+      data => {
+        this.tipotratamentos = JSON.parse(data._body);
+      }
+    );
 
     // this._tiporesiduoService.getListTipoResiduo(this._tokenManager.retrieve()).subscribe(
     //   data => {
@@ -784,13 +784,9 @@ export class ManifestoFormComponent
     const index = this.manifestoservicosCombo.findIndex(p => p.id_residuo === this.manifestoservico.id_residuo);
     itemResiduo = this.manifestoservicosCombo[index];
 
-    this.manifestoservico.id_acondicionamento = itemResiduo.id_acondicionamento;
     this.manifestoservico.id_tipo_residuo = itemResiduo.id_tipo_residuo;
-    this.manifestoservico.id_tratamento = itemResiduo.id_tratamento;
     this.manifestoservico.residuo = itemResiduo.residuo;
-    this.manifestoservico.acondicionamento = itemResiduo.acondicionamento;
     this.manifestoservico.tipo_residuo = itemResiduo.tipo_residuo;
-    this.manifestoservico.tratamento = itemResiduo.tratamento;
     this.manifestoservico.unidade = itemResiduo.unidade;
 
     const index2 = this.manifestoservicos.findIndex(p => p.id_residuo === this.manifestoservico.id_residuo);

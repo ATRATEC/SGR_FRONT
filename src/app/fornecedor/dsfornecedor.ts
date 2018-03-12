@@ -16,7 +16,8 @@ import 'rxjs/add/operator/debounceTime';
 import { Fornecedor, FornecedorFilter } from './fornecedor';
 
 export class DsFornecedor extends DataSource<Fornecedor> {
-  _filterChange = new BehaviorSubject( {id: '', codigo_omie: '', cnpj_cpf: '', razao_social: '', contato: '', telefone: '', email: ''} );
+  _filterChange = new BehaviorSubject( {id: '', codigo_omie: '', cnpj_cpf: '', razao_social: '', contato: '', telefone: '', email: '',
+  inativo: false} );
 
   public onChange: EventEmitter<boolean> = new EventEmitter<boolean>();
 
@@ -27,6 +28,8 @@ export class DsFornecedor extends DataSource<Fornecedor> {
   set filter(filter: FornecedorFilter) {
     this._filterChange.next(filter);
   }
+
+  public filtraAtivos = false;
 
   resultsLength = 0;
   // isLoadingResults: boolean;
@@ -59,7 +62,7 @@ export class DsFornecedor extends DataSource<Fornecedor> {
       // this.isLoadingResults = true;
       this.onChange.emit(true);
       return this._fornecedorService.getFornecedors(this._tokenManager.retrieve(),
-        this._sort.active, this._sort.direction, this._paginator.pageIndex, this._paginator.pageSize, this.filter);
+        this._sort.active, this._sort.direction, this._paginator.pageIndex, this._paginator.pageSize, this.filter, this.filtraAtivos);
     })
     .retry(3)
     .map(data => {
