@@ -26,6 +26,7 @@ import {FormControl, Validators} from '@angular/forms';
 export class TipoTratamentoFormComponent implements OnInit, AfterViewInit, AfterViewChecked {
 
   tipotratamento: TipoTratamento;
+  tipotratamento_ant: TipoTratamento;
   emProcessamento = false;
   exibeIncluir = false;
 
@@ -48,12 +49,14 @@ export class TipoTratamentoFormComponent implements OnInit, AfterViewInit, After
   ngOnInit() {
     this.emProcessamento = true;
     this.tipotratamento = new TipoTratamento();
+    this.tipotratamento_ant = new TipoTratamento();
     this._route.params.forEach((params: Params) => {
       const id: number = +params['id'];
       if (id) {
         this._tipotratamentoService.getTipoTratamento(this._tokenManager.retrieve(), id)
         .subscribe( data => {
           this.tipotratamento = JSON.parse(data._body);
+          this.tipotratamento_ant = JSON.parse(data._body);
           this.emProcessamento = false;
         });
       } else {
@@ -89,6 +92,7 @@ export class TipoTratamentoFormComponent implements OnInit, AfterViewInit, After
             data => {
               this.emProcessamento = false;
               this.tipotratamento = data;
+              this.tipotratamento_ant = data;
               this.exibeIncluir = true;
               this.dialog.success('SGR', 'TipoTratamento salvo com sucesso.');
             },
@@ -105,6 +109,7 @@ export class TipoTratamentoFormComponent implements OnInit, AfterViewInit, After
           data => {
           this.emProcessamento = false;
           this.tipotratamento = data;
+          this.tipotratamento_ant = data;
           this.exibeIncluir = true;
           this.dialog.success('SGR', 'TipoTratamento salvo com sucesso.');
         },
@@ -122,6 +127,7 @@ export class TipoTratamentoFormComponent implements OnInit, AfterViewInit, After
 
   btnIncluir_click() {
     this.tipotratamento = new TipoTratamento();
+    this.tipotratamento_ant = new TipoTratamento();
   }
 
   getDescricaoErrorMessage() {
@@ -133,4 +139,14 @@ export class TipoTratamentoFormComponent implements OnInit, AfterViewInit, After
     return mensagem;
   }
 
+  canDeactivate(): Observable<boolean> | boolean {
+
+    if (JSON.stringify(this.tipotratamento) === JSON.stringify(this.tipotratamento_ant)) {
+      return true;
+    }
+
+    return this.dialog.confirm('Existem dados não salvos. Deseja descarta-los?');
+  }
+
 }
+

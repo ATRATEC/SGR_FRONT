@@ -26,6 +26,7 @@ import {FormControl, Validators} from '@angular/forms';
 export class TipoAtividadeFormComponent implements OnInit, AfterViewInit, AfterViewChecked {
 
   tipoatividade: TipoAtividade;
+  tipoatividade_ant: TipoAtividade;
   emProcessamento = false;
   exibeIncluir = false;
 
@@ -48,12 +49,14 @@ export class TipoAtividadeFormComponent implements OnInit, AfterViewInit, AfterV
   ngOnInit() {
     this.emProcessamento = true;
     this.tipoatividade = new TipoAtividade();
+    this.tipoatividade_ant = new TipoAtividade();
     this._route.params.forEach((params: Params) => {
       const id: number = +params['id'];
       if (id) {
         this._tipoatividadeService.getTipoAtividade(this._tokenManager.retrieve(), id)
         .subscribe( data => {
           this.tipoatividade = JSON.parse(data._body);
+          this.tipoatividade_ant = JSON.parse(data._body);
           this.emProcessamento = false;
         });
       } else {
@@ -89,6 +92,7 @@ export class TipoAtividadeFormComponent implements OnInit, AfterViewInit, AfterV
             data => {
               this.emProcessamento = false;
               this.tipoatividade = data;
+              this.tipoatividade_ant = data;
               this.exibeIncluir = true;
               this.dialog.success('SGR', 'TipoAtividade salvo com sucesso.');
             },
@@ -105,6 +109,7 @@ export class TipoAtividadeFormComponent implements OnInit, AfterViewInit, AfterV
           data => {
           this.emProcessamento = false;
           this.tipoatividade = data;
+          this.tipoatividade_ant = data;
           this.exibeIncluir = true;
           this.dialog.success('SGR', 'TipoAtividade salvo com sucesso.');
         },
@@ -122,6 +127,7 @@ export class TipoAtividadeFormComponent implements OnInit, AfterViewInit, AfterV
 
   btnIncluir_click() {
     this.tipoatividade = new TipoAtividade();
+    this.tipoatividade_ant = new TipoAtividade();
   }
 
   getDescricaoErrorMessage() {
@@ -133,4 +139,14 @@ export class TipoAtividadeFormComponent implements OnInit, AfterViewInit, AfterV
     return mensagem;
   }
 
+  canDeactivate(): Observable<boolean> | boolean {
+
+    if (JSON.stringify(this.tipoatividade) === JSON.stringify(this.tipoatividade_ant)) {
+      return true;
+    }
+
+    return this.dialog.confirm('Existem dados não salvos. Deseja descarta-los?');
+  }
+
 }
+

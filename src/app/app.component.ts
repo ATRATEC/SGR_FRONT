@@ -297,6 +297,11 @@ export class AppComponent implements OnInit {
       });
   }
 
+  // converte() {
+  //   console.log(strToBoolean('N'));
+  //   console.log(booleanToStrSN(false));
+  // }
+
   // emailFormControl = new FormControl('', [
   //   Validators.required,
   //   Validators.pattern(EMAIL_REGEX)]);

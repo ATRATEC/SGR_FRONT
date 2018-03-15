@@ -117,7 +117,7 @@
           <ng-container matColumnDef="inativo">
             <mat-header-cell *matHeaderCellDef mat-sort-header> Inativo </mat-header-cell>
             <mat-cell *matCellDef="let row">
-              <mat-checkbox disabled [checked]="row.inativo"></mat-checkbox>
+              <mat-checkbox disabled [checked]="row.inativo | strtoboolean"></mat-checkbox>
             </mat-cell>
           </ng-container>
 

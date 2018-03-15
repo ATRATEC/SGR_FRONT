@@ -1,3 +1,4 @@
+import { FiltroPesagem } from './filtropesagem';
 import { environment } from './../../environments/environment';
 import { isEmpty } from 'rxjs/operators';
 import { isNullOrUndefined } from 'util';
@@ -362,6 +363,52 @@ export class RelatorioService {
     if ((!isNullOrUndefined(_relatorio.id_cliente)) && (_relatorio.id_cliente.toString().length > 0) &&
        (!isNaN(_relatorio.id_cliente))) {
       search.set('id_cliente', _relatorio.id_cliente.toString());
+    }
+
+    if ((!isNullOrUndefined(_relatorio.datade)) && (_relatorio.datade.toString().length > 0)) {
+      const dt = new Date(_relatorio.datade);
+      dt.setDate(dt.getDate() + 1);
+      search.set('datade', '\'' + moment(dt).format('YYYY-MM-DD').toString() + '\'');
+    }
+
+    if ((!isNullOrUndefined(_relatorio.dataate)) && (_relatorio.dataate.toString().length > 0)) {
+      const dt = new Date(_relatorio.dataate);
+      dt.setDate(dt.getDate() + 1);
+      search.set('dataate', '\'' + moment(dt).format('YYYY-MM-DD').toString() + '\'');
+    }
+
+    return this._http
+      .get(url, { headers: headers, search: search })
+      .map((res: Response) => res.json())
+      .catch((error: any) =>
+        Observable.throw(error.json() || 'Server error')
+      );
+
+  }
+
+  getRelatorioPesagemCliente(accessToken: string, _relatorio: FiltroPesagem) {
+    const url = environment.urlbase + '/api/relatorios/pesagens';
+
+    const headers = new Headers({
+      Accept: 'application/json',
+      Authorization: 'Bearer ' + accessToken.toString().replace(/"/g, '')
+    });
+
+    // const params: HttpParams = new HttpParams();
+    const search: URLSearchParams =  new URLSearchParams();
+
+    if ((!isNullOrUndefined(_relatorio.id)) && (_relatorio.id.toString().length > 0)) {
+      search.set('id', _relatorio.id.toString());
+    }
+
+    if ((!isNullOrUndefined(_relatorio.id_cliente)) && (_relatorio.id_cliente.toString().length > 0) &&
+       (!isNaN(_relatorio.id_cliente))) {
+      search.set('id_cliente', _relatorio.id_cliente.toString());
+    }
+
+    if ((!isNullOrUndefined(_relatorio.id_residuo)) && (_relatorio.id_residuo.toString().length > 0) &&
+       (!isNaN(_relatorio.id_residuo))) {
+      search.set('id_residuo', _relatorio.id_residuo.toString());
     }
 
     if ((!isNullOrUndefined(_relatorio.datade)) && (_relatorio.datade.toString().length > 0)) {

@@ -14,7 +14,7 @@ export class ClienteDocumento {
     public emissao: Date = null,
     public vencimento: Date = null,
     public caminho: string = '',
-    public extensao: boolean = false,
+    public extensao: string = 'N',
     public created_at: string = '',
     public updated_at: string = '',
     public descricao: string = '',

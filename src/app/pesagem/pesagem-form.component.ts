@@ -70,9 +70,11 @@ import { FornecedorFindComponent } from '../fornecedor/fornecedor-find.component
 export class PesagemFormComponent
   implements OnInit, AfterViewInit, AfterViewChecked {
   pesagem: Pesagem;
+  pesagem_ant: Pesagem;
   itempesagem: ItemPesagem;
   itempesagemsCombo: ItemPesagem[];
   itempesagems: ItemPesagem[];
+  itempesagems_ant: ItemPesagem[];
   contratoclienteservicos: ContratoClienteResiduo[];
   // itempesagem: ItemPesagem;
   residuos: Residuo[];
@@ -166,7 +168,9 @@ export class PesagemFormComponent
   ngOnInit() {
     this.emProcessamento = true;
     this.pesagem = new Pesagem();
+    this.pesagem_ant = new Pesagem();
     this.itempesagems = new Array<ItemPesagem>();
+    this.itempesagems_ant = new Array<ItemPesagem>();
     this.itempesagemsCombo = new Array<ItemPesagem>();
     this.itempesagem = new ItemPesagem();
     this.contratoclienteservicos = new Array<ContratoClienteResiduo>();
@@ -186,6 +190,7 @@ export class PesagemFormComponent
           .retry(3)
           .subscribe(data => {
             this.pesagem = JSON.parse(data._body);
+            this.pesagem_ant = JSON.parse(data._body);
             this.emProcessamento = false;
           });
         this._itempesagemService
@@ -193,7 +198,9 @@ export class PesagemFormComponent
           .retry(3)
           .subscribe(data => {
             this.itempesagems.length = 0;
+            this.itempesagems_ant.length = 0;
             this.itempesagems = JSON.parse(data._body);
+            this.itempesagems_ant = JSON.parse(data._body);
           });
       } else {
         this.emProcessamento = false;
@@ -235,6 +242,7 @@ export class PesagemFormComponent
         this._pesagemService.addPesagem(this._tokenManager.retrieve(), this.pesagem)
           .subscribe( data => {
               this.pesagem = data;
+              this.pesagem_ant = data;
               // this.emProcessamento = false;
               // this.exibeIncluir = true;
               // this.dialog.success('SGR', 'Pesagem salvo com sucesso.');
@@ -249,6 +257,7 @@ export class PesagemFormComponent
                 .subscribe( ctrfsrv => {
                   this.itempesagems.length = 0;
                   this.itempesagems = ctrfsrv;
+                  this.itempesagems_ant = ctrfsrv;
                   this.emProcessamento = false;
                   this.exibeIncluir = true;
                   this.dialog.success('SGR', 'Pesagem salvo com sucesso.');
@@ -279,6 +288,7 @@ export class PesagemFormComponent
               // this.emProcessamento = false;
               // fileBrowser.files[0]
               this.pesagem = data;
+              this.pesagem_ant = data;
               for (let index = 0; index < this.itempesagems.length; index++) {
                 this.itempesagems[index].id_pesagem = this.pesagem.id;
               }
@@ -286,7 +296,9 @@ export class PesagemFormComponent
                 this.pesagem.id, this.itempesagems)
                 .subscribe( ctrfsrv => {
                   this.itempesagems.length = 0;
+                  this.itempesagems_ant.length = 0;
                   this.itempesagems = ctrfsrv;
+                  this.itempesagems_ant = ctrfsrv;
                   this.emProcessamento = false;
                   this.exibeIncluir = true;
                   this.dialog.success('SGR', 'Pesagem salvo com sucesso.');
@@ -318,8 +330,10 @@ export class PesagemFormComponent
 
   btnIncluir_click() {
     this.pesagem = new Pesagem();
+    this.pesagem_ant = new Pesagem();
     this.itempesagemsCombo.length = 0;
     this.itempesagems.length = 0;
+    this.itempesagems_ant.length = 0;
   }
 
   getErrorMessage(campo: FormControl) {
@@ -717,5 +731,15 @@ export class PesagemFormComponent
         this.itempesagemsCombo = JSON.parse(data._body);
       });
     }
+  }
+
+  canDeactivate(): Observable<boolean> | boolean {
+
+    if (((JSON.stringify(this.pesagem) === JSON.stringify(this.pesagem_ant))) &&
+    ((JSON.stringify(this.itempesagems) === JSON.stringify(this.itempesagems_ant)))) {
+      return true;
+    }
+
+    return this.dialog.confirm('Existem dados não salvos. Deseja descarta-los?');
   }
 }

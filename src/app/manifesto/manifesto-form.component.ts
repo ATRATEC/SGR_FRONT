@@ -70,9 +70,11 @@ import { FornecedorFindComponent } from '../fornecedor/fornecedor-find.component
 export class ManifestoFormComponent
   implements OnInit, AfterViewInit, AfterViewChecked {
   manifesto: Manifesto;
+  manifesto_ant: Manifesto;
   manifestoservico: ManifestoServico;
   manifestoservicosCombo: ManifestoServico[];
   manifestoservicos: ManifestoServico[];
+  manifestoservicos_ant: ManifestoServico[];
   contratoclienteservicos: ContratoClienteResiduo[];
   // manifestoservico: ManifestoServico;
   residuos: Residuo[];
@@ -175,7 +177,9 @@ export class ManifestoFormComponent
   ngOnInit() {
     this.emProcessamento = true;
     this.manifesto = new Manifesto();
+    this.manifesto_ant = new Manifesto();
     this.manifestoservicos = new Array<ManifestoServico>();
+    this.manifestoservicos_ant = new Array<ManifestoServico>();
     this.manifestoservicosCombo = new Array<ManifestoServico>();
     this.manifestoservico = new ManifestoServico();
     this.contratoclienteservicos = new Array<ContratoClienteResiduo>();
@@ -213,6 +217,7 @@ export class ManifestoFormComponent
           .getManifesto(this._tokenManager.retrieve(), id)
           .subscribe(data => {
             this.manifesto = JSON.parse(data._body);
+            this.manifesto_ant = JSON.parse(data._body);
 
             if (this.manifesto.caminho) {
               this.linkDownload = this.linkDownload + 'CLI_' +
@@ -233,6 +238,7 @@ export class ManifestoFormComponent
           .subscribe(data => {
             this.manifestoservicos.length = 0;
             this.manifestoservicos = JSON.parse(data._body);
+            this.manifestoservicos_ant = JSON.parse(data._body);
           });
       } else {
         this.emProcessamento = false;
@@ -307,6 +313,7 @@ export class ManifestoFormComponent
         this._manifestoService.addManifesto(this._tokenManager.retrieve(), this.manifesto)
           .subscribe( data => {
               this.manifesto = data;
+              this.manifesto_ant = data;
               // this.emProcessamento = false;
               // this.exibeIncluir = true;
               // this.dialog.success('SGR', 'Manifesto salvo com sucesso.');
@@ -320,7 +327,9 @@ export class ManifestoFormComponent
                 this.manifesto.id, this.manifestoservicos)
                 .subscribe( ctrfsrv => {
                   this.manifestoservicos.length = 0;
+                  this.manifestoservicos_ant.length = 0;
                   this.manifestoservicos = ctrfsrv;
+                  this.manifestoservicos_ant = ctrfsrv;
                   this.emProcessamento = false;
                   this.exibeIncluir = true;
                   this.dialog.success('SGR', 'Manifesto salvo com sucesso.');
@@ -354,6 +363,7 @@ export class ManifestoFormComponent
               // this.emProcessamento = false;
               // fileBrowser.files[0]
               this.manifesto = data;
+              this.manifesto_ant = data;
               for (let index = 0; index < this.manifestoservicos.length; index++) {
                 this.manifestoservicos[index].id_manifesto = this.manifesto.id;
               }
@@ -361,7 +371,9 @@ export class ManifestoFormComponent
                 this.manifesto.id, this.manifestoservicos)
                 .subscribe( ctrfsrv => {
                   this.manifestoservicos.length = 0;
+                  this.manifestoservicos_ant.length = 0;
                   this.manifestoservicos = ctrfsrv;
+                  this.manifestoservicos_ant = ctrfsrv;
                   this.emProcessamento = false;
                   this.exibeIncluir = true;
                   this.dialog.success('SGR', 'Manifesto salvo com sucesso.');
@@ -414,8 +426,10 @@ export class ManifestoFormComponent
 
   btnIncluir_click() {
     this.manifesto = new Manifesto();
+    this.manifesto_ant = new Manifesto();
     this.manifestoservicosCombo.length = 0;
     this.manifestoservicos.length = 0;
+    this.manifestoservicos_ant.length = 0;
   }
 
   getCodigoErrorMessage() {
@@ -916,5 +930,14 @@ export class ManifestoFormComponent
         this.manifestoservicosCombo = JSON.parse(data._body);
       });
     }
+  }
+
+  canDeactivate(): Observable<boolean> | boolean {
+
+    if (((JSON.stringify(this.manifesto) === JSON.stringify(this.manifesto_ant))) &&
+        ((JSON.stringify(this.manifestoservicos) === JSON.stringify(this.manifestoservicos_ant)))) {
+      return true;
+    }
+    return this.dialog.confirm('Existem dados não salvos. Deseja descarta-los?');
   }
 }

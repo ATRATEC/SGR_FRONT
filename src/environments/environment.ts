@@ -7,3 +7,10 @@ export const environment = {
   production: false,
   urlbase: 'http://sgr.localhost'
 };
+
+// export const environment = {
+//   production: false,
+//   urlbase: 'http://sgr.ambienteverde.eco.br'
+// };
+
+

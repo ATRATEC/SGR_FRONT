@@ -28,7 +28,7 @@ export class ContratoFornecedor {
     public descricao: string = '',
     public vigencia_inicio: Date = null,
     public vigencia_final: Date = null,
-    public exclusivo: boolean = false,
+    public exclusivo: string = 'N',
     public observacao: string = '',
     public caminho: string = '',
     public created_at: string = '',

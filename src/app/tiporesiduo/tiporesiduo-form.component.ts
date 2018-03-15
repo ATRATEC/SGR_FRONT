@@ -26,6 +26,7 @@ import {FormControl, Validators} from '@angular/forms';
 export class TipoResiduoFormComponent implements OnInit, AfterViewInit, AfterViewChecked {
 
   tiporesiduo: TipoResiduo;
+  tiporesiduo_ant: TipoResiduo;
   emProcessamento = false;
   exibeIncluir = false;
 
@@ -48,12 +49,14 @@ export class TipoResiduoFormComponent implements OnInit, AfterViewInit, AfterVie
   ngOnInit() {
     this.emProcessamento = true;
     this.tiporesiduo = new TipoResiduo();
+    this.tiporesiduo_ant = new TipoResiduo();
     this._route.params.forEach((params: Params) => {
       const id: number = +params['id'];
       if (id) {
         this._tiporesiduoService.getTipoResiduo(this._tokenManager.retrieve(), id)
         .subscribe( data => {
           this.tiporesiduo = JSON.parse(data._body);
+          this.tiporesiduo_ant = JSON.parse(data._body);
           this.emProcessamento = false;
         });
       } else {
@@ -89,6 +92,7 @@ export class TipoResiduoFormComponent implements OnInit, AfterViewInit, AfterVie
             data => {
               this.emProcessamento = false;
               this.tiporesiduo = data;
+              this.tiporesiduo_ant = data;
               this.exibeIncluir = true;
               this.dialog.success('SGR', 'TipoResiduo salvo com sucesso.');
             },
@@ -105,6 +109,7 @@ export class TipoResiduoFormComponent implements OnInit, AfterViewInit, AfterVie
           data => {
           this.emProcessamento = false;
           this.tiporesiduo = data;
+          this.tiporesiduo_ant = data;
           this.exibeIncluir = true;
           this.dialog.success('SGR', 'TipoResiduo salvo com sucesso.');
         },
@@ -122,6 +127,7 @@ export class TipoResiduoFormComponent implements OnInit, AfterViewInit, AfterVie
 
   btnIncluir_click() {
     this.tiporesiduo = new TipoResiduo();
+    this.tiporesiduo_ant = new TipoResiduo();
   }
 
   getDescricaoErrorMessage() {
@@ -131,6 +137,15 @@ export class TipoResiduoFormComponent implements OnInit, AfterViewInit, AfterVie
       mensagem = mensagem + 'Campo obrigatório.';
     }
     return mensagem;
+  }
+
+  canDeactivate(): Observable<boolean> | boolean {
+
+    if (JSON.stringify(this.tiporesiduo) === JSON.stringify(this.tiporesiduo_ant)) {
+      return true;
+    }
+
+    return this.dialog.confirm('Existem dados não salvos. Deseja descarta-los?');
   }
 
 }

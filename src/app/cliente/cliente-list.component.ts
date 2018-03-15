@@ -22,6 +22,7 @@ import { Cliente } from './cliente';
 import { ChangeDetectorRef, AfterViewInit } from '@angular/core';
 import { OnlyNumberDirective } from './../only-number.directive';
 
+
 @Component({
   selector: 'app-cliente',
   templateUrl: './cliente-list.component.html',

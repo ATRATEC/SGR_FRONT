@@ -26,6 +26,7 @@ import {FormControl, Validators} from '@angular/forms';
 export class EquipamentoFormComponent implements OnInit, AfterViewInit, AfterViewChecked {
 
   equipamento: Equipamento;
+  equipamento_ant: Equipamento;
   emProcessamento = false;
   exibeIncluir = false;
 
@@ -48,12 +49,14 @@ export class EquipamentoFormComponent implements OnInit, AfterViewInit, AfterVie
   ngOnInit() {
     this.emProcessamento = true;
     this.equipamento = new Equipamento();
+    this.equipamento_ant = new Equipamento();
     this._route.params.forEach((params: Params) => {
       const id: number = +params['id'];
       if (id) {
         this._equipamentoService.getEquipamento(this._tokenManager.retrieve(), id)
         .subscribe( data => {
           this.equipamento = JSON.parse(data._body);
+          this.equipamento_ant = JSON.parse(data._body);
           this.emProcessamento = false;
         });
       } else {
@@ -89,6 +92,7 @@ export class EquipamentoFormComponent implements OnInit, AfterViewInit, AfterVie
             data => {
               this.emProcessamento = false;
               this.equipamento = data;
+              this.equipamento_ant = data;
               this.exibeIncluir = true;
               this.dialog.success('SGR', 'Equipamento salvo com sucesso.');
             },
@@ -105,6 +109,7 @@ export class EquipamentoFormComponent implements OnInit, AfterViewInit, AfterVie
           data => {
           this.emProcessamento = false;
           this.equipamento = data;
+          this.equipamento_ant = data;
           this.exibeIncluir = true;
           this.dialog.success('SGR', 'Equipamento salvo com sucesso.');
         },
@@ -122,6 +127,7 @@ export class EquipamentoFormComponent implements OnInit, AfterViewInit, AfterVie
 
   btnIncluir_click() {
     this.equipamento = new Equipamento();
+    this.equipamento_ant = new Equipamento();
   }
 
   getDescricaoErrorMessage() {
@@ -131,6 +137,15 @@ export class EquipamentoFormComponent implements OnInit, AfterViewInit, AfterVie
       mensagem = mensagem + 'Campo obrigatório.';
     }
     return mensagem;
+  }
+
+  canDeactivate(): Observable<boolean> | boolean {
+
+    if (JSON.stringify(this.equipamento) === JSON.stringify(this.equipamento_ant)) {
+      return true;
+    }
+
+    return this.dialog.confirm('Existem dados não salvos. Deseja descarta-los?');
   }
 
 }

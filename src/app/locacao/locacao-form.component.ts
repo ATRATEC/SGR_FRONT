@@ -51,9 +51,11 @@ import { FormBuilder, FormGroup} from '@angular/forms';
 export class LocacaoFormComponent
   implements OnInit, AfterViewInit, AfterViewChecked {
   locacao: Locacao;
+  locacao_ant: Locacao;
   locacaoequipamento: LocacaoEquipamento;
   locacaoequipamentosCombo: LocacaoEquipamento[];
   locacaoequipamentos: LocacaoEquipamento[];
+  locacaoequipamentos_ant: LocacaoEquipamento[];
   contratoclienteequipamentos: ContratoClienteEquipamento[];
   // locacaoequipamento: LocacaoEquipamento;
   equipamentos: Equipamento[];
@@ -118,7 +120,9 @@ export class LocacaoFormComponent
   ngOnInit() {
     this.emProcessamento = true;
     this.locacao = new Locacao();
+    this.locacao_ant = new Locacao();
     this.locacaoequipamentos = new Array<LocacaoEquipamento>();
+    this.locacaoequipamentos_ant = new Array<LocacaoEquipamento>();
     this.locacaoequipamentosCombo = new Array<LocacaoEquipamento>();
     this.locacaoequipamento = new LocacaoEquipamento();
     this.contratoclienteequipamentos = new Array<ContratoClienteEquipamento>();
@@ -137,13 +141,16 @@ export class LocacaoFormComponent
           .getLocacao(this._tokenManager.retrieve(), id)
           .subscribe(data => {
             this.locacao = JSON.parse(data._body);
+            this.locacao_ant = JSON.parse(data._body);
             this.emProcessamento = false;
           });
         this._locacaoequipamentoService
           .getLocacaoEquipamento(this._tokenManager.retrieve(), id)
           .subscribe(data => {
             this.locacaoequipamentos.length = 0;
+            this.locacaoequipamentos_ant.length = 0;
             this.locacaoequipamentos = JSON.parse(data._body);
+            this.locacaoequipamentos_ant = JSON.parse(data._body);
           });
       } else {
         this.emProcessamento = false;
@@ -184,7 +191,7 @@ export class LocacaoFormComponent
         this._locacaoService.addLocacao(this._tokenManager.retrieve(), this.locacao)
           .subscribe( data => {
               this.locacao = data;
-
+              this.locacao_ant = data;
               for (let index = 0; index < this.locacaoequipamentos.length; index++) {
                 this.locacaoequipamentos[index].id_locacao = this.locacao.id;
               }
@@ -193,7 +200,9 @@ export class LocacaoFormComponent
                 this.locacao.id, this.locacaoequipamentos)
                 .subscribe( ctrfsrv => {
                   this.locacaoequipamentos.length = 0;
+                  this.locacaoequipamentos_ant.length = 0;
                   this.locacaoequipamentos = ctrfsrv;
+                  this.locacaoequipamentos_ant = ctrfsrv;
                   this.emProcessamento = false;
                   this.exibeIncluir = true;
                   this.dialog.success('SGR', 'Locacao salvo com sucesso.');
@@ -221,6 +230,7 @@ export class LocacaoFormComponent
               // this.emProcessamento = false;
               // fileBrowser.files[0]
               this.locacao = data;
+              this.locacao_ant = data;
               for (let index = 0; index < this.locacaoequipamentos.length; index++) {
                 this.locacaoequipamentos[index].id_locacao = this.locacao.id;
               }
@@ -228,7 +238,9 @@ export class LocacaoFormComponent
                 this.locacao.id, this.locacaoequipamentos)
                 .subscribe( ctrfsrv => {
                   this.locacaoequipamentos.length = 0;
+                  this.locacaoequipamentos_ant.length = 0;
                   this.locacaoequipamentos = ctrfsrv;
+                  this.locacaoequipamentos_ant = ctrfsrv;
                   this.emProcessamento = false;
                   this.exibeIncluir = true;
                   this.dialog.success('SGR', 'Locacao salvo com sucesso.');
@@ -257,8 +269,10 @@ export class LocacaoFormComponent
 
   btnIncluir_click() {
     this.locacao = new Locacao();
+    this.locacao_ant = new Locacao();
     this.locacaoequipamentosCombo.length = 0;
     this.locacaoequipamentos.length = 0;
+    this.locacaoequipamentos_ant.length = 0;
   }
 
   getErrorMessage(campo: FormControl) {
@@ -435,5 +449,15 @@ export class LocacaoFormComponent
         this.locacaoequipamentosCombo = JSON.parse(data._body);
       });
     }
+  }
+
+  canDeactivate(): Observable<boolean> | boolean {
+
+    if (((JSON.stringify(this.locacao) === JSON.stringify(this.locacao_ant))) &&
+    ((JSON.stringify(this.locacaoequipamentos) === JSON.stringify(this.locacaoequipamentos_ant)))) {
+      return true;
+    }
+
+    return this.dialog.confirm('Existem dados não salvos. Deseja descarta-los?');
   }
 }

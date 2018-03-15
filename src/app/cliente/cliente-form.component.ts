@@ -1,3 +1,4 @@
+import { StrToBooleanPipe } from './../utilitario/strToBooleanPipe';
 import { ClienteDocumentoService } from './clientedocumento.service';
 import { TipoDocumentoService } from './../tipodocumento/tipodocumento.service';
 import { TipoDocumento } from './../tipodocumento/tipodocumento';
@@ -21,7 +22,7 @@ import 'rxjs/add/observable/fromEvent';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/distinctUntilChanged';
 import 'rxjs/add/operator/debounceTime';
-import { ChangeDetectorRef, ViewChildren, ElementRef, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, ViewChildren, ElementRef, ViewChild, Input } from '@angular/core';
 import { OnlyNumberDirective } from './../only-number.directive';
 import { Cliente, ClienteFilter, ClienteFiltro } from './cliente';
 import { ActivatedRoute, Params } from '@angular/router';
@@ -31,6 +32,8 @@ import { startWith } from 'rxjs/operators/startWith';
 import { map } from 'rxjs/operators/map';
 import { ClienteDocumento } from './clientedocumento';
 import { environment } from '../../environments/environment';
+import { strToBoolean } from '../utilitario/utilitarios';
+import { booleanToStrSN } from '../utilitario/utilitarios';
 
 @Component({
   selector: 'app-cliente-form',
@@ -40,14 +43,17 @@ import { environment } from '../../environments/environment';
 export class ClienteFormComponent
   implements OnInit, AfterViewInit, AfterViewChecked {
   cliente: Cliente;
+  cliente_ant: Cliente;
   clientedocumento: ClienteDocumento;
   clientedocumentos: ClienteDocumento[];
+  clientedocumentos_ant: ClienteDocumento[];
   clientedocumentosList: ClienteDocumento[];
   clientedocumentoAnexos: ClienteDocumento[];
   tipodocumentos: TipoDocumento[];
   linkDownload = environment.urlbase + '/api/documentos/cliente/downloadanexo?arquivo=';
   emProcessamento = false;
   exibeIncluir = false;
+  private _inativo = false;
   id_documento: number;
   estados: Estado[];
   cidades: Cidade[];
@@ -79,7 +85,21 @@ export class ClienteFormComponent
 
   filteredOptions: Observable<Cidade[]>;
 
+  @Input('inativo')
+  set inativo(inativo: boolean){
+    this.cliente.inativo = booleanToStrSN(inativo);
+  }
+  get inativo(): boolean {
+    return strToBoolean(this.cliente.inativo);
+  }
 
+  @Input('extensao')
+  set extensao(extensao: boolean){
+    this.clientedocumento.extensao = booleanToStrSN(extensao);
+  }
+  get extensao(): boolean {
+    return strToBoolean(this.clientedocumento.extensao);
+  }
 
   @ViewChildren('input') vc;
   @ViewChild('focuscomp') focuscomp: ElementRef;
@@ -104,8 +124,10 @@ export class ClienteFormComponent
   ngOnInit() {
     this.emProcessamento = true;
     this.cliente = new Cliente();
+    this.cliente_ant = new Cliente();
     this.clientedocumento = new ClienteDocumento();
     this.clientedocumentos = new Array<ClienteDocumento>();
+    this.clientedocumentos_ant = new Array<ClienteDocumento>();
     this.clientedocumentosList = new Array<ClienteDocumento>();
     this.clientedocumentoAnexos = new Array<ClienteDocumento>();
     this.tipodocumentos = new Array<TipoDocumento>();
@@ -127,6 +149,9 @@ export class ClienteFormComponent
           .getCliente(this._tokenManager.retrieve(), id)
           .subscribe(data => {
             this.cliente = JSON.parse(data._body);
+            this.cliente_ant = JSON.parse(data._body);
+            this.inativo = strToBoolean(this.cliente.inativo);
+            // console.log(JSON.parse(data._body).inativo);
             if (!isNullOrUndefined(this.cliente.estado)) {
               this.loadCidades(this.cliente.estado);
             }
@@ -135,6 +160,7 @@ export class ClienteFormComponent
                 this.clientedocumentos.length = 0;
                 this.clientedocumentosList.length = 0;
                 this.clientedocumentos = JSON.parse(clidoc._body);
+                this.clientedocumentos_ant = JSON.parse(clidoc._body);
                 this.clientedocumentosList = JSON.parse(clidoc._body);
               });
               this._clientedocumentoService.getClienteDocumentoAnexo(this._tokenManager.retrieve(), this.cliente.id).subscribe(
@@ -366,6 +392,7 @@ export class ClienteFormComponent
           .subscribe(
             data => {
               this.cliente = data;
+              this.cliente_ant = data;
               // this.emProcessamento = false;
               // this.exibeIncluir = true;
               // this.dialog.success('SGR', 'Cliente salvo com sucesso.');
@@ -379,6 +406,7 @@ export class ClienteFormComponent
                   this.clientedocumentos.length = 0;
                   this.clientedocumentosList.length = 0;
                   this.clientedocumentos = clidoc;
+                  this.clientedocumentos_ant = clidoc;
                   this.clientedocumentosList = clidoc;
                   this.limpaValidadores();
                   this.emProcessamento = false;
@@ -406,6 +434,7 @@ export class ClienteFormComponent
           .subscribe(
             data => {
               this.cliente = data;
+              this.cliente_ant = data;
               // this.emProcessamento = false;
               // this.exibeIncluir = true;
               // this.dialog.success('SGR', 'Cliente salvo com sucesso.');
@@ -419,6 +448,7 @@ export class ClienteFormComponent
                   this.clientedocumentos.length = 0;
                   this.clientedocumentosList.length = 0;
                   this.clientedocumentos = clidoc;
+                  this.clientedocumentos_ant = clidoc;
                   this.clientedocumentosList = clidoc;
                   this.limpaValidadores();
                   this.emProcessamento = false;
@@ -445,6 +475,11 @@ export class ClienteFormComponent
 
   btnIncluir_click() {
     this.cliente = new Cliente();
+    this.clientedocumento = new ClienteDocumento();
+    this.clientedocumentos.length = 0;
+    this.clientedocumentos_ant.length = 0;
+    this.clientedocumentoAnexos.length = 0;
+    this.clientedocumentosList.length = 0;
   }
 
   getRazaoSocialErrorMessage() {
@@ -613,6 +648,7 @@ export class ClienteFormComponent
     this.clientedocumento = doc;
     const index = this.clientedocumentos.indexOf(doc);
     this.clientedocumentos.splice(index, 1);
+    this.limpaValidadores();
   }
 
   uploadAnexo() {
@@ -649,6 +685,21 @@ export class ClienteFormComponent
         });
       }
     );
+  }
+
+  canDeactivate(): Observable<boolean> | boolean {
+
+    if (((JSON.stringify(this.cliente) === JSON.stringify(this.cliente_ant))) &&
+       ((JSON.stringify(this.clientedocumentos) === JSON.stringify(this.clientedocumentos_ant)))) {
+      return true;
+    }
+    // Allow synchronous navigation (`true`) if no crisis or the crisis is unchanged
+    // if (!this.crisis || this.crisis.name === this.editName) {
+    //   return true;
+    // }
+    // Otherwise ask the user with the dialog service and return its
+    // observable which resolves to true or false when the user decides
+    return this.dialog.confirm('Existem dados não salvos. Deseja descarta-los?');
   }
 
 

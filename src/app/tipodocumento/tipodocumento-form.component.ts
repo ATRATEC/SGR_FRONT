@@ -26,6 +26,7 @@ import {FormControl, Validators} from '@angular/forms';
 export class TipoDocumentoFormComponent implements OnInit, AfterViewInit, AfterViewChecked {
 
   tipodocumento: TipoDocumento;
+  tipodocumento_ant: TipoDocumento;
   emProcessamento = false;
   exibeIncluir = false;
 
@@ -48,12 +49,14 @@ export class TipoDocumentoFormComponent implements OnInit, AfterViewInit, AfterV
   ngOnInit() {
     this.emProcessamento = true;
     this.tipodocumento = new TipoDocumento();
+    this.tipodocumento_ant = new TipoDocumento();
     this._route.params.forEach((params: Params) => {
       const id: number = +params['id'];
       if (id) {
         this._tipodocumentoService.getTipoDocumento(this._tokenManager.retrieve(), id)
         .subscribe( data => {
           this.tipodocumento = JSON.parse(data._body);
+          this.tipodocumento_ant = JSON.parse(data._body);
           this.emProcessamento = false;
         });
       } else {
@@ -89,6 +92,7 @@ export class TipoDocumentoFormComponent implements OnInit, AfterViewInit, AfterV
             data => {
               this.emProcessamento = false;
               this.tipodocumento = data;
+              this.tipodocumento_ant = data;
               this.exibeIncluir = true;
               this.dialog.success('SGR', 'TipoDocumento salvo com sucesso.');
             },
@@ -105,6 +109,7 @@ export class TipoDocumentoFormComponent implements OnInit, AfterViewInit, AfterV
           data => {
           this.emProcessamento = false;
           this.tipodocumento = data;
+          this.tipodocumento_ant = data;
           this.exibeIncluir = true;
           this.dialog.success('SGR', 'TipoDocumento salvo com sucesso.');
         },
@@ -122,6 +127,7 @@ export class TipoDocumentoFormComponent implements OnInit, AfterViewInit, AfterV
 
   btnIncluir_click() {
     this.tipodocumento = new TipoDocumento();
+    this.tipodocumento_ant = new TipoDocumento();
   }
 
   getDescricaoErrorMessage() {
@@ -131,6 +137,15 @@ export class TipoDocumentoFormComponent implements OnInit, AfterViewInit, AfterV
       mensagem = mensagem + 'Campo obrigatório.';
     }
     return mensagem;
+  }
+
+  canDeactivate(): Observable<boolean> | boolean {
+
+    if (JSON.stringify(this.tipodocumento) === JSON.stringify(this.tipodocumento_ant)) {
+      return true;
+    }
+
+    return this.dialog.confirm('Existem dados não salvos. Deseja descarta-los?');
   }
 
 }

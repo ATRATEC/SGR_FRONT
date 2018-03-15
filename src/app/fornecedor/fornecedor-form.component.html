@@ -71,7 +71,7 @@
                   </mat-form-field>
                 </div>
                 <div fxFlex="100px" fxFlexFill>
-                  <mat-checkbox [(ngModel)]="fornecedor.inativo">Inativo</mat-checkbox>
+                  <mat-checkbox [(ngModel)]="inativo">Inativo</mat-checkbox>
                 </div>
               </div>
             </div>
@@ -285,7 +285,7 @@
                           <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="5px">
                             <div fxFlex="230px" fxFlexFill>
                               <mat-form-field class="frm_fornecedor_tipodocumento">
-                                <mat-select [formControl]="valTipoDocumento" placeholder="Tipo de Documento" [(value)]="fornecedordocumento.id_tipo_documento"
+                                <mat-select [formControl]="valTipoDocumento" placeholder="Tipo de Documento" [(ngModel)]="fornecedordocumento.id_tipo_documento"
                                   required tabindex="30" id="id_tipodocumento">
                                   <mat-option *ngFor="let tipodocumento of tipodocumentos" [value]="tipodocumento.id">
                                     {{ tipodocumento.descricao }}
@@ -315,6 +315,9 @@
                                   [value]="fornecedordocumento.vencimento">
                                 <mat-hint align="end">{{dtvencimento.value?.length || 0}}/10</mat-hint>
                               </mat-form-field>
+                            </div>
+                            <div fxFlex="100px" fxFlexFill>
+                              <mat-checkbox [(ngModel)]="extensao">Extensão</mat-checkbox>
                             </div>
                             <div fxFlex="120px" fxFlexAlign="center" fxFlexFill>
                               <button mat-raised-button color="primary" (click)="addlinha()" tabindex="34" style="margin-bottom: 10px">
@@ -367,7 +370,7 @@
                                 {{fordoc.vencimento|formatDate}}
                               </td>
                               <td class="frm_fornecedor_grid_extensao" style="text-align: center">
-                                <mat-checkbox [(ngModel)]="fordoc.extensao"></mat-checkbox>
+                                  <mat-checkbox disabled [checked]="fordoc.extensao | strtoboolean"></mat-checkbox>
                               </td>
                               <td class="frm_fornecedor_botao">
                                 <a (click)="remlinha(fordoc)" class="tooltip">

@@ -26,6 +26,7 @@ import {FormControl, Validators} from '@angular/forms';
 export class ClasseResiduoFormComponent implements OnInit, AfterViewInit, AfterViewChecked {
 
   classeresiduo: ClasseResiduo;
+  classeresiduo_ant: ClasseResiduo;
   emProcessamento = false;
   exibeIncluir = false;
 
@@ -54,6 +55,7 @@ export class ClasseResiduoFormComponent implements OnInit, AfterViewInit, AfterV
         this._classeresiduoService.getClasseResiduo(this._tokenManager.retrieve(), id)
         .subscribe( data => {
           this.classeresiduo = JSON.parse(data._body);
+          this.classeresiduo_ant = JSON.parse(data._body);
           this.emProcessamento = false;
         });
       } else {
@@ -90,6 +92,7 @@ export class ClasseResiduoFormComponent implements OnInit, AfterViewInit, AfterV
             // this.classeresiduo = data;
             this.emProcessamento = false;
             this.classeresiduo = data;
+            this.classeresiduo_ant = data;
             this.exibeIncluir = true;
             this.dialog.success('SGR', 'Classe de Residuo salvo com sucesso.');
           },
@@ -107,6 +110,7 @@ export class ClasseResiduoFormComponent implements OnInit, AfterViewInit, AfterV
             // this.classeresiduo = data;
             this.emProcessamento = false;
             this.classeresiduo = data;
+            this.classeresiduo_ant = data;
             this.exibeIncluir = true;
             this.dialog.success('SGR', 'Classe de Residuo salvo com sucesso.');
           },
@@ -124,6 +128,7 @@ export class ClasseResiduoFormComponent implements OnInit, AfterViewInit, AfterV
 
   btnIncluir_click() {
     this.classeresiduo = new ClasseResiduo();
+    this.classeresiduo_ant = new ClasseResiduo();
   }
 
   getDescricaoErrorMessage() {
@@ -133,6 +138,20 @@ export class ClasseResiduoFormComponent implements OnInit, AfterViewInit, AfterV
       mensagem = mensagem + 'Campo obrigatório.';
     }
     return mensagem;
+  }
+
+  canDeactivate(): Observable<boolean> | boolean {
+
+    if (JSON.stringify(this.classeresiduo) === JSON.stringify(this.classeresiduo_ant)) {
+      return true;
+    }
+    // Allow synchronous navigation (`true`) if no crisis or the crisis is unchanged
+    // if (!this.crisis || this.crisis.name === this.editName) {
+    //   return true;
+    // }
+    // Otherwise ask the user with the dialog service and return its
+    // observable which resolves to true or false when the user decides
+    return this.dialog.confirm('Existem dados não salvos. Deseja descarta-los?');
   }
 
 }

@@ -58,7 +58,7 @@ export class Cliente {
     public cnae: string = '',
     public obsEndereco: string = '',
     public obsTelefonesEmail: string = '',
-    public inativo: boolean = false,
+    public inativo: string = 'N',
     public inclusao: Date = null,
     public usuario_inclusao: string = '',
     public alteracao: Date = null,

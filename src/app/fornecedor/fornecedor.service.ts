@@ -57,7 +57,8 @@ export class FornecedorService {
       importado_api: _fornecedor.importado_api,
       cnae: _fornecedor.cnae,
       obsEndereco: _fornecedor.obsEndereco,
-      obsTelefonesEmail: _fornecedor.obsTelefonesEmail
+      obsTelefonesEmail: _fornecedor.obsTelefonesEmail,
+      inativo: _fornecedor.inativo
     };
     // _params.set('codigo', '1');
 
@@ -112,7 +113,8 @@ export class FornecedorService {
       importado_api: _fornecedor.importado_api,
       cnae: _fornecedor.cnae,
       obsEndereco: _fornecedor.obsEndereco,
-      obsTelefonesEmail: _fornecedor.obsTelefonesEmail
+      obsTelefonesEmail: _fornecedor.obsTelefonesEmail,
+      inativo: _fornecedor.inativo
     };
     // _params.set('id', _id.toString());
 
@@ -214,9 +216,9 @@ export class FornecedorService {
     if (Ativos) {
       if ((!isNullOrUndefined(filter.inativo))) {
         if (filter.inativo) {
-          search.set('inativo', '1');
+          search.set('inativo', 'S');
         } else {
-          search.set('inativo', '0');
+          search.set('inativo', 'N');
         }
       }
     }

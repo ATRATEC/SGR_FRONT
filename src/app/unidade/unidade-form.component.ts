@@ -26,6 +26,7 @@ import {FormControl, Validators} from '@angular/forms';
 export class UnidadeFormComponent implements OnInit, AfterViewInit, AfterViewChecked {
 
   unidade: Unidade;
+  unidade_ant: Unidade;
   emProcessamento = false;
   exibeIncluir = false;
 
@@ -49,12 +50,14 @@ export class UnidadeFormComponent implements OnInit, AfterViewInit, AfterViewChe
   ngOnInit() {
     this.emProcessamento = true;
     this.unidade = new Unidade();
+    this.unidade_ant = new Unidade();
     this._route.params.forEach((params: Params) => {
       const id: number = +params['id'];
       if (id) {
         this._unidadeService.getUnidade(this._tokenManager.retrieve(), id)
         .subscribe( data => {
           this.unidade = JSON.parse(data._body);
+          this.unidade_ant = JSON.parse(data._body);
           this.emProcessamento = false;
         });
       } else {
@@ -91,6 +94,7 @@ export class UnidadeFormComponent implements OnInit, AfterViewInit, AfterViewChe
             data => {
               this.emProcessamento = false;
               this.unidade = data;
+              this.unidade_ant = data;
               this.exibeIncluir = true;
               this.dialog.success('SGR', 'Unidade salva com sucesso.');
             },
@@ -108,6 +112,7 @@ export class UnidadeFormComponent implements OnInit, AfterViewInit, AfterViewChe
           data => {
           this.emProcessamento = false;
           this.unidade = data;
+          this.unidade_ant = data;
           this.exibeIncluir = true;
           this.dialog.success('SGR', 'Unidade salva com sucesso.');
         },
@@ -125,6 +130,7 @@ export class UnidadeFormComponent implements OnInit, AfterViewInit, AfterViewChe
 
   btnIncluir_click() {
     this.unidade = new Unidade();
+    this.unidade_ant = new Unidade();
   }
 
   getCodigoErrorMessage() {
@@ -143,6 +149,14 @@ export class UnidadeFormComponent implements OnInit, AfterViewInit, AfterViewChe
       mensagem = mensagem + 'Campo obrigatório.';
     }
     return mensagem;
+  }
+
+  canDeactivate(): Observable<boolean> | boolean {
+
+    if (JSON.stringify(this.unidade) === JSON.stringify(this.unidade_ant)) {
+      return true;
+    }
+    return this.dialog.confirm('Existem dados não salvos. Deseja descarta-los?');
   }
 
 }

@@ -10,6 +10,10 @@
           <mat-icon>insert_drive_file</mat-icon>
           <span>Incluir</span>
         </button>
+        <button id="btnDuplicar" mat-raised-button color="primary" style="width: 100%" (click)="btnDuplicar_click()" *ngIf="this.contratofornecedor.id">
+          <mat-icon>content_copy</mat-icon>
+          <span>Duplicar</span>
+        </button>
       </div>
       <div fxFlex="40px" fxFlexFill fxFlexAlign="end">
         <a routerLink="/contratofornecedores" mat-raised-button color="primary" style="width: 120px">

@@ -19,7 +19,7 @@ import 'rxjs/add/observable/fromEvent';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/distinctUntilChanged';
 import 'rxjs/add/operator/debounceTime';
-import { ChangeDetectorRef, ViewChildren, ViewChild, ElementRef } from '@angular/core';
+import { ChangeDetectorRef, ViewChildren, ViewChild, ElementRef, Input } from '@angular/core';
 import { OnlyNumberDirective } from './../only-number.directive';
 import { Fornecedor, FornecedorFiltro } from './fornecedor';
 import { ActivatedRoute, Params} from '@angular/router';
@@ -28,6 +28,7 @@ import { Estado, Cidade } from './../endereco';
 import {startWith} from 'rxjs/operators/startWith';
 import {map} from 'rxjs/operators/map';
 import { environment } from '../../environments/environment';
+import { booleanToStrSN, strToBoolean } from '../utilitario/utilitarios';
 
 @Component({
   selector: 'app-fornecedor-form',
@@ -37,8 +38,10 @@ import { environment } from '../../environments/environment';
 export class FornecedorFormComponent implements OnInit, AfterViewInit, AfterViewChecked {
 
   fornecedor: Fornecedor;
+  fornecedor_ant: Fornecedor;
   fornecedordocumento: FornecedorDocumento;
   fornecedordocumentos: FornecedorDocumento[];
+  fornecedordocumentos_ant: FornecedorDocumento[];
   fornecedordocumentosList: FornecedorDocumento[];
   fornecedordocumentoAnexos: FornecedorDocumento[];
   tipodocumentos: TipoDocumento[];
@@ -76,7 +79,21 @@ export class FornecedorFormComponent implements OnInit, AfterViewInit, AfterView
 
   filteredOptions: Observable<Cidade[]>;
 
+  @Input('inativo')
+  set inativo(inativo: boolean){
+    this.fornecedor.inativo = booleanToStrSN(inativo);
+  }
+  get inativo(): boolean {
+    return strToBoolean(this.fornecedor.inativo);
+  }
 
+  @Input('extensao')
+  set extensao(extensao: boolean){
+    this.fornecedordocumento.extensao = booleanToStrSN(extensao);
+  }
+  get extensao(): boolean {
+    return strToBoolean(this.fornecedordocumento.extensao);
+  }
 
   @ViewChildren('input') vc;
   @ViewChild('focuscomp') focuscomp: ElementRef;
@@ -101,10 +118,11 @@ export class FornecedorFormComponent implements OnInit, AfterViewInit, AfterView
   ngOnInit() {
     this.emProcessamento = true;
     this.fornecedor = new Fornecedor();
+    this.fornecedor = new Fornecedor();
     this.fornecedordocumento = new FornecedorDocumento();
     this.fornecedordocumentos = new Array<FornecedorDocumento>();
+    this.fornecedordocumentos_ant = new Array<FornecedorDocumento>();
     this.fornecedordocumentosList = new Array<FornecedorDocumento>();
-    this.fornecedordocumentoAnexos = new Array<FornecedorDocumento>();
     this.tipodocumentos = new Array<TipoDocumento>();
 
     this._tipodocumentoService.getListTipoDocumentos(this._tokenManager.retrieve()).subscribe( data => {
@@ -124,6 +142,7 @@ export class FornecedorFormComponent implements OnInit, AfterViewInit, AfterView
           .getFornecedor(this._tokenManager.retrieve(), id)
           .subscribe(data => {
             this.fornecedor = JSON.parse(data._body);
+            this.fornecedor_ant = JSON.parse(data._body);
             if (!isNullOrUndefined(this.fornecedor.estado)) {
               this.loadCidades(this.fornecedor.estado);
             }
@@ -132,6 +151,7 @@ export class FornecedorFormComponent implements OnInit, AfterViewInit, AfterView
                 this.fornecedordocumentos.length = 0;
                 this.fornecedordocumentosList.length = 0;
                 this.fornecedordocumentos = JSON.parse(clidoc._body);
+                this.fornecedordocumentos_ant = JSON.parse(clidoc._body);
                 this.fornecedordocumentosList = JSON.parse(clidoc._body);
               });
               this._fornecedordocumentoService.getFornecedorDocumentoAnexo(this._tokenManager.retrieve(), this.fornecedor.id).subscribe(
@@ -363,6 +383,7 @@ export class FornecedorFormComponent implements OnInit, AfterViewInit, AfterView
           .subscribe(
             data => {
               this.fornecedor = data;
+              this.fornecedor_ant = data;
               // this.emProcessamento = false;
               // this.exibeIncluir = true;
               // this.dialog.success('SGR', 'Fornecedor salvo com sucesso.');
@@ -374,8 +395,10 @@ export class FornecedorFormComponent implements OnInit, AfterViewInit, AfterView
                 this.fornecedor.id, this.fornecedordocumentos)
                 .subscribe( clidoc => {
                   this.fornecedordocumentos.length = 0;
+                  this.fornecedordocumentos_ant.length = 0;
                   this.fornecedordocumentosList.length = 0;
                   this.fornecedordocumentos = clidoc;
+                  this.fornecedordocumentos_ant = clidoc;
                   this.fornecedordocumentosList = clidoc;
                   this.limpaValidadores();
                   this.emProcessamento = false;
@@ -403,6 +426,7 @@ export class FornecedorFormComponent implements OnInit, AfterViewInit, AfterView
           .subscribe(
             data => {
               this.fornecedor = data;
+              this.fornecedor_ant = data;
               // this.emProcessamento = false;
               // this.exibeIncluir = true;
               // this.dialog.success('SGR', 'Fornecedor salvo com sucesso.');
@@ -414,8 +438,10 @@ export class FornecedorFormComponent implements OnInit, AfterViewInit, AfterView
                 this.fornecedor.id, this.fornecedordocumentos)
                 .subscribe( clidoc => {
                   this.fornecedordocumentos.length = 0;
+                  this.fornecedordocumentos_ant.length = 0;
                   this.fornecedordocumentosList.length = 0;
                   this.fornecedordocumentos = clidoc;
+                  this.fornecedordocumentos_ant = clidoc;
                   this.fornecedordocumentosList = clidoc;
                   this.limpaValidadores();
                   this.emProcessamento = false;
@@ -442,6 +468,12 @@ export class FornecedorFormComponent implements OnInit, AfterViewInit, AfterView
 
   btnIncluir_click() {
     this.fornecedor = new Fornecedor();
+    this.fornecedor_ant = new Fornecedor();
+    this.fornecedordocumento = new FornecedorDocumento();
+    this.fornecedordocumentos.length = 0;
+    this.fornecedordocumentos_ant.length = 0;
+    this.fornecedordocumentosList.length = 0;
+    this.fornecedordocumentoAnexos.length = 0;
   }
 
   getRazaoSocialErrorMessage() {
@@ -610,6 +642,7 @@ export class FornecedorFormComponent implements OnInit, AfterViewInit, AfterView
     this.fornecedordocumento = doc;
     const index = this.fornecedordocumentos.indexOf(doc);
     this.fornecedordocumentos.splice(index, 1);
+    this.limpaValidadores();
   }
 
   uploadAnexo() {
@@ -646,6 +679,16 @@ export class FornecedorFormComponent implements OnInit, AfterViewInit, AfterView
         });
       }
     );
+  }
+
+  canDeactivate(): Observable<boolean> | boolean {
+
+    if (((JSON.stringify(this.fornecedor) === JSON.stringify(this.fornecedor_ant))) &&
+        ((JSON.stringify(this.fornecedordocumentos) === JSON.stringify(this.fornecedordocumentos_ant)))) {
+      return true;
+    }
+
+    return this.dialog.confirm('Existem dados não salvos. Deseja descarta-los?');
   }
 
 

@@ -44,7 +44,8 @@ import {
   ViewChildren,
   ViewChild,
   ElementRef,
-  EventEmitter
+  EventEmitter,
+  Input
 } from '@angular/core';
 import { OnlyNumberDirective } from './../only-number.directive';
 import { FocusDirective } from '../focus/focus.directive';
@@ -65,6 +66,7 @@ import { Servico } from '../servico/servico';
 import { Cliente } from '../cliente/cliente';
 import {FormBuilder, FormGroup} from '@angular/forms';
 import { Residuo } from '../residuo/residuo';
+import { booleanToStrSN, strToBoolean } from '../utilitario/utilitarios';
 
 @Component({
   selector: 'app-contratofornecedor-form',
@@ -85,8 +87,10 @@ import { Residuo } from '../residuo/residuo';
 export class ContratoFornecedorFormComponent
   implements OnInit, AfterViewInit, AfterViewChecked {
   contratofornecedor: ContratoFornecedor;
+  contratofornecedor_ant: ContratoFornecedor;
   contratofornecedorresiduo: ContratoFornecedorResiduo;
   contratofornecedorresiduos: ContratoFornecedorResiduo[];
+  contratofornecedorresiduos_ant: ContratoFornecedorResiduo[];
   residuos: Residuo[];
   servicos: Servico[];
   unidades: Unidade[];
@@ -103,6 +107,14 @@ export class ContratoFornecedorFormComponent
   valDescricao = new FormControl();
 
   private inputFocused = new EventEmitter();
+
+  @Input('exclusivo')
+  set exclusivo(exclusivo: boolean){
+    this.contratofornecedor.exclusivo = booleanToStrSN(exclusivo);
+  }
+  get exclusivo(): boolean {
+    return strToBoolean(this.contratofornecedor.exclusivo);
+  }
 
   @ViewChildren('input') vc;
   @ViewChild('focuscomp') focuscomp: ElementRef;
@@ -131,8 +143,11 @@ export class ContratoFornecedorFormComponent
   ngOnInit() {
     this.emProcessamento = true;
     this.contratofornecedor = new ContratoFornecedor();
+    this.contratofornecedor_ant = new ContratoFornecedor();
     this.contratofornecedorresiduo = new ContratoFornecedorResiduo();
     this.contratofornecedorresiduos = new Array<ContratoFornecedorResiduo>();
+    this.contratofornecedorresiduos_ant = new Array<ContratoFornecedorResiduo>();
+
     this._unidadeService.getListUnidades(this._tokenManager.retrieve()).subscribe(
       data => {
         this.unidades = JSON.parse(data._body);
@@ -158,11 +173,7 @@ export class ContratoFornecedorFormComponent
           .getContratoFornecedor(this._tokenManager.retrieve(), id)
           .subscribe(data => {
             this.contratofornecedor = JSON.parse(data._body);
-            if (JSON.parse(data._body).exclusivo === 1) {
-              this.contratofornecedor.exclusivo = true;
-            } else {
-              this.contratofornecedor.exclusivo = false;
-            }
+            this.contratofornecedor_ant = JSON.parse(data._body);
 
             if (this.contratofornecedor.caminho) {
               this.linkDownload = this.linkDownload + 'FOR_' +
@@ -178,6 +189,7 @@ export class ContratoFornecedorFormComponent
           .subscribe(data => {
             this.contratofornecedorresiduos.length = 0;
             this.contratofornecedorresiduos = JSON.parse(data._body);
+            this.contratofornecedorresiduos_ant = JSON.parse(data._body);
           });
       } else {
         this.emProcessamento = false;
@@ -225,20 +237,15 @@ export class ContratoFornecedorFormComponent
     this.emProcessamento = true;
     const fileBrowser = this.fileInput.nativeElement;
     if (this.validaCampos()) {
-      if (!this.contratofornecedor.exclusivo) {
+      if (strToBoolean(this.contratofornecedor.exclusivo)) {
         this.contratofornecedor.id_cliente = null;
         this.contratofornecedor.cliente = '';
-        this.contratofornecedor.exclusivo = false;
       }
       if (isNullOrUndefined(this.contratofornecedor.id)) {
         this._contratofornecedorService.addContratoFornecedor(this._tokenManager.retrieve(), this.contratofornecedor)
           .subscribe( data => {
               this.contratofornecedor = data;
-              if (data.exclusivo === 1) {
-                this.contratofornecedor.exclusivo = true;
-              } else {
-                this.contratofornecedor.exclusivo = false;
-              }
+              this.contratofornecedor_ant = data;
 
               for (let index = 0; index < this.contratofornecedorresiduos.length; index++) {
                 this.contratofornecedorresiduos[index].id_contrato = this.contratofornecedor.id;
@@ -250,6 +257,7 @@ export class ContratoFornecedorFormComponent
                 .subscribe( ctrfres => {
                   this.contratofornecedorresiduos.length = 0;
                   this.contratofornecedorresiduos = ctrfres;
+                  this.contratofornecedorresiduos_ant = ctrfres;
                   this.emProcessamento = false;
                   this.exibeIncluir = true;
                   this.dialog.success('SGR', 'Documento salvo com sucesso.');
@@ -276,11 +284,7 @@ export class ContratoFornecedorFormComponent
               // this.emProcessamento = false;
               // fileBrowser.files[0]
               this.contratofornecedor = data;
-              if (data.exclusivo === 1) {
-                this.contratofornecedor.exclusivo = true;
-              } else {
-                this.contratofornecedor.exclusivo = false;
-              }
+              this.contratofornecedor_ant = data;
 
               for (let index = 0; index < this.contratofornecedorresiduos.length; index++) {
                 this.contratofornecedorresiduos[index].id_contrato = this.contratofornecedor.id;
@@ -292,6 +296,7 @@ export class ContratoFornecedorFormComponent
                 .subscribe( ctrfres => {
                   this.contratofornecedorresiduos.length = 0;
                   this.contratofornecedorresiduos = ctrfres;
+                  this.contratofornecedorresiduos_ant = ctrfres;
                   this.emProcessamento = false;
                   this.exibeIncluir = true;
                   this.dialog.success('SGR', 'Documento salvo com sucesso.');
@@ -361,8 +366,21 @@ export class ContratoFornecedorFormComponent
 
   btnIncluir_click() {
     this.contratofornecedor = new ContratoFornecedor();
+    this.contratofornecedor_ant = new ContratoFornecedor();
     this.contratofornecedorresiduo = new ContratoFornecedorResiduo();
     this.contratofornecedorresiduos.length = 0;
+    this.contratofornecedorresiduos_ant.length = 0;
+  }
+
+  btnDuplicar_click() {
+    this.dialog.question('SGR', 'Deseja realmente duplicar o contrato?').subscribe(
+      result => {
+        this.contratofornecedor.id = null;
+        for (let index = 0; index < this.contratofornecedorresiduos.length; index++) {
+          this.contratofornecedorresiduos[index].id = null;
+          this.contratofornecedorresiduos[index].id_contrato = null;
+        }
+      });
   }
 
   getErrorMessage(control: FormControl) {
@@ -438,8 +456,6 @@ export class ContratoFornecedorFormComponent
 
   buscaCliente(event: any) {
     let cliente: Cliente;
-    // this.clientedocumento.id_cliente = null;
-    // this.clientedocumento.razao_social = '';
     if (event.id) {
       this._clienteService.getCliente(this._tokenManager.retrieve(), Number(event.id))
       .subscribe( data => {
@@ -452,7 +468,6 @@ export class ContratoFornecedorFormComponent
         this.contratofornecedor.cliente = '';
       });
     }
-    // console.log('mudou estado ' + event.value);
   }
 
   openPesquisaCliente(): void {
@@ -534,5 +549,14 @@ export class ContratoFornecedorFormComponent
 
   moveFocus() {
     document.getElementById('cbResiduo').focus();
+  }
+
+  canDeactivate(): Observable<boolean> | boolean {
+
+    if (((JSON.stringify(this.contratofornecedor) === JSON.stringify(this.contratofornecedor_ant))) &&
+        ((JSON.stringify(this.contratofornecedorresiduos) === JSON.stringify(this.contratofornecedorresiduos_ant)))) {
+      return true;
+    }
+    return this.dialog.confirm('Existem dados não salvos. Deseja descarta-los?');
   }
 }

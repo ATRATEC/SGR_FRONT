@@ -1,3 +1,4 @@
+import { UtilitarioModule } from './../utilitario/utilitario.module';
 import { DatepipeModule } from './../datepipe/datepipe.module';
 import { FornecedorDocumentoService } from './fornecedordocumento.service';
 import { UpperCaseModule } from './../uppercase/uppercase.module';
@@ -29,6 +30,7 @@ import { FornecedorRoutingModule } from './fornecedor-routing.module';
     ReactiveFormsModule,
     UpperCaseModule,
     DatepipeModule,
+    UtilitarioModule,
     FornecedorRoutingModule
   ],
   declarations: [

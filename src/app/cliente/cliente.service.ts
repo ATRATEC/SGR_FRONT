@@ -117,6 +117,7 @@ export class ClienteService {
       inativo: _cliente.inativo
     };
     // _params.set('id', _id.toString());
+    console.log(_cliente.inativo);
 
     return this._http
       .put(this.clienteUrl + '/' + _id.toString(), _body, { headers: headers })
@@ -212,9 +213,9 @@ export class ClienteService {
     if (Ativos) {
       if ((!isNullOrUndefined(filter.inativo))) {
         if (filter.inativo) {
-          search.set('inativo', '1');
+          search.set('inativo', 'S');
         } else {
-          search.set('inativo', '0');
+          search.set('inativo', 'N');
         }
       }
     }

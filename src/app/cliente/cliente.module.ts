@@ -1,3 +1,5 @@
+import { UtilitarioModule } from './../utilitario/utilitario.module';
+import { StrToBooleanPipe } from './../utilitario/strToBooleanPipe';
 import { DatepipeModule } from './../datepipe/datepipe.module';
 import { ClienteDocumentoService } from './clientedocumento.service';
 import { ClienteFindComponent } from './cliente-find.component';
@@ -29,6 +31,7 @@ import { UpperCaseModule } from '../uppercase/uppercase.module';
     ReactiveFormsModule,
     UpperCaseModule,
     DatepipeModule,
+    UtilitarioModule,
     ClienteRoutingModule
   ],
   declarations: [

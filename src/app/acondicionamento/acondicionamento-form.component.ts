@@ -26,6 +26,7 @@ import {FormControl, Validators} from '@angular/forms';
 export class AcondicionamentoFormComponent implements OnInit, AfterViewInit, AfterViewChecked {
 
   acondicionamento: Acondicionamento;
+  acondicionamento_ant: Acondicionamento;
   emProcessamento = false;
   exibeIncluir = false;
 
@@ -54,6 +55,7 @@ export class AcondicionamentoFormComponent implements OnInit, AfterViewInit, Aft
         this._acondicionamentoService.getAcondicionamento(this._tokenManager.retrieve(), id)
         .subscribe( data => {
           this.acondicionamento = JSON.parse(data._body);
+          this.acondicionamento_ant = JSON.parse(data._body);
           this.emProcessamento = false;
         });
       } else {
@@ -89,6 +91,7 @@ export class AcondicionamentoFormComponent implements OnInit, AfterViewInit, Aft
             data => {
               this.emProcessamento = false;
               this.acondicionamento = data;
+              this.acondicionamento_ant = data;
               this.exibeIncluir = true;
               this.dialog.success('SGR', 'Acondicionamento salvo com sucesso.');
             },
@@ -105,6 +108,7 @@ export class AcondicionamentoFormComponent implements OnInit, AfterViewInit, Aft
           data => {
           this.emProcessamento = false;
           this.acondicionamento = data;
+          this.acondicionamento_ant = data;
           this.exibeIncluir = true;
           this.dialog.success('SGR', 'Acondicionamento salvo com sucesso.');
         },
@@ -122,6 +126,7 @@ export class AcondicionamentoFormComponent implements OnInit, AfterViewInit, Aft
 
   btnIncluir_click() {
     this.acondicionamento = new Acondicionamento();
+    this.acondicionamento_ant = new Acondicionamento();
   }
 
   getDescricaoErrorMessage() {
@@ -131,6 +136,20 @@ export class AcondicionamentoFormComponent implements OnInit, AfterViewInit, Aft
       mensagem = mensagem + 'Campo obrigatório.';
     }
     return mensagem;
+  }
+
+  canDeactivate(): Observable<boolean> | boolean {
+
+    if (JSON.stringify(this.acondicionamento) === JSON.stringify(this.acondicionamento_ant)) {
+      return true;
+    }
+    // Allow synchronous navigation (`true`) if no crisis or the crisis is unchanged
+    // if (!this.crisis || this.crisis.name === this.editName) {
+    //   return true;
+    // }
+    // Otherwise ask the user with the dialog service and return its
+    // observable which resolves to true or false when the user decides
+    return this.dialog.confirm('Existem dados não salvos. Deseja descarta-los?');
   }
 
 }

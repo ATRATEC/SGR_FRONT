@@ -29,6 +29,7 @@ import { TipoAtividade } from '../tipoatividade/tipoatividade';
 export class ServicoFormComponent implements OnInit, AfterViewInit, AfterViewChecked {
 
   servico: Servico;
+  servico_ant: Servico;
   emProcessamento = false;
   exibeIncluir = false;
   tipoatividades: TipoAtividade[];
@@ -54,6 +55,7 @@ export class ServicoFormComponent implements OnInit, AfterViewInit, AfterViewChe
   ngOnInit() {
     this.emProcessamento = true;
     this.servico = new Servico();
+    this.servico_ant = new Servico();
     const ta = this._tipoatividadeService.getListTipoAtividades(this._tokenManager.retrieve())
       .retry(3)
       .subscribe(
@@ -67,6 +69,7 @@ export class ServicoFormComponent implements OnInit, AfterViewInit, AfterViewChe
               .retry(3)
               .subscribe( dt => {
                 this.servico = JSON.parse(dt._body);
+                this.servico_ant = JSON.parse(dt._body);
                 // console.log(1);
                 this.emProcessamento = false;
               });
@@ -111,6 +114,7 @@ export class ServicoFormComponent implements OnInit, AfterViewInit, AfterViewChe
             data => {
               this.emProcessamento = false;
               this.servico = data;
+              this.servico_ant = data;
               this.exibeIncluir = true;
               this.dialog.success('SGR', 'Servico salvo com sucesso.');
             },
@@ -127,6 +131,7 @@ export class ServicoFormComponent implements OnInit, AfterViewInit, AfterViewChe
           data => {
           this.emProcessamento = false;
           this.servico = data;
+          this.servico_ant = data;
           this.exibeIncluir = true;
           this.dialog.success('SGR', 'Servico salvo com sucesso.');
         },
@@ -144,6 +149,7 @@ export class ServicoFormComponent implements OnInit, AfterViewInit, AfterViewChe
 
   btnIncluir_click() {
     this.servico = new Servico();
+    this.servico_ant = new Servico();
   }
 
   getDescricaoErrorMessage() {
@@ -153,6 +159,14 @@ export class ServicoFormComponent implements OnInit, AfterViewInit, AfterViewChe
       mensagem = mensagem + 'Campo obrigatório.';
     }
     return mensagem;
+  }
+
+  canDeactivate(): Observable<boolean> | boolean {
+
+    if (JSON.stringify(this.servico) === JSON.stringify(this.servico_ant)) {
+      return true;
+    }
+    return this.dialog.confirm('Existem dados não salvos. Deseja descarta-los?');
   }
 
 }
