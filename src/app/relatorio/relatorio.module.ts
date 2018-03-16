@@ -1,3 +1,5 @@
+import { RelatorioFormComponent } from './relatorio-form.component';
+import { FiltroRelatorioFormComponent } from './filtrorelatorio-form.component';
 import { RelatorioPesagemFormComponent } from './relatoriopesagem-form.component';
 import { FiltroPesagemFormComponent } from './filtropesagem-form.component';
 import { DatepipeModule } from './../datepipe/datepipe.module';
@@ -34,6 +36,8 @@ import { RelatorioRoutingModule } from './relatorio-routing.module';
   declarations: [
     ReceitaFormComponent,
     FiltroClienteFormComponent,
+    FiltroRelatorioFormComponent,
+    RelatorioFormComponent,
     RelatorioClienteFormComponent,
     DespesaFormComponent,
     FiltroPesagemFormComponent,

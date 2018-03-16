@@ -154,37 +154,104 @@ export class RelatorioService {
       );
   }
 
-  getRelatorioReceita(accessToken: string, _relatorio: FiltroRelatorio): any {
+  getRelatorioReceita(accessToken: string, _relatorio: FiltroRelatorio) {
     const url = environment.urlbase + '/api/relatorios/receitas';
-    const headers = new HttpHeaders({
+
+    const headers = new Headers({
       Accept: 'application/json',
       Authorization: 'Bearer ' + accessToken.toString().replace(/"/g, '')
     });
 
-    let params: HttpParams = new HttpParams();
+    // const params: HttpParams = new HttpParams();
     const search: URLSearchParams =  new URLSearchParams();
 
+    if ((!isNullOrUndefined(_relatorio.id)) && (_relatorio.id.toString().length > 0)) {
+      search.set('id', _relatorio.id.toString());
+    }
 
-    if ((!isNullOrUndefined(_relatorio.id_cliente)) && (_relatorio.id_cliente.toString().length > 0)) {
-      params = params.append('id_cliente', _relatorio.id_cliente.toString());
+    if ((!isNullOrUndefined(_relatorio.id_cliente)) && (_relatorio.id_cliente.toString().length > 0) &&
+       (!isNaN(_relatorio.id_cliente))) {
+      search.set('id_cliente', _relatorio.id_cliente.toString());
+    }
+
+    if ((!isNullOrUndefined(_relatorio.id_manifesto)) && (_relatorio.id_manifesto.toString().length > 0) &&
+       (!isNaN(_relatorio.id_manifesto))) {
+      search.set('id_manifesto', _relatorio.id_manifesto.toString());
+    }
+
+    if ((!isNullOrUndefined(_relatorio.id_residuo)) && (_relatorio.id_residuo.toString().length > 0) &&
+       (!isNaN(_relatorio.id_residuo))) {
+      search.set('id_residuo', _relatorio.id_residuo.toString());
     }
 
     if ((!isNullOrUndefined(_relatorio.datade)) && (_relatorio.datade.toString().length > 0)) {
-      params = params.append('datade', _relatorio.datade.toString());
+      const dt = new Date(_relatorio.datade);
+      dt.setDate(dt.getDate() + 1);
+      search.set('datade', '\'' + moment(dt).format('YYYY-MM-DD').toString() + '\'');
     }
 
     if ((!isNullOrUndefined(_relatorio.dataate)) && (_relatorio.dataate.toString().length > 0)) {
-      params = params.append('dataate', _relatorio.dataate.toString());
+      const dt = new Date(_relatorio.dataate);
+      dt.setDate(dt.getDate() + 1);
+      search.set('dataate', '\'' + moment(dt).format('YYYY-MM-DD').toString() + '\'');
     }
 
+    return this._http
+      .get(url, { headers: headers, search: search })
+      .map((res: Response) => res.json())
+      .catch((error: any) =>
+        Observable.throw(error.json() || 'Server error')
+      );
+  }
 
-    return this._httpClient.get(url, {headers: headers, params: params, responseType: 'blob'})
-            .map(res => {
-              return new Blob([res], { type: 'application/pdf', });
-            })
-            .catch((error: any) =>
-            Observable.throw(error || 'Server error')
-          );
+  getRelatorioReceitaClasse(accessToken: string, _relatorio: FiltroRelatorio) {
+    const url = environment.urlbase + '/api/relatorios/receitasclasse';
+
+    const headers = new Headers({
+      Accept: 'application/json',
+      Authorization: 'Bearer ' + accessToken.toString().replace(/"/g, '')
+    });
+
+    // const params: HttpParams = new HttpParams();
+    const search: URLSearchParams =  new URLSearchParams();
+
+    if ((!isNullOrUndefined(_relatorio.id)) && (_relatorio.id.toString().length > 0)) {
+      search.set('id', _relatorio.id.toString());
+    }
+
+    if ((!isNullOrUndefined(_relatorio.id_cliente)) && (_relatorio.id_cliente.toString().length > 0) &&
+       (!isNaN(_relatorio.id_cliente))) {
+      search.set('id_cliente', _relatorio.id_cliente.toString());
+    }
+
+    if ((!isNullOrUndefined(_relatorio.id_manifesto)) && (_relatorio.id_manifesto.toString().length > 0) &&
+       (!isNaN(_relatorio.id_manifesto))) {
+      search.set('id_manifesto', _relatorio.id_manifesto.toString());
+    }
+
+    if ((!isNullOrUndefined(_relatorio.id_residuo)) && (_relatorio.id_residuo.toString().length > 0) &&
+       (!isNaN(_relatorio.id_residuo))) {
+      search.set('id_residuo', _relatorio.id_residuo.toString());
+    }
+
+    if ((!isNullOrUndefined(_relatorio.datade)) && (_relatorio.datade.toString().length > 0)) {
+      const dt = new Date(_relatorio.datade);
+      dt.setDate(dt.getDate() + 1);
+      search.set('datade', '\'' + moment(dt).format('YYYY-MM-DD').toString() + '\'');
+    }
+
+    if ((!isNullOrUndefined(_relatorio.dataate)) && (_relatorio.dataate.toString().length > 0)) {
+      const dt = new Date(_relatorio.dataate);
+      dt.setDate(dt.getDate() + 1);
+      search.set('dataate', '\'' + moment(dt).format('YYYY-MM-DD').toString() + '\'');
+    }
+
+    return this._http
+      .get(url, { headers: headers, search: search })
+      .map((res: Response) => res.json())
+      .catch((error: any) =>
+        Observable.throw(error.json() || 'Server error')
+      );
   }
 
   getRelatorioReceitaCliente(accessToken: string, _relatorio: FiltroRelatorio) {
@@ -235,35 +302,6 @@ export class RelatorioService {
       .catch((error: any) =>
         Observable.throw(error.json() || 'Server error')
       );
-    // const headers = new HttpHeaders({
-    //   Accept: 'application/json',
-    //   Authorization: 'Bearer ' + accessToken.toString().replace(/"/g, '')
-    // });
-
-    // let params: HttpParams = new HttpParams();
-    // const search: URLSearchParams =  new URLSearchParams();
-
-
-    // if ((!isNullOrUndefined(_relatorio.id_cliente)) && (_relatorio.id_cliente.toString().length > 0)) {
-    //   params = params.append('id_cliente', _relatorio.id_cliente.toString());
-    // }
-
-    // if ((!isNullOrUndefined(_relatorio.datade)) && (_relatorio.datade.toString().length > 0)) {
-    //   params = params.append('datade', _relatorio.datade.toString());
-    // }
-
-    // if ((!isNullOrUndefined(_relatorio.dataate)) && (_relatorio.dataate.toString().length > 0)) {
-    //   params = params.append('dataate', _relatorio.dataate.toString());
-    // }
-
-
-    // return this._httpClient.get(url, {headers: headers, params: params, responseType: 'blob'})
-    //         .map(res => {
-    //           return new Blob([res], { type: 'application/pdf', });
-    //         })
-    //         .catch((error: any) =>
-    //         Observable.throw(error || 'Server error')
-    //       );
   }
 
   getRelatorioDespesaCliente(accessToken: string, _relatorio: FiltroRelatorio) {

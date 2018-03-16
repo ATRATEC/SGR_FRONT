@@ -1,0 +1,250 @@
+<div fxLayout="row" fxLayoutAlign="start start" fxLayoutGap="1px">
+  <div fxFlex="140px" style="padding: 10px;" fxLayoutGap="10px" class="no_print">
+    <div fxLayout="column" fxLayoutAlign="space-between center" fxLayoutGap="5px" style="height: 100%" class="no_print">
+      <div fxFlex="80%" fxFlexFill fxFlexAlign="center" class="no_print">
+        <button id="btnImprimir" mat-raised-button color="primary" style="width: 100%" (click)="btnImprimir_click()">
+          <mat-icon>print</mat-icon>
+          <span>Imprimir</span>
+        </button>
+        <!-- <button id="btnIncluir" mat-raised-button color="primary" style="width: 100%" (click)="exportarPDF()">
+          <mat-icon>insert_drive_file</mat-icon>
+          <span>Incluir</span>
+        </button> -->
+      </div>
+      <div fxFlex="40px" fxFlexFill fxFlexAlign="end">
+
+        <a routerLink="/" mat-raised-button color="primary" style="width: 120px">
+          <mat-icon>close</mat-icon>
+          <span>Fechar</span>
+        </a>
+      </div>
+    </div>
+  </div>
+  <div fxFlex="90%">
+    <div fxLayout="column" fxLayoutAlign="start center" fxLayoutGap="5px">
+      <div fxFlex="80%" fxFlexAlign="start">
+        <div fxLayout="column" class="frm_relatorio-loading-shade" fxLayoutAlign="center center" *ngIf="emProcessamento">
+          <div fxFlex="70" fxFlexAlign="center" style="width: 29cm">
+            <mat-spinner></mat-spinner>
+          </div>
+          <div fxFlex="10" fxFlexAlign="center" style="width: 29cm">
+            &nbsp;
+          </div>
+          <div fxFlex="20" fxFlexAlign="center" style="width: 29cm">
+            <label>Aguarde...</label>
+          </div>
+        </div>
+        <div fxLayout="column" fxLayoutAlign="start start" fxLayoutGap="5px" *ngIf="!emProcessamento" #relatorio >
+          <div fxFlex="100%" fxFlexAlign="start" style="width: 29cm">
+            <div *ngIf="filtroRelatorio.receita">
+              <table class="a4" style="padding: 0px 0px 0px 0px; margin: 0px 0px 0px 0px; width: 100%; border: 0px solid white;" border="0">
+                <tr>
+                  <th style="background-color: #FFFFFF; width: 200px">
+                    <img src="assets/imagens/logo_av.png" alt="profile Pic" height="60px" width="200px" style="width: 200px; height: 60px;">
+                  </th>
+                  <th style="background-color: #FFFFFF">
+                    <div style="background-color: #FFFFFF; text-align: center">
+                      <h2>Relatório gerencial de Receitas</h2>
+                    </div>
+                    <div style="background-color: #FFFFFF; text-align: center">
+                      <span *ngIf="filtroRelatorio.datade && filtroRelatorio.dataate">Período {{filtroRelatorio.datade | formatDate}} até {{filtroRelatorio.dataate | formatDate}}</span>
+                    </div>
+                  </th>
+                  <th style="background-color: #FFFFFF; width: 200px">
+                    <div style="text-align: right; font-size: 10px">Data / Hora: {{hoje | formatDate}} {{hoje | date:'HH:mm'}}</div>
+                    <!-- <div style="text-align: right">info</div> -->
+                  </th>
+                </tr>
+              </table>
+              <div *ngFor="let grupocliente of grupoclientes">
+                <div>
+                  <label>Cliente: {{grupocliente.cliente}} {{zerasomareceita()}} </label>
+                </div>
+                <!-- <hr> -->
+                <!-- <span *ngIf="filtroRelatorio.cliente">Cliente: {{filtroRelatorio.cliente}} </span> -->
+                <!-- <hr *ngIf="filtroRelatorio.cliente"> -->
+                <table class="a4">
+                  <tr style="background-color: #FFFFFF; font-size: 12px; border-bottom: 1px solid black ">
+                    <th>Dt Coleta</th>
+                    <th>Nº Manifesto</th>
+                    <th>Resíduo</th>
+                    <th>Transportador</th>
+                    <th>Destinador</th>
+                    <th>Tratamento</th>
+                    <th style="text-align: right">Qtd</th>
+                    <th style="text-align: center">Und</th>
+                    <th style="text-align: right">Val Unit.</th>
+                    <th style="text-align: right">Val Total</th>
+                  </tr>
+                  <tr *ngFor="let item of grupocliente.receitas" style="background-color: #FFFFFF; font-size: 10px; ">
+                    <td>{{item.coleta | formatDate}}</td>
+                    <td>{{item.manifesto}}</td>
+                    <td>{{item.residuo}}</td>
+                    <td>{{item.transportador}}</td>
+                    <td>{{item.destinador}}</td>
+                    <td>{{item.tratamento}}</td>
+                    <td style="text-align: right">{{item.quantidade}}</td>
+                    <td style="text-align: center">{{item.unidade}}</td>
+                    <td style="text-align: right">{{item.valor_unitario | currency:'BRL':true}}</td>
+                    <td style="text-align: right">{{item.valor_total | currency:'BRL':true}} {{somareceita(item.valor_total)}}</td>
+                  </tr>
+                </table>
+                <hr>
+                <table style="width: 100%">
+                  <tr style="font-size: 10px">
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td style="text-align: right"></td>
+                    <td style="text-align: center"></td>
+                    <td colspan="2" style="text-align: right">
+                      <b>Total Geral:</b> {{grupocliente.total_geral | currency:'BRL':true}}</td>
+                  </tr>
+                </table>
+              </div>
+            </div>
+            <div *ngFor="let grupoclasse of grupoclasses">
+              <div class="page-break"></div>
+              <table class="a4" style="padding: 0px 0px 0px 0px; margin: 0px 0px 0px 0px; width: 100%; border: 0px solid white;" border="0">
+                <tr>
+                  <th style="background-color: #FFFFFF; width: 200px">
+                    <img src="assets/imagens/logo_av.png" alt="profile Pic" height="60px" width="200px" style="width: 200px; height: 60px;">
+                  </th>
+                  <th style="background-color: #FFFFFF">
+                    <div style="background-color: #FFFFFF; text-align: center">
+                      <h2>Relatório gerencial de Receitas - {{grupoclasse.classe}}</h2>
+                    </div>
+                    <div style="background-color: #FFFFFF; text-align: center">
+                      <span *ngIf="filtroRelatorio.datade && filtroRelatorio.dataate">Período {{filtroRelatorio.datade | formatDate}} até {{filtroRelatorio.dataate | formatDate}}</span>
+                    </div>
+                  </th>
+                  <th style="background-color: #FFFFFF; width: 200px">
+                    <div style="text-align: right; font-size: 10px">Data / Hora: {{hoje | formatDate}} {{hoje | date:'HH:mm'}}</div>
+                    <!-- <div style="text-align: right">info</div> -->
+                  </th>
+                </tr>
+              </table>
+              <div *ngFor="let grupo of grupoclasse.grupo_clientes">
+                <div>
+                  <label>Cliente: {{grupo.cliente}} {{zerasomareceita()}} </label>
+                </div>
+                <!-- <hr> -->
+                <!-- <span *ngIf="filtroRelatorio.cliente">Cliente: {{filtroRelatorio.cliente}} </span> -->
+                <!-- <hr *ngIf="filtroRelatorio.cliente"> -->
+                <table class="a4">
+                  <tr style="background-color: #FFFFFF; font-size: 12px; border-bottom: 1px solid black ">
+                    <th>Dt Coleta</th>
+                    <th>Nº Manifesto</th>
+                    <th>Resíduo</th>
+                    <th>Transportador</th>
+                    <th>Destinador</th>
+                    <th>Tratamento</th>
+                    <th style="text-align: right">Qtd</th>
+                    <th style="text-align: center">Und</th>
+                    <th style="text-align: right">Val Unit.</th>
+                    <th style="text-align: right">Val Total</th>
+                  </tr>
+                  <tr *ngFor="let item of grupo.receitas" style="background-color: #FFFFFF; font-size: 10px; ">
+                    <td>{{item.coleta | formatDate}}</td>
+                    <td>{{item.manifesto}}</td>
+                    <td>{{item.residuo}}</td>
+                    <td>{{item.transportador}}</td>
+                    <td>{{item.destinador}}</td>
+                    <td>{{item.tratamento}}</td>
+                    <td style="text-align: right">{{item.quantidade}}</td>
+                    <td style="text-align: center">{{item.unidade}}</td>
+                    <td style="text-align: right">{{item.valor_unitario | currency:'BRL':true}}</td>
+                    <td style="text-align: right">{{item.valor_total | currency:'BRL':true}} {{somareceita(item.valor_total)}}</td>
+                  </tr>
+                </table>
+                <hr>
+                <table style="width: 100%">
+                  <tr style="font-size: 10px">
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td style="text-align: right"></td>
+                    <td style="text-align: center"></td>
+                    <td colspan="2" style="text-align: right">
+                      <b>Total Geral:</b> {{grupo.total_geral | currency:'BRL':true}}</td>
+                  </tr>
+                </table>
+              </div>
+            </div>
+            <div class="page-break" *ngIf="filtroRelatorio.despesa && filtroRelatorio.receita"></div>
+            <div *ngIf="filtroRelatorio.despesa">
+              <table class="a4" style="padding: 0px 0px 0px 0px; margin: 0px 0px 0px 0px; width: 100%; border: 0px solid white;" border="0">
+                <tr>
+                  <th style="background-color: #FFFFFF; width: 200px">
+                    <img src="assets/imagens/logo_av.png" alt="profile Pic" height="60px" width="200px" style="width: 200px; height: 60px;">
+                  </th>
+                  <th style="background-color: #FFFFFF">
+                    <div style="background-color: #FFFFFF; text-align: center">
+                      <h2>Relatório gerencial de Despesa</h2>
+                    </div>
+                    <div style="background-color: #FFFFFF; text-align: center">
+                      <span *ngIf="filtroRelatorio.datade && filtroRelatorio.dataate">Período {{filtroRelatorio.datade | formatDate}} até {{filtroRelatorio.dataate | formatDate}}</span>
+                    </div>
+                  </th>
+                  <th style="background-color: #FFFFFF; width: 200px">
+                    <div style="text-align: right; font-size: 10px">Data / Hora: {{hoje | formatDate}} {{hoje | date:'HH:mm'}}</div>
+                  </th>
+                </tr>
+              </table>
+              <hr>
+              <span *ngIf="filtroRelatorio.cliente">Cliente: {{filtroRelatorio.cliente}} </span>
+              <hr *ngIf="filtroRelatorio.cliente">
+              <table class="a4">
+                <tr style="background-color: #FFFFFF; font-size: 12px; border-bottom: 1px solid black ">
+                  <th>Dt Coleta</th>
+                  <th>Nº Manifesto</th>
+                  <th>Resíduo</th>
+                  <th>Transportador</th>
+                  <th>Destinador</th>
+                  <th>Tratamento</th>
+                  <th style="text-align: right">Qtd</th>
+                  <th style="text-align: center">Und</th>
+                  <th style="text-align: right">Val Transp.</th>
+                  <th style="text-align: right">Val Dest.</th>
+                  <th style="text-align: right">Val Total</th>
+                </tr>
+                <tr *ngFor="let item of despesas" style="background-color: #FFFFFF; font-size: 10px; ">
+                  <td>{{item.coleta | formatDate}}</td>
+                  <td>{{item.manifesto}}</td>
+                  <td>{{item.residuo}}</td>
+                  <td>{{item.transportador}}</td>
+                  <td>{{item.destinador}}</td>
+                  <td>{{item.tratamento}}</td>
+                  <td style="text-align: right">{{item.quantidade}}</td>
+                  <td style="text-align: center">{{item.unidade}}</td>
+                  <td style="text-align: right">{{item.valor_transporte | currency:'BRL':true}}</td>
+                  <td style="text-align: right">{{item.valor_destinacao | currency:'BRL':true}}</td>
+                  <td style="text-align: right">{{item.valor_total | currency:'BRL':true}}</td>
+                </tr>
+              </table>
+              <hr>
+              <table style="width: 100%">
+                <tr style="font-size: 10px">
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td style="text-align: right"></td>
+                  <td style="text-align: center"></td>
+                  <td colspan="2" style="text-align: right">
+                    <b>Total Geral:</b> {{sumTotalDespesas | currency:'BRL':true}}</td>
+                </tr>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
