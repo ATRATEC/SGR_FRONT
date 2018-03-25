@@ -30,7 +30,10 @@ export class ManifestoService {
       data: _manifesto.data,
       numero: _manifesto.numero,
       observacao: _manifesto.observacao,
-      caminho: _manifesto.caminho
+      caminho: _manifesto.caminho,
+      pago: _manifesto.pago,
+      previsao_pagamento: _manifesto.previsao_pagamento,
+      data_pagamento: _manifesto.data_pagamento
     };
     // _params.set('codigo', '1');
 
@@ -59,7 +62,10 @@ export class ManifestoService {
       data: _manifesto.data,
       numero: _manifesto.numero,
       observacao: _manifesto.observacao,
-      caminho: _manifesto.caminho
+      caminho: _manifesto.caminho,
+      pago: _manifesto.pago,
+      previsao_pagamento: _manifesto.previsao_pagamento,
+      data_pagamento: _manifesto.data_pagamento
     };
     // _params.set('id', _id.toString());
 

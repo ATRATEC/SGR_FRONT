@@ -42,7 +42,7 @@ import 'rxjs/add/observable/fromEvent';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/distinctUntilChanged';
 import 'rxjs/add/operator/debounceTime';
-import { ChangeDetectorRef, ViewChildren, ViewChild, ElementRef } from '@angular/core';
+import { ChangeDetectorRef, ViewChildren, ViewChild, ElementRef, Input } from '@angular/core';
 import { OnlyNumberDirective } from './../only-number.directive';
 import { Manifesto } from './manifesto';
 import { ActivatedRoute, Params } from '@angular/router';
@@ -56,6 +56,7 @@ import { ContratoFornecedor } from '../contratofornecedor/contratofornecedor';
 import { Acondicionamento } from '../acondicionamento/acondicionamento';
 import { TipoTratamento } from '../tipotratamento/tipotratamento';
 import { FornecedorFindComponent } from '../fornecedor/fornecedor-find.component';
+import { booleanToStrSN, strToBoolean } from '../utilitario/utilitarios';
 
 @Component({
   selector: 'app-manifesto-form',
@@ -100,7 +101,16 @@ export class ManifestoFormComponent
   valDestinador = new FormControl('', [Validators.required]);
   valResiduo = new FormControl('', [Validators.required]);
   valData = new FormControl('', [Validators.required]);
+  valDataPagamento = new FormControl('', [Validators.required]);
   valVigenciaFinal = new FormControl('', [Validators.required]);
+
+  @Input('pago')
+  set pago(pago: boolean){
+    this.manifesto.pago = booleanToStrSN(pago);
+  }
+  get pago(): boolean {
+    return strToBoolean(this.manifesto.pago);
+  }
 
   @ViewChildren('input') vc;
   @ViewChild('focuscomp') focuscomp: ElementRef;
@@ -126,7 +136,15 @@ export class ManifestoFormComponent
   }
 
   validaCampos() {
-    return this.valCodigo.valid && this.valNumero.valid && this.valData.valid && this.validaServicos();
+    let validaPagamento = true;
+    if (this.pago) {
+      validaPagamento = this.valDataPagamento.valid;
+    }
+    return this.valCodigo.valid &&
+           this.valNumero.valid &&
+           this.valData.valid &&
+           this.validaServicos()
+           && validaPagamento;
   }
 
   /**

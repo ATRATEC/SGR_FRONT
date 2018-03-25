@@ -1,7 +1,8 @@
+import { GrupoFornecedor } from './grupofornecedor';
 import { GrupoCliente } from './grupocliente';
 import { GrupoClasse } from './grupoclasse';
 import { ApLocacao } from './aplocacao';
-import { Despesa } from './despesa';
+import { Despesa, DespesaAv, DespesaAvFor } from './despesa';
 import { Receita } from './receita';
 import { ManifestoFindComponent } from './../manifesto/manifesto-find.component';
 import { ManifestoService } from './../manifesto/manifesto.service';
@@ -53,7 +54,8 @@ export class RelatorioFormComponent implements OnInit, AfterViewInit, AfterViewC
   hoje: Date;
   filtroRelatorio: FiltroRelatorio;
   receitas: Receita[];
-  despesas: Despesa[];
+  despesas: DespesaAv[];
+  despesasfor: DespesaAvFor[];
   grupoclientes: GrupoCliente[];
   grupoclasses: GrupoClasse[];
   locacoes: ApLocacao[];
@@ -103,7 +105,8 @@ export class RelatorioFormComponent implements OnInit, AfterViewInit, AfterViewC
     // });
     this.filtroRelatorio = new FiltroRelatorio();
     this.receitas = new Array<Receita>();
-    this.despesas = new Array<Despesa>();
+    this.despesas = new Array<DespesaAv>();
+    this.despesasfor = new Array<DespesaAvFor>();
     this.locacoes = new Array<ApLocacao>();
     this.grupoclientes = new Array<GrupoCliente>();
     this.grupoclasses = new Array<GrupoClasse>();
@@ -205,8 +208,6 @@ export class RelatorioFormComponent implements OnInit, AfterViewInit, AfterViewC
 
         this.emProcessamento = false;
       });
-    }
-
 
       this._relatorioService.getRelatorioReceitaClasse(this._tokenManager.retrieve(), this.filtroRelatorio)
       .subscribe(data => {
@@ -257,20 +258,93 @@ export class RelatorioFormComponent implements OnInit, AfterViewInit, AfterViewC
 
         this.emProcessamento = false;
       });
+    }
 
+    if (this.filtroRelatorio.despesa) {
+      this._relatorioService.getRelatorioDespesa(this._tokenManager.retrieve(), this.filtroRelatorio)
+      .subscribe(data => {
+        this.despesas = data;
 
+        let id_cliente: number;
+        let grupocliente: GrupoCliente;
+        // separa os registros agrupando por classe e cliente
+        for (let index = 0; index < this.despesas.length; index++) {
+          const item = this.despesas[index];
 
-    // if (this.filtroRelatorio.despesa) {
-    //   this._relatorioService.getRelatorioDespesaCliente(this._tokenManager.retrieve(), this.filtroRelatorio)
-    //   .subscribe(data => {
-    //     this.despesas = data;
-    //     this.sumTotalDespesas = 0;
+          // se o cliente muda gravamos o grupo atual na lista e iniciamos um novo grupo
+          if (id_cliente !== item.id_cliente) {
+            if (index > 0) {
+              this.grupoclientes.push(grupocliente);
+            }
+            grupocliente = new GrupoCliente();
+            id_cliente = item.id_cliente;
+            grupocliente.id_cliente = item.id_cliente;
+            grupocliente.cliente = item.cliente;
+          }
+          grupocliente.despesasav.push(item);
+        }
+        grupocliente.total_geral = this.despesas.reduce((sum, item) => sum + Number(item.valor_total), 0);
+        this.grupoclientes.push(grupocliente);
+        this.sumTotalDespesas = 0;
+        // this.sumTotalDespesas = this.despesas.reduce((sum, item) => sum + Number(item.valor_total), 0);
+        // this.emProcessamento = false;
+      });
 
-    //     this.sumTotalDespesas = this.despesas.reduce((sum, item) => sum + Number(item.valor_total), 0);
+      this._relatorioService.getRelatorioDespesaClasse(this._tokenManager.retrieve(), this.filtroRelatorio)
+      .subscribe(data => {
+        this.despesasfor.length = 0;
+        this.despesasfor = data;
 
-    //     this.emProcessamento = false;
-    //   });
-    // }
+        let id_fornecedor: number;
+        let id_classe: number;
+        let grupofornecedor: GrupoFornecedor;
+        let grupoclasse: GrupoClasse;
+        // separa os registros agrupando por classe e cliente
+        for (let index = 0; index < this.despesasfor.length; index++) {
+          const item = this.despesasfor[index];
+
+          if (id_classe !== item.id_classe) {
+            if (index > 0) {
+              grupofornecedor.total_geral = grupofornecedor.despesasavfor.reduce((sum, it) => sum + Number(it.valor_total), 0);
+              grupoclasse.grupo_fornecedores.push(grupofornecedor);
+              this.grupoclasses.push(grupoclasse);
+              grupofornecedor = new GrupoFornecedor();
+              grupofornecedor.id_fornecedor = item.id_fornecedor;
+              grupofornecedor.cnpj_cpf = item.cnpj_cpf;
+              grupofornecedor.fornecedor = item.fornecedor;
+            }
+            grupoclasse = new GrupoClasse();
+            id_classe = item.id_classe;
+            grupoclasse.id_classe = item.id_classe;
+            grupoclasse.classe = item.classe;
+          }
+
+          // se o cliente muda gravamos o grupo atual na lista e iniciamos um novo grupo
+          if (id_fornecedor !== item.id_fornecedor) {
+            if (index > 0) {
+              // so adicionamos se houver registro na lista.
+              if (grupofornecedor.despesasavfor.length > 0) {
+                grupoclasse.grupo_fornecedores.push(grupofornecedor);
+              }
+            }
+            grupofornecedor = new GrupoFornecedor();
+            id_fornecedor = item.id_fornecedor;
+            grupofornecedor.id_fornecedor = item.id_fornecedor;
+            grupofornecedor.cnpj_cpf = item.cnpj_cpf;
+            grupofornecedor.fornecedor = item.fornecedor;
+          }
+          grupofornecedor.despesasavfor.push(item);
+        }
+        grupofornecedor.total_geral = grupofornecedor.despesasavfor.reduce((sum, it) => sum + Number(it.valor_total), 0);
+        grupoclasse.grupo_fornecedores.push(grupofornecedor);
+        grupoclasse.total_geral = this.despesasfor.reduce((sum, item) => sum + Number(item.valor_total), 0);
+        this.grupoclasses.push(grupoclasse);
+
+        this.sumTotalReceitas = 0;
+
+        this.emProcessamento = false;
+      });
+    }
   }
 
   ngAfterViewChecked(): void {
@@ -520,6 +594,18 @@ export class RelatorioFormComponent implements OnInit, AfterViewInit, AfterViewC
   }
 
   getTotalReceita(): number {
+    return this.sumTotalReceitas;
+  }
+
+  zerasomadespesa() {
+    this.sumTotalDespesas = 0;
+  }
+
+  somadespesa(valor: number) {
+    this.sumTotalDespesas = Number(this.sumTotalDespesas) + Number(valor);
+  }
+
+  getTotalDespesa(): number {
     return this.sumTotalReceitas;
   }
 }

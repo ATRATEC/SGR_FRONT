@@ -75,7 +75,7 @@
                     <mat-error *ngIf="valNumero.invalid">{{getDescricaoErrorMessage()}}</mat-error>
                   </mat-form-field>
                 </div>
-                <div fxFlex="140px" fxFlexAlign="start" fxFlexFill>
+                <div fxFlex="150px" fxFlexAlign="start" fxFlexFill>
                   <mat-form-field class="frm_manifesto_data">
                     <input matInput type="date" #dtemissao maxlength="10" placeholder="Data" tabindex="4" [ngModel]="manifesto.data" (ngModelChange)="manifesto.data = $event"
                       [value]="manifesto.data" [formControl]="valData">
@@ -324,6 +324,49 @@
                     </div>
                   </div>
                 </mat-tab>
+                <mat-tab label="Pagamento">
+                  <div fxLayou="column" fxLayoutAlign="start center" fxLayoutGap="10px">
+                    <div fxFlex="380px" fxFlexAlign="start" fxFlexFill>
+                      <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="0px" >
+                        <div fxFlex="100%" fxFlexAlign="center" >
+                          <div fxLayout="column" fxLayoutAlign="center start" fxLayoutGap="20ppx">
+                            <div fxFlex="70px" fxFlexFill style="width: 100%;" fxFlexAlign="center">
+                                <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="25px" style="margin-top: 10px">
+                                    <div fxFlex="90px" fxFlexAlign="start" fxFlexFill>
+                                        <mat-slide-toggle [(ngModel)]="pago" [color]="'primary'" tabindex="14">Pago</mat-slide-toggle>
+                                    </div>
+                                    <div fxFlex="150px" fxFlexAlign="start" fxFlexFill>
+                                        <mat-form-field class="frm_manifesto_data">
+                                          <input matInput type="date" #dtprevisaopagamento maxlength="10" placeholder="Previsão de Pagamento" tabindex="15" [ngModel]="manifesto.previsao_pagamento" (ngModelChange)="manifesto.previsao_pagamento = $event"
+                                            [value]="manifesto.previsao_pagamento">
+                                          <mat-hint align="end">{{dtprevisaopagamento.value?.length || 0}}/10</mat-hint>
+                                          <!-- <mat-error *ngIf="valData.invalid">{{getErrorMessage(valData)}}</mat-error> -->
+                                        </mat-form-field>
+                                    </div>
+                                    <div fxFlex="150px" fxFlexAlign="start" fxFlexFill>
+                                        <mat-form-field class="frm_manifesto_data">
+                                          <input matInput type="date" #dtpagamento maxlength="10" placeholder="Data de Pagamento" tabindex="16" [ngModel]="manifesto.data_pagamento" (ngModelChange)="manifesto.data_pagamento = $event"
+                                            [value]="manifesto.data_pagamento" [required]="pago" [formControl]="valDataPagamento">
+                                          <mat-hint align="end">{{dtpagamento.value?.length || 0}}/10</mat-hint>
+                                          <mat-error *ngIf="valDataPagamento.invalid">{{getErrorMessage(valDataPagamento)}}</mat-error>
+                                        </mat-form-field>
+                                    </div>
+                                  </div>
+                            </div>
+                          </div>
+
+                        </div>
+                      </div>
+                      <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="20px">
+                          <div fxFlex="70px" fxFlexAlign="center">
+                            <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="20px">
+
+                            </div>
+                          </div>
+                        </div>
+                    </div>
+                  </div>
+                </mat-tab>
               </mat-tab-group>
             </div>
           </div>
@@ -333,3 +376,4 @@
     </div>
   </div>
 </div>
+
