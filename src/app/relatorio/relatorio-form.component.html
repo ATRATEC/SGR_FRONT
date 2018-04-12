@@ -34,9 +34,10 @@
             <label>Aguarde...</label>
           </div>
         </div>
-        <div fxLayout="column" fxLayoutAlign="start start" fxLayoutGap="5px" *ngIf="!emProcessamento" #relatorio >
+        <div fxLayout="column" fxLayoutAlign="start start" fxLayoutGap="5px" *ngIf="!emProcessamento" #relatorio>
           <div fxFlex="100%" fxFlexAlign="start" style="width: 29cm">
-            <div *ngIf="filtroRelatorio.receita">
+            <!-- Relatorios de receita - analiticos -->
+            <div *ngIf="filtroRelatorio.receita && filtroRelatorio.receita_analitico">
               <table class="a4" style="padding: 0px 0px 0px 0px; margin: 0px 0px 0px 0px; width: 100%; border: 0px solid white;" border="0">
                 <tr>
                   <th style="background-color: #FFFFFF; width: 200px">
@@ -52,7 +53,7 @@
                   </th>
                   <th style="background-color: #FFFFFF; width: 200px">
                     <div style="text-align: right; font-size: 10px">Data / Hora: {{hoje | formatDate}} {{hoje | date:'HH:mm'}}</div>
-                    <!-- <div style="text-align: right">info</div> -->
+                    <div style="text-align: right; font-size: 10px">Tipo: Analítico</div>
                   </th>
                 </tr>
               </table>
@@ -60,9 +61,6 @@
                 <div>
                   <label>Cliente: {{grupocliente.cliente}} {{zerasomareceita()}} </label>
                 </div>
-                <!-- <hr> -->
-                <!-- <span *ngIf="filtroRelatorio.cliente">Cliente: {{filtroRelatorio.cliente}} </span> -->
-                <!-- <hr *ngIf="filtroRelatorio.cliente"> -->
                 <table class="a4">
                   <tr style="background-color: #FFFFFF; font-size: 12px; border-bottom: 1px solid black ">
                     <th>Dt Coleta</th>
@@ -121,6 +119,7 @@
                     </th>
                     <th style="background-color: #FFFFFF; width: 200px">
                       <div style="text-align: right; font-size: 10px">Data / Hora: {{hoje | formatDate}} {{hoje | date:'HH:mm'}}</div>
+                      <div style="text-align: right; font-size: 10px">Tipo: Analítico</div>
                       <!-- <div style="text-align: right">info</div> -->
                     </th>
                   </tr>
@@ -175,8 +174,46 @@
                 </div>
               </div>
             </div>
+            <div *ngIf="filtroRelatorio.receita && filtroRelatorio.receita_sintetico">
+              <table class="a4" style="padding: 0px 0px 0px 0px; margin: 0px 0px 0px 0px; width: 100%; border: 0px solid white;" border="0">
+                <tr>
+                  <th style="background-color: #FFFFFF; width: 200px">
+                    <img src="assets/imagens/logo_av.png" alt="profile Pic" height="60px" width="200px" style="width: 200px; height: 60px;">
+                  </th>
+                  <th style="background-color: #FFFFFF">
+                    <div style="background-color: #FFFFFF; text-align: center">
+                      <h2>Relatório gerencial de Receitas</h2>
+                    </div>
+                    <div style="background-color: #FFFFFF; text-align: center">
+                      <span *ngIf="filtroRelatorio.datade && filtroRelatorio.dataate">Período {{filtroRelatorio.datade | formatDate}} até {{filtroRelatorio.dataate | formatDate}}</span>
+                    </div>
+                  </th>
+                  <th style="background-color: #FFFFFF; width: 200px">
+                    <div style="text-align: right; font-size: 10px">Data / Hora: {{hoje | formatDate}} {{hoje | date:'HH:mm'}}</div>
+                    <div style="text-align: right; font-size: 10px">Tipo: Sintético</div>
+                    <!-- <div style="text-align: right">info</div> -->
+                  </th>
+                </tr>
+              </table>
+              <table class="a4">
+                <tr style="background-color: #FFFFFF; font-size: 12px; border-bottom: 1px solid black ">
+                  <th class="col_cnpj_cpf">CNPJ / CPF</th>
+                  <th class="col_clifor">Cliente / Fornecedor</th>
+                  <th class="col_manifestos">Manifestos</th>
+                  <th class="col_total" style="text-align: right">Val Total</th>
+                </tr>
+                <tr *ngFor="let item of receitasinteticas" style="background-color: #FFFFFF; font-size: 10px; ">
+                  <td class="col_cnpj_cpf">{{item.cnpj_cpf}}</td>
+                  <td class="col_clifor">{{item.credor}}</td>
+                  <td class="col_manifestos">{{item.manifestos}}</td>
+                  <td class="col_total" style="text-align: right">{{item.total | currency:'BRL':true}}</td>
+                </tr>
+              </table>
+
+            </div>
             <div class="page-break" *ngIf="filtroRelatorio.despesa && filtroRelatorio.receita"></div>
-            <div *ngIf="filtroRelatorio.despesa">
+            <!-- Relatorios de despesa analiticos -->
+            <div *ngIf="filtroRelatorio.despesa && filtroRelatorio.despesa_analitico">
               <table class="a4" style="padding: 0px 0px 0px 0px; margin: 0px 0px 0px 0px; width: 100%; border: 0px solid white;" border="0">
                 <tr>
                   <th style="background-color: #FFFFFF; width: 200px">
@@ -309,12 +346,45 @@
                 </div>
               </div>
             </div>
+            <!-- Relatorios de despesa sinteticos -->
+            <div *ngIf="filtroRelatorio.despesa && filtroRelatorio.despesa_sintetico">
+                <table class="a4" style="padding: 0px 0px 0px 0px; margin: 0px 0px 0px 0px; width: 100%; border: 0px solid white;" border="0">
+                  <tr>
+                    <th style="background-color: #FFFFFF; width: 200px">
+                      <img src="assets/imagens/logo_av.png" alt="profile Pic" height="60px" width="200px" style="width: 200px; height: 60px;">
+                    </th>
+                    <th style="background-color: #FFFFFF">
+                      <div style="background-color: #FFFFFF; text-align: center">
+                        <h2>Relatório gerencial de Despesa</h2>
+                      </div>
+                      <div style="background-color: #FFFFFF; text-align: center">
+                        <span *ngIf="filtroRelatorio.datade && filtroRelatorio.dataate">Período {{filtroRelatorio.datade | formatDate}} até {{filtroRelatorio.dataate | formatDate}}</span>
+                      </div>
+                    </th>
+                    <th style="background-color: #FFFFFF; width: 200px">
+                      <div style="text-align: right; font-size: 10px">Data / Hora: {{hoje | formatDate}} {{hoje | date:'HH:mm'}}</div>
+                      <div style="text-align: right; font-size: 10px">Tipo: Sintético</div>
+                    </th>
+                  </tr>
+                </table>
+                <table class="a4">
+                  <tr style="background-color: #FFFFFF; font-size: 12px; border-bottom: 1px solid black ">
+                    <th class="col_cnpj_cpf">CNPJ / CPF</th>
+                    <th class="col_clifor">Cliente / Fornecedor</th>
+                    <th class="col_manifestos">Manifestos</th>
+                    <th class="col_total" style="text-align: right">Val Total</th>
+                  </tr>
+                  <tr *ngFor="let item2 of despesasinteticas" style="background-color: #FFFFFF; font-size: 10px; ">
+                    <td class="col_cnpj_cpf">{{item2.cnpj_cpf}}</td>
+                    <td class="col_clifor">{{item2.credor}}</td>
+                    <td class="col_manifestos">{{item2.manifestos}}</td>
+                    <td class="col_total" style="text-align: right">{{item2.total | currency:'BRL':true}}</td>
+                  </tr>
+                </table>
+              </div>
           </div>
         </div>
       </div>
-
     </div>
   </div>
 </div>
-
-

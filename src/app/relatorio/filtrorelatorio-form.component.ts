@@ -1,3 +1,4 @@
+import { FornecedorService } from './../fornecedor/fornecedor.service';
 import { ResiduoService } from './../residuo/residuo.service';
 import { Residuo } from './../residuo/residuo';
 import { ManifestoFindComponent } from './../manifesto/manifesto-find.component';
@@ -11,7 +12,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { isNullOrUndefined } from 'util';
 import { DialogService } from './../dialog/dialog.service';
 import { TokenManagerService } from './../token-manager.service';
-import { Component, OnInit, AfterViewInit, AfterViewChecked, LOCALE_ID } from '@angular/core';
+import { Component, OnInit, AfterViewInit, AfterViewChecked, LOCALE_ID, Input } from '@angular/core';
 import { Router } from '@angular/router';
 import { by, element } from 'protractor';
 import { Observable } from 'rxjs/Observable';
@@ -34,6 +35,8 @@ import { ContratoFornecedor } from '../contratofornecedor/contratofornecedor';
 import { RelatorioService } from './relatorio.service';
 import { FiltroRelatorio } from './filtrorelatorio';
 import { DateValidator } from '../datevalidator';
+import { Fornecedor } from '../fornecedor/fornecedor';
+import { FornecedorFindComponent } from '../fornecedor/fornecedor-find.component';
 
 
 @Component({
@@ -50,6 +53,7 @@ export class FiltroRelatorioFormComponent implements OnInit, AfterViewInit, Afte
 
   valCodigo = new FormControl();
   valManifesto = new FormControl();
+  valCodigofor = new FormControl();
   valDescricao = new FormControl('', [Validators.required]);
   valDataDe = new FormControl('', [Validators.required]);
   valDataAte = new FormControl('', Validators.compose([Validators.required, DateValidator.afterDate(this.valDataDe)]));
@@ -59,6 +63,7 @@ export class FiltroRelatorioFormComponent implements OnInit, AfterViewInit, Afte
 
   constructor(private _relatorioService: RelatorioService,
     private _clienteService: ClienteService,
+    private _fornecedorService: FornecedorService,
     private _manifestoService: ManifestoService,
     private _contratoclienteService: ContratoClienteService,
     private _residuoService: ResiduoService,
@@ -130,6 +135,11 @@ export class FiltroRelatorioFormComponent implements OnInit, AfterViewInit, Afte
         this.buscaCliente(filter);
       });
 
+    const idCodFor$ = this.valCodigofor.valueChanges.debounceTime(500).distinctUntilChanged().startWith('');
+    Observable.combineLatest(idCodFor$).debounceTime(500).distinctUntilChanged().map(([id]) => ({ id })).subscribe(filter => {
+        this.buscaFornecedor(filter);
+      });
+
     const idManifesto$ = this.valManifesto.valueChanges.debounceTime(500).distinctUntilChanged().startWith('');
     Observable.combineLatest(idManifesto$).debounceTime(500).distinctUntilChanged().map(([id]) => ({ id })).subscribe(filter => {
         this.buscaManifesto(filter);
@@ -161,8 +171,14 @@ export class FiltroRelatorioFormComponent implements OnInit, AfterViewInit, Afte
         id: this.filtrorelatorio.id,
         id_cliente: this.filtrorelatorio.id_cliente,
         cliente: this.filtrorelatorio.cliente,
+        id_fornecedor: this.filtrorelatorio.id_fornecedor,
+        fornecedor: this.filtrorelatorio.fornecedor,
         receita: this.filtrorelatorio.receita,
+        receita_analitico: this.filtrorelatorio.receita_analitico,
+        receita_sintetico: this.filtrorelatorio.receita_sintetico,
         despesa: this.filtrorelatorio.despesa,
+        despesa_analitico: this.filtrorelatorio.despesa_analitico,
+        despesa_sintetico: this.filtrorelatorio.despesa_sintetico,
         agrupar_classe: this.filtrorelatorio.agrupar_classe,
         id_residuo: this.filtrorelatorio.id_residuo,
         datade: this.filtrorelatorio.datade,
@@ -316,6 +332,51 @@ export class FiltroRelatorioFormComponent implements OnInit, AfterViewInit, Afte
     }
   }
 
+  validaSaidaFornecedor(event: string) {
+    if (event === '') {
+      this.filtrorelatorio.id_fornecedor = null;
+      this.filtrorelatorio.fornecedor = '';
+    }
+  }
+
+  buscaFornecedor(event: any) {
+    let fornecedor: Fornecedor;
+    if (event.id) {
+      this._fornecedorService
+        .getFornecedor(this._tokenManager.retrieve(), Number(event.id))
+        .subscribe(
+          data => {
+            fornecedor = JSON.parse(data._body);
+            this.filtrorelatorio.id_fornecedor = fornecedor.id;
+            this.filtrorelatorio.fornecedor = fornecedor.razao_social;
+          },
+          (err: HttpErrorResponse) => {
+            this.filtrorelatorio.id_fornecedor = null;
+            this.filtrorelatorio.fornecedor = '';
+          }
+        );
+    }
+  }
+
+  openPesquisaFornecedor(): void {
+    const dialogLoginRef = this.pesquisa.open(FornecedorFindComponent, {
+      width: '900px',
+      height: '460px',
+      disableClose: true,
+      data: {
+        id: null,
+        razao_social: null
+      }
+    });
+
+    dialogLoginRef.afterClosed().subscribe(result => {
+      if (result.id != null && result.id !== undefined) {
+        this.filtrorelatorio.id_fornecedor = result.id;
+        this.filtrorelatorio.fornecedor = result.razao_social;
+      }
+    });
+  }
+
   buscaManifesto(event: any) {
     let manifesto: Manifesto;
     if (event.id) {
@@ -371,6 +432,26 @@ export class FiltroRelatorioFormComponent implements OnInit, AfterViewInit, Afte
         this.filtrorelatorio.manifesto = result.descricao;
       }
     });
+  }
+
+  receita_analiticoChange(v: any) {
+    this.filtrorelatorio.receita_analitico = true;
+    this.filtrorelatorio.receita_sintetico = false;
+  }
+
+  receita_sinteticoChange(v: any) {
+    this.filtrorelatorio.receita_analitico = false;
+    this.filtrorelatorio.receita_sintetico = true;
+  }
+
+  despesa_analiticoChange(v: any) {
+    this.filtrorelatorio.despesa_analitico = true;
+    this.filtrorelatorio.despesa_sintetico = false;
+  }
+
+  despesa_sinteticoChange(v: any) {
+    this.filtrorelatorio.despesa_analitico = false;
+    this.filtrorelatorio.despesa_sintetico = true;
   }
 
 }

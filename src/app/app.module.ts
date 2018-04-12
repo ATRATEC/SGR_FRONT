@@ -1,3 +1,4 @@
+import { ResetComponent } from './usuario/reset.component';
 import { LocacaoModule } from './locacao/locacao.module';
 import { EquipamentoModule } from './equipamento/equipamento.module';
 import { MonitorDocumentoModule } from './monitordocumento/monitordocumento.module';
@@ -53,6 +54,7 @@ import { PesagemModule } from './pesagem/pesagem.module';
   declarations: [
     AppComponent,
     LoginComponent,
+    ResetComponent,
     MovimentoComponent,
     OnlyNumberDirective,
     AlertComponent,
@@ -107,7 +109,7 @@ import { PesagemModule } from './pesagem/pesagem.module';
     {provide: LOCALE_ID, useValue: 'pt-BR'},
     { provide: CURRENCY_MASK_CONFIG, useValue: CustomCurrencyMaskConfig }
   ],
-  entryComponents: [LoginComponent, DialogComponent],
+  entryComponents: [LoginComponent, DialogComponent, ResetComponent],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

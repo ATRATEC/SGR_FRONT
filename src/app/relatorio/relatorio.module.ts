@@ -1,3 +1,5 @@
+import { MapaResiduoFormComponent } from './maparesiduo-form.component';
+import { FiltroMapaResiduoFormComponent } from './filtromaparesiduo-form.component';
 import { RelatorioFormComponent } from './relatorio-form.component';
 import { FiltroRelatorioFormComponent } from './filtrorelatorio-form.component';
 import { RelatorioPesagemFormComponent } from './relatoriopesagem-form.component';
@@ -41,7 +43,9 @@ import { RelatorioRoutingModule } from './relatorio-routing.module';
     RelatorioClienteFormComponent,
     DespesaFormComponent,
     FiltroPesagemFormComponent,
-    RelatorioPesagemFormComponent
+    RelatorioPesagemFormComponent,
+    FiltroMapaResiduoFormComponent,
+    MapaResiduoFormComponent
   ],
   providers: [RelatorioService]
 })

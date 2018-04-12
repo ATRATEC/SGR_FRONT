@@ -1,0 +1,32 @@
+<h1 mat-dialog-title>Redefinir Senha</h1>
+<div fxLayout="column" class="example-loading-shade" fxLayoutAlign="center center" *ngIf="emProcessamento">
+  <div fxFlex="70" fxFlexAlign="center">
+    <mat-spinner></mat-spinner>
+  </div>
+  <div fxFlex="10" fxFlexAlign="center">
+    &nbsp;
+  </div>
+  <div fxFlex="20" fxFlexAlign="center">
+    <label>Aguarde...</label>
+  </div>
+</div>
+<div mat-dialog-content *ngIf="!emProcessamento">
+  <div fxLayout="column" fxLayoutAlign="center center" fxLayoutGap="5px">
+      <div fxFlex="70px" style="width: 400px">
+          <mat-form-field style="width:100%">
+            <input matInput tabindex="1" [(ngModel)]="data.email" [formControl]="valEmail" placeholder="E-Mail" required (click)="setErroLogin('')">
+            <mat-error *ngIf="valEmail.invalid">{{getEmailErrorMessage()}}</mat-error>
+          </mat-form-field>
+      </div>
+  </div>
+</div>
+<div mat-dialog-actions *ngIf="!emProcessamento">
+  <div fxLayout="row" fxLayoutAlign="end center" fxFill>
+    <button mat-raised-button color="primary" (click)="onEntrarClick(data)" tabindex="2" [disabled]="((valEmail.invalid)||(emProcessamento))">Enviar</button>
+    <button mat-raised-button color="primary" (click)="onNoClick()" tabindex="-1">Cancelar</button>
+  </div>
+  <div fxLayout="row" fxLayoutAlign="center center" fxFill>
+    <mat-error *ngIf="erroLogin">{{msgErroLogin}}</mat-error>
+    &nbsp;
+  </div>
+</div>

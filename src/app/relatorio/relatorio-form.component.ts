@@ -1,3 +1,5 @@
+import { DespesaSintetica } from './despesasintetica';
+import { ReceitaSintetica } from './receitasintetica';
 import { GrupoFornecedor } from './grupofornecedor';
 import { GrupoCliente } from './grupocliente';
 import { GrupoClasse } from './grupoclasse';
@@ -25,7 +27,7 @@ import 'rxjs/add/observable/fromEvent';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/distinctUntilChanged';
 import 'rxjs/add/operator/debounceTime';
-import { ChangeDetectorRef, ViewChildren, ViewChild, ElementRef } from '@angular/core';
+import { ChangeDetectorRef, ViewChildren, ViewChild, ElementRef, ViewEncapsulation } from '@angular/core';
 import { OnlyNumberDirective } from './../only-number.directive';
 import { ActivatedRoute, Params } from '@angular/router';
 import { FormControl, Validators } from '@angular/forms';
@@ -44,7 +46,8 @@ import * as FileSaver from 'file-saver';
 @Component({
   selector: 'app-relatorio-form',
   templateUrl: './relatorio-form.component.html',
-  styleUrls: ['./relatorio-form.component.css']
+  styleUrls: ['./relatorio-form.component.css'],
+  encapsulation: ViewEncapsulation.None
 })
 export class RelatorioFormComponent implements OnInit, AfterViewInit, AfterViewChecked {
 
@@ -54,7 +57,9 @@ export class RelatorioFormComponent implements OnInit, AfterViewInit, AfterViewC
   hoje: Date;
   filtroRelatorio: FiltroRelatorio;
   receitas: Receita[];
+  receitasinteticas: ReceitaSintetica[];
   despesas: DespesaAv[];
+  despesasinteticas: DespesaSintetica[];
   despesasfor: DespesaAvFor[];
   grupoclientes: GrupoCliente[];
   grupoclasses: GrupoClasse[];
@@ -105,14 +110,16 @@ export class RelatorioFormComponent implements OnInit, AfterViewInit, AfterViewC
     // });
     this.filtroRelatorio = new FiltroRelatorio();
     this.receitas = new Array<Receita>();
+    this.receitasinteticas = new Array<ReceitaSintetica>();
     this.despesas = new Array<DespesaAv>();
     this.despesasfor = new Array<DespesaAvFor>();
+    this.despesasinteticas = new Array<DespesaSintetica>();
     this.locacoes = new Array<ApLocacao>();
     this.grupoclientes = new Array<GrupoCliente>();
     this.grupoclasses = new Array<GrupoClasse>();
 
     // this.receitas.push(new Receita(new Date(Date.now()), '2323', 'AÇO INOX', 'KARDEC', 'KARDEC', 200, 'KG', 2.50, 250));
-
+    //#region Campos filtragem
 
     if (this._route.snapshot.paramMap.has('id')) {
       this.filtroRelatorio.id = +this._route.snapshot.paramMap.get('id');
@@ -126,8 +133,21 @@ export class RelatorioFormComponent implements OnInit, AfterViewInit, AfterViewC
       // console.log(this._route.snapshot.paramMap.get('id_cliente'));
     }
 
+    if (this._route.snapshot.paramMap.has('id_fornecedor')) {
+      if ((!isNullOrUndefined(this._route.snapshot.paramMap.get('id_fornecedor'))) &&
+         (+this._route.snapshot.paramMap.get('id_fornecedor') !== NaN)) {
+        this.filtroRelatorio.id_fornecedor = +this._route.snapshot.paramMap.get('id_fornecedor');
+      }
+      // console.log(this._route.snapshot.paramMap.get('id_cliente'));
+    }
+
     if (this._route.snapshot.paramMap.has('cliente')) {
       this.filtroRelatorio.cliente = this._route.snapshot.paramMap.get('cliente');
+      // console.log(this._route.snapshot.paramMap.get('cliente'));
+    }
+
+    if (this._route.snapshot.paramMap.has('fornecedor')) {
+      this.filtroRelatorio.fornecedor = this._route.snapshot.paramMap.get('fornecedor');
       // console.log(this._route.snapshot.paramMap.get('cliente'));
     }
 
@@ -136,8 +156,28 @@ export class RelatorioFormComponent implements OnInit, AfterViewInit, AfterViewC
       // console.log(this._route.snapshot.paramMap.get('receita'));
     }
 
+    if (this._route.snapshot.paramMap.has('receita_analitico')) {
+      this.filtroRelatorio.receita_analitico = this._route.snapshot.paramMap.get('receita_analitico') === 'true';
+      // console.log(this._route.snapshot.paramMap.get('receita'));
+    }
+
+    if (this._route.snapshot.paramMap.has('receita_sintetico')) {
+      this.filtroRelatorio.receita_sintetico = this._route.snapshot.paramMap.get('receita_sintetico') === 'true';
+      // console.log(this._route.snapshot.paramMap.get('receita'));
+    }
+
     if (this._route.snapshot.paramMap.has('despesa')) {
       this.filtroRelatorio.despesa = this._route.snapshot.paramMap.get('despesa') === 'true';
+      // console.log(this._route.snapshot.paramMap.get('despesa'));
+    }
+
+    if (this._route.snapshot.paramMap.has('despesa_analitico')) {
+      this.filtroRelatorio.despesa_analitico = this._route.snapshot.paramMap.get('despesa_analitico') === 'true';
+      // console.log(this._route.snapshot.paramMap.get('despesa'));
+    }
+
+    if (this._route.snapshot.paramMap.has('despesa_sintetico')) {
+      this.filtroRelatorio.despesa_sintetico = this._route.snapshot.paramMap.get('despesa_sintetico') === 'true';
       // console.log(this._route.snapshot.paramMap.get('despesa'));
     }
 
@@ -175,175 +215,273 @@ export class RelatorioFormComponent implements OnInit, AfterViewInit, AfterViewC
       this.filtroRelatorio.manifesto = this._route.snapshot.paramMap.get('manifesto');
       // console.log(this._route.snapshot.paramMap.get('cliente'));
     }
+    //#endregion
 
     if (this.filtroRelatorio.receita) {
-      this._relatorioService.getRelatorioReceita(this._tokenManager.retrieve(), this.filtroRelatorio)
-      .subscribe(data => {
-        this.receitas = data;
+      if (this.filtroRelatorio.receita_analitico) {
+        this._relatorioService.getRelatorioReceita(this._tokenManager.retrieve(), this.filtroRelatorio)
+        .subscribe(data => {
+            this.receitas = data;
+            let id_cliente: number;
+            let grupocliente: GrupoCliente;
+            // separa os registros agrupando por classe e cliente
+            for (let index = 0; index < this.receitas.length; index++) {
+              const item = this.receitas[index];
 
-        let id_cliente: number;
-        let grupocliente: GrupoCliente;
-        // separa os registros agrupando por classe e cliente
-        for (let index = 0; index < this.receitas.length; index++) {
-          const item = this.receitas[index];
-
-          // se o cliente muda gravamos o grupo atual na lista e iniciamos um novo grupo
-          if (id_cliente !== item.id_cliente) {
-            if (index > 0) {
-              this.grupoclientes.push(grupocliente);
+              // se o cliente muda gravamos o grupo atual na lista e iniciamos um novo grupo
+              if (id_cliente !== item.id_cliente) {
+                if (index > 0) {
+                  this.grupoclientes.push(grupocliente);
+                }
+                grupocliente = new GrupoCliente();
+                id_cliente = item.id_cliente;
+                grupocliente.id_cliente = item.id_cliente;
+                grupocliente.cliente = item.cliente;
+              }
+              grupocliente.receitas.push(item);
             }
-            grupocliente = new GrupoCliente();
-            id_cliente = item.id_cliente;
-            grupocliente.id_cliente = item.id_cliente;
-            grupocliente.cliente = item.cliente;
-          }
-          grupocliente.receitas.push(item);
-        }
-        grupocliente.total_geral = this.receitas.reduce((sum, item) => sum + Number(item.valor_total), 0);
-        this.grupoclientes.push(grupocliente);
+            grupocliente.total_geral = this.receitas.reduce((sum, item) => sum + Number(item.valor_total), 0);
+            this.grupoclientes.push(grupocliente);
+            this.emProcessamento = false;
+            },
+            error => {
+              this.emProcessamento = false;
+              const err = new HttpErrorResponse(error);
+              console.log(err);
+              this.dialog.error('SGR', 'Erro ao gerar o relatório.', '');
+            }
+        );
 
-        // this.sumTotalReceitas = 0;
+        this._relatorioService.getRelatorioReceitaClasse(this._tokenManager.retrieve(), this.filtroRelatorio)
+        .subscribe(data => {
+          this.receitas.length = 0;
+          this.receitas = data;
 
-        // this.sumTotalReceitas = this.receitas.reduce((sum, item) => sum + Number(item.valor_total), 0);
+          let id_cliente: number;
+          let id_classe: number;
+          let grupocliente: GrupoCliente;
+          let grupoclasse: GrupoClasse;
+          // separa os registros agrupando por classe e cliente
+          for (let index = 0; index < this.receitas.length; index++) {
+            const item = this.receitas[index];
 
-        this.emProcessamento = false;
-      });
+            if (id_classe !== item.id_classe) {
+              if (index > 0) {
+                grupocliente.total_geral = grupocliente.receitas.reduce((sum, it) => sum + Number(it.valor_total), 0);
+                grupoclasse.grupo_clientes.push(grupocliente);
+                this.grupoclasses.push(grupoclasse);
+                grupocliente = new GrupoCliente();
+                grupocliente.id_cliente = item.id_cliente;
+                grupocliente.cliente = item.cliente;
+              }
+              grupoclasse = new GrupoClasse();
+              id_classe = item.id_classe;
+              grupoclasse.id_classe = item.id_classe;
+              grupoclasse.classe = item.classe;
+            }
 
-      this._relatorioService.getRelatorioReceitaClasse(this._tokenManager.retrieve(), this.filtroRelatorio)
-      .subscribe(data => {
-        this.receitas.length = 0;
-        this.receitas = data;
-
-        let id_cliente: number;
-        let id_classe: number;
-        let grupocliente: GrupoCliente;
-        let grupoclasse: GrupoClasse;
-        // separa os registros agrupando por classe e cliente
-        for (let index = 0; index < this.receitas.length; index++) {
-          const item = this.receitas[index];
-
-          if (id_classe !== item.id_classe) {
-            if (index > 0) {
-              grupocliente.total_geral = grupocliente.receitas.reduce((sum, it) => sum + Number(it.valor_total), 0);
-              grupoclasse.grupo_clientes.push(grupocliente);
-              this.grupoclasses.push(grupoclasse);
+            // se o cliente muda gravamos o grupo atual na lista e iniciamos um novo grupo
+            if (id_cliente !== item.id_cliente) {
+              if (index > 0) {
+                grupoclasse.grupo_clientes.push(grupocliente);
+              }
               grupocliente = new GrupoCliente();
+              id_cliente = item.id_cliente;
               grupocliente.id_cliente = item.id_cliente;
               grupocliente.cliente = item.cliente;
             }
-            grupoclasse = new GrupoClasse();
-            id_classe = item.id_classe;
-            grupoclasse.id_classe = item.id_classe;
-            grupoclasse.classe = item.classe;
+            grupocliente.receitas.push(item);
           }
+          grupocliente.total_geral = grupocliente.receitas.reduce((sum, it) => sum + Number(it.valor_total), 0);
+          grupoclasse.grupo_clientes.push(grupocliente);
+          grupoclasse.total_geral = this.receitas.reduce((sum, item) => sum + Number(item.valor_total), 0);
+          this.grupoclasses.push(grupoclasse);
 
-          // se o cliente muda gravamos o grupo atual na lista e iniciamos um novo grupo
-          if (id_cliente !== item.id_cliente) {
-            if (index > 0) {
-              grupoclasse.grupo_clientes.push(grupocliente);
-            }
-            grupocliente = new GrupoCliente();
-            id_cliente = item.id_cliente;
-            grupocliente.id_cliente = item.id_cliente;
-            grupocliente.cliente = item.cliente;
-          }
-          grupocliente.receitas.push(item);
+          this.sumTotalReceitas = 0;
+
+          this.emProcessamento = false;
+        },
+        error => {
+          this.emProcessamento = false;
+          const err = new HttpErrorResponse(error);
+          console.log(err);
+          this.dialog.error('SGR', 'Erro ao gerar o relatório.', '');
         }
-        grupocliente.total_geral = grupocliente.receitas.reduce((sum, it) => sum + Number(it.valor_total), 0);
-        grupoclasse.grupo_clientes.push(grupocliente);
-        grupoclasse.total_geral = this.receitas.reduce((sum, item) => sum + Number(item.valor_total), 0);
-        this.grupoclasses.push(grupoclasse);
+      );
 
-        this.sumTotalReceitas = 0;
+      }
+      if (this.filtroRelatorio.receita_sintetico) {
+        this._relatorioService.getRelatorioReceitaSintetico(this._tokenManager.retrieve(), this.filtroRelatorio)
+        .retry(3)
+        .subscribe(data => {
+          // receitas vindas de clientes
+          this.receitasinteticas = data;
 
-        this.emProcessamento = false;
-      });
+          this._relatorioService.getRelatorioReceitaSinteticoClasse(this._tokenManager.retrieve(), this.filtroRelatorio)
+          .retry(3)
+          .subscribe(data2 => {
+              let recsint: ReceitaSintetica[];
+              recsint = new Array<ReceitaSintetica>();
+              recsint = data2;
+              for (let index = 0; index < recsint.length; index++) {
+                const item = recsint[index];
+                this.receitasinteticas.push(item);
+              }
+              this.emProcessamento = false;
+            },
+            error => {
+              this.emProcessamento = false;
+              const err = new HttpErrorResponse(error);
+              console.log(err);
+              this.dialog.error('SGR', 'Erro ao gerar o relatório.', '');
+            }
+          );
+        },
+          error => {
+            this.emProcessamento = false;
+            const err = new HttpErrorResponse(error);
+            console.log(err);
+            this.dialog.error('SGR', 'Erro ao gerar o relatório.', '');
+          }
+      );
+      }
     }
 
     if (this.filtroRelatorio.despesa) {
-      this._relatorioService.getRelatorioDespesa(this._tokenManager.retrieve(), this.filtroRelatorio)
-      .subscribe(data => {
-        this.despesas = data;
+      if (this.filtroRelatorio.despesa_analitico) {
+        this._relatorioService.getRelatorioDespesa(this._tokenManager.retrieve(), this.filtroRelatorio)
+        .subscribe(data => {
+          this.despesas = data;
 
-        let id_cliente: number;
-        let grupocliente: GrupoCliente;
-        // separa os registros agrupando por classe e cliente
-        for (let index = 0; index < this.despesas.length; index++) {
-          const item = this.despesas[index];
+          let id_cliente: number;
+          let grupocliente: GrupoCliente;
+          // separa os registros agrupando por classe e cliente
+          for (let index = 0; index < this.despesas.length; index++) {
+            const item = this.despesas[index];
 
-          // se o cliente muda gravamos o grupo atual na lista e iniciamos um novo grupo
-          if (id_cliente !== item.id_cliente) {
-            if (index > 0) {
-              this.grupoclientes.push(grupocliente);
+            // se o cliente muda gravamos o grupo atual na lista e iniciamos um novo grupo
+            if (id_cliente !== item.id_cliente) {
+              if (index > 0) {
+                this.grupoclientes.push(grupocliente);
+              }
+              grupocliente = new GrupoCliente();
+              id_cliente = item.id_cliente;
+              grupocliente.id_cliente = item.id_cliente;
+              grupocliente.cliente = item.cliente;
             }
-            grupocliente = new GrupoCliente();
-            id_cliente = item.id_cliente;
-            grupocliente.id_cliente = item.id_cliente;
-            grupocliente.cliente = item.cliente;
+            grupocliente.despesasav.push(item);
           }
-          grupocliente.despesasav.push(item);
-        }
-        grupocliente.total_geral = this.despesas.reduce((sum, item) => sum + Number(item.valor_total), 0);
-        this.grupoclientes.push(grupocliente);
-        this.sumTotalDespesas = 0;
-        // this.sumTotalDespesas = this.despesas.reduce((sum, item) => sum + Number(item.valor_total), 0);
-        // this.emProcessamento = false;
-      });
+          grupocliente.total_geral = this.despesas.reduce((sum, item) => sum + Number(item.valor_total), 0);
+          this.grupoclientes.push(grupocliente);
+          this.sumTotalDespesas = 0;
+          // this.sumTotalDespesas = this.despesas.reduce((sum, item) => sum + Number(item.valor_total), 0);
+          // this.emProcessamento = false;
+          },
+          error => {
+            this.emProcessamento = false;
+            const err = new HttpErrorResponse(error);
+            console.log(err);
+            this.dialog.error('SGR', 'Erro ao gerar o relatório.', '');
+          }
+        );
 
-      this._relatorioService.getRelatorioDespesaClasse(this._tokenManager.retrieve(), this.filtroRelatorio)
-      .subscribe(data => {
-        this.despesasfor.length = 0;
-        this.despesasfor = data;
+        this._relatorioService.getRelatorioDespesaClasse(this._tokenManager.retrieve(), this.filtroRelatorio)
+        .subscribe(data => {
+          this.despesasfor.length = 0;
+          this.despesasfor = data;
 
-        let id_fornecedor: number;
-        let id_classe: number;
-        let grupofornecedor: GrupoFornecedor;
-        let grupoclasse: GrupoClasse;
-        // separa os registros agrupando por classe e cliente
-        for (let index = 0; index < this.despesasfor.length; index++) {
-          const item = this.despesasfor[index];
+          let id_fornecedor: number;
+          let id_classe: number;
+          let grupofornecedor: GrupoFornecedor;
+          let grupoclasse: GrupoClasse;
+          // separa os registros agrupando por classe e cliente
+          for (let index = 0; index < this.despesasfor.length; index++) {
+            const item = this.despesasfor[index];
 
-          if (id_classe !== item.id_classe) {
-            if (index > 0) {
-              grupofornecedor.total_geral = grupofornecedor.despesasavfor.reduce((sum, it) => sum + Number(it.valor_total), 0);
-              grupoclasse.grupo_fornecedores.push(grupofornecedor);
-              this.grupoclasses.push(grupoclasse);
+            if (id_classe !== item.id_classe) {
+              if (index > 0) {
+                grupofornecedor.total_geral = grupofornecedor.despesasavfor.reduce((sum, it) => sum + Number(it.valor_total), 0);
+                grupoclasse.grupo_fornecedores.push(grupofornecedor);
+                this.grupoclasses.push(grupoclasse);
+                grupofornecedor = new GrupoFornecedor();
+                grupofornecedor.id_fornecedor = item.id_fornecedor;
+                grupofornecedor.cnpj_cpf = item.cnpj_cpf;
+                grupofornecedor.fornecedor = item.fornecedor;
+              }
+              grupoclasse = new GrupoClasse();
+              id_classe = item.id_classe;
+              grupoclasse.id_classe = item.id_classe;
+              grupoclasse.classe = item.classe;
+            }
+
+            // se o cliente muda gravamos o grupo atual na lista e iniciamos um novo grupo
+            if (id_fornecedor !== item.id_fornecedor) {
+              if (index > 0) {
+                // so adicionamos se houver registro na lista.
+                if (grupofornecedor.despesasavfor.length > 0) {
+                  grupoclasse.grupo_fornecedores.push(grupofornecedor);
+                }
+              }
               grupofornecedor = new GrupoFornecedor();
+              id_fornecedor = item.id_fornecedor;
               grupofornecedor.id_fornecedor = item.id_fornecedor;
               grupofornecedor.cnpj_cpf = item.cnpj_cpf;
               grupofornecedor.fornecedor = item.fornecedor;
             }
-            grupoclasse = new GrupoClasse();
-            id_classe = item.id_classe;
-            grupoclasse.id_classe = item.id_classe;
-            grupoclasse.classe = item.classe;
+            grupofornecedor.despesasavfor.push(item);
           }
+          grupofornecedor.total_geral = grupofornecedor.despesasavfor.reduce((sum, it) => sum + Number(it.valor_total), 0);
+          grupoclasse.grupo_fornecedores.push(grupofornecedor);
+          grupoclasse.total_geral = this.despesasfor.reduce((sum, item) => sum + Number(item.valor_total), 0);
+          this.grupoclasses.push(grupoclasse);
 
-          // se o cliente muda gravamos o grupo atual na lista e iniciamos um novo grupo
-          if (id_fornecedor !== item.id_fornecedor) {
-            if (index > 0) {
-              // so adicionamos se houver registro na lista.
-              if (grupofornecedor.despesasavfor.length > 0) {
-                grupoclasse.grupo_fornecedores.push(grupofornecedor);
+          this.sumTotalReceitas = 0;
+
+          this.emProcessamento = false;
+        },
+        error => {
+          this.emProcessamento = false;
+          const err = new HttpErrorResponse(error);
+          console.log(err);
+          this.dialog.error('SGR', 'Erro ao gerar o relatório.', '');
+        });
+      }
+
+      if (this.filtroRelatorio.despesa_sintetico) {
+        this._relatorioService.getRelatorioDespesaSintetico(this._tokenManager.retrieve(), this.filtroRelatorio)
+        .retry(3)
+        .subscribe(data => {
+          // receitas vindas de clientes
+          this.despesasinteticas = data;
+
+          this._relatorioService.getRelatorioDespesaSinteticoClasse(this._tokenManager.retrieve(), this.filtroRelatorio)
+          .retry(3)
+          .subscribe(data2 => {
+              let dessint: DespesaSintetica[];
+              dessint = new Array<DespesaSintetica>();
+              dessint = data2;
+              for (let index = 0; index < dessint.length; index++) {
+                const item = dessint[index];
+                this.despesasinteticas.push(item);
               }
+              this.emProcessamento = false;
+            },
+            error => {
+              this.emProcessamento = false;
+              const err = new HttpErrorResponse(error);
+              console.log(err);
+              this.dialog.error('SGR', 'Erro ao gerar o relatório.', '');
             }
-            grupofornecedor = new GrupoFornecedor();
-            id_fornecedor = item.id_fornecedor;
-            grupofornecedor.id_fornecedor = item.id_fornecedor;
-            grupofornecedor.cnpj_cpf = item.cnpj_cpf;
-            grupofornecedor.fornecedor = item.fornecedor;
+          );
+        },
+          error => {
+            this.emProcessamento = false;
+            const err = new HttpErrorResponse(error);
+            console.log(err);
+            this.dialog.error('SGR', 'Erro ao gerar o relatório.', '');
           }
-          grupofornecedor.despesasavfor.push(item);
-        }
-        grupofornecedor.total_geral = grupofornecedor.despesasavfor.reduce((sum, it) => sum + Number(it.valor_total), 0);
-        grupoclasse.grupo_fornecedores.push(grupofornecedor);
-        grupoclasse.total_geral = this.despesasfor.reduce((sum, item) => sum + Number(item.valor_total), 0);
-        this.grupoclasses.push(grupoclasse);
-
-        this.sumTotalReceitas = 0;
-
-        this.emProcessamento = false;
-      });
+        );
+      }
     }
   }
 

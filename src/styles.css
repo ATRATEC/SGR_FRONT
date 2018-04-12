@@ -31,4 +31,20 @@
   .page-break {
     page-break-after: always;
   }
+
+  .col_cnpj_cpf {
+    width: 10%;
+  }
+
+  .col_clifor {
+    width: 30%;
+  }
+
+  .col_manifestos {
+    width: 55%;
+  }
+
+  .col_total {
+    width: 5%;
+  }
 }

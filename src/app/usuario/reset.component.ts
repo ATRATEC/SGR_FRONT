@@ -1,3 +1,4 @@
+import { UserService } from './../user.service';
 import { Perfil } from './../perfil';
 import { User } from './../user';
 import { LoginService } from './../login.service';
@@ -7,26 +8,34 @@ import { Data } from '@angular/router';
 import { Component, OnInit, Inject } from '@angular/core';
 import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material';
 import {FormControl, Validators} from '@angular/forms';
+import {MatSnackBar} from '@angular/material';
 
 @Component({
-  selector: 'app-login',
-  templateUrl: './login.component.html',
-  styleUrls: ['./login.component.css']
+  selector: 'app-reset',
+  templateUrl: './reset.component.html',
+  styleUrls: ['./reset.component.css']
 })
-export class LoginComponent implements OnInit {
+export class ResetComponent implements OnInit {
   hide = true;
   erroLogin: boolean;
   msgErroLogin = '';
   emProcessamento = false;
 
   valEmail = new FormControl('', [Validators.email, Validators.required]);
-  valPassword = new FormControl('', [Validators.required]);
 
   constructor(private loginService: LoginService,
-    public dialogLoginRef: MatDialogRef<LoginComponent>,
+    public userService: UserService,
+    public snackBar: MatSnackBar,
+    public dialogLoginRef: MatDialogRef<ResetComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any) { }
 
   ngOnInit() {
+  }
+
+  openSnackBar(message: string, action: string) {
+    this.snackBar.open(message, action, {
+      duration: 3000,
+    });
   }
 
   onEntrarClick(): void {
@@ -114,11 +123,7 @@ export class LoginComponent implements OnInit {
   }
 
   getPasswordErrorMessage() {
-    let mensagem = '';
-
-    if (this.valPassword.hasError('required')) {
-      mensagem = mensagem + 'Campo senha não informado.';
-    }
+    const mensagem = '';
     return mensagem;
   }
 

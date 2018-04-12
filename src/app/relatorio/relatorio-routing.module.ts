@@ -1,3 +1,5 @@
+import { MapaResiduoFormComponent } from './maparesiduo-form.component';
+import { FiltroMapaResiduoFormComponent } from './filtromaparesiduo-form.component';
 import { RelatorioFormComponent } from './relatorio-form.component';
 import { FiltroRelatorioFormComponent } from './filtrorelatorio-form.component';
 import { RelatorioPesagemFormComponent } from './relatoriopesagem-form.component';
@@ -18,6 +20,8 @@ const routes: Routes = [
   { path: 'relatorios/despesa', component: DespesaFormComponent, canActivate: [AuthGuard] },
   { path: 'relatorios/pesagem', component: FiltroPesagemFormComponent, canActivate: [AuthGuard] },
   { path: 'relatorios/pesagemreport', component: RelatorioPesagemFormComponent, canActivate: [AuthGuard] },
+  { path: 'relatorios/maparesiduos', component: FiltroMapaResiduoFormComponent, canActivate: [AuthGuard] },
+  { path: 'relatorios/relmaparesiduos', component: MapaResiduoFormComponent, canActivate: [AuthGuard] },
 ];
 
 @NgModule({

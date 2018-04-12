@@ -12,6 +12,22 @@ mat-icon-button.size-15 {
   display: block !important;
 }
 
+.col_cnpj_cpf {
+  width: 10%;
+}
+
+.col_clifor {
+  width: 30%;
+}
+
+.col_manifestos {
+  width: 55%;
+}
+
+.col_total {
+  width: 5%;
+}
+
 .frm_receita-loading-shade {
   position: absolute;
   top: 0;

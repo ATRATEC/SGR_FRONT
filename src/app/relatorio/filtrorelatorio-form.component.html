@@ -25,7 +25,7 @@
       <div fxFlex="50px" fxFlexAlign="start" style="padding: 10px;" class="no_print">
         <button id="lblTitulo" mat-raised-button style="width: 100%" disabled>
           <i class="fa fa-filter" aria-hidden="true"></i>
-          <span>FILTRO RELATÓRIO GERENCIAL CLIENTE</span>
+          <span>FILTRO RELATÓRIO GERENCIAL AMBIENTE VERDE</span>
         </button>
       </div>
       <div fxFlex="80%" fxFlexAlign="center">
@@ -42,18 +42,79 @@
         </div>
         <mat-card *ngIf="!emProcessamento" style="width: 700px;">
           <div fxLayout="column" fxLayoutAlign="start center" fxLayoutGap="5px">
+            <div fxFlex="80px" fxFlexAlign="start">
+              <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="10px" style="width: 100%">
+                <div fxFlex="100%" fxFlexFill>
+                  <div fxLayout="column" fxLayoutAlign="center center" fxLayoutGap="5px">
+                    <div fxFlex="20px" fxFlexAlign="start">
+                      <span>Tipo de Relatório</span>
+                    </div>
+                    <div fxLayout="row" fxLayoutAlign="start start" fxLayoutGap="10px">
+                      <div fxFlex="120px" fxFlexFill fxFlexAlign="start">
+                        <mat-checkbox autofocus #focuscomp class="example-margin" [(ngModel)]="filtrorelatorio.receita" tabindex="1" [color]="'primary'">Receita</mat-checkbox>
+                      </div>
+                      <div fxFlex="400px" fxFlexFill fxFlexAlign="start">
+                        <mat-radio-button name="receita" [checked]="true" [color]="'primary'" [(value)]="filtrorelatorio.receita_analitico" style="margin-right: 10px" tabindex="2"
+                        [disabled]="!filtrorelatorio.receita" (change)="receita_analiticoChange($event)">
+                          Analítico
+                        </mat-radio-button>
+                        <mat-radio-button name="receita" [checked]="false" [color]="'primary'" [(value)]="filtrorelatorio.receita_sintetico" style="margin-right: 10px" tabindex="3"
+                        [disabled]="!filtrorelatorio.receita" (change)="receita_sinteticoChange($event)">
+                          Sintético
+                        </mat-radio-button>
+                      </div>
+                    </div>
+                    <div fxLayout="row" fxLayoutAlign="start start" fxLayoutGap="10px">
+                      <div fxFlex="120px" fxFlexFill fxFlexAlign="start">
+                        <mat-checkbox class="example-margin" [(ngModel)]="filtrorelatorio.despesa" tabindex="4" [color]="'primary'">Despesa</mat-checkbox>
+                      </div>
+                      <div fxFlex="400px" fxFlexFill fxFlexAlign="start">
+                        <mat-radio-button name="despesa" [checked]="true" [color]="'primary'" [(value)]="filtrorelatorio.despesa_analitico" style="margin-right: 10px" tabindex="5"
+                        [disabled]="!filtrorelatorio.despesa" (change)="despesa_analiticoChange($event)">
+                          Analítico
+                        </mat-radio-button>
+                        <mat-radio-button name="despesa" [checked]="false" [color]="'primary'" [(value)]="filtrorelatorio.despesa_sintetico" style="margin-right: 10px" tabindex="6"
+                        [disabled]="!filtrorelatorio.despesa" (change)="despesa_sinteticoChange($event)">
+                          Sintético
+                        </mat-radio-button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div fxFlex="60px" fxFlexAlign="start">
+              <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="10px" style="width: 100%">
+                <div fxFlex="170px" fxFlexAlign="start" fxFlexFill>
+                  <mat-form-field class="frm_receita_data">
+                    <input matInput type="date" autofocus #focuscomp required #dtemissao maxlength="10" placeholder="Data Inicio Coleta" tabindex="7" [ngModel]="filtrorelatorio.datade"
+                      (ngModelChange)="filtrorelatorio.datade = $event" [value]="filtrorelatorio.datade" [formControl]="valDataDe">
+                    <mat-hint align="end">{{dtemissao.value?.length || 0}}/10</mat-hint>
+                    <mat-error *ngIf="valDataDe.invalid">{{getErrorMessage(valDataDe)}}</mat-error>
+                  </mat-form-field>
+                </div>
+                <div fxFlex="170px" fxFlexAlign="start" fxFlexFill>
+                  <mat-form-field class="frm_receita_data">
+                    <input matInput type="date" required #dtvencimento maxlength="10" placeholder="Data Final Coleta" tabindex="8" [ngModel]="filtrorelatorio.dataate"
+                      (ngModelChange)="filtrorelatorio.dataate = $event" [value]="filtrorelatorio.dataate" [formControl]="valDataAte">
+                    <mat-hint align="end">{{dtvencimento.value?.length || 0}}/10</mat-hint>
+                    <mat-error *ngIf="valDataAte.invalid">{{getErrorMessage(valDataAte)}}</mat-error>
+                  </mat-form-field>
+                </div>
+              </div>
+            </div>
             <div fxFlex="60px" fxFlexAlign="start">
               <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="10px" style="width: 100%">
                 <div fxFlex="120px" fxFlexAlign="start" fxFlexFill>
                   <mat-form-field class="frm_receita_codigo">
-                    <input matInput autofocus #focuscomp #codigofor maxlength="9" [formControl]="valCodigo" placeholder="Cliente" tabindex="1"
+                    <input matInput #codigofor maxlength="9" [formControl]="valCodigo" placeholder="Cliente" tabindex="9"
                       [(ngModel)]="filtrorelatorio.id_cliente" (keyup)="validaSaida($event.target.value)" (keypress)="onlyNumber($event)">
                     <mat-hint align="end">{{codigofor.value?.length || 0}}/9</mat-hint>
                     <mat-error *ngIf="valCodigo.invalid">{{getErrorMessage(valCodigo)}}</mat-error>
                   </mat-form-field>
                 </div>
                 <div fxFlex="45px" fxFlexAlign="center" fxFlexFill>
-                  <button mat-icon-button color="primary" (click)="openPesquisa()" tabindex="2">
+                  <button mat-icon-button color="primary" (click)="openPesquisa()" tabindex="10">
                     <mat-icon>search</mat-icon>
                   </button>
                 </div>
@@ -64,53 +125,41 @@
                 </div>
               </div>
             </div>
-            <div fxFlex="80px" fxFlexAlign="start">
+            <div fxFlex="60px" fxFlexAlign="start">
               <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="10px" style="width: 100%">
-                <div fxFlex="170px" fxFlexAlign="start" fxFlexFill>
-                  <mat-form-field class="frm_receita_data">
-                    <input matInput type="date" required #dtemissao maxlength="10" placeholder="Data Inicio Coleta" tabindex="4" [ngModel]="filtrorelatorio.datade"
-                      (ngModelChange)="filtrorelatorio.datade = $event" [value]="filtrorelatorio.datade" [formControl]="valDataDe">
-                    <mat-hint align="end">{{dtemissao.value?.length || 0}}/10</mat-hint>
-                    <mat-error *ngIf="valDataDe.invalid">{{getErrorMessage(valDataDe)}}</mat-error>
+                <div fxFlex="120px" fxFlexAlign="start" fxFlexFill>
+                  <mat-form-field class="frm_receita_codigo">
+                    <input matInput #codigofor maxlength="9" [formControl]="valCodigofor" placeholder="Fornecedor" required
+                      tabindex="11" [(ngModel)]="filtrorelatorio.id_fornecedor" (keyup)="validaSaidaFornecedor($event.target.value)" (keypress)="onlyNumber($event)"
+                      id="id_fornecedor">
+                    <mat-hint align="end">{{codigofor.value?.length || 0}}/9</mat-hint>
+                    <mat-error *ngIf="valCodigofor.invalid">{{getErrorMessage(valCodigofor)}}</mat-error>
                   </mat-form-field>
                 </div>
-                <div fxFlex="170px" fxFlexAlign="start" fxFlexFill>
-                  <mat-form-field class="frm_receita_data">
-                    <input matInput type="date" required #dtvencimento maxlength="10" placeholder="Data Final Coleta" tabindex="5" [ngModel]="filtrorelatorio.dataate"
-                      (ngModelChange)="filtrorelatorio.dataate = $event" [value]="filtrorelatorio.dataate" [formControl]="valDataAte">
-                    <mat-hint align="end">{{dtvencimento.value?.length || 0}}/10</mat-hint>
-                    <mat-error *ngIf="valDataAte.invalid">{{getErrorMessage(valDataAte)}}</mat-error>
+                <div fxFlex="45px" fxFlexAlign="center" fxFlexFill>
+                  <button mat-icon-button color="primary" (click)="openPesquisaFornecedor()" tabindex="12">
+                    <mat-icon>search</mat-icon>
+                  </button>
+                </div>
+                <div fxFlex="520px" fxFlexAlign="start" fxFlexFill>
+                  <mat-form-field class="frm_receita_razao_social">
+                    <input matInput disabled [(ngModel)]="filtrorelatorio.fornecedor">
                   </mat-form-field>
                 </div>
-                <div fxFlex="230px" fxFlexFill>
-                  <div fxLayout="column" fxLayoutAlign="space-between center" fxLayoutGap="5px">
-                    <div fxFlex="20px" fxFlexAlign="center">
-                      <span>Tipo de Relatório</span>
-                    </div>
-                    <div fxFlex="20px" fxFlexFill fxFlexAlign="center">
-                      <mat-checkbox class="example-margin" [(ngModel)]="filtrorelatorio.receita" tabindex="6" [color]="'primary'">Receita</mat-checkbox>
-                    </div>
-                    <div fxFlex="20px" fxFlexFill fxFlexAlign="center">
-                      <mat-checkbox class="example-margin" [(ngModel)]="filtrorelatorio.despesa" tabindex="7" [color]="'primary'">Despesa</mat-checkbox>
-                    </div>
-                  </div>
-
-                </div>
-
               </div>
             </div>
             <div fxFlex="60px" fxFlexAlign="start">
               <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="10px" style="width: 100%">
                 <div fxFlex="120px" fxFlexAlign="start" fxFlexFill>
                   <mat-form-field class="frm_receita_codigo">
-                    <input matInput autofocus #focuscomp #codigofor maxlength="9" [formControl]="valManifesto" placeholder="Manifesto" tabindex="8"
+                    <input matInput #codigofor maxlength="9" [formControl]="valManifesto" placeholder="Manifesto" tabindex="13"
                       [(ngModel)]="filtrorelatorio.id_manifesto" (keyup)="validaSaidaManifesto($event.target.value)" (keypress)="onlyNumber($event)">
                     <mat-hint align="end">{{codigofor.value?.length || 0}}/9</mat-hint>
                     <mat-error *ngIf="valManifesto.invalid">{{getCodigoErrorMessage()}}</mat-error>
                   </mat-form-field>
                 </div>
                 <div fxFlex="45px" fxFlexAlign="center" fxFlexFill>
-                  <button mat-icon-button color="primary" (click)="openPesquisaManifesto()" tabindex="9">
+                  <button mat-icon-button color="primary" (click)="openPesquisaManifesto()" tabindex="14">
                     <mat-icon>search</mat-icon>
                   </button>
                 </div>
@@ -125,16 +174,16 @@
               <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="10px" style="width: 100%">
                 <div fxFlex="250px" fxFlexAlign="start" fxFlexFill>
                   <mat-form-field class="frm_filtrocliente_residuo">
-                    <mat-select id="cbResiduo" placeholder="Residuo" [(value)]="filtrorelatorio.id_residuo" tabindex="10">
+                    <mat-select id="cbResiduo" placeholder="Residuo" [(value)]="filtrorelatorio.id_residuo" tabindex="15">
                       <mat-option *ngFor="let residuo of residuos" [value]="residuo.id">
                         {{ residuo.descricao }}
                       </mat-option>
                     </mat-select>
                   </mat-form-field>
                 </div>
-                <div fxFlex="150px" fxFlexFill>
+                <!-- <div fxFlex="150px" fxFlexFill>
                   <mat-checkbox class="example-margin" [(ngModel)]="filtrorelatorio.agrupar_classe" tabindex="11" [color]="'primary'">Agrupar por Classe</mat-checkbox>
-                </div>
+                </div> -->
               </div>
             </div>
             <!-- <div fxFlex="60px" fxFlexAlign="start">

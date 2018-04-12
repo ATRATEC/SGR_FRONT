@@ -288,3 +288,27 @@ tr:nth-child(even) {
 .tooltip:hover .tooltiptext {
   visibility: visible;
 }
+
+.col_cnpj_cpf {
+  min-width: 10%;
+  max-width: 10%;
+  width: 10%;
+}
+
+.col_clifor {
+  min-width: 30%;
+  max-width: 30%;
+  width: 30%;
+}
+
+.col_manifestos {
+  min-width: 55%;
+  max-width: 55%;
+  width: 55%;
+}
+
+.col_total {
+  min-width: 5%;
+  max-width: 5%;
+  width: 5%;
+}
