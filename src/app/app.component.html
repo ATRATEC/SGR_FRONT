@@ -206,16 +206,21 @@
       <span style="color: white" class="no_print"> {{Usuario.name}}</span>
     </button>
     <mat-menu #loginsistema="matMenu" [overlapTrigger]="false">
-      <button mat-menu-item *ngIf="perfil.aclcontrol_adicionar_usuario == 'S'">
-        <mat-icon fontSet="fontawesome" fontIcon="fa-key"></mat-icon>
+      <button mat-menu-item *ngIf="perfil.aclcontrol_adicionar_usuario == 'S'" (click)="openAddUsuario()">
+        <mat-icon fontSet="fontawesome" fontIcon="fa-user-plus"></mat-icon>
         <span>Adicionar Usuário</span>
       </button>
-      <button mat-menu-item>
-        <mat-icon fontSet="fontawesome" fontIcon="fa-key"></mat-icon>
+      <button mat-menu-item *ngIf="perfil.aclcontrol_adicionar_usuario == 'S'" (click)="openEditUsuario()">
+          <mat-icon fontSet="fontawesome" fontIcon="fa-user-times"></mat-icon>
+          <span>Alterar Usuário</span>
+        </button>
+      <button mat-menu-item (click)="openChangePasswordtUsuario()">
+        <mat-icon fontSet="fontawesome" fontIcon="fa-lock"></mat-icon>
+        <i class="fa fa-exchange" aria-hidden="true"></i>
         <span>Trocar Senha</span>
       </button>
       <button mat-menu-item (click)="logOut()">
-        <mat-icon fontSet="fontawesome" fontIcon="fa-user-times"></mat-icon>
+        <mat-icon fontSet="fontawesome" fontIcon="fa-power-off"></mat-icon>
         <span>Sair</span>
       </button>
     </mat-menu>

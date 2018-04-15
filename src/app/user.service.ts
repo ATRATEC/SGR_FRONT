@@ -1,3 +1,4 @@
+import { isNullOrUndefined } from 'util';
 import { environment } from './../environments/environment';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Rx';
@@ -46,8 +47,9 @@ export class UserService {
       );
   }
 
-  public addUsuario(accessToken: string, _name: string, _email: string, _password: string, _confPassword: string): Observable<User[]> {
-    const url = environment.urlbase + '/aclcontrol/adduser';
+  public addUsuario(accessToken: string, _name: string, _email: string, _password: string, _confPassword: string, _id_perfil: number
+  ): Observable<User[]> {
+    const url = environment.urlbase + '/api/aclcontrol/adduser';
     const headers = new Headers({
       Accept: 'application/json',
       Authorization: 'Bearer ' + accessToken.toString().replace(/"/g, '')
@@ -58,7 +60,8 @@ export class UserService {
       name: _name,
       email: _email,
       password: _password,
-      password_confirmation: _confPassword
+      password_confirmation: _confPassword,
+      id_perfil: _id_perfil
     };
     // _params.set('id', _id.toString());
 
@@ -71,28 +74,70 @@ export class UserService {
   }
 
   public editUsuario(accessToken: string, _id: number, _name: string, _email: string,
-    _password: string, _confPassword: string): Observable<User[]> {
-    const url = environment.urlbase + '/aclcontrol/edituser';
+    _password: string, _confPassword: string, _id_perfil: number): Observable<User[]> {
+    const url = environment.urlbase + '/api/aclcontrol/edituser';
     const headers = new Headers({
       Accept: 'application/json',
       Authorization: 'Bearer ' + accessToken.toString().replace(/"/g, '')
     });
 
+    let retorno: Observable<User[]>;
     // const _params: HttpParams = new HttpParams();
-    const _body = {
-      name: _name,
-      email: _email,
-      password: _password,
-      password_confirmation: _confPassword
-    };
-    // _params.set('id', _id.toString());
 
-    return this._http
+    if ((!isNullOrUndefined(_password)) && (!isNullOrUndefined(_confPassword))) {
+      const _body = {
+        name: _name,
+        email: _email,
+        password: _password,
+        password_confirmation: _confPassword,
+        id_perfil: _id_perfil
+      };
+      retorno = this._http
+      .put(url + '/' + _id.toString(), _body, { headers: headers })
+      .map((res: Response) => res.json())
+      .catch((error: any) =>
+        Observable.throw(error.json() || 'Server error')
+      );
+    } else {
+      const _body = {
+        name: _name,
+        email: _email,
+        id_perfil: _id_perfil
+      };
+
+      retorno = this._http
       .post(url + '/' + _id.toString(), _body, { headers: headers })
       .map((res: Response) => res.json())
       .catch((error: any) =>
         Observable.throw(error.json() || 'Server error')
       );
+    }
+    return retorno;
+  }
+
+  public changePasswordUsuario(accessToken: string, _id: number, _password: string
+    , _confPassword: string): Observable<User[]> {
+    const url = environment.urlbase + '/api/aclcontrol/changepassword';
+    const headers = new Headers({
+      Accept: 'application/json',
+      Authorization: 'Bearer ' + accessToken.toString().replace(/"/g, '')
+    });
+
+    let retorno: Observable<User[]>;
+
+    const _body = {
+      password: _password,
+      password_confirmation: _confPassword
+    };
+
+    retorno = this._http
+    .put(url + '/' + _id.toString(), _body, { headers: headers })
+    .map((res: Response) => res.json())
+    .catch((error: any) =>
+      Observable.throw(error.json() || 'Server error')
+    );
+
+    return retorno;
   }
 
   downloadPDF(): any {
@@ -101,6 +146,38 @@ export class UserService {
             .map(res => {
             return new Blob([res], { type: 'application/pdf', });
         });
+  }
+
+  getListPerfis(accessToken: string)  {
+    const listUrl = environment.urlbase + '/api/aclcontrol/listperfil';
+    const headers = new Headers({
+      Accept: 'application/json',
+      Authorization: 'Bearer ' + accessToken.toString().replace(/"/g, '')
+    });
+
+    return this._http
+      .get(listUrl, { headers: headers })
+      .map((res: Response) => res)
+      .retry(3)
+      .catch((error: any) =>
+        Observable.throw(error.json() || 'Server error')
+      );
+  }
+
+  getListUsers(accessToken: string)  {
+    const listUrl = environment.urlbase + '/api/aclcontrol/listuser';
+    const headers = new Headers({
+      Accept: 'application/json',
+      Authorization: 'Bearer ' + accessToken.toString().replace(/"/g, '')
+    });
+
+    return this._http
+      .get(listUrl, { headers: headers })
+      .map((res: Response) => res)
+      .retry(3)
+      .catch((error: any) =>
+        Observable.throw(error.json() || 'Server error')
+      );
   }
 
 }

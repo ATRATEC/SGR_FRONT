@@ -1,3 +1,7 @@
+import { ChangePasswordUserComponent } from './usuario/changepassworduser.component';
+import { EditUserComponent } from './usuario/edituser.component';
+import { DialogService } from './dialog/dialog.service';
+import { AddUserComponent } from './usuario/adduser.component';
 import { ClienteFindComponent } from './cliente/cliente-find.component';
 import { isNullOrUndefined } from 'util';
 import { FornecedorFindComponent } from './fornecedor/fornecedor-find.component';
@@ -27,12 +31,12 @@ import { booleanToStrSN, strToBoolean } from './utilitario/utilitarios';
 const DIRECTIONS = ['row', 'row-reverse', 'column', 'column-reverse'];
 
 @Component({
-  selector: "app-root",
-  templateUrl: "./app.component.html",
-  styleUrls: ["./app.component.css"]
+  selector: 'app-root',
+  templateUrl: './app.component.html',
+  styleUrls: ['./app.component.css']
 })
 export class AppComponent implements OnInit {
-  title = "app";
+  title = 'app';
   animal: string;
   name: string;
   login: string;
@@ -40,25 +44,15 @@ export class AppComponent implements OnInit {
   Usuario: User;
   perfil: Perfil;
   users: User[];
-  private loginUrl = environment.urlbase + "/api/login";
-  private usersUrl = environment.urlbase + "/api/users";
-
-  options = {
-    direction: "row",
-    mainAxis: "space-around",
-    crossAxis: "center"
-  };
-
-  direction = "row";
-  someValue = 20;
-  mainAxis = "space-around";
-  crossAxis = "center";
+  private loginUrl = environment.urlbase + '/api/login';
+  private usersUrl = environment.urlbase + '/api/users';
 
   constructor(
     private tokenManager: TokenManagerService,
     private loginService: LoginService,
     private userService: UserService,
-    public dialog: MatDialog,
+    public modal: MatDialog,
+    private dialog: DialogService,
     private _alert: AlertsService,
     private _router: Router
   ) {
@@ -69,7 +63,7 @@ export class AppComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    if (!sessionStorage.getItem("Logado")) {
+    if (!sessionStorage.getItem('Logado')) {
       this.perfil = new Perfil();
     }
     // this.logOut();
@@ -85,7 +79,7 @@ export class AppComponent implements OnInit {
       duration: 0
     };
 
-    this._alert.create(type, "This is a message", "SGR", settings);
+    this._alert.create(type, 'This is a message', 'SGR', settings);
   }
 
   verificaLogin() {
@@ -94,8 +88,8 @@ export class AppComponent implements OnInit {
     //   this.Logado = true;
     //   return true;
     // }
-    if (sessionStorage.getItem("Logado")) {
-      this.Usuario = JSON.parse(localStorage.getItem("currentUser"));
+    if (sessionStorage.getItem('Logado')) {
+      this.Usuario = JSON.parse(localStorage.getItem('currentUser'));
       this.perfil = this.sessionStorageToPerfil();
       // this.perfil = JSON.parse(localStorage.getItem('Perfil'));
       this.Logado = true;
@@ -105,7 +99,7 @@ export class AppComponent implements OnInit {
   }
 
   chamalogin() {
-    this.loginService.Login("atxaloisio@hotmail.com", "mestre").subscribe(
+    this.loginService.Login('atxaloisio@hotmail.com', 'mestre').subscribe(
       data => {
         console.log(data);
         this.Usuario = data.usuario;
@@ -180,7 +174,7 @@ export class AppComponent implements OnInit {
   // }
 
   // openDialog(): void {
-  //   let dialogRef = this.dialog.open(DialogOverviewComponent, {
+  //   let dialogRef = this.modal.open(DialogOverviewComponent, {
   //     width: '250px',
   //     disableClose: true,
   //     data: { name: this.name, animal: this.animal }
@@ -193,8 +187,8 @@ export class AppComponent implements OnInit {
   // }
 
   openLoginDialog(): void {
-    const dialogLoginRef = this.dialog.open(LoginComponent, {
-      width: "500px",
+    const dialogLoginRef = this.modal.open(LoginComponent, {
+      width: '500px',
       height: '330px',
       disableClose: true,
       data: { email: '', password: '' }
@@ -222,7 +216,7 @@ export class AppComponent implements OnInit {
         this.perfilToSessionStorage(this.perfil);
       } else {
         if (result.reset) {
-          const dialogResetRef = this.dialog.open(ResetComponent, {
+          const dialogResetRef = this.modal.open(ResetComponent, {
             width: '500px',
             height: '320px',
             disableClose: true,
@@ -602,7 +596,7 @@ export class AppComponent implements OnInit {
   }
 
   openDialog(): void {
-    const dialogLoginRef = this.dialog.open(DialogComponent, {
+    const dialogLoginRef = this.modal.open(DialogComponent, {
       width: '450px',
       height: '250px',
       disableClose: true,
@@ -639,25 +633,12 @@ export class AppComponent implements OnInit {
     localStorage.removeItem('currentUser');
   }
 
-  layoutAlign() {
-    return `${this.options.mainAxis} ${this.options.crossAxis}`;
-  }
-
-  layoutAlign2() {
-    return `${this.mainAxis} ${this.crossAxis}`;
-  }
-
-  toggleDirection() {
-    const next = (DIRECTIONS.indexOf(this.direction) + 1) % DIRECTIONS.length;
-    this.direction = DIRECTIONS[next];
-  }
-
   lerToken() {
     alert(this.tokenManager.retrieve());
   }
 
   openPesquisa(): void {
-    const dialogLoginRef = this.dialog.open(ClienteFindComponent, {
+    const dialogLoginRef = this.modal.open(ClienteFindComponent, {
       width: '600px',
       height: '400px',
       disableClose: true,
@@ -701,4 +682,34 @@ export class AppComponent implements OnInit {
   // emailFormControl = new FormControl('', [
   //   Validators.required,
   //   Validators.pattern(EMAIL_REGEX)]);
+
+  openAddUsuario(): void {
+    const dialogResetRef = this.modal.open(AddUserComponent, {
+      width: '400px',
+      height: '510px',
+      disableClose: true,
+      data: {name: '', email: '', password: '', confpassword: '' }
+    });
+  }
+
+  openEditUsuario(): void {
+    const dialogResetRef = this.modal.open(EditUserComponent, {
+      width: '400px',
+      height: '510px',
+      disableClose: true,
+      data: {name: '', email: '', password: '', confpassword: '' }
+    });
+  }
+
+  openChangePasswordtUsuario(): void {
+    const dialogResetRef = this.modal.open(ChangePasswordUserComponent, {
+      width: '400px',
+      height: '430px',
+      disableClose: true,
+      data: {
+        usuario: this.Usuario
+      }
+    });
+  }
+
 }

@@ -1,0 +1,85 @@
+<h1 mat-dialog-title>Alterar Usuário</h1>
+<div fxLayout="column" class="example-loading-shade" fxLayoutAlign="center center" *ngIf="emProcessamento" fxLayoutGap="10px">
+  <div fxFlex="70px" fxFlexAlign="center">
+    <mat-spinner></mat-spinner>
+  </div>
+  <div fxFlex="10px" fxFlexAlign="center">
+    &nbsp;
+  </div>
+  <div fxFlex="10px" fxFlexAlign="center">
+    &nbsp;
+  </div>
+  <div fxFlex="10px" fxFlexAlign="center">
+    &nbsp;
+  </div>
+  <div fxFlex="20px" fxFlexAlign="center">
+    <label>Aguarde...</label>
+  </div>
+</div>
+<div mat-dialog-content *ngIf="!emProcessamento">
+  <div fxLayout="column" fxLayoutAlign="center center" fxLayoutGap="7px" style="height: 360px;">
+      <div fxFlex="60px" fxFlexAlign="start" style="width: 350px">
+          <mat-form-field style="width:100%">
+            <mat-select autofocus placeholder="Usuário" [(ngModel)]="usuario" tabindex="1" required
+            (change)="usuarioChange($event)">
+              <mat-option *ngFor="let usuario of usuarios" [value]="usuario">
+                {{ usuario.name }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+      <div fxFlex="60px" fxFlexAlign="start" style="width: 350px">
+        <mat-form-field style="width:100%">
+          <mat-select autofocus placeholder="Perfil" [(ngModel)]="perfil" tabindex="1" required
+            [formControl]="valPerfil" id="perfil">
+            <mat-option *ngFor="let perfil of perfis" [value]="perfil.id">
+              {{ perfil.descricao }}
+            </mat-option>
+          </mat-select>
+          <mat-error *ngIf="valPerfil.invalid">{{getErrorMessage(valPerfil)}}</mat-error>
+        </mat-form-field>
+      </div>
+
+      <div fxFlex="60px" style="width: 350px" fxFlexAlign="start">
+          <mat-form-field style="width:100%">
+            <input matInput tabindex="2" [(ngModel)]="name" #nomeusuario maxlength="60" [formControl]="valNome" placeholder="Nome" required>
+            <mat-hint align="end">{{nomeusuario.value?.length || 0}}/60</mat-hint>
+            <mat-error *ngIf="valNome.invalid">{{getErrorMessage(valNome)}}</mat-error>
+          </mat-form-field>
+      </div>
+      <div fxFlex="60px" style="width: 350px" fxFlexAlign="start">
+          <mat-form-field style="width:100%">
+            <input matInput tabindex="3" [(ngModel)]="email" [formControl]="valEmail" placeholder="E-Mail" required>
+            <mat-error *ngIf="valEmail.invalid">{{getErrorMessage(valEmail)}}</mat-error>
+          </mat-form-field>
+      </div>
+      <div fxFlex="30px" fxFlexAlign="start">
+          <mat-slide-toggle [color]="'accent'" [(ngModel)]="redefinirsenha">Redefinir Senha</mat-slide-toggle>
+      </div>
+      <div fxFlex="60px" style="width: 350px" fxFlexAlign="start" *ngIf="redefinirsenha">
+          <mat-form-field style="width:100%">
+            <input matInput tabindex="4" [(ngModel)]="password" [formControl]="valPassword" placeholder="Senha" required [type]="hide ? 'password' : 'text'">
+            <mat-icon matSuffix (click)="hide = !hide">{{hide ? 'visibility' : 'visibility_off'}}</mat-icon>
+            <mat-error *ngIf="valPassword.invalid">{{getErrorMessage(valPassword)}}</mat-error>
+          </mat-form-field>
+      </div>
+
+      <div fxFlex="60px" style="width: 350px" fxFlexAlign="start" *ngIf="redefinirsenha">
+          <mat-form-field style="width:100%">
+            <input matInput tabindex="5" [(ngModel)]="confpassword" [formControl]="valConfPassword" placeholder="Confirmar Senha" required [type]="hide ? 'password' : 'text'">
+            <mat-icon matSuffix (click)="hide = !hide">{{hide ? 'visibility' : 'visibility_off'}}</mat-icon>
+            <mat-error *ngIf="valConfPassword.invalid">{{getErrorMessage(valConfPassword)}}</mat-error>
+          </mat-form-field>
+      </div>
+  </div>
+</div>
+<div mat-dialog-actions *ngIf="!emProcessamento" style="height: 30px;">
+  <div fxLayout="row" fxLayoutAlign="end center" fxFill>
+    <button mat-raised-button color="primary" (click)="onEntrarClick(data)" tabindex="2" [disabled]="((!validaCampos())||(emProcessamento))">Enviar</button>
+    <button mat-raised-button color="primary" (click)="onNoClick()" tabindex="-1">Cancelar</button>
+  </div>
+  <div fxLayout="row" fxLayoutAlign="center center" fxFill>
+    <mat-error *ngIf="erroLogin">{{msgErroLogin}}</mat-error>
+    <!-- &nbsp; -->
+  </div>
+</div>

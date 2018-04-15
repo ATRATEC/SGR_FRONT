@@ -1,3 +1,8 @@
+import { ChangePasswordUserComponent } from './usuario/changepassworduser.component';
+import { EditUserComponent } from './usuario/edituser.component';
+import { UpperCaseModule } from './uppercase/uppercase.module';
+import { PasswordEqualsDirective } from './usuario/password-equals.directive';
+import { AddUserComponent } from './usuario/adduser.component';
 import { ResetComponent } from './usuario/reset.component';
 import { LocacaoModule } from './locacao/locacao.module';
 import { EquipamentoModule } from './equipamento/equipamento.module';
@@ -55,13 +60,17 @@ import { PesagemModule } from './pesagem/pesagem.module';
     AppComponent,
     LoginComponent,
     ResetComponent,
+    AddUserComponent,
+    EditUserComponent,
+    ChangePasswordUserComponent,
     MovimentoComponent,
     OnlyNumberDirective,
     AlertComponent,
     AlertsComponent,
     DialogComponent,
     HomeComponent,
-    PageNotFoundComponent
+    PageNotFoundComponent,
+    PasswordEqualsDirective
   ],
   imports: [
     FlexLayoutModule,
@@ -94,6 +103,7 @@ import { PesagemModule } from './pesagem/pesagem.module';
     EquipamentoModule,
     LocacaoModule,
     PesagemModule,
+    UpperCaseModule,
     AppRoutingModule
   ],
   providers: [
@@ -109,7 +119,14 @@ import { PesagemModule } from './pesagem/pesagem.module';
     {provide: LOCALE_ID, useValue: 'pt-BR'},
     { provide: CURRENCY_MASK_CONFIG, useValue: CustomCurrencyMaskConfig }
   ],
-  entryComponents: [LoginComponent, DialogComponent, ResetComponent],
+  entryComponents: [
+    LoginComponent,
+    DialogComponent,
+    ResetComponent,
+    AddUserComponent,
+    EditUserComponent,
+    ChangePasswordUserComponent
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
