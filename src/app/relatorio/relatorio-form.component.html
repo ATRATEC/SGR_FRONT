@@ -369,16 +369,16 @@
                 </table>
                 <table class="a4">
                   <tr style="background-color: #FFFFFF; font-size: 12px; border-bottom: 1px solid black ">
-                    <th class="col_cnpj_cpf">CNPJ / CPF</th>
-                    <th class="col_clifor">Cliente / Fornecedor</th>
-                    <th class="col_manifestos">Manifestos</th>
-                    <th class="col_total" style="text-align: right">Val Total</th>
+                    <th style="min-width: 130px; max-width: 130px; width: 130px">CNPJ / CPF</th>
+                    <th style="min-width: 350px; max-width: 350px; width: 350px">Cliente / Fornecedor</th>
+                    <th style="min-width: 500px; max-width: 500px; width: 500px">Manifestos</th>
+                    <th style="min-width: 90px; max-width: 90px; width: 90px; text-align: right" >Val Total</th>
                   </tr>
                   <tr *ngFor="let item2 of despesasinteticas" style="background-color: #FFFFFF; font-size: 10px; ">
-                    <td class="col_cnpj_cpf">{{item2.cnpj_cpf}}</td>
-                    <td class="col_clifor">{{item2.credor}}</td>
-                    <td class="col_manifestos">{{item2.manifestos}}</td>
-                    <td class="col_total" style="text-align: right">{{item2.total | currency:'BRL':true}}</td>
+                    <td style="min-width: 130px; max-width: 130px; width: 130px">{{item2.cnpj_cpf}}</td>
+                    <td style="min-width: 350px; max-width: 350px; width: 350px">{{item2.credor}}</td>
+                    <td style="min-width: 500px; max-width: 500px; width: 500px; word-wrap: break-word;">{{item2.manifestos}}</td>
+                    <td style="min-width: 90px; max-width: 90px; width: 90px; text-align: right">{{item2.total | currency:'BRL':true}}</td>
                   </tr>
                 </table>
               </div>
